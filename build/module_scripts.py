@@ -48466,17 +48466,12 @@ scripts = [
                       (set_item_probability_in_merchandise, ":cur_goods", ":cur_production"),
                     (try_end),
                     
-                    # v1.0 商人转卖：旧货卖给城里人、新货从本地进货，只和城镇金库结差额。
-                    (call_script, "script_af24_stock_value", ":cur_merchant"),
-                    (assign, ":old_value", reg0),
                     (troop_clear_inventory, ":cur_merchant"),
                     (troop_add_merchandise, ":cur_merchant", itp_type_goods, ":number_of_items_in_town"),
                     
                     (troop_ensure_inventory_space, ":cur_merchant", 20),
                     (troop_sort_inventory, ":cur_merchant"),
-                    (call_script, "script_af24_stock_value", ":cur_merchant"),
-                    (assign, ":new_value", reg0),
-                    (call_script, "script_af24_settle_stock", ":cur_merchant", ":cur_center", ":old_value", ":new_value", 3000, 1500),
+                    (call_script, "script_af24_settle_stock", ":cur_merchant", ":cur_center", 0, 0, 2000, 0),  # v1.0 商人转卖
                   (try_end),
               ]),
               
@@ -48488,9 +48483,6 @@ scripts = [
                   (try_for_range, ":cur_merchant", armor_merchants_begin, armor_merchants_end),
                     (store_sub, ":cur_town", ":cur_merchant", armor_merchants_begin),
                     (val_add, ":cur_town", towns_begin),
-                    # v1.0 商人转卖：旧货卖给城里人、新货从本地进货，只和城镇金库结差额。
-                    (call_script, "script_af24_stock_value", ":cur_merchant"),
-                    (assign, ":old_value", reg0),
                     (troop_clear_inventory, ":cur_merchant"),
                     (party_get_slot, ":cur_faction", ":cur_town", slot_center_original_faction),
                     (troop_add_merchandise_with_faction, ":cur_merchant", ":cur_faction", itp_type_body_armor, 16),
@@ -48499,9 +48491,7 @@ scripts = [
                     (troop_add_merchandise_with_faction, ":cur_merchant", ":cur_faction", itp_type_hand_armor, 4),
                     (troop_ensure_inventory_space, ":cur_merchant", merchant_inventory_space),
                     (troop_sort_inventory, ":cur_merchant"),
-                    (call_script, "script_af24_stock_value", ":cur_merchant"),
-                    (assign, ":new_value", reg0),
-                    (call_script, "script_af24_settle_stock", ":cur_merchant", ":cur_town", ":old_value", ":new_value", 2000, 750),
+                    (call_script, "script_af24_settle_stock", ":cur_merchant", ":cur_town", 0, 0, 1250, 0),  # v1.0 商人转卖
                   (end_try),
               ]),
               
@@ -48513,9 +48503,6 @@ scripts = [
                   (try_for_range, ":cur_merchant", weapon_merchants_begin, weapon_merchants_end),
                     (store_sub, ":cur_town", ":cur_merchant", weapon_merchants_begin),
                     (val_add, ":cur_town", towns_begin),
-                    # v1.0 商人转卖：旧货卖给城里人、新货从本地进货，只和城镇金库结差额。
-                    (call_script, "script_af24_stock_value", ":cur_merchant"),
-                    (assign, ":old_value", reg0),
                     (troop_clear_inventory, ":cur_merchant"),
                     (party_get_slot, ":cur_faction", ":cur_town", slot_center_original_faction),
                     (troop_add_merchandise_with_faction, ":cur_merchant", ":cur_faction", itp_type_one_handed_wpn, 5),
@@ -48529,9 +48516,7 @@ scripts = [
                     (troop_add_merchandise_with_faction, ":cur_merchant", ":cur_faction", itp_type_bolts, 2),
                     (troop_ensure_inventory_space, ":cur_merchant", merchant_inventory_space),
                     (troop_sort_inventory, ":cur_merchant"),
-                    (call_script, "script_af24_stock_value", ":cur_merchant"),
-                    (assign, ":new_value", reg0),
-                    (call_script, "script_af24_settle_stock", ":cur_merchant", ":cur_town", ":old_value", ":new_value", 2000, 750),
+                    (call_script, "script_af24_settle_stock", ":cur_merchant", ":cur_town", 0, 0, 1250, 0),  # v1.0 商人转卖
                   (try_end),
               ]),
               
@@ -48541,9 +48526,6 @@ scripts = [
                   (reset_item_probabilities, 100),
                   (set_merchandise_modifier_quality, 150),
                   (try_for_range, ":cur_merchant", horse_merchants_begin, horse_merchants_end),
-                    # v1.0 商人转卖：旧货卖给城里人、新货从本地进货，只和城镇金库结差额。
-                    (call_script, "script_af24_stock_value", ":cur_merchant"),
-                    (assign, ":old_value", reg0),
                     (troop_clear_inventory, ":cur_merchant"),
                     (store_sub, ":cur_town", ":cur_merchant", horse_merchants_begin),
                     (val_add, ":cur_town", towns_begin),
@@ -48551,9 +48533,7 @@ scripts = [
                     (troop_add_merchandise_with_faction, ":cur_merchant", ":cur_faction", itp_type_horse, 5),
                     (troop_ensure_inventory_space, ":cur_merchant", 65),
                     (troop_sort_inventory, ":cur_merchant"),
-                    (call_script, "script_af24_stock_value", ":cur_merchant"),
-                    (assign, ":new_value", reg0),
-                    (call_script, "script_af24_settle_stock", ":cur_merchant", ":cur_town", ":old_value", ":new_value", 1200, 750),
+                    (call_script, "script_af24_settle_stock", ":cur_merchant", ":cur_town", 0, 0, 800, 0),  # v1.0 商人转卖
                   (try_end),
               ]),
               
@@ -58063,66 +58043,41 @@ scripts = [
     (assign, reg0, ":total"),
   ]),
 
-  # Settle one merchant's refresh against his town's treasury.
-  # Input: merchant, town, old stock value, new stock value, cap, starting
-  # capital. diff = old - new: the townspeople paid the merchant for the old
-  # stock, and he paid the treasury for the new stock; only the difference
-  # moves. A payment out of the treasury is at most a quarter of the treasury
-  # (the caravan chest rule). A payment out of the merchant's pocket never
-  # goes below zero. Afterwards, any gold above the cap is swept back to the
-  # treasury. A merchant with no gold and no old stock is on his first refresh
-  # of a new game: he gets starting capital from the treasury (also at most a
-  # quarter of it). Merchants in old saves already have gold and skip that.
+  # Settle one merchant's weekly refresh against his town's treasury.
+  # Input: merchant, town, (unused), (unused), working float, (unused).
+  # The merchant keeps a working float. What the player sold him since the
+  # last refresh left his purse short: he has resold those goods to the
+  # townspeople, so the town treasury makes up the shortfall (at most a
+  # quarter of the treasury, the caravan chest rule; a poor town cannot).
+  # What the player bought from him left his purse over the float: the
+  # surplus pays local workshops and villages for new stock and goes back to
+  # the treasury. So the treasury pays exactly the net of the player's trade
+  # with him, and the random native top-up is gone. (An earlier version
+  # valued old and new stock; the randomly regenerated stock made that swing
+  # by thousands a week and left merchants broke about half the time.)
+  # New games: merchants start at 0 and are filled on the first refresh.
   ("af24_settle_stock", [
     (store_script_param, ":merchant", 1),
     (store_script_param, ":town", 2),
-    (store_script_param, ":old_value", 3),
-    (store_script_param, ":new_value", 4),
-    (store_script_param, ":cap", 5),
-    (store_script_param, ":starting", 6),
-    (store_sub, ":diff", ":old_value", ":new_value"),
-    (try_begin),
-      (gt, ":diff", 0),
-      (party_get_slot, ":wealth", ":town", slot_town_wealth),
-      (store_div, ":limit", ":wealth", 4),
-      (val_min, ":diff", ":limit"),
-      (gt, ":diff", 0),
-      (val_sub, ":wealth", ":diff"),
-      (party_set_slot, ":town", slot_town_wealth, ":wealth"),
-      (call_script, "script_troop_add_gold", ":merchant", ":diff"),
-    (else_try),
-      (lt, ":diff", 0),
-      (store_mul, ":owed", ":diff", -1),
-      (store_troop_gold, ":gold", ":merchant"),
-      (val_min, ":owed", ":gold"),
-      (gt, ":owed", 0),
-      (troop_remove_gold, ":merchant", ":owed"),
-      (party_get_slot, ":wealth", ":town", slot_town_wealth),
-      (val_add, ":wealth", ":owed"),
-      (party_set_slot, ":town", slot_town_wealth, ":wealth"),
-    (try_end),
-    # Sweep: gold above the cap goes back to the treasury.
+    (store_script_param, ":float", 5),
     (store_troop_gold, ":gold", ":merchant"),
+    (party_get_slot, ":wealth", ":town", slot_town_wealth),
+    (val_max, ":wealth", 0),
     (try_begin),
-      (gt, ":gold", ":cap"),
-      (store_sub, ":excess", ":gold", ":cap"),
-      (troop_remove_gold, ":merchant", ":excess"),
-      (party_get_slot, ":wealth", ":town", slot_town_wealth),
-      (val_add, ":wealth", ":excess"),
-      (party_set_slot, ":town", slot_town_wealth, ":wealth"),
-    (try_end),
-    # New game: a merchant with no gold and no old stock gets starting capital.
-    (try_begin),
-      (store_troop_gold, ":gold", ":merchant"),
-      (eq, ":gold", 0),
-      (eq, ":old_value", 0),
-      (party_get_slot, ":wealth", ":town", slot_town_wealth),
+      (lt, ":gold", ":float"),
+      (store_sub, ":short", ":float", ":gold"),
       (store_div, ":limit", ":wealth", 4),
-      (val_min, ":starting", ":limit"),
-      (gt, ":starting", 0),
-      (val_sub, ":wealth", ":starting"),
+      (val_min, ":short", ":limit"),
+      (gt, ":short", 0),
+      (val_sub, ":wealth", ":short"),
       (party_set_slot, ":town", slot_town_wealth, ":wealth"),
-      (call_script, "script_troop_add_gold", ":merchant", ":starting"),
+      (call_script, "script_troop_add_gold", ":merchant", ":short"),
+    (else_try),
+      (gt, ":gold", ":float"),
+      (store_sub, ":surplus", ":gold", ":float"),
+      (troop_remove_gold, ":merchant", ":surplus"),
+      (val_add, ":wealth", ":surplus"),
+      (party_set_slot, ":town", slot_town_wealth, ":wealth"),
     (try_end),
   ]),
 
