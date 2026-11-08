@@ -57066,13 +57066,13 @@ scripts = [
 
   # ========== v1.0 fame: a fearsome record keeps enemies from chasing ==========
   # Fame = points from battles won (slot 875) + the player's own lifetime
-  # kills and knock-downs / 20. Output reg0.
+  # kills and knock-downs / 10. Output reg0.
   ("af20_fame_total", [
     (party_get_slot, ":fame", "p_main_party", slot_af20_fame),
     (get_player_agent_kill_count, ":kills"),
     (get_player_agent_kill_count, ":downs", 1),
     (val_add, ":kills", ":downs"),
-    (val_div, ":kills", 20),
+    (val_div, ":kills", 10),
     (store_add, reg0, ":fame", ":kills"),
   ]),
 
@@ -57156,8 +57156,8 @@ scripts = [
     (call_script, "script_af20_announce", ":before", reg0),
   ]),
 
-  # Hourly. (1) Two weeks without a battle: battle fame -10%, again every two
-  # weeks. (2) Each hostile map party within 6 units is judged at most once per
+  # Hourly. (1) Two weeks without a battle: battle fame -5 points, again every
+  # two weeks. (2) Each hostile map party within 6 units is judged at most once per
   # 12 hours: chance it will not chase = fame - its nerve x its strength ratio
   # against the player (ratio capped at 3x), at most 90%. Nerve: 20 for
   # bandits and others; lords 30 + renown/20, martial +20, debauched -10,
@@ -57179,8 +57179,8 @@ scripts = [
       (call_script, "script_af20_fame_total"),
       (assign, ":before", reg0),
       (party_get_slot, ":fame", "p_main_party", slot_af20_fame),
-      (val_mul, ":fame", 90),
-      (val_div, ":fame", 100),
+      (val_sub, ":fame", 5),
+      (val_max, ":fame", 0),
       (party_set_slot, "p_main_party", slot_af20_fame, ":fame"),
       (call_script, "script_af20_fame_total"),
       (call_script, "script_af20_announce", ":before", reg0),
@@ -57322,11 +57322,11 @@ scripts = [
     (try_begin),
       (gt, ":battle", 0),
       (gt, ":next", 0),
-      (str_store_string, s43, "@再过{reg4}天不打仗，战功会淡去一成。"),
+      (str_store_string, s43, "@再过{reg4}天不打仗，战功会减少5点。"),
     (else_try),
       (str_clear, s43),
     (try_end),
-    (str_store_string, s40, "@{s42}^^威名：{reg1}（{s41}）^战功：{reg2}^你亲手杀死或打晕：{reg3}人（每20人算1点威名）^{s43}^^威名到30、80、150分别是小有名气、威震一方、传奇。打赢一场仗战功+1，以弱胜强另有加成；打输一场，战功扣两成。"),
+    (str_store_string, s40, "@{s42}^^威名：{reg1}（{s41}）^战功：{reg2}^你亲手杀死或打晕：{reg3}人（每10人算1点威名）^{s43}^^威名到30、80、150分别是小有名气、威震一方、传奇。打赢一场仗战功+1，以弱胜强另有加成；打输一场，战功扣两成。"),
   ]),
 
   # ========== v1.0 fame: proud lords want to make their name on you ==========
