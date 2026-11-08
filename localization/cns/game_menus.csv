@@ -1,0 +1,138 @@
+﻿mno_fb71_full_start|满级开局（62级／全属性63／全技能10／全熟练度699）
+mno_af07_world_entry|烽烟与暗流：卡拉迪亚战局总览
+mno_af04_network_entry|地方匪帮与黑市情报
+mno_af05_ledger_entry|战争与宫廷：秘密军粮案卷
+mno_af03_field_journal|军事委托记录
+mno_fb75_intel_book|宫廷政治情报簿
+mno_af08_desk_entry|烽烟案头：领地、战争与宫廷消息
+mno_fb75_cheat_entry|宫廷政治测试（v7.5）
+mno_af01_cheat_entry|烽烟与暗流测试（v0.1 / v0.2）
+mno_af06_cheat_entry|烽烟与暗流·围城与战后治理测试（v0.6）
+mno_af05_cheat_entry|烽烟与暗流·政治战争联动（v0.5）
+mno_af04_cheat_entry|烽烟与暗流·匪帮网络测试（v0.4）
+mno_af03_cheat_entry|烽烟与暗流·战争承包商测试（v0.3）
+mno_af06_siege_ops_entry|围城暗战：侦察、破坏粮仓与策反守军
+mno_af06_defender_supply|将随身四袋谷物秘密送入守城粮仓
+mno_af01_village_status|查看地方战乱与援助
+mno_af09_village_echo|村口似乎有人在等你……
+mno_af03_contract_board|战争承包商·军粮委托
+mno_af08_town_rumor_entry|在城中询问附近的战乱传闻
+mno_af06_recovery_entry|战后治理：查看城池恢复与重建
+mno_af06_supply_entry|秘密运粮入城（4袋谷物，增加约两天粮食储备）
+menu_fb75_intel_book|宫廷政治情报簿^^政治信用：{reg50}    政治嫌疑：{reg51}/100    王室调查次数：{reg52}^有效情报：{reg53}条    有人欠你选票：{reg54}笔    你欠人的选票：{reg58}笔^^情报只记录你已经打听到的消息；过期线索会自动从本页隐去。
+mno_fb75_book_clues|查看已掌握的政治线索
+mno_fb75_book_debts|查看欠你选票的贵族
+mno_fb75_book_help|情报说明与时效规则
+mno_fb75_book_back|返回营地
+menu_fb75_intel_detail|调查对象：{s10}^^你掌握的线索可信度：{reg55}/100^可供举报的有效期剩余：{reg56}天^^向自己效忠的国王对话，可以提交当前仍然有效的线索。
+mno_fb75_next_intel|下一条情报
+mno_fb75_intel_back|返回情报簿
+menu_fb75_debt_detail|人情债记录^^{s10}尚欠你一次未来的封地议事支持。^这笔债将在符合条件的后续封地投票中清偿或判定失信。
+mno_fb75_next_debt|下一位欠债贵族
+mno_fb75_debt_back|返回情报簿
+menu_fb75_intel_help|政治情报说明^^1. 同国贵族每隔3个游戏日可提供一次新的传闻。^2. 线索自收集日起保持15个日期编号（当天及后14天）。^3. 国王只接受本王国、未过调查冷却的有效线索。^4. 私下交易会提高政治嫌疑；嫌疑会缓慢消退。^5. 贵族欠你的未来支持会保留到后续合格议程结算。
+mno_fb75_help_back|返回情报簿
+menu_fb75_debug|宫廷政治测试菜单（仅作弊模式）^^下列操作会修改存档中的政治状态。请使用测试存档。
+mno_fb75_debug_heat|测试：玩家政治嫌疑 +60
+mno_fb75_debug_evidence|测试：生成一条可向本国国王举报的线索
+mno_fb75_debug_court|测试：手动运行一次王室政治检查
+mno_fb75_debug_flip|测试：尝试一次合法的秘密派系转投
+mno_fb75_debug_return|返回作弊菜单
+menu_af01_village_status|{s10}·地方局势^^战乱度：{reg60}/100（{s11}）^你与村民的关系：{reg61}^繁荣度：{reg62}/100^近期事件：{s12}^援助状态：{s13}^^从该村庄出发的流民队：{reg64}，逃兵队：{reg65}。^战争造成长期动荡；村庄关系和繁荣度仍使用原版数据。^所有援助在登记时消耗资源，下一游戏日结算，同村庄共用七天冷却。
+mno_af01_relief|出资救济（600第纳尔；战乱-3、关系+4、繁荣+2）
+mno_af01_patrol|组织巡防（200第纳尔、20名士兵；战乱-12、关系+1）
+mno_af01_grain|运送赈灾粮（6份谷物；战乱-5、关系+2、繁荣+3）
+mno_af01_status_back|返回村庄
+menu_af01_debug|烽烟与暗流·v0.1 测试^^最近村庄：{s10}^战乱度：{reg60}/100（{s11}）^与玩家关系：{reg61}^近期事件：{s12}^^下列测试行为会直接修改存档。请使用测试存档。
+mno_af01_debug_raid|模拟完成一次洗劫对战乱及邻村的影响（不扣原版繁荣）
+mno_af01_debug_clear|把最近村庄战乱度重设为0
+mno_af01_debug_daily|运行每日结算一次（同日重复无效）
+mno_af02_debug_refugees|v0.2：在最近村庄生成流民（遵守全局上限）
+mno_af02_debug_deserters|v0.2：在最近村庄生成逃兵（遵守全局上限）
+mno_af01_debug_return|返回作弊菜单
+menu_af02_refugees|你遇到了一群因战争离开家乡的流民。他们正尝试抵达安全的城镇。^^你可以提供帮助，或者接纳一些人加入队伍。
+mno_af02_refugee_help|给予150第纳尔作为路费（家乡战乱-2，村庄关系+1）
+mno_af02_refugee_recruit|接纳六名流民入伍（需要至少六个队伍空位）
+mno_af02_refugee_leave|祝他们平安，继续赶路。
+menu_af02_deserters|你遇到一伙从战场逃散的士兵。他们武装完整，行踪可疑。^^你可以尝试招安，也可以花钱让他们离开，或直接交战。
+mno_af02_deserter_amnesty|支付600第纳尔招安六名士兵（统御≥2，家乡战乱-6）
+mno_af02_deserter_bribe|支付250第纳尔使这伙逃兵解散（家乡战乱-2）
+mno_af02_deserter_attack|拒绝妥协，准备战斗。
+mno_af02_deserter_leave|放弃追击。
+menu_af03_contract_board|战争承包商·军粮委托^^当前合同：{s20}^委托城镇：{s21}^目标地点：{s22}^签约阵营：{s25}^军粮路线：{s24} -> {s22}^进度：{s23}^约定报酬：{reg70}第纳尔^剩余天数：{reg71}^护送记录：{reg74}次六小时巡逻检查^^你最多同时签订一份合同。护送需要持续跟随运输队并在抵达时在场；截粮必须实际参与摧毁目标队伍。结算需要返回委托城镇。
+mno_af03_take_escort|接取护送军粮委托（至少15名士兵；期限12天）
+mno_af03_take_intercept|接取截断敌军补给委托（期限12天）
+mno_af03_settle|领取已完成合同的酬金／登记失败合同
+mno_af03_office_to_journal|查看当前委托说明
+mno_af03_office_back|返回城镇
+menu_af03_journal|军事委托记录^^当前：{s20}^接取地点：{s21}^目标地点：{s22}^路线：{s24} -> {s22}^签约阵营：{s25}^进度：{s23}^报酬：{reg70}第纳尔^期限剩余：{reg71}天^有效护送检查：{reg74}次^^累计成功：{reg72}，失败：{reg73}。^^护送：保持与军粮队接近，并陪它抵达目标城镇。截粮：在战斗中摧毁被指定的敌军运输队。完成后返回签约城镇结算。
+mno_af03_journal_cancel|主动注销委托（放弃全部报酬，记为一次失败）
+mno_af03_journal_back|返回营地／委托所
+menu_af03_convoy|你遇见了一支正运输军粮的队伍。商队车夫和护卫们已经做好防备。^他们会自行前往目的地；你可以护卫同行，或选择袭击。
+mno_af03_convoy_attack|袭击军粮队（可能引发外交敌对）
+mno_af03_convoy_leave|离开，让军粮队继续行进。
+menu_af03_debug|v0.3 战争承包商测试^^此菜单只用于作弊测试存档。可以强制生成一支普通运输队，并手动刷新每日物流结算。
+mno_af03_debug_spawn|在最近的两座同阵营城镇间强制派出军粮队
+mno_af03_debug_tick|执行一次每日后勤结算与发车检查
+mno_af03_debug_back|返回作弊菜单
+menu_af04_gang|你遭遇了{s10}。^^这支团伙的势力范围是{s11}附近。专长：{s12}。^与该团伙的交情：{reg90}；当前协议还剩{reg91}天。^已收买的军粮袭击委托：{reg92}（1为正在进行）。^^你可以与其交易、通过谈判招安，也可以选择战斗。匪帮可能袭扰经过附近的真实军粮队。
+mno_af04_pay_treaty|支付450第纳尔，签订11天互不侵扰协议（团伙交情+10）
+mno_af04_hire_raid|支付850第纳尔，委托袭扰附近敌国军粮队（8天内执行）
+mno_af04_buy_grain|从盐鸦商路黑市购买两袋谷物（360第纳尔，3天限购一次）
+mno_af04_hire_men|从灰狼团招募5名散兵（650第纳尔，7天冷却）
+mno_af04_amnesty|赦免并招安匪帮（1200第纳尔；6名新兵；家乡战乱-12）
+mno_af04_attack|剿灭这伙匪帮（进入正常野战）
+mno_af04_leave|离开此地
+menu_af04_network|地方匪帮与黑市情报^^黑松帮·铁鬃：{s20}，交情{reg93}，保护协议剩{reg94}天。^灰狼团·裂旗：{s21}，交情{reg95}，保护协议剩{reg96}天。^盐鸦商路·盐鸦：{s22}，交情{reg97}，保护协议剩{reg98}天。^^三支团伙会在各自文化区域的高战乱村庄周边形成势力。交情是独立的地下交易记录，不会替代原版村庄关系。
+mno_af04_network_back|返回营地
+menu_af04_debug|v0.4 土匪江湖测试^^可以尝试生成三支独立匪帮，手动推进一次每日匪帮逻辑。若对应地区的村庄战乱不足35，生成会失败。
+mno_af04_debug_spawn_black|尝试生成黑松帮
+mno_af04_debug_spawn_wolf|尝试生成灰狼团
+mno_af04_debug_spawn_raven|尝试生成盐鸦商路
+mno_af04_debug_war|提高最近村庄战乱至至少70（用于测试生成）
+mno_af04_debug_tick|手动运行一次匪帮每日更新
+mno_af04_debug_back|返回作弊菜单
+menu_af05_ledger|战争与宫廷 · 秘密军粮案卷^^当前存在尚未结案的真实袭扰线索：{reg80}（1为存在）。^涉及的军粮目的地：{s41}。^已查明幕后资助者：{s40}；证据：{reg81}（1为掌握）。^再次调查需等待：{reg82}天。^^只有王国封臣可以侦查并向本国国王举报。嫌疑人身份不会在未侦查前公开。
+mno_af05_ledger_investigate|支付350第纳尔，派密探追查最近的军粮遇袭事件（75%成功，4天冷却）
+mno_af05_ledger_report|派遣密使将证据呈交国王（得罪幕后领主，王室关系+3）
+mno_af05_ledger_silence|以证据勒索资助者，收取650第纳尔封口费（自身政治嫌疑+18）
+mno_af05_ledger_book|查阅现有宫廷政治情报簿
+mno_af05_ledger_back|返回营地
+menu_af05_debug|v0.5 政治战争联动测试^^此菜单只使用真实存在的匪帮和军粮队，不会伪造王室证据。
+mno_af05_debug_plot|尝试匹配封地失意领主、匪帮与军粮队
+mno_af05_debug_gang|前往匪帮测试工具
+mno_af05_debug_convoy|前往军粮队测试工具
+mno_af05_debug_back|返回作弊菜单
+menu_af06_siege_ops|{s40}·围城暗战^^粮仓情报：{s41}^侦察情报有效：{reg84?是:否}；粮仓破坏冷却剩 {reg85} 天；策反冷却剩 {reg86} 天。^^秘密行动仅能由亲自围城的玩家执行；侦察会提高后两项成功率。
+mno_af06_scout_action|派斥候勘察敌军粮仓（150第纳尔，5天内提高成功率）
+mno_af06_sabotage_action|派间谍焚毁敌军粮仓（800第纳尔；40%或65%成功率）
+mno_af06_bribe_action|策反敌军守备士卒（1400第纳尔；有侦察则更易成功）
+mno_af06_ops_back|返回围城指挥
+menu_af06_recovery|{s40}·战后治理^^目前恢复程度：{reg90}/100。^繁荣度：{reg91}；粮食库存：{reg92}。^距最近一次王国更替：{reg93}天；本地重建冷却：{reg94}天。^^只对真实经历王国更替的城池开放重建；旧存档未发生战乱的城池视为恢复完成。^重建会提升城池恢复与原版繁荣度，并降低其附属村庄的战乱度。
+mno_af06_invest_action|投资修复城防与市集（1000第纳尔；恢复+20）
+mno_af06_grain_action|为战后居民提供粮食（4袋谷物；恢复+10）
+mno_af06_recovery_back|返回城池
+menu_af06_debug|v0.6 围城与战后治理测试^^测试入口不会伪造真实王国易主事件；仅设置测试城池的恢复计数。
+mno_af06_debug_recovery|测试：将最近一座城池恢复程度设为35
+mno_af06_debug_daily|测试：运行一次战后每日恢复检查
+mno_af06_debug_back|返回作弊菜单
+menu_af07_world|卡拉迪亚战局总览（v0.7）^^王国战争：{reg73}个王国正在交战；统计村庄：{reg68}座。^全图平均战乱度：{reg72}/100；严重动荡村庄：{reg60}座；危机村庄：{reg61}座。^最严重村庄：{s10}（战乱{reg69}/100）。^^地图动态：流民{reg62}支；逃兵{reg63}支；军粮队{reg64}支；特殊匪帮{reg65}支。^尚在战后恢复的城市与城堡：{reg67}处。^你的战争委托状态编号：{reg70}（0无、1进行中、2成功待结算、3失败待结算）。^^本页面只读取既有村庄关系、战乱度与部队数据，不引入额外民心，也不改变存档经济。
+mno_af07_world_contract|查看军事委托详情
+mno_af07_world_return|返回营地
+menu_af08_desk|烽烟案头 · 守土之责（v0.8）^^第{reg80}天 · 你的领地最高乱度：{reg83}/100；失职：{reg81}/100；贤名：{reg82}/100。^最近获知：{s40}^^当前战争委托状态：{reg84}（0无／1进行中／2成功待结算／3失败待结算）。^^只记录你在附近听到的局势或本国公开问责；幕后资助者仍需调查。
+mno_af08_desk_world|查看卡拉迪亚战局总览
+mno_af08_desk_contract|查看军粮委托
+mno_af08_desk_gang|查看地方匪帮与黑市
+mno_af08_desk_ledger|查看秘密军粮案卷
+mno_af08_desk_court|查看宫廷政治情报簿
+mno_af08_desk_back|返回营地
+menu_af08_town_rumor|城中风声^^{s40}^^传闻只说明公开的地方状况；人物身份和幕后阴谋需要调查确认。
+mno_af08_town_rumor_back|返回城镇
+menu_af09_echo|{s23}^^{s24}
+mno_af09_take_refugee|谢过她，收下村民送来的谷物。
+mno_af09_take_deserter|让他们跟上队伍。
+mno_af09_take_aid|收下村民凑出的粮食。
+mno_af09_leave_refugee_grain|粮食还是留在村里吧，村里更需要。
+mno_af09_leave_deserter_guard|留在家乡守路吧。这里也需要拿得动武器的人。
+mno_af09_take_aid_watchmen|让两个愿意出门的哨兵跟着队伍。
+mno_af09_echo_later|道谢，先去办自己的事。
