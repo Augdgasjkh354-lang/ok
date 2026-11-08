@@ -15123,7 +15123,7 @@ game_menus = [
      ("af05_ledger_silence",
       [(call_script, "script_af05_find_proven_case"),
        (is_between, reg0, active_npcs_begin, active_npcs_end)],
-      "以证据勒索资助者，收取650第纳尔封口费（自身政治嫌疑+18）",
+      "以证据勒索资助者，收取650第纳尔封口费（自身政治嫌疑+18，荣誉-5）",
       [(call_script, "script_af05_silence_case"),
        (try_begin), (eq, reg0, 1), (display_message, "@幕后资助者支付了封口费；这件事也让你的政治名声更加危险。"),
        (else_try), (display_message, "@无法交易：证据已经失效或案件已结。"), (try_end),

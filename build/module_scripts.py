@@ -53694,7 +53694,15 @@ scripts = [
       (eq, ":stage", 2),
       (party_get_slot, ":reward", "p_main_party", slot_af03_contract_reward),
       (troop_add_gold, "trp_player", ":reward"),
-      (call_script, "script_change_troop_renown", "trp_player", 2),
+      # v1.0: a finished military contract is a public deed (was +2).
+      (call_script, "script_change_troop_renown", "trp_player", 10),
+      (try_begin),
+        # Escort: the town that actually received the grain remembers it.
+        (party_slot_eq, "p_main_party", slot_af03_contract_type, 1),
+        (party_get_slot, ":dest", "p_main_party", slot_af03_contract_dest),
+        (is_between, ":dest", centers_begin, centers_end),
+        (call_script, "script_change_player_relation_with_center", ":dest", 3),
+      (try_end),
       (party_get_slot, ":victories", "p_main_party", slot_af03_contract_wins),
       (val_add, ":victories", 1),
       (party_set_slot, "p_main_party", slot_af03_contract_wins, ":victories"),
@@ -54640,6 +54648,8 @@ scripts = [
       (troop_set_slot, ":lord", slot_fb74_intel_day, 0),
       (troop_add_gold, "trp_player", 650),
       (call_script, "script_fb74_add_heat", "trp_player", 18),
+      # v1.0: taking hush money is a moral choice, not just political risk.
+      (call_script, "script_change_player_honor", -5),
       (troop_get_slot, ":grudge", ":lord", slot_fb7_grudge),
       (val_add, ":grudge", 6),
       (val_min, ":grudge", 100),
@@ -55676,6 +55686,7 @@ scripts = [
       (eq, ":wanted", 5),
       (call_script, "script_af01_change_unrest", ":village", -10),
       (party_set_slot, ":village", slot_af09_deserter_thanked, 1),
+      (call_script, "script_change_player_honor", 2),  # v1.0
       (assign, ":success", 1),
     # A grateful village offers a few road watchmen; this choice spends the aid memory.
     (else_try),
@@ -55695,6 +55706,7 @@ scripts = [
       (call_script, "script_af01_change_unrest", ":village", -4),
       (call_script, "script_change_center_prosperity", ":village", 2),
       (party_set_slot, ":village", slot_af09_refugee_thanked, 1),
+      (call_script, "script_change_player_honor", 3),  # v1.0
       (assign, ":success", 1),
     # Take grain personally: two actual free inventory slots required.
     (else_try),
@@ -55718,6 +55730,12 @@ scripts = [
         (party_set_slot, ":village", slot_af09_aid_thanked, 1),
       (try_end),
       (assign, ":success", 1),
+    (try_end),
+    # v1.0: word of the elder's public thanks spreads (claimed once per village).
+    (try_begin),
+      (eq, ":success", 1),
+      (eq, ":kind", 3),
+      (call_script, "script_change_troop_renown", "trp_player", 5),
     (try_end),
     (assign, reg0, ":success"),
   ]),
