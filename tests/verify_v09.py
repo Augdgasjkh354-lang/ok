@@ -30,19 +30,26 @@ for x in qnew:
 assert len([x for x in qnew if x[0].startswith('qstr_æ')])==3
 
 # All game text translated in a localized layer; do not replace native troops.
-needed={'game_menus.csv','troops.csv','party_templates.csv','quick_strings.csv'}
+needed={'game_menus.csv','troops.csv','party_templates.csv','quick_strings.csv','game_strings.csv','dialogs.csv'}
 for lang in ('cns','cn_s'):
     folder=local/lang
     assert {f.name for f in folder.glob('*.csv')}==needed
     for file in folder.glob('*.csv'):
         b=file.read_bytes();assert b.startswith(b'\xef\xbb\xbf')
         seen=set()
-        for line in b.decode('utf-8-sig').splitlines():
+        lines=b.decode('utf-8-sig').splitlines()
+        assert lines and lines[0]=='',(file,'first line must be empty: the engine skips it')
+        for line in lines[1:]:
             assert line.count('|')==1,(file,line)
             key,val=line.split('|',1)
             assert key not in seen,(file,key)
             assert val,(file,key)
             seen.add(key)
+            # Official Chinese style: every non-ASCII char followed by a space
+            # (troop names keep the player's own trailing ideographic space).
+            for i,ch in enumerate(val):
+                if ord(ch)>127 and ch!='\u3000':
+                    assert i+1<len(val) and val[i+1] in ' \u3000',(file,key,val)
 menu=(local/'cns/game_menus.csv').read_text('utf-8-sig')
 for key in ('mno_af09_village_echo','menu_af09_echo','mno_af09_take_aid_watchmen','mno_af09_leave_deserter_guard'):
     assert key+'|' in menu,key
