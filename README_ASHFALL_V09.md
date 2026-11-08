@@ -55,7 +55,9 @@ python tests/verify_v09.py
 
 - **累计安装包**：已装 FewerBandits v7.5 的模块，复制 `FewerBandits/` 下 `.txt` 文件到现有模块根目录。
 - **增量安装包**：已装《烽烟与暗流》v0.8 的模块，复制同名 `.txt` 文件覆盖。
-- **汉化**：压缩包内的 `localization/` 是增量语言文件。保存当前语言包后，运行 `python merge_localization.py "C:\\...\\Modules\\TestMod" cns`；如果你使用的是 `cn_s`，把最后参数改为 `cn_s`。不要直接覆盖已有完整的 `troops.csv`。
+- **从 v7.4 升级**：使用「从v7.4累计包」，已包含 v7.5，无需另装 v7.5 增量包。
+- **汉化（只能合并）**：游戏每种语言只认固定文件名（如 `troops.csv`），Mod 译文只能写进玩家已有的同名文件，直接复制会覆盖原有完整汉化。因此安装包里的汉化放在 `汉化_需合并_不要直接复制/`，文件改名为 `*.merge.csv`（误复制也不会被游戏读取）。把 `Modules\\TestMod` 文件夹拖到其中的 `双击合并汉化.bat` 上即可合并，无需 Python；装了 Python 也可运行 `python merge_localization.py "C:\\...\\Modules\\TestMod"`。语言目录默认自动选择（已有 `cns` 用 `cns`，只有 `cn_s` 用 `cn_s`），首次合并前的原文件保存为 `*.csv.bak`，重复运行不覆盖备份；遇到非 UTF-8（如 GBK）文件会停止且不改动任何文件。
+- **打包**：`python package_v09.py [输出目录]` 生成 v0.8 增量包、v7.5 累计包和 v7.4 累计包（默认输出到 `dist/`）；`python tests/test_merge_localization.py` 检查合并规则与包结构。
 - 交付文件不是可独立运行的 Native Mod；须保留原模块的资源目录、`module.ini`、`map.txt` 等文件。
 
 ## 技术约束和检查
@@ -64,7 +66,7 @@ python tests/verify_v09.py
 - 三个新脚本编号追加于既有 720 个脚本之后；一个新菜单编号追加于既有菜单之后。此前的 `troops.txt`、`conversation.txt`、`party_templates.txt` 未改。
 - 新玩法不会自行刷出地图队伍，也不干扰原版领主的任务优先级。
 - 玩家领取前再检查事件就绪、队伍容量或物品栏空位；资源不足时可下次再取，不消耗一次机会。
-- 已有 v0.8 游戏客户端、复杂战场和旧存档未实机验证。真实中文字体与不同发行版本语言文件路径亦需以后实机检查。
+- 已有 v0.8 游戏客户端、复杂战场和旧存档未实机验证。Windows 合并工具 `tools/merge_localization.ps1` 仅做过静态检查，尚未在 Windows 上实际运行。真实中文字体与不同发行版本语言文件路径亦需以后实机检查。
 
 ## 后续优先工作
 

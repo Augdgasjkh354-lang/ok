@@ -32,6 +32,7 @@ python tests/verify_v09.py
 - 新增含中文源码统一使用 UTF-8，并确保编码声明匹配文件内容；不要让源码声明为 `cp1254` 却写入 UTF-8 中文。
 - 游戏语言层为增量 CSV：`localization/cns/` 和 `localization/cn_s/`，每行 `ID|译文`，当前写入 UTF-8 BOM。
 - **尊重玩家已有汉化**：保留所有原版 `trp_*` 译名、敬称、`_pl` 条目及用户提供的汉字间空格风格，不得用增量 CSV 覆盖完整原版语言文件。
+- **发布包不得以引擎文件名附带 CSV**（如 `troops.csv`）：玩家直接复制会覆盖完整汉化。CSV 一律改名为 `*.merge.csv`，放入「需合并」文件夹并附带合并工具（见 `package_v09.py`、`tools/`）；修改合并规则时同步更新 `merge_localization.py` 与 `tools/merge_localization.ps1`，并运行 `tests/test_merge_localization.py`。
 - 严格保持翻译键不变；源码和翻译中的 `{s0}`、`{reg0}` 等占位符及格式控制符必须匹配；不允许因修乱码改变旧 `quick_strings` 的 ID 或位置。
 - 角色说话应符合其身份、性格和利益，避免机械的“战乱度＋10”式剧情对白；提示信息才展示必要的数值。
 
