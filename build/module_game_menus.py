@@ -4014,7 +4014,87 @@ game_menus = [
         (jump_to_menu, "mnu_battle_debrief"),
         (change_screen_mission),
       ]),
-      
+
+      # v1.0 fame (III): order a weaker, leaderless party to lay down its arms.
+      # Strength ratio is read from p_collective_enemy (the force actually
+      # fought, attachments included), the same party the battle uses.
+      ("af20_demand_surrender",
+      [
+        (eq, "$encountered_party_friendly", 0),
+        (neg|troop_is_wounded, "trp_player"),
+        (call_script, "script_af20_fame_total"),
+        (ge, reg0, 30),
+        (neg|is_between, "$g_encountered_party", centers_begin, centers_end),
+        (party_stack_get_troop_id, ":leader", "$g_encountered_party", 0),
+        (neg|troop_is_hero, ":leader"),
+        (party_get_slot, ":kind", "$g_encountered_party", slot_af04_kind),
+        (neg|is_between, ":kind", 1, 4),
+        (party_get_slot, ":ptype", "$g_encountered_party", slot_party_type),
+        (neq, ":ptype", spt_kingdom_caravan),
+        (call_script, "script_party_calculate_strength", "p_main_party", 0),
+        (assign, ":mine", reg0),
+        (val_max, ":mine", 1),
+        (call_script, "script_party_calculate_strength", "p_collective_enemy", 0),
+        (store_mul, ":ratio", reg0, 100),
+        (val_div, ":ratio", ":mine"),
+        (le, ":ratio", 50),
+        (store_current_hours, ":hours"),
+        (party_get_slot, ":tried", "$g_encountered_party", slot_af20_surrender_tried),
+        (lt, ":tried", ":hours"),
+      ],
+      "勒令他们放下武器",
+      [
+        # The try is spent whether it works or not: no re-rolling this party
+        # for 24 hours.
+        (store_current_hours, ":hours"),
+        (store_add, ":next", ":hours", 24),
+        (party_set_slot, "$g_encountered_party", slot_af20_surrender_tried, ":next"),
+        (call_script, "script_af20_fame_total"),
+        (assign, ":fame", reg0),
+        (call_script, "script_party_calculate_strength", "p_main_party", 0),
+        (assign, ":mine", reg0),
+        (val_max, ":mine", 1),
+        (call_script, "script_party_calculate_strength", "p_collective_enemy", 0),
+        (store_mul, ":ratio", reg0, 100),
+        (val_div, ":ratio", ":mine"),
+        (store_div, ":chance", ":fame", 2),
+        (store_sub, ":diff", 50, ":ratio"),
+        (val_add, ":chance", ":diff"),
+        (call_script, "script_af20_fame_kind"),
+        (assign, ":kind", reg0),
+        (try_begin),
+          (eq, ":kind", 1),
+          (val_add, ":chance", 20),
+        (else_try),
+          (eq, ":kind", 2),
+          (val_sub, ":chance", 20),
+        (try_end),
+        (val_max, ":chance", 5),
+        (val_min, ":chance", 90),
+        (store_random_in_range, ":roll", 0, 100),
+        (try_begin),
+          (lt, ":roll", ":chance"),
+          (display_message, "@对方面面相觑，最后还是把兵器扔在了地上。", 0x66FF66),
+          # Prisoners, copied the way a won battle collects them: the enemy's
+          # own prisoners become free companions in p_temp_party, their
+          # soldiers become prisoners there. Unlike after a battle, the
+          # soldiers are still companions in p_collective_enemy, so both
+          # scripts are needed here. No fame, xp or loot is given.
+          (party_clear, "p_temp_party"),
+          (assign, "$g_move_heroes", 0),
+          (call_script, "script_party_add_party_prisoners", "p_temp_party", "p_collective_enemy"),
+          (call_script, "script_party_prisoners_add_party_companions", "p_temp_party", "p_collective_enemy"),
+          (call_script, "script_clear_party_group", "$g_encountered_party"),
+          # The exchange screen is the last operation: when it closes, the
+          # encounter menu runs again and this flag returns to the map.
+          (assign, "$g_leave_encounter", 1),
+          (change_screen_exchange_with_party, "p_temp_party"),
+        (else_try),
+          (display_message, "@他们骂骂咧咧地拔出了刀。", 0xFF6666),
+          (jump_to_menu, "mnu_simple_encounter"),
+        (try_end),
+      ]),
+
       ("encounter_order_attack",
       [
         (eq, "$encountered_party_friendly", 0),

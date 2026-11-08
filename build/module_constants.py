@@ -2096,3 +2096,4 @@ slot_af20_next_check       = 877 # any map party: hour before which it is not ju
 slot_af20_challengers_beaten = 878 # p_main_party: challengers the player has beaten (3 = no more challenges)
 slot_af20_challenge        = 879 # lord: 0 none, 1 seeking the player out, 3 crushed (never again)
 slot_af20_challenge_day    = 880 # lord: state 1 start day+1; state 0 day+1 before which he will not try
+slot_af20_surrender_tried  = 881 # any map party: hour+24 until which it cannot be ordered to surrender again
