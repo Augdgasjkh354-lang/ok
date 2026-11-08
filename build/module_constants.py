@@ -2077,3 +2077,7 @@ slot_af11_merc_weeks       = 862 # consecutive unpaid paydays
 slot_af11_merc_centers     = 863 # employer's walled centers at last payday (0 = unknown)
 slot_af11_merc_demand_day  = 864 # last demand for back pay, day+1 (7-day cooldown)
 slot_af11_merc_endured     = 865 # unpaid weeks the player sat through and was repaid for
+# v1.0 the lord's court: villagers bring disputes to the player in his own villages.
+slot_af12_case_day         = 866 # village: last case heard, day+1 (30-day cooldown)
+slot_af12_case_kind        = 867 # village: kind of the last case (not repeated next time)
+slot_af12_case_global      = 868 # p_main_party: last case anywhere, day+1 (7-day cooldown)

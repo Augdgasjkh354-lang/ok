@@ -16,6 +16,7 @@ mno_af03_cheat_entry|烽 烟 与 暗 流 · 战 争 承 包 商 测 试 （ v0.3
 mno_af06_siege_ops_entry|围 城 暗 战 ： 侦 察 、 破 坏 粮 仓 与 策 反 守 军 
 mno_af06_defender_supply|将 随 身 四 袋 谷 物 秘 密 送 入 守 城 粮 仓 
 mno_af01_village_status|查 看 地 方 战 乱 与 援 助 
+mno_af12_case_entry|有 村 民 请 你 主 持 公 道 
 mno_af10_village_word|和 村 长 聊 聊 附 近 的 动 静 
 mno_af09_village_echo|村 口 似 乎 有 人 在 等 你 … … 
 mno_af03_contract_board|战 争 承 包 商 · 军 粮 委 托 
@@ -149,3 +150,14 @@ mno_af11_demand|派 人 去 国 王 那 里 催 讨 欠 饷
 mno_af11_quit|撕 毁 合 约 ， 带 着 弟 兄 们 离 开 （ 放 弃 欠 款 ） 
 mno_af11_take_land|接 受 ： 以 {s48}抵 偿 欠 饷 ， 向 国 王 宣 誓 效 忠 
 mno_af11_wait|再 等 等 。 
+menu_af12_case|{s40}
+mno_af12_land_fair|请 村 里 的 老 人 作 证 ， 照 旧 界 碑 重 新 划 界 。 
+mno_af12_land_bribe|收 下 老 户 的 钱 袋 ， 把 坡 地 判 给 他 们 。 
+mno_af12_land_mercy|坡 地 归 开 荒 的 人 家 ， 再 从 领 主 的 荒 地 里 补 老 户 一 块 。 
+mno_af12_mill_check|当 众 验 秤 ， 让 磨 坊 主 照 数 赔 给 各 家 。 
+mno_af12_mill_bribe|收 下 磨 坊 主 的 布 包 ， 这 事 就 算 了 。 
+mno_af12_mill_take|磨 坊 收 归 领 主 ， 派 人 看 管 ， 定 下 公 价 （ 出 资 100 第 纳 尔 ） 。 
+mno_af12_thief_flog|当 众 鞭 打 那 个 兵 ， 照 价 赔 给 老 汉 （ 赔 偿 50 第 纳 尔 ） 。 
+mno_af12_thief_pay|赔 钱 了 事 ， 回 营 再 私 下 教 训 （ 赔 偿 80 第 纳 尔 ） 。 
+mno_af12_thief_protect|一 口 咬 定 是 误 会 ， 把 告 状 的 老 汉 打 发 走 。 
+mno_af12_case_later|改 日 再 说 。 

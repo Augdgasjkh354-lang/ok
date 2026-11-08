@@ -732,5 +732,9 @@ script_af11_demand_back_pay = 730
 script_af11_quit_unpaid = 731
 script_af11_land_offer = 732
 script_af11_accept_land = 733
+script_af12_case_kind = 734
+script_af12_prepare_case = 735
+script_af12_judge = 736
+script_af12_verdict_cost = 737
 
 
