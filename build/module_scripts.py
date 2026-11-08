@@ -57315,7 +57315,7 @@ scripts = [
   ]),
 
   # ========== v1.0 fame: proud lords want to make their name on you ==========
-  # Once fame reaches 80, martial lords and marshals at war with the player may
+  # Once fame reaches 80, martial lords (never the marshal) at war with the player may
   # come looking for him: each such lord within 20 map units rolls once a day,
   # fame/10 % (at most 25%), one seeker at a time. A seeker attacks the player
   # for up to 3 days (re-asserted hourly against the native AI), then gives up
@@ -57372,8 +57372,8 @@ scripts = [
         (store_troop_faction, ":faction", ":lord"),
         (store_relation, ":rel", ":faction", ":player_faction"),
         (lt, ":rel", 0),
-        (this_or_next|troop_slot_eq, ":lord", slot_lord_reputation_type, lrep_martial),
-        (faction_slot_eq, ":faction", slot_faction_marshall, ":lord"),
+        (troop_slot_eq, ":lord", slot_lord_reputation_type, lrep_martial),
+        (neg|faction_slot_eq, ":faction", slot_faction_marshall, ":lord"),  # a marshal would bring his whole army
         (troop_slot_eq, ":lord", slot_troop_prisoner_of_party, -1),
         (troop_get_slot, ":party", ":lord", slot_troop_leaded_party),
         (gt, ":party", 0),
