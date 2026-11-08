@@ -32080,6 +32080,12 @@ scripts = [
       (assign, ":tier", reg0),
       (assign, ":bonus", 0),
       (try_begin),
+        (eq, ":tier", 5),
+        (assign, ":bonus", 8),
+      (else_try),
+        (eq, ":tier", 4),
+        (assign, ":bonus", 6),
+      (else_try),
         (eq, ":tier", 3),
         (assign, ":bonus", 4),
       (else_try),
@@ -57219,11 +57225,14 @@ scripts = [
     (store_add, reg0, ":fame", ":kills"),
   ]),
 
-  # Tier of a fame value: 0 unknown, 1 (30+), 2 (80+), 3 legendary (150+). Output reg0.
+  # Tier of a fame value: 0 unknown, 1 (30+), 2 (80+), 3 legendary (150+),
+  # 4 unbeaten (300+), 5 mythic (600+). Output reg0.
   ("af20_fame_tier", [
     (store_script_param, ":fame", 1),
     (assign, reg0, 0),
-    (try_begin), (ge, ":fame", 150), (assign, reg0, 3),
+    (try_begin), (ge, ":fame", 600), (assign, reg0, 5),
+    (else_try), (ge, ":fame", 300), (assign, reg0, 4),
+    (else_try), (ge, ":fame", 150), (assign, reg0, 3),
     (else_try), (ge, ":fame", 80), (assign, reg0, 2),
     (else_try), (ge, ":fame", 30), (assign, reg0, 1),
     (try_end),
@@ -57246,7 +57255,13 @@ scripts = [
         (eq, ":new", 2),
         (display_message, "@你的威名传遍了这一带，不少领主见了你的旗号也要掂量掂量。", 0x66FF66),
       (else_try),
+        (eq, ":new", 3),
         (display_message, "@关于你的传说越传越玄，哪怕你只带着寥寥几人，多数人也不敢上前。", 0x66FF66),
+      (else_try),
+        (eq, ":new", 4),
+        (display_message, "@人们开始说你从没输过。敌军望见你的旗号，先想的是退路。", 0x66FF66),
+      (else_try),
+        (display_message, "@你的名字成了故事里的人物。说书人讲你，孩子们扮你，连敌国的国王都在打听你的下落。", 0x66FF66),
       (try_end),
     (else_try),
       (lt, ":new", ":old"),
@@ -57302,7 +57317,8 @@ scripts = [
   # Hourly. (1) Two weeks without a battle: battle fame -5 points, again every
   # two weeks. (2) Each hostile map party within 6 units is judged at most once per
   # 12 hours: chance it will not chase = fame - its nerve x its strength ratio
-  # against the player (ratio capped at 3x), at most 90%. Nerve: 20 for
+  # against the player (ratio capped at 3x), at most 90% (95% at tiers 4-5).
+  # Nerve: 20 for
   # bandits and others; lords 30 + renown/20, martial +20, debauched -10,
   # marshal +30. Parties under a paid truce or besieging are left alone.
   # Only pursuit changes: they still fight if the player attacks them.
@@ -57414,7 +57430,14 @@ scripts = [
           (eq, reg0, 2),
           (val_add, ":chance", 10),
         (try_end),
-        (val_min, ":chance", 90),
+        # v1.0 fame (VI): tiers 4-5 cap the chance at 95% instead of 90%.
+        (call_script, "script_af20_fame_tier", ":fame"),
+        (try_begin),
+          (ge, reg0, 4),
+          (val_min, ":chance", 95),
+        (else_try),
+          (val_min, ":chance", 90),
+        (try_end),
         (gt, ":chance", 0),
         (store_random_in_range, ":roll", 0, 100),
         (lt, ":roll", ":chance"),
@@ -57453,6 +57476,14 @@ scripts = [
     (call_script, "script_af20_fame_tier", ":fame"),
     (assign, ":tier", reg0),
     (try_begin),
+      (eq, ":tier", 5),
+      (str_store_string, s41, "@神话"),
+      (str_store_string, s42, "@你已经不只是一个将领，而是一个传说。再没有人敢来找你立威，连国王们都要掂量你的意思。"),
+    (else_try),
+      (eq, ":tier", 4),
+      (str_store_string, s41, "@无敌"),
+      (str_store_string, s42, "@敌人说起你，都说你从没打过败仗。只有极少数不要命的人，还敢试着找你较量。"),
+    (else_try),
       (eq, ":tier", 3),
       (str_store_string, s41, "@传奇"),
       (str_store_string, s42, "@关于你的传说越传越玄。哪怕你只带着寥寥几人，多数人也不敢上前，只有最好战的领主和元帅还敢来碰你。"),
@@ -57492,13 +57523,14 @@ scripts = [
     (else_try),
       (str_clear, s43),
     (try_end),
-    (str_store_string, s40, "@{s42}^^威名：{reg1}（{s41}）^战功：{reg2}^你亲手杀死或打晕：{reg3}人（每10人算1点威名）^{s43}^^威名到30、80、150分别是小有名气、威震一方、传奇。打赢一场仗战功+1，以弱胜强另有加成；打输一场，战功扣两成。"),
+    (str_store_string, s40, "@{s42}^^威名：{reg1}（{s41}）^战功：{reg2}^你亲手杀死或打晕：{reg3}人（每10人算1点威名）^{s43}^^威名到30、80、150、300、600分别是小有名气、威震一方、传奇、无敌、神话。打赢一场仗战功+1，以弱胜强另有加成；打输一场，战功扣两成。"),
   ]),
 
   # ========== v1.0 fame: proud lords want to make their name on you ==========
   # Once fame reaches 80, martial lords (never the marshal) at war with the player may
   # come looking for him: each such lord within 20 map units rolls once a day,
-  # fame/10 % (at most 25%), one seeker at a time. A seeker attacks the player
+  # fame/10 % (at most 25%), one seeker at a time. Tier 4 halves that daily
+  # chance; tier 5 brings no new seekers at all. A seeker attacks the player
   # for up to 3 days (re-asserted hourly against the native AI), then gives up
   # for 15 days. If he loses: 30 days before he tries again -- or never, if it
   # was a rout (the player kept at least 75% of his strength). After three
@@ -57542,8 +57574,15 @@ scripts = [
       (lt, ":seeker", 0),
       (lt, ":beaten", 3),
       (ge, ":fame", 80),
+      # v1.0 fame (VI): tier 5, nobody dares come; tier 4, the daily chance halves.
+      (call_script, "script_af20_fame_tier", ":fame"),
+      (lt, reg0, 5),
       (store_div, ":chance", ":fame", 10),
       (val_min, ":chance", 25),
+      (try_begin),
+        (eq, reg0, 4),
+        (val_div, ":chance", 2),
+      (try_end),
       (try_for_range, ":lord", kings_begin, lords_end),
         (lt, ":seeker", 0),
         (troop_slot_eq, ":lord", slot_troop_occupation, slto_kingdom_hero),
@@ -57688,6 +57727,12 @@ scripts = [
     (call_script, "script_af20_fame_tier", ":fame"),
     (assign, ":pct", 33),
     (try_begin),
+      (eq, reg0, 5),
+      (assign, ":pct", 10),
+    (else_try),
+      (eq, reg0, 4),
+      (assign, ":pct", 15),
+    (else_try),
       (eq, reg0, 3),
       (assign, ":pct", 20),
     (else_try),
@@ -57707,9 +57752,9 @@ scripts = [
   # How interesting a center is to an enemy, in percent (100 = as usual).
   # Input: center. Output reg0, assigned last: the calls in the middle
   # rewrite reg0. Only the player's own fiefs are affected: tier 2
-  # (威震一方) -25, tier 3 (传奇) -50, a merciful name another -25,
-  # never below 25. A bloody name takes nothing off: a feared player is
-  # also one worth getting rid of.
+  # (威震一方) -25, tier 3 (传奇) -50, tier 4 (无敌) -60, tier 5 (神话) -70,
+  # a merciful name another -25, never below 15. A bloody name takes nothing
+  # off: a feared player is also one worth getting rid of.
   ("af22_fief_respect", [
     (store_script_param, ":center", 1),
     (assign, ":interest", 100),
@@ -57720,6 +57765,12 @@ scripts = [
       (call_script, "script_af20_fame_tier", ":fame"),
       (assign, ":tier", reg0),
       (try_begin),
+        (eq, ":tier", 5),
+        (val_sub, ":interest", 70),
+      (else_try),
+        (eq, ":tier", 4),
+        (val_sub, ":interest", 60),
+      (else_try),
         (eq, ":tier", 3),
         (val_sub, ":interest", 50),
       (else_try),
@@ -57731,7 +57782,7 @@ scripts = [
         (eq, reg0, 1),
         (val_sub, ":interest", 25),
       (try_end),
-      (val_max, ":interest", 25),
+      (val_max, ":interest", 15),
     (try_end),
     (assign, reg0, ":interest"),
   ]),
