@@ -48471,7 +48471,7 @@ scripts = [
                     
                     (troop_ensure_inventory_space, ":cur_merchant", 20),
                     (troop_sort_inventory, ":cur_merchant"),
-                    (call_script, "script_af24_settle_stock", ":cur_merchant", ":cur_center", 0, 0, 2000, 0),  # v1.0 商人转卖
+                    (call_script, "script_af24_settle_stock", ":cur_merchant", ":cur_center", 0, 0, 2000, 40),  # v1.0 商人转卖
                   (try_end),
               ]),
               
@@ -48491,7 +48491,7 @@ scripts = [
                     (troop_add_merchandise_with_faction, ":cur_merchant", ":cur_faction", itp_type_hand_armor, 4),
                     (troop_ensure_inventory_space, ":cur_merchant", merchant_inventory_space),
                     (troop_sort_inventory, ":cur_merchant"),
-                    (call_script, "script_af24_settle_stock", ":cur_merchant", ":cur_town", 0, 0, 1250, 0),  # v1.0 商人转卖
+                    (call_script, "script_af24_settle_stock", ":cur_merchant", ":cur_town", 0, 0, 1250, 20),  # v1.0 商人转卖
                   (end_try),
               ]),
               
@@ -48516,7 +48516,7 @@ scripts = [
                     (troop_add_merchandise_with_faction, ":cur_merchant", ":cur_faction", itp_type_bolts, 2),
                     (troop_ensure_inventory_space, ":cur_merchant", merchant_inventory_space),
                     (troop_sort_inventory, ":cur_merchant"),
-                    (call_script, "script_af24_settle_stock", ":cur_merchant", ":cur_town", 0, 0, 1250, 0),  # v1.0 商人转卖
+                    (call_script, "script_af24_settle_stock", ":cur_merchant", ":cur_town", 0, 0, 1250, 20),  # v1.0 商人转卖
                   (try_end),
               ]),
               
@@ -48533,7 +48533,7 @@ scripts = [
                     (troop_add_merchandise_with_faction, ":cur_merchant", ":cur_faction", itp_type_horse, 5),
                     (troop_ensure_inventory_space, ":cur_merchant", 65),
                     (troop_sort_inventory, ":cur_merchant"),
-                    (call_script, "script_af24_settle_stock", ":cur_merchant", ":cur_town", 0, 0, 800, 0),  # v1.0 商人转卖
+                    (call_script, "script_af24_settle_stock", ":cur_merchant", ":cur_town", 0, 0, 800, 20),  # v1.0 商人转卖
                   (try_end),
               ]),
               
@@ -58043,39 +58043,45 @@ scripts = [
     (assign, reg0, ":total"),
   ]),
 
-  # Settle one merchant's weekly refresh against his town's treasury.
-  # Input: merchant, town, (unused), (unused), working float, (unused).
+  # Settle one merchant's weekly refresh.
+  # Input: merchant, town, (unused), (unused), working float, share of the
+  # town's market in percent (general 40, armour/weapons/horses 20 each).
   # The merchant keeps a working float. What the player sold him since the
   # last refresh left his purse short: he has resold those goods to the
-  # townspeople, so the town treasury makes up the shortfall (at most a
-  # quarter of the treasury, the caravan chest rule; a poor town cannot).
-  # What the player bought from him left his purse over the float: the
-  # surplus pays local workshops and villages for new stock and goes back to
-  # the treasury. So the treasury pays exactly the net of the player's trade
-  # with him, and the random native top-up is gone. (An earlier version
-  # valued old and new stock; the randomly regenerated stock made that swing
-  # by thousands a week and left merchants broke about half the time.)
-  # New games: merchants start at 0 and are filled on the first refresh.
+  # townspeople. Their purchasing power is the town's weekly market,
+  # prosperity x 15 + 500 (the same "local production" that feeds the
+  # treasury's weekly income), and each merchant may draw only his share of
+  # it; it is a weekly flow, not a pool, so it never runs dry for good --
+  # only a town whose prosperity falls buys less. The treasury is not
+  # touched for the shortfall: it pays garrisons and recruits and usually
+  # holds too little. What the player bought from him left his purse over
+  # the float: the surplus pays for new stock and goes to the town treasury.
+  # (Earlier versions valued old and new stock -- random stock made that
+  # swing by thousands -- and then drew the shortfall from the treasury,
+  # which garrison wages keep near empty in most towns.)
+  # New games: merchants start at 0 and are filled from the first week's market.
   ("af24_settle_stock", [
     (store_script_param, ":merchant", 1),
     (store_script_param, ":town", 2),
     (store_script_param, ":float", 5),
+    (store_script_param, ":share", 6),
     (store_troop_gold, ":gold", ":merchant"),
-    (party_get_slot, ":wealth", ":town", slot_town_wealth),
-    (val_max, ":wealth", 0),
     (try_begin),
       (lt, ":gold", ":float"),
       (store_sub, ":short", ":float", ":gold"),
-      (store_div, ":limit", ":wealth", 4),
-      (val_min, ":short", ":limit"),
+      (party_get_slot, ":prosperity", ":town", slot_town_prosperity),
+      (store_mul, ":market", ":prosperity", 15),
+      (val_add, ":market", 500),
+      (val_mul, ":market", ":share"),
+      (val_div, ":market", 100),
+      (val_min, ":short", ":market"),
       (gt, ":short", 0),
-      (val_sub, ":wealth", ":short"),
-      (party_set_slot, ":town", slot_town_wealth, ":wealth"),
       (call_script, "script_troop_add_gold", ":merchant", ":short"),
     (else_try),
       (gt, ":gold", ":float"),
       (store_sub, ":surplus", ":gold", ":float"),
       (troop_remove_gold, ":merchant", ":surplus"),
+      (party_get_slot, ":wealth", ":town", slot_town_wealth),
       (val_add, ":wealth", ":surplus"),
       (party_set_slot, ":town", slot_town_wealth, ":wealth"),
     (try_end),
