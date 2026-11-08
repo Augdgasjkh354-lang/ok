@@ -7,6 +7,7 @@ mno_af03_field_journal|军 事 委 托 记 录
 mno_fb75_intel_book|宫 廷 政 治 情 报 簿 
 mno_af08_desk_entry|烽 烟 案 头 ： 领 地 、 战 争 与 宫 廷 消 息 
 mno_af11_arrears_entry|清 点 拖 欠 的 饷 银 
+mno_af20_fame_entry|听 听 人 们 怎 么 说 你 
 mno_fb75_cheat_entry|宫 廷 政 治 测 试 （ v7.5） 
 mno_af01_cheat_entry|烽 烟 与 暗 流 测 试 （ v0.1 / v0.2） 
 mno_af06_cheat_entry|烽 烟 与 暗 流 · 围 城 与 战 后 治 理 测 试 （ v0.6） 
@@ -163,3 +164,5 @@ mno_af12_thief_flog|当 众 鞭 打 那 个 兵 ， 照 价 赔 给 老 汉 （ 
 mno_af12_thief_pay|赔 钱 了 事 ， 回 营 再 私 下 教 训 （ 赔 偿 80 第 纳 尔 ） 。 
 mno_af12_thief_protect|一 口 咬 定 是 误 会 ， 把 告 状 的 老 汉 打 发 走 。 
 mno_af12_case_later|改 日 再 说 。 
+menu_af20_fame|{s40}
+mno_af20_fame_back|返 回 营 地 

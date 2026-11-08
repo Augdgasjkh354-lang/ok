@@ -770,5 +770,6 @@ script_af20_announce = 768
 script_af20_on_victory = 769
 script_af20_on_defeat = 770
 script_af20_hourly = 771
+script_af20_prepare_fame = 772
 
 

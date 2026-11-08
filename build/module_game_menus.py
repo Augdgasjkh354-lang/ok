@@ -3060,6 +3060,7 @@ game_menus = [
       ("af08_desk_entry", [], "烽烟案头：领地、战争与宫廷消息", [(jump_to_menu, "mnu_af08_desk")]),
       ("af11_arrears_entry", [(call_script, "script_af11_merc_current_owed"), (gt, reg0, 0)],
        "清点拖欠的饷银", [(jump_to_menu, "mnu_af11_arrears")]),
+      ("af20_fame_entry", [], "听听人们怎么说你", [(jump_to_menu, "mnu_af20_fame")]),
       ("camp_cheat",
        [(ge, "$cheat_mode", 1)
         ], "CHEAT MENU!",
@@ -15534,6 +15535,15 @@ game_menus = [
        (try_begin), (eq, reg0, 1), (display_message, "@弟兄们松了口气。老汉被人搀回去时，村口的人都在看。"), (try_end),
        (jump_to_menu, "mnu_village")]),
      ("af12_case_later", [], "改日再说。", [(jump_to_menu, "mnu_village")]),
+   ]),
+
+  # v1.0: the player's fame, read-only.
+  ("af20_fame", 0,
+   "{s40}",
+   "none",
+   [(call_script, "script_af20_prepare_fame")],
+   [
+     ("af20_fame_back", [], "返回营地", [(jump_to_menu, "mnu_camp")]),
    ]),
 
 ]
