@@ -3314,6 +3314,7 @@ scripts = [
                 #(troop_set_slot, ":cur_troop_id", slot_troop_is_prisoner, 1),
                 (troop_set_slot, ":cur_troop_id", slot_troop_prisoner_of_party, ":nonempty_winner_party"),
                 (display_log_message, "str_hero_taken_prisoner"),
+                (call_script, "script_af16_lord_war_chest", ":cur_troop_id", ":leader_troop_id"),  # v1.0
                 
                 (try_begin),
                   (call_script, "script_cf_prisoner_offered_parole", ":cur_troop_id"),
@@ -3428,6 +3429,12 @@ scripts = [
               (try_end),
               (call_script, "script_faction_inflict_war_damage_on_faction", ":winner_faction", ":fortress_faction", ":damage"),
               
+              # v1.0: the conqueror carries off most of the treasury.
+              (try_begin),
+                (party_get_slot, ":sacker", ":root_defeated_party", slot_center_last_taken_by_troop),
+                (is_between, ":sacker", active_npcs_begin, active_npcs_end),
+                (call_script, "script_af16_sack_center", ":root_defeated_party", ":sacker"),
+              (try_end),
               (call_script, "script_give_center_to_faction", ":root_defeated_party", ":winner_faction"),
               (try_begin),
                 (eq, ":defeated_faction", "fac_player_supporters_faction"),
@@ -22341,6 +22348,8 @@ scripts = [
               (party_get_slot, ":village_prosperity", ":village_no"),
               (store_mul, ":value_of_loot", ":village_prosperity", 60), #average is 3000
               (val_add, ":raid_leader_gold", ":value_of_loot"),
+              (call_script, "script_af16_take_village_cash", ":village_no"),  # v1.0: the elder's purse too
+              (val_add, ":raid_leader_gold", reg0),
               (troop_set_slot, ":raid_leader", slot_troop_wealth, ":raid_leader_gold"),
               
               #take loot gold from village lord #new 1.126
@@ -52654,6 +52663,10 @@ scripts = [
   # Params: (village); clears reservation first, then applies one already-paid action.
   ("af01_settle_aid", [
     (store_script_param, ":village", 1),
+    # v1.0: remember the before-values so the result message can show them.
+    (party_get_slot, ":p_before", ":village", slot_town_prosperity),
+    (party_get_slot, ":u_before", ":village", slot_af01_unrest),
+    (party_get_slot, ":r_before", ":village", slot_center_player_relation),
     (party_get_slot, ":action", ":village", slot_af01_pending_action),
     (party_set_slot, ":village", slot_af01_pending_action, 0),
     (party_set_slot, ":village", slot_af01_pending_day, 0),
@@ -52708,7 +52721,17 @@ scripts = [
     (try_begin),
       (is_between, ":action", 1, 4),
       (str_store_party_name, s10, ":village"),
-      (display_message, "@{s10}\uff1a\u6b64\u524d\u5b89\u6392\u7684\u5730\u65b9\u63f4\u52a9\u5df2\u5b8c\u6210\u3002"),
+      (assign, reg41, ":p_before"),
+      (party_get_slot, reg42, ":village", slot_town_prosperity),
+      (assign, reg43, ":u_before"),
+      (party_get_slot, reg44, ":village", slot_af01_unrest),
+      (assign, reg45, ":r_before"),
+      (party_get_slot, reg46, ":village", slot_center_player_relation),
+      (display_message, "@{s10}：援助已经送到。繁荣{reg41}→{reg42}，战乱{reg43}→{reg44}，关系{reg45}→{reg46}。", 0x66FF66),
+      (try_begin),
+        (ge, ":r_before", 30),
+        (display_message, "@村里人已经很信任你了，日常援助不再提升关系，但繁荣和战乱照样会变。"),
+      (try_end),
     (try_end),
   ]),
 
@@ -54090,7 +54113,7 @@ scripts = [
       (try_begin),
         (eq, ":valid", 0),
         (party_set_slot, "p_main_party", ":slot", 0),
-        (call_script, "script_af15_gang_purse_reset", ":kind"),  # v1.0: a broken gang's cash is gone
+        (call_script, "script_af15_gang_purse_reset", ":kind"),  # v1.0: broken by others; the player already took it if he won
         # An existing leader was defeated by the world simulation: start a fresh 30-day cooldown.
         (try_begin),
           (gt, ":gang", 0),
@@ -54361,6 +54384,17 @@ scripts = [
       (call_script, "script_af01_change_unrest", ":home", -8),
       (call_script, "script_change_player_relation_with_center", ":home", 2),
       (call_script, "script_af04_change_trust", ":kind", -20),
+      # v1.0: the gang's cash box is taken with its camp.
+      (store_add, ":purse_slot", slot_af15_gang_purse_start, ":kind"),
+      (val_sub, ":purse_slot", 1),
+      (party_get_slot, ":purse", "p_main_party", ":purse_slot"),
+      (try_begin),
+        (gt, ":purse", 0),
+        (troop_add_gold, "trp_player", ":purse"),
+        (party_set_slot, "p_main_party", ":purse_slot", 0),
+        (assign, reg41, ":purse"),
+        (display_message, "@你们在匪帮的营地里翻出了他们的钱箱：{reg41}第纳尔。", 0x66FF66),
+      (try_end),
       # Keep the tracked party id until the native engine has actually removed it.
       # This prevents a duplicate leader band after a victory with survivors.
       (call_script, "script_af04_main_slot", slot_af04_last_spawn_start, ":kind"),
@@ -56525,6 +56559,101 @@ scripts = [
       (val_add, ":size", 1),
     (try_end),
     (party_set_slot, "p_main_party", ":slot", ":purse"),
+  ]),
+
+
+  # ========== v1.0 economy: spoils of war ==========
+  # Split loot between the taker and his king (one third to the crown, unless
+  # the taker is the king or serves no NPC kingdom). Input: receiver
+  # (trp_player or a lord), amount. Output: reg41 kept, reg42 to the king, s47 king.
+  ("af16_split_loot", [
+    (store_script_param, ":receiver", 1),
+    (store_script_param, ":amount", 2),
+    (assign, ":king_share", 0),
+    (assign, ":king", -1),
+    (try_begin),
+      (eq, ":receiver", "trp_player"),
+      (is_between, "$players_kingdom", kingdoms_begin, kingdoms_end),
+      (neq, "$players_kingdom", "fac_player_supporters_faction"),
+      (faction_get_slot, ":king", "$players_kingdom", slot_faction_leader),
+    (else_try),
+      (neq, ":receiver", "trp_player"),
+      (store_troop_faction, ":faction", ":receiver"),
+      (is_between, ":faction", kingdoms_begin, kingdoms_end),
+      (faction_get_slot, ":king", ":faction", slot_faction_leader),
+    (try_end),
+    (try_begin),
+      (is_between, ":king", active_npcs_begin, active_npcs_end),
+      (neq, ":king", ":receiver"),
+      (store_div, ":king_share", ":amount", 3),
+      (call_script, "script_af14_lord_wealth", ":king", ":king_share", 0),
+      (str_store_troop_name, s47, ":king"),
+    (try_end),
+    (store_sub, ":kept", ":amount", ":king_share"),
+    (try_begin),
+      (eq, ":receiver", "trp_player"),
+      (troop_add_gold, "trp_player", ":kept"),
+    (else_try),
+      (call_script, "script_af14_lord_wealth", ":receiver", ":kept", 0),
+    (try_end),
+    (assign, reg41, ":kept"),
+    (assign, reg42, ":king_share"),
+  ]),
+
+  # A captured town or castle: 60% of its treasury is carried off.
+  # Output reg0 = total taken (also reg41/reg42 as in af16_split_loot).
+  ("af16_sack_center", [
+    (store_script_param, ":center", 1),
+    (store_script_param, ":receiver", 2),
+    (party_get_slot, ":treasury", ":center", slot_town_wealth),
+    (val_max, ":treasury", 0),
+    (store_mul, ":loot", ":treasury", 60),
+    (val_div, ":loot", 100),
+    (val_sub, ":treasury", ":loot"),
+    (party_set_slot, ":center", slot_town_wealth, ":treasury"),
+    (assign, reg41, 0), (assign, reg42, 0),
+    (try_begin),
+      (gt, ":loot", 0),
+      (call_script, "script_af16_split_loot", ":receiver", ":loot"),
+    (try_end),
+    (assign, reg0, ":loot"),
+  ]),
+
+  # A defeated lord's war chest: the 30% of his wealth he campaigns with.
+  # (Not all of it -- his estate stays home; taking everything would leave him
+  # unable to pay any troops and collapse through native attrition.)
+  ("af16_lord_war_chest", [
+    (store_script_param, ":lord", 1),
+    (store_script_param, ":receiver", 2),
+    (assign, ":chest", 0),
+    (assign, reg41, 0), (assign, reg42, 0),
+    (try_begin),
+      (is_between, ":lord", active_npcs_begin, active_npcs_end),
+      (neq, ":lord", ":receiver"),
+      (troop_get_slot, ":wealth", ":lord", slot_troop_wealth),
+      (gt, ":wealth", 0),
+      (store_mul, ":chest", ":wealth", 30),
+      (val_div, ":chest", 100),
+      (gt, ":chest", 0),
+      (call_script, "script_af14_lord_wealth", ":lord", 0, ":chest"),
+      (call_script, "script_af16_split_loot", ":receiver", ":chest"),
+    (try_end),
+    (assign, reg0, ":chest"),
+  ]),
+
+  # The cash a village has on hand (its elder's purse) goes to whoever sacks it.
+  ("af16_take_village_cash", [
+    (store_script_param, ":village", 1),
+    (assign, reg0, 0),
+    (try_begin),
+      (is_between, ":village", villages_begin, villages_end),
+      (party_get_slot, ":elder", ":village", slot_town_elder),
+      (gt, ":elder", 0),
+      (store_troop_gold, ":cash", ":elder"),
+      (gt, ":cash", 0),
+      (troop_remove_gold, ":elder", ":cash"),
+      (assign, reg0, ":cash"),
+    (try_end),
   ]),
 
 ]

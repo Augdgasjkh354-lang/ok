@@ -745,5 +745,9 @@ script_af14_lord_wealth = 743
 script_af15_gang_purse = 744
 script_af15_gang_purse_reset = 745
 script_af15_gang_recruit = 746
+script_af16_split_loot = 747
+script_af16_sack_center = 748
+script_af16_lord_war_chest = 749
+script_af16_take_village_cash = 750
 
 
