@@ -2093,3 +2093,6 @@ slot_af19_lord_owes_player = 874 # lord: denars still owed to the player, paid w
 slot_af20_fame             = 875 # p_main_party: fame from battles won (kills are read live)
 slot_af20_next_decay       = 876 # p_main_party: day+1 of the next fortnightly fading (reset by battles)
 slot_af20_next_check       = 877 # any map party: hour before which it is not judged again
+slot_af20_challengers_beaten = 878 # p_main_party: challengers the player has beaten (3 = no more challenges)
+slot_af20_challenge        = 879 # lord: 0 none, 1 seeking the player out, 3 crushed (never again)
+slot_af20_challenge_day    = 880 # lord: state 1 start day+1; state 0 day+1 before which he will not try

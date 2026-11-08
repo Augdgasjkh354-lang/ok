@@ -771,5 +771,8 @@ script_af20_on_victory = 769
 script_af20_on_defeat = 770
 script_af20_hourly = 771
 script_af20_prepare_fame = 772
+script_af20_challenges = 773
+script_af20_challenge_lost = 774
+script_af20_challenge_won = 775
 
 
