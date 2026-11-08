@@ -53089,6 +53089,9 @@ scripts = [
       (party_set_slot, ":village", slot_af02_last_refugee_token, ":day"),
       (party_set_ai_behavior, ":new", ai_bhvr_travel_to_party),
       (party_set_ai_object, ":new", ":destination"),
+      # v1.0: the people really leave. The town gains them only if they arrive
+      # (+1 on arrival below); if they are scattered on the road, they are lost.
+      (call_script, "script_change_center_prosperity", ":village", -1),
       (str_store_party_name, s10, ":village"),
       (str_store_string, s11, "@\u6765\u81ea{s10}\u7684\u6d41\u6c11"),
       (party_set_name, ":new", s11),
