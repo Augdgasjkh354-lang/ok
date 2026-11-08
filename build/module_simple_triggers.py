@@ -4085,4 +4085,6 @@ simple_triggers = [
   (0, [(eq, "$fb71_full_start", 2),
        (assign, "$fb71_full_start", 1),
        (call_script, "script_fb71_apply_full_start")]),
+  # Ashfall v1.0: hunger when a granary stays nearly empty outside a siege.
+  (24 * 7, [(call_script, "script_af17_weekly_hunger")]),
 ]

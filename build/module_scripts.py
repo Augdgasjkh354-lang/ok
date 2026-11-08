@@ -14386,6 +14386,10 @@ scripts = [
         (is_between, ":center_no", villages_begin, villages_end),
         (call_script, "script_update_trade_good_price_for_party", ":center_no"),
       (try_end),
+      # v1.0: grain prices feel the town granary (before normalisation).
+      (try_for_range, ":center_no", towns_begin, towns_end),
+        (call_script, "script_af17_grain_price_pressure", ":center_no"),
+      (try_end),
       
       (try_for_range, ":cur_good", trade_goods_begin, trade_goods_end),
         (assign, ":total_price", 0),
@@ -56656,6 +56660,103 @@ scripts = [
       (gt, ":cash", 0),
       (troop_remove_gold, ":elder", ":cash"),
       (assign, reg0, ":cash"),
+    (try_end),
+  ]),
+
+
+  # ========== v1.0 economy: food ==========
+  # Granary fill in percent of the native food store limit. Output reg0.
+  ("af17_granary_ratio", [
+    (store_script_param, ":center", 1),
+    (assign, reg0, 100),
+    (try_begin),
+      (is_between, ":center", walled_centers_begin, walled_centers_end),
+      (party_get_slot, ":food", ":center", slot_party_food_store),
+      (call_script, "script_center_get_food_store_limit", ":center"),
+      (gt, reg0, 0),
+      (assign, ":limit", reg0),
+      (store_mul, reg0, ":food", 100),
+      (val_div, reg0, ":limit"),
+      (val_clamp, reg0, 0, 101),
+    (try_end),
+  ]),
+
+  # Every 72h, before native normalisation: grain costs more where the granary
+  # runs low (up to +500 on the 1000-based price factor at an empty granary).
+  ("af17_grain_price_pressure", [
+    (store_script_param, ":town", 1),
+    (try_begin),
+      (is_between, ":town", towns_begin, towns_end),
+      (call_script, "script_af17_granary_ratio", ":town"),
+      (lt, reg0, 50),
+      (store_sub, ":push", 50, reg0),
+      (val_mul, ":push", 10),
+      (store_sub, ":slot", "itm_grain", trade_goods_begin),
+      (val_add, ":slot", slot_town_trade_good_prices_begin),
+      (party_get_slot, ":price", ":town", ":slot"),
+      (val_add, ":price", ":push"),
+      (val_clamp, ":price", minimum_price_factor, maximum_price_factor),
+      (party_set_slot, ":town", ":slot", ":price"),
+    (try_end),
+  ]),
+
+  # The town granary buys the player's grain while it is under 80% full.
+  # One sack = one day of the town's siege consumption. Paid from the town
+  # treasury at the local market grain price (no premium: buying from the same
+  # town's merchant and selling here must not profit; hauling grain in does,
+  # since prices rise as the granary empties). Output reg0 sacks, reg1 denars.
+  ("af17_sell_grain", [
+    (store_script_param, ":town", 1),
+    (call_script, "script_center_get_food_store_limit", ":town"),
+    (assign, ":limit", reg0),
+    (call_script, "script_center_get_food_consumption", ":town"),
+    (assign, ":per_sack", reg0),
+    (store_item_value, ":base", "itm_grain"),
+    (store_sub, ":slot", "itm_grain", trade_goods_begin),
+    (val_add, ":slot", slot_town_trade_good_prices_begin),
+    (party_get_slot, ":factor", ":town", ":slot"),
+    (store_mul, ":price", ":base", ":factor"),
+    (val_div, ":price", 1000),
+    (val_max, ":price", 1),
+    (assign, ":sold", 0),
+    (assign, ":paid", 0),
+    (store_item_kind_count, ":have", "itm_grain", "trp_player"),
+    (try_for_range, ":unused", 0, ":have"),
+      (party_get_slot, ":food", ":town", slot_party_food_store),
+      (store_mul, ":cap", ":limit", 80),
+      (val_div, ":cap", 100),
+      (lt, ":food", ":cap"),
+      (party_get_slot, ":treasury", ":town", slot_town_wealth),
+      (ge, ":treasury", ":price"),
+      (troop_remove_items, "trp_player", "itm_grain", 1),
+      (val_sub, ":treasury", ":price"),
+      (party_set_slot, ":town", slot_town_wealth, ":treasury"),
+      (val_add, ":food", ":per_sack"),
+      (val_min, ":food", ":limit"),
+      (party_set_slot, ":town", slot_party_food_store, ":food"),
+      (val_add, ":sold", 1),
+      (val_add, ":paid", ":price"),
+    (try_end),
+    (try_begin),
+      (gt, ":paid", 0),
+      (troop_add_gold, "trp_player", ":paid"),
+    (try_end),
+    (assign, reg0, ":sold"),
+    (assign, reg1, ":paid"),
+  ]),
+
+  # Weekly: a granary under 25% outside a siege means hunger, prosperity -1.
+  ("af17_weekly_hunger", [
+    (try_for_range, ":center", walled_centers_begin, walled_centers_end),
+      (party_slot_eq, ":center", slot_center_is_besieged_by, -1),
+      (call_script, "script_af17_granary_ratio", ":center"),
+      (lt, reg0, 25),
+      (call_script, "script_change_center_prosperity", ":center", -1),
+      (try_begin),
+        (party_slot_eq, ":center", slot_town_lord, "trp_player"),
+        (str_store_party_name, s48, ":center"),
+        (display_message, "@{s48}的粮仓见底，城里在挨饿，繁荣在下滑。", 0xFF6666),
+      (try_end),
     (try_end),
   ]),
 

@@ -21,6 +21,7 @@ mno_af10_village_word|和 村 长 聊 聊 附 近 的 动 静
 mno_af09_village_echo|村 口 似 乎 有 人 在 等 你 … … 
 mno_af03_contract_board|战 争 承 包 商 · 军 粮 委 托 
 mno_af08_town_rumor_entry|在 城 中 询 问 附 近 的 战 乱 传 闻 
+mno_af17_sell_grain_entry|把 带 来 的 粮 食 卖 给 官 仓 （ 粮 仓 存 量 {reg41}%） 
 mno_af10_town_word_entry|找 相 熟 的 粮 商 打 听 军 粮 车 
 mno_af06_recovery_entry|战 后 治 理 ： 查 看 城 池 恢 复 与 重 建 
 mno_af06_supply_entry|秘 密 运 粮 入 城 （ 4袋 谷 物 ， 增 加 约 两 天 粮 食 储 备 ） 

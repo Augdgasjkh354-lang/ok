@@ -749,5 +749,9 @@ script_af16_split_loot = 747
 script_af16_sack_center = 748
 script_af16_lord_war_chest = 749
 script_af16_take_village_cash = 750
+script_af17_granary_ratio = 751
+script_af17_grain_price_pressure = 752
+script_af17_sell_grain = 753
+script_af17_weekly_hunger = 754
 
 
