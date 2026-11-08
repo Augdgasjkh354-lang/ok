@@ -742,5 +742,8 @@ script_af14_center_funds = 740
 script_af14_pay_from_center = 741
 script_af14_collect_debt = 742
 script_af14_lord_wealth = 743
+script_af15_gang_purse = 744
+script_af15_gang_purse_reset = 745
+script_af15_gang_recruit = 746
 
 

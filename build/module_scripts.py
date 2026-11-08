@@ -52660,7 +52660,10 @@ scripts = [
     (try_begin),
       (eq, ":action", 1),
       (call_script, "script_af01_change_unrest", ":village", -3),
-      (call_script, "script_change_center_prosperity", ":village", 2),
+      # v1.0: the 600 reaches the villagers and stays in the village purse,
+      # which native invests as prosperity over time; direct boost 2 -> 1.
+      (call_script, "script_af13_village_purse", ":village", 600),
+      (call_script, "script_change_center_prosperity", ":village", 1),
       (party_get_slot, ":relationship", ":village", slot_center_player_relation),
       (try_begin),
         (lt, ":relationship", 30),
@@ -54087,6 +54090,7 @@ scripts = [
       (try_begin),
         (eq, ":valid", 0),
         (party_set_slot, "p_main_party", ":slot", 0),
+        (call_script, "script_af15_gang_purse_reset", ":kind"),  # v1.0: a broken gang's cash is gone
         # An existing leader was defeated by the world simulation: start a fresh 30-day cooldown.
         (try_begin),
           (gt, ":gang", 0),
@@ -54102,6 +54106,7 @@ scripts = [
         (call_script, "script_af04_spawn_gang", ":kind"),
       (else_try),
         (eq, ":valid", 1),
+        (call_script, "script_af15_gang_recruit", ":kind", ":gang"),  # v1.0
         (party_get_slot, ":home", ":gang", slot_af04_home),
         (party_get_slot, ":target", ":gang", slot_af04_order_target),
         (party_get_slot, ":deadline", ":gang", slot_af04_order_deadline),
@@ -54203,6 +54208,7 @@ scripts = [
       (assign, ":target", reg0),
       (gt, ":target", 0),
       (troop_remove_gold, "trp_player", 850),
+      (call_script, "script_af15_gang_purse", ":kind", 850),  # v1.0: the gang keeps it
       (party_set_slot, "p_main_party", ":service_slot", ":day"),
       (party_set_slot, ":gang", slot_af04_order_target, ":target"),
       (store_add, ":deadline", ":day", 8),
@@ -54227,6 +54233,7 @@ scripts = [
       (ge, ":gold", 450),
       (ge, ":day", ":until"),
       (troop_remove_gold, "trp_player", 450),
+      (call_script, "script_af15_gang_purse", ":kind", 450),  # v1.0: the gang keeps it
       (store_add, ":deadline", ":day", 11),
       (party_set_slot, "p_main_party", ":slot", ":deadline"),
       (call_script, "script_af04_change_trust", ":kind", 10),
@@ -54253,6 +54260,7 @@ scripts = [
       (try_begin),
         (eq, ":received", 2),
         (troop_remove_gold, "trp_player", 360),
+        (call_script, "script_af15_gang_purse", 3, 360),  # v1.0: Salt-Raven keeps it
         (party_set_slot, "p_main_party", slot_af04_last_grain_deal, ":day"),
         (call_script, "script_af04_change_trust", 3, 2),
         (assign, ":done", 1),
@@ -54282,6 +54290,7 @@ scripts = [
       (ge, ":gold", 650),
       (ge, ":room", 5),
       (troop_remove_gold, "trp_player", 650),
+      (call_script, "script_af15_gang_purse", 2, 650),  # v1.0: Greywolf keeps it
       (party_add_members, "p_main_party", "trp_mercenary_swordsman", 3),
       (party_add_members, "p_main_party", "trp_watchman", 2),
       (party_set_slot, "p_main_party", ":slot", ":day"),
@@ -55131,6 +55140,10 @@ scripts = [
         (troop_remove_gold, "trp_player", 1000),
         (val_add, ":score", 20),
         (call_script, "script_change_center_prosperity", ":center", 2),
+        # v1.0: half the money is local wages and stays in the town treasury.
+        (party_get_slot, ":treasury", ":center", slot_town_wealth),
+        (val_add, ":treasury", 500),
+        (party_set_slot, ":center", slot_town_wealth, ":treasury"),
       (else_try),
         (troop_remove_items, "trp_player", "itm_grain", 4),
         (val_add, ":score", 10),
@@ -56461,6 +56474,57 @@ scripts = [
       (val_max, ":wealth", 0),
       (troop_set_slot, ":lord", slot_troop_wealth, ":wealth"),
     (try_end),
+  ]),
+
+
+  # ========== v1.0 economy: named gangs keep the money they are paid ==========
+  ("af15_gang_purse", [
+    (store_script_param, ":kind", 1),
+    (store_script_param, ":amount", 2),
+    (try_begin),
+      (is_between, ":kind", 1, 4),
+      (store_add, ":slot", slot_af15_gang_purse_start, ":kind"),
+      (val_sub, ":slot", 1),
+      (party_get_slot, ":purse", "p_main_party", ":slot"),
+      (val_add, ":purse", ":amount"),
+      (val_max, ":purse", 0),
+      (party_set_slot, "p_main_party", ":slot", ":purse"),
+    (try_end),
+  ]),
+
+  ("af15_gang_purse_reset", [
+    (store_script_param, ":kind", 1),
+    (try_begin),
+      (is_between, ":kind", 1, 4),
+      (store_add, ":slot", slot_af15_gang_purse_start, ":kind"),
+      (val_sub, ":slot", 1),
+      (party_set_slot, "p_main_party", ":slot", 0),
+    (try_end),
+  ]),
+
+  # Daily: a gang with cash hires up to 3 men (120 each) of its own kind,
+  # never beyond 45 men. Paying a gang therefore makes it stronger.
+  ("af15_gang_recruit", [
+    (store_script_param, ":kind", 1),
+    (store_script_param, ":gang", 2),
+    (store_add, ":slot", slot_af15_gang_purse_start, ":kind"),
+    (val_sub, ":slot", 1),
+    (party_get_slot, ":purse", "p_main_party", ":slot"),
+    (assign, ":troop", "trp_forest_bandit"),
+    (try_begin),
+      (eq, ":kind", 2), (assign, ":troop", "trp_mercenary_swordsman"),
+    (else_try),
+      (eq, ":kind", 3), (assign, ":troop", "trp_caravan_guard"),
+    (try_end),
+    (party_get_num_companions, ":size", ":gang"),
+    (try_for_range, ":unused", 0, 3),
+      (ge, ":purse", 120),
+      (lt, ":size", 45),
+      (party_add_members, ":gang", ":troop", 1),
+      (val_sub, ":purse", 120),
+      (val_add, ":size", 1),
+    (try_end),
+    (party_set_slot, "p_main_party", ":slot", ":purse"),
   ]),
 
 ]
