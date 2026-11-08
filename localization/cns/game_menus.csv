@@ -15,6 +15,7 @@ mno_af03_cheat_entry|烽 烟 与 暗 流 · 战 争 承 包 商 测 试 （ v0.3
 mno_af06_siege_ops_entry|围 城 暗 战 ： 侦 察 、 破 坏 粮 仓 与 策 反 守 军 
 mno_af06_defender_supply|将 随 身 四 袋 谷 物 秘 密 送 入 守 城 粮 仓 
 mno_af01_village_status|查 看 地 方 战 乱 与 援 助 
+mno_af10_village_word|和 村 长 聊 聊 附 近 的 动 静 
 mno_af09_village_echo|村 口 似 乎 有 人 在 等 你 … … 
 mno_af03_contract_board|战 争 承 包 商 · 军 粮 委 托 
 mno_af08_town_rumor_entry|在 城 中 询 问 附 近 的 战 乱 传 闻 
@@ -137,3 +138,5 @@ mno_af09_leave_refugee_grain|粮 食 还 是 留 在 村 里 吧 ， 村 里 更
 mno_af09_leave_deserter_guard|留 在 家 乡 守 路 吧 。 这 里 也 需 要 拿 得 动 武 器 的 人 。 
 mno_af09_take_aid_watchmen|让 两 个 愿 意 出 门 的 哨 兵 跟 着 队 伍 。 
 mno_af09_echo_later|道 谢 ， 先 去 办 自 己 的 事 。 
+menu_af10_village_word|{s40}
+mno_af10_word_back|道 别 。 

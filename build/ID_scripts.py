@@ -721,5 +721,8 @@ script_af08_ask_town_rumor = 719
 script_af09_check_echo = 720
 script_af09_prepare_echo = 721
 script_af09_take_echo = 722
+script_af10_village_word = 723
+script_af10_gang_name_to_s44 = 724
+script_af10_nearest_center_to_s42 = 725
 
 

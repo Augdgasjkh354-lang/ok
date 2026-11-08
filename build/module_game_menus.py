@@ -7722,6 +7722,11 @@ game_menus = [
            ]),
       ("af01_village_status", [], "查看地方战乱与援助",
        [(jump_to_menu, "mnu_af01_village_status")]),
+      ("af10_village_word",
+       [(party_slot_eq, "$current_town", slot_village_state, 0),
+        (neg|party_slot_ge, "$current_town", slot_village_infested_by_bandits, 1)],
+       "和村长聊聊附近的动静",
+       [(jump_to_menu, "mnu_af10_village_word")]),
       ("af09_village_echo",
        [(call_script, "script_af09_check_echo", "$current_town"), (gt, reg0, 0)],
        "村口似乎有人在等你……",
@@ -15329,6 +15334,16 @@ game_menus = [
        (try_end)]),
      ("af09_echo_later", [], "道谢，先去办自己的事。",
       [(jump_to_menu, "mnu_village")]),
+   ]),
+
+
+  # v1.0: what the elder is willing to tell depends on the village's regard.
+  ("af10_village_word", 0,
+   "{s40}",
+   "none",
+   [(call_script, "script_af10_village_word", "$current_town")],
+   [
+     ("af10_word_back", [], "道别。", [(jump_to_menu, "mnu_village")]),
    ]),
 
 ]

@@ -240,3 +240,4 @@ menu_af07_world = 238
 menu_af08_desk = 239
 menu_af08_town_rumor = 240
 menu_af09_echo = 241
+menu_af10_village_word = 242
