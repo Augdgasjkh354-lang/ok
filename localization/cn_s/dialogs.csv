@@ -1,0 +1,41 @@
+﻿
+dlga_village_elder_talk:village_elder_donate|我 想 给 村 子 捐 点 钱 （ 500 第 纳 尔 换 1 点 好 感 ） 。 
+dlga_village_elder_donate:village_elder_pretalk|多 谢 您 的 慷 慨 ， {先 生 /夫 人 }！ 这 500 第 纳 尔 一 定 会 用 在 村 子 最 需 要 的 地 方 ， 您 是 我 们 永 远 的 朋 友 。 
+dlga_lord_talk:fb7_memory_answer|你 还 记 得 我 们 过 去 的 恩 怨 吗 ？ 
+dlga_fb7_memory_answer:lord_pretalk|你 放 走 过 我 {reg51}次 ， 也 囚 禁 过 我 {reg52}次 。 我 对 你 的 仇 怨 有 {reg54}之 深 ， 家 族 之 恨 还 有 {reg55}。 这 笔 账 ， 我 不 会 忘 。 
+dlga_fb7_memory_answer:lord_pretalk.1|你 放 走 过 我 {reg51}次 、 囚 禁 我 {reg52}次 。 我 欠 你 的 恩 情 是 {reg53}， 旧 怨 是 {reg54}。 你 的 仁 慈 ， 我 记 得 。 
+dlga_fb7_memory_answer:lord_pretalk.2|我 记 得 你 放 走 我 {reg51}次 ， 囚 禁 我 {reg52}次 。 恩 情 {reg53}， 私 怨 {reg54}， 家 族 之 恨 {reg55}。 
+dlga_lord_talk:fb71_compact_answer|我 听 说 贵 族 之 间 常 有 秘 密 盟 约 。 你 参 与 其 中 吗 ？ 
+dlga_fb71_compact_answer:lord_pretalk|宫 廷 里 流 言 四 起 。 至 于 谁 与 谁 私 下 结 盟 ， 我 无 可 奉 告 。 
+dlga_fb71_compact_answer:lord_pretalk.1|我 与 {s61}订 有 盟 约 。 盟 约 忠 诚 度 为 {reg62}， 对 封 地 分 配 的 不 满 为 {reg63}。 盟 友 遇 险 时 ， 我 自 会 伸 出 援 手 。 
+dlga_fb71_compact_answer:lord_pretalk.2|目 前 我 没 有 加 入 任 何 秘 密 派 系 。 贵 族 之 间 的 关 系 总 在 变 化 。 
+dlga_lord_talk:fb72_claim_answer|你 觊 觎 哪 块 封 地 ？ 你 的 盟 友 又 支 持 谁 ？ 
+dlga_fb72_claim_answer:lord_pretalk|我 不 会 向 外 人 透 露 我 的 封 地 野 心 和 宫 廷 谋 划 。 
+dlga_fb72_claim_answer:lord_pretalk.1|我 想 得 到 {s60}。 我 的 封 地 野 心 为 {reg61}， 对 过 往 分 封 的 不 满 为 {reg62}。 目 前 的 封 赏 争 夺 中 ， 我 的 派 系 支 持 {s61}。 
+dlga_fb72_claim_answer:lord_pretalk.2|我 想 得 到 {s60}。 我 的 封 地 野 心 为 {reg61}， 对 过 往 分 封 的 不 满 为 {reg62}。 目 前 我 们 没 有 共 同 推 举 的 候 选 人 。 
+dlga_fb72_claim_answer:lord_pretalk.3|我 暂 时 没 有 锁 定 具 体 的 封 地 目 标 。 我 的 野 心 为 {reg61}， 对 分 封 的 不 满 为 {reg62}。 
+dlga_lord_talk:fb73_private_entry|我 想 和 你 私 下 谈 谈 王 国 中 的 政 治 交 易 。 
+dlga_fb73_private_entry:fb73_private_options|这 里 没 有 旁 人 。 你 的 政 治 信 用 为 {reg41}， 我 的 信 用 为 {reg42}。 说 说 你 的 提 议 吧 。 
+dlga_fb73_private_options:fb73_bribe_result|我 愿 付 出 {reg40}第 纳 尔 ， 换 取 你 在 本 次 封 地 议 事 中 支 持 我 。 
+dlga_fb73_bribe_result:lord_pretalk|成 交 。 本 次 封 地 投 票 我 会 支 持 你 。 我 清 楚 背 信 的 代 价 。 
+dlga_fb73_bribe_result:lord_pretalk.1|这 张 票 我 不 卖 。 把 钱 收 回 去 吧 。 
+dlga_fb73_private_options:fb73_barter_result|这 次 我 投 你 一 票 。 你 得 承 诺 下 次 封 地 议 事 支 持 我 。 
+dlga_fb73_barter_result:lord_pretalk|我 接 受 。 你 现 在 已 经 投 票 支 持 我 。 如 果 守 约 ， 我 就 欠 你 下 次 封 地 议 事 的 一 票 。 
+dlga_fb73_barter_result:lord_pretalk.1|眼 下 我 无 法 与 你 订 下 这 份 交 易 。 
+dlga_fb73_private_options:fb73_break_reply|我 决 定 撕 毁 支 持 你 的 承 诺 ， 后 果 由 我 承 担 。 
+dlga_fb73_break_reply:lord_pretalk|你 背 弃 了 誓 言 。 这 份 羞 辱 我 会 记 在 心 里 。 
+dlga_fb73_private_options:fb73_debt_reply|我 们 之 间 还 有 哪 些 尚 未 兑 现 的 人 情 债 ？ 
+dlga_fb73_debt_reply:fb73_private_options|我 还 欠 你 下 一 次 封 地 议 事 的 一 票 。 你 的 政 治 信 用 为 {reg46}； 我 累 计 失 信 {reg45}次 。 
+dlga_fb73_debt_reply:fb73_private_options.1|本 次 封 地 议 事 我 已 承 诺 支 持 你 。 你 的 政 治 信 用 为 {reg46}。 
+dlga_fb73_debt_reply:fb73_private_options.2|我 们 目 前 没 有 待 兑 现 的 承 诺 。 你 的 政 治 信 用 为 {reg46}； 我 累 计 失 信 {reg45}次 。 
+dlga_fb73_private_options:lord_pretalk|密 谈 就 到 这 里 吧 。 
+dlga_fb73_private_options:fb74_poach_answer|我 出 {reg57}第 纳 尔 ， 你 愿 意 转 投 {s54}的 秘 密 派 系 吗 ？ 
+dlga_fb74_poach_answer:lord_pretalk|交 易 成 立 。 我 已 经 加 入 新 的 派 系 ， 下 一 次 封 地 投 票 还 欠 你 一 票 。 
+dlga_fb74_poach_answer:lord_pretalk.1|我 拒 绝 。 这 种 风 声 在 宫 廷 里 会 害 死 人 。 
+dlga_lord_talk:fb74_gossip_reply|最 近 有 什 么 可 信 的 秘 密 交 易 传 闻 吗 ？ 
+dlga_fb74_gossip_reply:lord_pretalk|有 人 在 议 论 {s63}。 我 掌 握 一 条 可 信 度 为 {reg58}的 线 索 ， 你 可 以 向 国 王 报 告 。 
+dlga_fb74_gossip_reply:lord_pretalk.1|我 最 近 已 经 告 诉 过 你 这 些 风 声 。 请 再 过 {reg59}天 来 打 听 。 
+dlga_fb74_gossip_reply:lord_pretalk.2|近 来 没 有 新 的 可 靠 传 闻 ， 宫 廷 暂 时 风 平 浪 静 。 
+dlga_lord_talk:fb74_report_reply|陛 下 ， 我 掌 握 了 贵 族 秘 密 交 易 的 证 据 。 
+dlga_fb74_report_reply:lord_pretalk|你 为 王 室 立 了 功 。 我 会 调 查 {s65}， 并 记 住 你 的 忠 诚 。 
+dlga_fb74_report_reply:lord_pretalk.1|没 有 更 新 的 证 词 ， 我 无 法 继 续 调 查 此 事 。 

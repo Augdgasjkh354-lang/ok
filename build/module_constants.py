@@ -2070,3 +2070,47 @@ slot_af09_deserter_troop = 854 # specific cultural soldier, from the actual part
 slot_af09_aid_count = 855 # completed, actually paid village aid missions, capped at 2
 slot_af09_aid_ready = 856 # day+1 of the second completed aid
 slot_af09_aid_thanked = 857 # claimed once per village
+# v1.0 mercenary wages paid from the employer king's real purse (p_main_party slots).
+slot_af11_merc_owed        = 860 # unpaid mercenary wages in denars
+slot_af11_merc_employer    = 861 # kingdom the wages are owed by; reset when it changes
+slot_af11_merc_weeks       = 862 # consecutive unpaid paydays
+slot_af11_merc_centers     = 863 # employer's walled centers at last payday (0 = unknown)
+slot_af11_merc_demand_day  = 864 # last demand for back pay, day+1 (7-day cooldown)
+slot_af11_merc_endured     = 865 # unpaid weeks the player sat through and was repaid for
+# v1.0 the lord's court: villagers bring disputes to the player in his own villages.
+slot_af12_case_day         = 866 # village: last case heard, day+1 (30-day cooldown)
+slot_af12_case_kind        = 867 # village: kind of the last case (not repeated next time)
+slot_af12_case_global      = 868 # p_main_party: last case anywhere, day+1 (7-day cooldown)
+# v1.0 economy: military contracts are paid by the town, its lord, then the crown.
+slot_af14_town_owes_player = 869 # town: contract pay still owed to the player
+slot_af15_gang_purse_start = 870 # p_main_party 870-872: each named gang's cash; spent on recruits
+# v1.0 economy: caravans carry real money, taken from town treasuries.
+slot_af18_caravan_purse    = 873 # caravan party: cash box in denars
+af18_caravan_capital       = 600 # working capital a caravan tops up to when it trades
+# v1.0 economy: lords who could not pay the player in full (troop slot).
+slot_af19_lord_owes_player = 874 # lord: denars still owed to the player, paid when they next meet
+# v1.0 fame: enemies who dare not chase a player with a fearsome record.
+slot_af20_fame             = 875 # p_main_party: fame from battles won (kills are read live)
+slot_af20_next_decay       = 876 # p_main_party: day+1 of the next fortnightly fading (reset by battles)
+slot_af20_next_check       = 877 # any map party: hour before which it is not judged again
+slot_af20_challengers_beaten = 878 # p_main_party: challengers the player has beaten (3 = no more challenges)
+slot_af20_challenge        = 879 # lord: 0 none, 1 seeking the player out, 3 crushed (never again)
+slot_af20_challenge_day    = 880 # lord: state 1 start day+1; state 0 day+1 before which he will not try
+slot_af20_surrender_tried  = 881 # any map party: hour+24 until which it cannot be ordered to surrender again
+# v1.0 fame (IV): people come because of the name; the crown takes less.
+slot_af21_fame_volunteers  = 882 # village: how many of the current volunteers came because of fame
+slot_af21_recruit_count     = 883 # village: fame volunteers who have left, cumulative (every 100 costs 1 prosperity)
+slot_af21_crown_cut_off     = 884 # p_main_party: negotiated reduction of the crown's cut, in percentage points
+slot_af21_crown_talk_day    = 885 # p_main_party: day+1 from which the crown's cut can be talked about again
+# v1.0 batch six (第六批): pre-assigned slots 886-896.
+slot_af23_flee_until         = 886 # any map party: hour until which it flees from the player
+slot_af23_shield_paid        = 887 # p_main_party: shield money paid for this muster (day+1, cleared when the muster ends)
+slot_af23_ignored_count      = 888 # p_main_party: how many musters the player has ignored in total
+slot_af23_backed_gang        = 889 # p_main_party: gang the player backs (1-3, 0 = none)
+slot_af23_feud_day           = 890 # p_main_party: day+1 of the next gang feud settlement
+slot_af23_kept_word_1        = 891 # p_main_party: truces kept with gang 1
+slot_af23_kept_word_2        = 892 # p_main_party: truces kept with gang 2
+slot_af23_kept_word_3        = 893 # p_main_party: truces kept with gang 3
+slot_af23_looted_day         = 894 # village: day+1 of the player's last loot of this village
+slot_af23_famine_bags        = 895 # town/castle: bags bought at the famine price this week
+slot_af23_famine_week        = 896 # town/castle: which week+1 the famine-bag count belongs to

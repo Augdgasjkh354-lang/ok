@@ -1638,21 +1638,36 @@ simple_triggers = [
              (assign, ":num_centers_owned", reg0),
              (eq, "$g_infinite_camping", 0),
                      
-             (assign, ":player_party_size", 0),      
+             (assign, ":player_party_size", 0),
              (try_begin),
                (ge, "p_main_party", 0),
-               (store_party_size_wo_prisoners, ":player_party_size", "p_main_party"),        
-             (try_end),  
-             
-             (try_begin),              
+               (store_party_size_wo_prisoners, ":player_party_size", "p_main_party"),
+             (try_end),
+
+             # v1.0 fame (IV): fame lowers the renown a king asks for and
+             # makes him likelier to invite the player. The no-fief branch
+             # is the only one with a renown gate; the fief branch never had
+             # one, so only its dice chance rises (by the same tier bonus).
+             (call_script, "script_af20_fame_total"),
+             (assign, ":fame", reg0),
+             (call_script, "script_af20_fame_tier", ":fame"),
+             (assign, ":tier", reg0),
+             (store_sub, ":renown_need", 160, ":fame"),
+             (val_max, ":renown_need", 60),
+             (store_mul, ":chance_no_fief", ":tier", 10),
+             (val_add, ":chance_no_fief", 50),
+             (store_mul, ":chance_with_fief", ":tier", 10),
+             (val_add, ":chance_with_fief", 20),
+
+             (try_begin),
                (eq, ":num_centers_owned", 0),
                (troop_get_slot, ":player_renown", "trp_player", slot_troop_renown),
-               (ge, ":player_renown", 160),
+               (ge, ":player_renown", ":renown_need"),
                (ge, ":kingdom_relation", 0),
                (ge, ":lord_relation", 0),
                (ge, ":player_party_size", 45),
                (store_random_in_range, ":rand", 0, 100),
-               (lt, ":rand", 50),
+               (lt, ":rand", ":chance_no_fief"),
                (call_script, "script_get_poorest_village_of_faction", ":kingdom_no"),
                (assign, "$g_invite_offered_center", reg0),
                (ge, "$g_invite_offered_center", 0),
@@ -1665,7 +1680,7 @@ simple_triggers = [
                (ge, ":lord_relation", -20),
                (ge, ":player_party_size", 30),
                (store_random_in_range, ":rand", 0, 100),
-               (lt, ":rand", 20),
+               (lt, ":rand", ":chance_with_fief"),
                (assign, "$g_invite_faction", ":kingdom_no"),
                (assign, "$g_invite_offered_center", -1),
                (jump_to_menu, "mnu_invite_player_to_faction_without_center"),
@@ -1968,6 +1983,7 @@ simple_triggers = [
          (faction_get_slot, ":num_towns", ":merchant_faction", slot_faction_num_towns),
          (try_begin),
            (le, ":num_towns", 0),
+           (call_script, "script_af18_caravan_disband", ":party_no"),  # v1.0
            (remove_party, ":party_no"),
          (else_try),
            (party_get_cur_town, ":cur_center", ":party_no"),
@@ -4080,4 +4096,15 @@ simple_triggers = [
   (24, [(call_script, "script_af06_daily_update")]),
   # Ashfall v0.8: territorial accountability and native low-priority patrol results.
   (24, [(call_script, "script_af08_governance_tick"), (call_script, "script_af08_patrol_relief")]),
+  # Ashfall v0.9: deferred full start (see start_character_4). Runs only on the
+  # map, i.e. after the creation character screen closed; one eq check otherwise.
+  (0, [(eq, "$fb71_full_start", 2),
+       (assign, "$fb71_full_start", 1),
+       (call_script, "script_fb71_apply_full_start")]),
+  # Ashfall v1.0: hunger when a granary stays nearly empty outside a siege.
+  (24 * 7, [(call_script, "script_af17_weekly_hunger")]),
+  # Ashfall v1.0: lords and towns that owe the player pay up when he is near.
+  (1, [(call_script, "script_af19_settle_debts")]),
+  # Ashfall v1.0: fame fades without battles; nearby enemies may not dare to chase.
+  (1, [(call_script, "script_af20_hourly")]),
 ]

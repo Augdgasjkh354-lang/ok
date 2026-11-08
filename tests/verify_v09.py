@@ -12,7 +12,66 @@ for idfile in ('ID_scripts.py','ID_menus.py','ID_troops.py','ID_party_templates.
     now=[x for x in (current/idfile).read_text('utf-8').splitlines() if x.strip()]
     assert now[:len(original)]==original, f'Old ID order changed: {idfile}'
 assert (base/'compiled/variables.txt').read_bytes()==(data/'variables.txt').read_bytes(), 'global variables changed'
-assert (base/'compiled/conversation.txt').read_bytes()==(data/'conversation.txt').read_bytes(), 'legacy dialogs changed'
+# Dialogues may change only where intended (logic edits); text stays as compiled before.
+ALLOWED_DIALOG_CHANGES={'dlga_village_elder_donate:village_elder_pretalk',  # v1.0: donation stays in village purse
+    'dlga_merchant_demand_toll:merchant_demand_toll_2', 'dlga_merchant_demand_toll:merchant_demand_toll_2.1',
+    'dlga_merchant_demand_toll_accept:close_window'}  # v1.0: tolls come out of the caravan's cash box
+# v1.0: lords, kings and towns pay the player from their real money (af19_*).
+# v1.0 第六批（十）: arena prizes and ladies' quest rewards are paid from
+# real money too (town treasury / the lady's guardian).
+ALLOWED_DIALOG_CHANGES|={
+    'dlga_arena_master_fight_result:arena_master_pre_talk.2',
+    'dlga_arena_master_fight_result:arena_master_pre_talk.3',
+    'dlga_arena_master_fight_result:arena_master_pre_talk.4',
+    'dlga_arena_master_fight_result:arena_master_pre_talk.5',
+    'dlga_arena_master_fight_result:arena_master_pre_talk.6',
+    'dlga_lady_qst_duel_for_lady_succeeded_2:lady_pretalk',
+    'dlga_start:lady_escort_lady_succeeded',
+    'dlga_start:lady_generic_mission_succeeded',
+    'dlga_start:rescue_prisoner_succeed_1',
+    'dlga_capture_enemy_hero_thank:capture_enemy_hero_thank_2',
+    'dlga_event_triggered:close_window.1',
+    'dlga_lord_buy_prisoner_accept:lord_pretalk',
+    'dlga_lord_hunt_down_fugitive_reward_accept:lord_pretalk',
+    'dlga_lord_kill_local_merchant_let_go_2:lord_pretalk',
+    'dlga_lord_marriage_permission_engagement_date:close_window',
+    'dlga_lord_mercenary_service_verify_2:lord_mercenary_service_accept_3',
+    'dlga_lord_mission_accepted:close_window',
+    'dlga_lord_mission_deal_with_bandits_accepted:close_window',
+    'dlga_lord_mission_deliver_message_accepted:close_window',
+    'dlga_lord_mission_raise_troops_accepted:close_window',
+    'dlga_lord_persuade_lords_to_make_peace_pay:close_window',
+    'dlga_lord_return_dower:close_window',
+    'dlga_lord_start:close_window.1',
+    'dlga_lord_start:lord_deal_with_bandits_completed',
+    'dlga_lord_start:lord_deliver_cattle_to_army_thank',
+    'dlga_lord_start:lord_follow_spy_completed',
+    'dlga_lord_start:lord_follow_spy_half_completed',
+    'dlga_lord_start:lord_follow_spy_half_completed.1',
+    'dlga_lord_start:lord_generic_mission_completed.2',
+    'dlga_lord_start:lord_pretalk',
+    'dlga_lord_start:lord_runaway_serf_half_completed',
+    'dlga_lord_tell_mission_incriminate_commander_fin:lord_pretalk',
+    'dlga_mayor_begin:close_window',
+    'dlga_mayor_begin:close_window.1',
+    'dlga_mayor_begin:lord_deal_with_night_bandits_completed',
+    'dlga_mayor_begin:mayor_friendly_pretalk',
+    'dlga_mayor_begin:mayor_friendly_pretalk.1',
+    'dlga_mayor_looters_quest_destroyed:mayor_looters_quest_destroyed_2',
+    'dlga_mayor_looters_quest_destroyed_2:close_window',
+    'dlga_mayor_looters_quest_goods_2:close_window',
+    'dlga_mayor_looters_quest_goods_response:mayor_looters_quest_goods_2',
+    'dlga_quest_meet_spy_in_enemy_town_completed_2:lord_pretalk',
+    'dlga_start:close_window.23',
+    'dlga_start:rescue_prisoner_succeed_2',
+    'dlga_tavernkeeper_deliver_wine:tavernkeeper_pretalk',
+    'dlga_tavernkeeper_deliver_wine_incomplete:tavernkeeper_pretalk',
+}
+_old=(base/'compiled/conversation.txt').read_text('utf-8').split('\n')
+_new=(data/'conversation.txt').read_text('utf-8').split('\n')
+assert len(_old)==len(_new), 'dialogue count changed'
+_changed={n.split(' ',1)[0] for o,n in zip(_old,_new) if o!=n}
+assert _changed<=ALLOWED_DIALOG_CHANGES, ('unexpected dialogue changes', _changed-ALLOWED_DIALOG_CHANGES)
 assert (base/'compiled/troops.txt').read_bytes()==(data/'troops.txt').read_bytes(), 'legacy troop data changed'
 assert (base/'compiled/party_templates.txt').read_bytes()==(data/'party_templates.txt').read_bytes()
 
@@ -30,19 +89,26 @@ for x in qnew:
 assert len([x for x in qnew if x[0].startswith('qstr_æ')])==3
 
 # All game text translated in a localized layer; do not replace native troops.
-needed={'game_menus.csv','troops.csv','party_templates.csv','quick_strings.csv'}
+needed={'game_menus.csv','troops.csv','party_templates.csv','quick_strings.csv','game_strings.csv','dialogs.csv'}
 for lang in ('cns','cn_s'):
     folder=local/lang
     assert {f.name for f in folder.glob('*.csv')}==needed
     for file in folder.glob('*.csv'):
         b=file.read_bytes();assert b.startswith(b'\xef\xbb\xbf')
         seen=set()
-        for line in b.decode('utf-8-sig').splitlines():
+        lines=b.decode('utf-8-sig').splitlines()
+        assert lines and lines[0]=='',(file,'first line must be empty: the engine skips it')
+        for line in lines[1:]:
             assert line.count('|')==1,(file,line)
             key,val=line.split('|',1)
             assert key not in seen,(file,key)
             assert val,(file,key)
             seen.add(key)
+            # Official Chinese style: every non-ASCII char followed by a space
+            # (troop names keep the player's own trailing ideographic space).
+            for i,ch in enumerate(val):
+                if ord(ch)>127 and ch!='\u3000':
+                    assert i+1<len(val) and val[i+1] in ' \u3000',(file,key,val)
 menu=(local/'cns/game_menus.csv').read_text('utf-8-sig')
 for key in ('mno_af09_village_echo','menu_af09_echo','mno_af09_take_aid_watchmen','mno_af09_leave_deserter_guard'):
     assert key+'|' in menu,key
