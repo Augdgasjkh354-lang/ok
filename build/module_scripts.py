@@ -24586,7 +24586,22 @@ scripts = [
     [
       (store_script_param_1, ":troop_no"),
       (store_script_param_2, ":difference"),
-      
+
+      # v1.0 fame (IV): a merciful name doubles positive gains with kingdom
+      # lords. Negative changes, fierce names, companions and ladies are
+      # unchanged; the occupation check is what keeps ladies out.
+      (try_begin),
+        (neq, ":troop_no", "trp_player"),
+        (neq, ":troop_no", -1),
+        (gt, ":difference", 0),
+        (troop_slot_eq, ":troop_no", slot_troop_occupation, slto_kingdom_hero),
+        (call_script, "script_af20_fame_total"),
+        (ge, reg0, 30),
+        (call_script, "script_af20_fame_kind"),
+        (eq, reg0, 1),
+        (val_mul, ":difference", 2),
+      (try_end),
+
       (try_begin),
         (neq, ":troop_no", "trp_player"),
         (neg|is_between, ":troop_no", soldiers_begin, soldiers_end),
@@ -32051,6 +32066,30 @@ scripts = [
         (val_mul, ":amount", 90),
         (val_div, ":amount", 100),
       (try_end),
+      # v1.0 fame (IV): people come because of the name. This script refreshes
+      # the player's volunteers only; the NPC refresh is a separate script.
+      (call_script, "script_af20_fame_total"),
+      (assign, ":fame", reg0),
+      (call_script, "script_af20_fame_tier", ":fame"),
+      (assign, ":tier", reg0),
+      (assign, ":bonus", 0),
+      (try_begin),
+        (eq, ":tier", 3),
+        (assign, ":bonus", 4),
+      (else_try),
+        (eq, ":tier", 2),
+        (assign, ":bonus", 2),
+      (else_try),
+        (eq, ":tier", 1),
+        (assign, ":bonus", 1),
+      (try_end),
+      (call_script, "script_af20_fame_kind"),
+      (try_begin),
+        (eq, reg0, 1),
+        (val_add, ":bonus", 1),
+      (try_end),
+      (val_add, ":amount", ":bonus"),
+      (party_set_slot, ":center_no", slot_af21_fame_volunteers, ":bonus"),
       (party_set_slot, ":center_no", slot_center_volunteer_troop_type, ":volunteer_troop"),
       (party_set_slot, ":center_no", slot_center_volunteer_troop_amount, ":amount"),
   ]),
@@ -34092,6 +34131,9 @@ scripts = [
       (party_set_slot, "$current_town", slot_center_volunteer_troop_amount, -1),
       (store_mul, ":cost", ":volunteer_amount", 10),#10 denars per man
       (troop_remove_gold, "trp_player", ":cost"),
+      # v1.0 fame (IV): both recruit paths (village menu and elder dialogue)
+      # go through this script, so one call here counts every recruit once.
+      (call_script, "script_af21_after_recruit", "$current_town", ":volunteer_amount"),
   ]),
   
   #script_get_troop_item_amount
@@ -56595,7 +56637,17 @@ scripts = [
     (try_begin),
       (is_between, ":king", active_npcs_begin, active_npcs_end),
       (neq, ":king", ":receiver"),
-      (store_div, ":king_share", ":amount", 3),
+      # v1.0 fame (IV): the crown takes a smaller percentage from the player
+      # as the player's fame grows; AI lords still pay a third.
+      (try_begin),
+        (eq, ":receiver", "trp_player"),
+        (call_script, "script_af21_crown_cut_pct"),
+        (assign, ":pct", reg0),
+        (store_mul, ":king_share", ":amount", ":pct"),
+        (val_div, ":king_share", 100),
+      (else_try),
+        (store_div, ":king_share", ":amount", 3),
+      (try_end),
       (call_script, "script_af14_lord_wealth", ":king", ":king_share", 0),
       (str_store_troop_name, s47, ":king"),
     (try_end),
@@ -57485,6 +57537,56 @@ scripts = [
       (lt, "$player_honor", 0),
       (assign, reg0, 2),
     (try_end),
+  ]),
+
+  # ========== v1.0 fame (IV): people come because of the name ==========
+  # After a village recruit: fame volunteers leave first. Input: village,
+  # how many were actually recruited. Every 100 fame volunteers who have
+  # left costs the village 1 prosperity (people, not a new value: the
+  # prosperity already stands for people).
+  ("af21_after_recruit", [
+    (store_script_param, ":village", 1),
+    (store_script_param, ":recruited", 2),
+    (party_get_slot, ":fame_left", ":village", slot_af21_fame_volunteers),
+    (assign, ":leaving", ":recruited"),
+    (val_min, ":leaving", ":fame_left"),
+    (val_sub, ":fame_left", ":leaving"),
+    (party_set_slot, ":village", slot_af21_fame_volunteers, ":fame_left"),
+    (party_get_slot, ":count", ":village", slot_af21_recruit_count),
+    (val_add, ":count", ":leaving"),
+    (try_begin),
+      (ge, ":count", 100),
+      (store_div, ":loss", ":count", 100),
+      (store_mul, ":diff", ":loss", -1),
+      (call_script, "script_change_center_prosperity", ":village", ":diff"),
+      (store_mul, ":used", ":loss", 100),
+      (val_sub, ":count", ":used"),
+    (try_end),
+    (party_set_slot, ":village", slot_af21_recruit_count, ":count"),
+  ]),
+
+  # The crown's cut of the player's spoils, in percent. Output reg0.
+  # Base by fame tier (0: 33, 1: 30, 2: 25, 3: 20), less the negotiated
+  # reduction in slot_af21_crown_cut_off, never below 10.
+  ("af21_crown_cut_pct", [
+    (call_script, "script_af20_fame_total"),
+    (assign, ":fame", reg0),
+    (call_script, "script_af20_fame_tier", ":fame"),
+    (assign, ":pct", 33),
+    (try_begin),
+      (eq, reg0, 3),
+      (assign, ":pct", 20),
+    (else_try),
+      (eq, reg0, 2),
+      (assign, ":pct", 25),
+    (else_try),
+      (eq, reg0, 1),
+      (assign, ":pct", 30),
+    (try_end),
+    (party_get_slot, ":cut_off", "p_main_party", slot_af21_crown_cut_off),
+    (val_sub, ":pct", ":cut_off"),
+    (val_max, ":pct", 10),
+    (assign, reg0, ":pct"),
   ]),
 
 ]

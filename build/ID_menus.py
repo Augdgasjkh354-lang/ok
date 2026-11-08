@@ -245,3 +245,4 @@ menu_af10_town_word = 243
 menu_af11_arrears = 244
 menu_af12_case = 245
 menu_af20_fame = 246
+menu_af21_crown_talk = 247
