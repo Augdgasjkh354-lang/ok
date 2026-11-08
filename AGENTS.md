@@ -14,7 +14,11 @@ python generate_localization.py
 python tests/verify_v09.py
 ```
 
-这些是当前的推荐命令（v1.0 仍沿用 v0.9 的入口）；使用 Python 3。`build_v09.py` 会编译剧本、菜单、触发器、对话和界面（presentations）。编译数据输出到 `game-data/`；`build/compiled/` 是构建过程目录。历史兼容基线位于 `baseline/v08/compiled/`。不要把 `build/build_module.bat` 当成这版的常规构建入口，也不要编辑 `game-data/*.txt` 来代替源码改动。
+这些是当前的推荐命令（v1.0 仍沿用 v0.9 的入口）；使用 Python 3。另外还要跑 `python tests/test_merge_localization.py`。
+
+**构建只编译 9 类文件**：troops、party_templates、全局变量、scripts、mission_templates、game_menus、simple_triggers、dialogs、presentations（见 `build_v09.py` 的 `steps`）。其余文件（如 `module_strings`、`module_items`、`module_quests`、`module_triggers`、`module_parties`）**直接沿用 v0.8 的编译结果**，改了源码也不会进游戏，而且没有任何报错。要改这些文件，先在 `steps` 里加上对应的 `process_*.py`，并确认编译结果和旧版一致后再改。
+
+**`tests/verify_v09.py` 会锁定几样东西**：`variables.txt`（全局变量）、`troops.txt`、`party_templates.txt` 必须和 v0.8 逐字节一致；对话只允许 `ALLOWED_DIALOG_CHANGES` 里列出的那些改动。新增兵种、部队模板或全局变量时，要先专项审计存档兼容性，再有意识地修改这些断言，不要为了让检查通过就删掉。编译数据输出到 `game-data/`；`build/compiled/` 是构建过程目录。历史兼容基线位于 `baseline/v08/compiled/`。不要把 `build/build_module.bat` 当成这版的常规构建入口，也不要编辑 `game-data/*.txt` 来代替源码改动。
 
 **对话的编译方式**：FewerBandits v7.x 对话的中文是在编译产物里套上的，源码里仍是英文，所以 `build_v09.py` 会把新编译结果和 `baseline/v08/compiled/conversation.txt` 逐行合并：某行若只有文字不同，保留旧行（中文）；逻辑真正改了的行，用新编译的。改对话逻辑后，要把该对话 ID 加进 `tests/verify_v09.py` 的 `ALLOWED_DIALOG_CHANGES`。对话只能追加，不能删除，也不能调整顺序。
 
@@ -85,11 +89,17 @@ python tests/verify_v09.py
 **游戏机制**
 - **角色创建阶段不能升级，也不能留下花不掉的点数**：创建角色界面要求点数全部用完，否则无法继续（满级开局曾因此卡死）。改属性、改等级要推迟到进入大地图之后（`$fb71_full_start` = 2，由触发器执行）。
 
+## 交接时先看
+
+- **进度**：`README_ASHFALL_V09.md` 里以「v1.0」开头的各节，以及其中「v1.0 待办」一节（已完成什么、待实机验收什么、下一步候选）；
+- **经济**：`经济系统梳理.md`；
+- **最近的改动**：`git log`。每个提交说明都写了改动原因和实现方式。
+
 ## 与玩家协作
 
 - 让玩家**覆盖、删除或替换文件之前，先说清后果**；能给工具或做好的文件，就别给手动步骤。
 - 玩家描述的现象（如"之前是中文"）就是证据，别让他自证。缺信息时**先要原文件**再动手，不要连续猜测修复：languages 文件夹只有几 MB，一次就能定位问题。
 - 回复要短，一次只给一步，并附上可核对的结果（文件大小、窗口里应该显示什么）。
 - 做新功能时，**先提一个具体的小场景**，不要一次铺开整套系统方案。
-- 玩家装一次、测一次要半个多小时，所以**几批改动攒成一个大试玩包**再交付。试玩包里放一个 `TestMod/` 文件夹，结构与玩家的模组一致：包括相对 `baseline/v74/compiled` 有变化的全部 txt，以及已经合并好的完整汉化 CSV。再附一份 `试玩说明.txt`，写明 `scripts.txt` 应有的大小、本次新增了什么、最快能在哪里试到。
+- 玩家装一次、测一次要半个多小时，所以**几批改动攒成一个大试玩包**再交付。用 `python tools/package_trial.py <玩家的 cns 目录> <输出.zip> --note <说明.txt>` 生成：包里是一个 `TestMod/` 文件夹，结构与玩家的模组一致，含有变化的全部 txt 和合并好的汉化；说明文件里要写清本次新增了什么、最快能在哪里试到（`scripts.txt` 应有的大小由脚本自动附上）。
 - 玩家看重真实感和"有来有去"：钱、人、粮不能凭空生灭；数值要和原版的量级对齐（荣誉 +1～+3，任务声望 +2～+10）；设计上的取舍（比如随军财物只取 30%）要说清楚理由。
