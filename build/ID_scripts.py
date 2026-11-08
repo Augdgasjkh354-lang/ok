@@ -741,5 +741,6 @@ script_af14_contract_reward = 739
 script_af14_center_funds = 740
 script_af14_pay_from_center = 741
 script_af14_collect_debt = 742
+script_af14_lord_wealth = 743
 
 

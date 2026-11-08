@@ -51684,7 +51684,7 @@ scripts = [
       (store_random_in_range, ":roll", 0, 100),
       (lt, ":roll", ":chance"),
       (troop_remove_gold, "trp_player", ":price"),
-      (troop_add_gold, ":lord", ":price"),
+      (call_script, "script_af14_lord_wealth", ":lord", ":price", 0),  # v1.0: into the purse he pays troops from
       (troop_set_slot, ":lord", slot_fb73_paid, ":price"),
       (call_script, "script_fb73_record_promise", ":lord", "trp_player", ":issue", "trp_player", 2),
       (call_script, "script_fb74_add_heat", ":lord", 26),
@@ -51853,7 +51853,7 @@ scripts = [
           (eq, ":kind", 2),
           (gt, ":paid", 0),
           (troop_add_gold, "trp_player", ":paid"),
-          (troop_remove_gold, ":voter", ":paid"),
+          (call_script, "script_af14_lord_wealth", ":voter", 0, ":paid"),
         (try_end),
       (try_end),
       (troop_set_slot, ":voter", slot_fb73_promise_candidate, 0),
@@ -51902,7 +51902,7 @@ scripts = [
         (try_begin),
           (gt, ":escrow", 0),
           (troop_add_gold, "trp_player", ":escrow"),
-          (troop_remove_gold, ":voter", ":escrow"),
+          (call_script, "script_af14_lord_wealth", ":voter", 0, ":escrow"),
         (try_end),
         (troop_set_slot, ":voter", slot_fb73_promise_candidate, 0),
         (troop_set_slot, ":voter", slot_fb73_promise_type, 0),
@@ -52145,7 +52145,7 @@ scripts = [
         (call_script, "script_fb74_switch_compact", ":lord", ":new"),
         (eq, reg0, 1),
         (troop_remove_gold, "trp_player", ":price"),
-        (troop_add_gold, ":lord", ":price"),
+        (call_script, "script_af14_lord_wealth", ":lord", ":price", 0),  # v1.0: into the purse he pays troops from
         (call_script, "script_fb74_add_heat", "trp_player", 19),
         (troop_slot_eq, ":lord", slot_fb73_debt_to, 0),
         # Player receives one vote of political gratitude, not an immortal alliance.
@@ -54665,12 +54665,14 @@ scripts = [
     (assign, ":lord", reg0),
     (try_begin),
       (is_between, ":lord", active_npcs_begin, active_npcs_end),
+      (troop_slot_ge, ":lord", slot_troop_wealth, 650),
       (troop_get_slot, ":hit", ":lord", slot_af05_last_hit_token),
       (troop_set_slot, ":lord", slot_af05_resolved_token, ":hit"),
       (troop_set_slot, ":lord", slot_af05_known_token, 0),
       (troop_set_slot, ":lord", slot_fb74_intel_strength, 0),
       (troop_set_slot, ":lord", slot_fb74_intel_day, 0),
       (troop_add_gold, "trp_player", 650),
+      (call_script, "script_af14_lord_wealth", ":lord", 0, 650),  # v1.0: paid out of his own purse
       (call_script, "script_fb74_add_heat", "trp_player", 18),
       # v1.0: taking hush money is a moral choice, not just political risk.
       (call_script, "script_change_player_honor", -5),
@@ -54679,6 +54681,9 @@ scripts = [
       (val_min, ":grudge", 100),
       (troop_set_slot, ":lord", slot_fb7_grudge, ":grudge"),
       (assign, ":ok", 1),
+    (else_try),
+      (is_between, ":lord", active_npcs_begin, active_npcs_end),
+      (assign, ":ok", 2),  # v1.0: proven case, but the funder cannot pay
     (try_end),
     (assign, reg0, ":ok"),
   ]),
@@ -56437,6 +56442,24 @@ scripts = [
       (else_try),
         (display_message, "@军需官先补了{reg41}第纳尔，还差{reg42}，说过几天再来。"),
       (try_end),
+    (try_end),
+  ]),
+
+
+  # v1.0 economy: money paid to or by a lord moves his real wealth (the purse
+  # native uses for his troops' wages), not the unused gold on his person.
+  # Input: lord, add, [subtract]. Never goes below zero.
+  ("af14_lord_wealth", [
+    (store_script_param, ":lord", 1),
+    (store_script_param, ":add", 2),
+    (store_script_param, ":sub", 3),
+    (try_begin),
+      (is_between, ":lord", active_npcs_begin, active_npcs_end),
+      (troop_get_slot, ":wealth", ":lord", slot_troop_wealth),
+      (val_add, ":wealth", ":add"),
+      (val_sub, ":wealth", ":sub"),
+      (val_max, ":wealth", 0),
+      (troop_set_slot, ":lord", slot_troop_wealth, ":wealth"),
     (try_end),
   ]),
 

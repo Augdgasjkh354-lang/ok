@@ -15148,6 +15148,7 @@ game_menus = [
       "以证据勒索资助者，收取650第纳尔封口费（自身政治嫌疑+18，荣誉-5）",
       [(call_script, "script_af05_silence_case"),
        (try_begin), (eq, reg0, 1), (display_message, "@幕后资助者支付了封口费；这件事也让你的政治名声更加危险。"),
+       (else_try), (eq, reg0, 2), (display_message, "@资助者手头拮据，眼下拿不出这笔封口费。"),
        (else_try), (display_message, "@无法交易：证据已经失效或案件已结。"), (try_end),
        (jump_to_menu, "mnu_af05_ledger")]),
      ("af05_ledger_book", [], "查阅现有宫廷政治情报簿", [(jump_to_menu, "mnu_fb75_intel_book")]),
