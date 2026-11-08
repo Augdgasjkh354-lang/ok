@@ -23656,11 +23656,12 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
 
   # FewerBandits v4: donate 500 denars for +1 village relation, repeatable
   [anyone|plyr,"village_elder_talk", [(store_troop_gold, ":gold", "trp_player"),(ge, ":gold", 500)],
-   "ææ³ç»æå­æç¹é±ï¼500 ç¬¬çº³å°æ¢ 1 ç¹å¥½æï¼ã", "village_elder_donate",[]],
+   "我想给村子捐点钱（500 第纳尔换 1 点好感）。", "village_elder_donate",[]],
 
   [anyone,"village_elder_donate", [],
-   "å¤è°¢æ¨çæ·æ¨ï¼{sir/madam}ï¼è¿ 500 ç¬¬çº³å°ä¸å®ä¼ç¨å¨æå­æéè¦çå°æ¹ï¼æ¨æ¯æä»¬æ°¸è¿çæåã", "village_elder_pretalk",
+   "多谢您的慷慨，{sir/madam}！这 500 第纳尔一定会用在村子最需要的地方，您是我们永远的朋友。", "village_elder_pretalk",
    [(troop_remove_gold, "trp_player", 500),
+    (call_script, "script_af13_village_purse", "$current_town", 500),  # v1.0: stays in the village
     (call_script, "script_change_player_relation_with_center", "$current_town", 1)]],
 
   [anyone|plyr,"village_elder_talk",

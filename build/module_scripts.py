@@ -52932,6 +52932,9 @@ scripts = [
     (party_get_slot, reg60, ":village", slot_af01_unrest),
     (party_get_slot, reg61, ":village", slot_center_player_relation),
     (party_get_slot, reg62, ":village", slot_town_prosperity),
+    (party_get_slot, ":purse_elder", ":village", slot_town_elder),
+    (assign, reg(66), 0),
+    (try_begin), (gt, ":purse_elder", 0), (store_troop_gold, reg(66), ":purse_elder"), (try_end),
     (try_begin),
       (lt, reg60, 20),
       (str_store_string, s11, "@\u5b89\u5b81"),
@@ -56203,6 +56206,7 @@ scripts = [
       (try_begin),
         (gt, ":cost", 0),
         (troop_remove_gold, "trp_player", ":cost"),
+        (call_script, "script_af13_village_purse", ":village", ":cost"),  # paid to villagers
       (try_end),
       (try_begin),
         (eq, ":kind", 1),
@@ -56213,6 +56217,7 @@ scripts = [
         (else_try),
           (eq, ":choice", 2),
           (troop_add_gold, "trp_player", 150),
+          (call_script, "script_af13_village_purse", ":village", -150),
           (call_script, "script_change_player_relation_with_center", ":village", -2),
           (call_script, "script_change_player_honor", -2),
         (else_try),
@@ -56229,6 +56234,7 @@ scripts = [
         (else_try),
           (eq, ":choice", 2),
           (troop_add_gold, "trp_player", 200),
+          (call_script, "script_af13_village_purse", ":village", -200),
           (call_script, "script_change_player_relation_with_center", ":village", -3),
           (call_script, "script_change_player_honor", -2),
         (else_try),
@@ -56271,6 +56277,32 @@ scripts = [
       (eq, ":kind", 3), (eq, ":choice", 1), (assign, reg0, 50),
     (else_try),
       (eq, ":kind", 3), (eq, ":choice", 2), (assign, reg0, 80),
+    (try_end),
+  ]),
+
+
+  # ========== v1.0 economy: money given to a village stays in the village ==========
+  # A village's cash is its elder's purse (native: on each inventory refresh,
+  # every 3000 above 3500 is invested as +1 prosperity). Input: village, amount
+  # (negative takes money out, never below zero).
+  ("af13_village_purse", [
+    (store_script_param, ":village", 1),
+    (store_script_param, ":amount", 2),
+    (try_begin),
+      (is_between, ":village", villages_begin, villages_end),
+      (party_get_slot, ":elder", ":village", slot_town_elder),
+      (gt, ":elder", 0),
+      (try_begin),
+        (gt, ":amount", 0),
+        (troop_add_gold, ":elder", ":amount"),
+      (else_try),
+        (lt, ":amount", 0),
+        (store_troop_gold, ":gold", ":elder"),
+        (store_sub, ":take", 0, ":amount"),
+        (val_min, ":take", ":gold"),
+        (gt, ":take", 0),
+        (troop_remove_gold, ":elder", ":take"),
+      (try_end),
     (try_end),
   ]),
 

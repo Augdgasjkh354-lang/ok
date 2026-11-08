@@ -16,6 +16,8 @@ python tests/verify_v09.py
 
 这些是当前 v0.9 的推荐命令；使用 Python 3。编译数据输出到 `game-data/`；`build/compiled/` 是构建过程目录。历史兼容基线位于 `baseline/v08/compiled/`。不要把 `build/build_module.bat` 当成这版的常规构建入口，也不要编辑 `game-data/*.txt` 来代替源码改动。
 
+**对话的编译方式**：FewerBandits v7.x 对话的中文是在编译产物里套上的，源码里仍是英文，所以 `build_v09.py` 会把新编译结果和 `baseline/v08/compiled/conversation.txt` 逐行合并：某行若只有文字不同，保留旧行（中文）；逻辑真正改了的行，用新编译的。改对话逻辑后，要把该对话 ID 加进 `tests/verify_v09.py` 的 `ALLOWED_DIALOG_CHANGES`。对话只能追加，不能删除，也不能调整顺序。
+
 `generate_localization.py` **会清空并重建** `localization/`，手工翻译修订必须回写生成逻辑或先保存差异。`merge_localization.py` 用于将增量 CSV 合并到现有模块，执行前应有备份。
 
 ## 兼容性红线

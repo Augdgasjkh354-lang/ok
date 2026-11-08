@@ -736,5 +736,6 @@ script_af12_case_kind = 734
 script_af12_prepare_case = 735
 script_af12_judge = 736
 script_af12_verdict_cost = 737
+script_af13_village_purse = 738
 
 

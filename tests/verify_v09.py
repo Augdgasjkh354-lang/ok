@@ -12,7 +12,13 @@ for idfile in ('ID_scripts.py','ID_menus.py','ID_troops.py','ID_party_templates.
     now=[x for x in (current/idfile).read_text('utf-8').splitlines() if x.strip()]
     assert now[:len(original)]==original, f'Old ID order changed: {idfile}'
 assert (base/'compiled/variables.txt').read_bytes()==(data/'variables.txt').read_bytes(), 'global variables changed'
-assert (base/'compiled/conversation.txt').read_bytes()==(data/'conversation.txt').read_bytes(), 'legacy dialogs changed'
+# Dialogues may change only where intended (logic edits); text stays as compiled before.
+ALLOWED_DIALOG_CHANGES={'dlga_village_elder_donate:village_elder_pretalk'}  # v1.0: donation stays in village purse
+_old=(base/'compiled/conversation.txt').read_text('utf-8').split('\n')
+_new=(data/'conversation.txt').read_text('utf-8').split('\n')
+assert len(_old)==len(_new), 'dialogue count changed'
+_changed={n.split(' ',1)[0] for o,n in zip(_old,_new) if o!=n}
+assert _changed<=ALLOWED_DIALOG_CHANGES, ('unexpected dialogue changes', _changed-ALLOWED_DIALOG_CHANGES)
 assert (base/'compiled/troops.txt').read_bytes()==(data/'troops.txt').read_bytes(), 'legacy troop data changed'
 assert (base/'compiled/party_templates.txt').read_bytes()==(data/'party_templates.txt').read_bytes()
 
