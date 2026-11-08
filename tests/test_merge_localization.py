@@ -89,7 +89,7 @@ with tempfile.TemporaryDirectory() as tmp:
         assert 'trp_af04_blackpine_captain|' in (mod3 / 'languages' / 'cns' / 'troops.csv').read_text('utf-8-sig')
         assert not list((mod3 / 'languages' / 'cns').glob('*.merge.csv'))
 
-    with zipfile.ZipFile(out / '烽烟与暗流-v0.9-从v7.4累计包.zip') as z:
+    with zipfile.ZipFile(next(out.glob('烽烟与暗流-*-从v7.4累计包.zip'))) as z:
         base = root / 'baseline' / 'v74' / 'compiled'
         expected = [f for f in (root / 'game-data').glob('*.txt') if f.read_bytes() != (base / f.name).read_bytes()]
         assert len([n for n in z.namelist() if n.startswith('FewerBandits/')]) == len(expected)
