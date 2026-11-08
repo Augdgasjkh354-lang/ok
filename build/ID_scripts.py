@@ -730,5 +730,7 @@ script_af11_merc_current_owed = 728
 script_af11_prepare_arrears = 729
 script_af11_demand_back_pay = 730
 script_af11_quit_unpaid = 731
+script_af11_land_offer = 732
+script_af11_accept_land = 733
 
 

@@ -55999,6 +55999,11 @@ scripts = [
     (assign, reg41, reg0),
     (party_get_slot, reg42, "p_main_party", slot_af11_merc_weeks),
     (str_store_string, s40, "@{s47}已经拖欠你{reg41}第纳尔饷银，连着{reg42}个发饷日没给钱了。^^弟兄们还在等。等国库缓过来，欠款会一次补清；你也可以派人去催，或者干脆撕了合约走人。"),
+    (try_begin),
+      (call_script, "script_af11_land_offer"),
+      (ge, reg0, 0),
+      (str_store_string, s40, "@{s40}^^国王的使者还带来一个提议：国库实在拿不出钱，{s47}愿意把{s48}封给你抵这笔账。条件是你得跪下宣誓，从此做他的封臣，不再是拿钱办事的雇佣兵。"),
+    (try_end),
   ]),
 
   # Demand back pay. reg0: 1 paid, 2 refused, 0 cooldown.
@@ -56050,6 +56055,87 @@ scripts = [
     (party_set_slot, "p_main_party", slot_af11_merc_employer, 0),
     (party_set_slot, "p_main_party", slot_af11_merc_centers, 0),
     (call_script, "script_player_leave_faction", 0),
+  ]),
+
+
+  # ========== v1.0: land for back pay ==========
+  # A king who cannot pay a loyal mercenary offers one of his own villages
+  # instead, in exchange for homage -- the historical road from sellsword to
+  # vassal. Output: reg0 = village or -1; s48 = its name.
+  # Conditions: still a mercenary of this kingdom, king relation >= 0, the
+  # king cannot cover the debt, and either 3+ unpaid weeks now or 1+ unpaid
+  # week after having already sat through 3+ weeks before (slot_af11_merc_endured).
+  ("af11_land_offer", [
+    (assign, reg0, -1),
+    (try_begin),
+      (call_script, "script_af11_merc_current_owed"),
+      (assign, ":owed", reg0),
+      (assign, reg0, -1),
+      (gt, ":owed", 0),
+      (faction_get_slot, ":king", "$players_kingdom", slot_faction_leader),
+      (is_between, ":king", active_npcs_begin, active_npcs_end),
+      (troop_get_slot, ":wealth", ":king", slot_troop_wealth),
+      (lt, ":wealth", ":owed"),
+      (call_script, "script_troop_get_player_relation", ":king"),
+      (ge, reg0, 0),
+      (assign, reg0, -1),
+      (party_get_slot, ":weeks", "p_main_party", slot_af11_merc_weeks),
+      (party_get_slot, ":endured", "p_main_party", slot_af11_merc_endured),
+      (assign, ":ready", 0),
+      (try_begin),
+        (ge, ":weeks", 3),
+        (assign, ":ready", 1),
+      (else_try),
+        (ge, ":weeks", 1),
+        (ge, ":endured", 3),
+        (assign, ":ready", 1),
+      (try_end),
+      (eq, ":ready", 1),
+      # The poorest village the king holds himself; otherwise an unassigned one.
+      (assign, ":best", -1),
+      (assign, ":best_prosperity", 1000),
+      (try_for_range, ":village", villages_begin, villages_end),
+        (store_faction_of_party, ":village_faction", ":village"),
+        (eq, ":village_faction", "$players_kingdom"),
+        (party_get_slot, ":lord", ":village", slot_town_lord),
+        (this_or_next|eq, ":lord", ":king"),
+        (eq, ":lord", stl_unassigned),
+        (party_slot_eq, ":village", slot_village_state, 0),
+        (party_get_slot, ":prosperity", ":village", slot_town_prosperity),
+        (try_begin),
+          (eq, ":lord", stl_unassigned),
+          (val_add, ":prosperity", 200),  # prefer the king's own domain
+        (try_end),
+        (lt, ":prosperity", ":best_prosperity"),
+        (assign, ":best", ":village"),
+        (assign, ":best_prosperity", ":prosperity"),
+      (try_end),
+      (ge, ":best", 0),
+      (str_store_party_name, s48, ":best"),
+      (assign, reg0, ":best"),
+    (try_end),
+  ]),
+
+  # Accept the village and swear homage, following the native oath sequence.
+  ("af11_accept_land", [
+    (store_script_param, ":village", 1),
+    (faction_get_slot, ":king", "$players_kingdom", slot_faction_leader),
+    (call_script, "script_player_join_faction", "$players_kingdom"),
+    (call_script, "script_give_center_to_lord", ":village", "trp_player", 0),
+    (try_begin),
+      (faction_slot_eq, "$players_kingdom", slot_faction_political_issue, ":village"),
+      (faction_set_slot, "$players_kingdom", slot_faction_political_issue, -1),
+    (try_end),
+    (call_script, "script_add_log_entry", logent_pledged_allegiance, "trp_player", -1, ":king", "$players_kingdom"),
+    (try_begin),
+      (check_quest_active, "qst_join_faction"),
+      (call_script, "script_abort_quest", "qst_join_faction", 0),
+    (try_end),
+    (assign, "$player_has_homage", 1),
+    (assign, "$g_player_banner_granted", 1),
+    (party_set_slot, "p_main_party", slot_af11_merc_owed, 0),
+    (party_set_slot, "p_main_party", slot_af11_merc_weeks, 0),
+    (call_script, "script_change_player_relation_with_troop", ":king", 3),
   ]),
 
 ]
