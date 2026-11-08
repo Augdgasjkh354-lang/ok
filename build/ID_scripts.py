@@ -785,5 +785,7 @@ script_af23_break_truce = 783
 script_af23_gang_live_party = 784
 script_af23_gang_feud = 785
 script_af23_back_gang = 786
+script_af24_stock_value = 787
+script_af24_settle_stock = 788
 
 
