@@ -63,7 +63,11 @@ def merge(previous, incoming):
             order.append(key); existing[key] = new[key]; inserted += 1
         elif key.startswith(OWNED_PREFIXES) and existing[key] != new[key]:
             existing[key] = new[key]; updated += 1
-    return ''.join(f'{k}|{existing[k]}\n' for k in order), inserted, updated, len(order)
+    # Warband treats the first line of every language CSV as a header and skips
+    # it (official files start with BOM + an empty line). Keep that empty line,
+    # or the first translation silently stops working.
+    body = '\r\n' + ''.join(f'{k}|{existing[k]}\r\n' for k in order)
+    return body, inserted, updated, len(order)
 
 
 def main(argv=None):
@@ -100,7 +104,7 @@ def main(argv=None):
         backup = dest.with_name(dest.name + '.bak')
         if dest.exists() and not backup.exists():
             shutil.copy2(dest, backup)  # keep the very first original; reruns never overwrite it
-        dest.write_text(text, encoding='utf-8-sig')
+        dest.write_bytes(b'\xef\xbb\xbf' + text.encode('utf-8'))
         print(f'{dest.name}: 新增={inserted}, 更新={updated}, 共={total}')
     print(f'完成：已合并到 {target}。原文件首次合并前的版本保存为 *.csv.bak')
 

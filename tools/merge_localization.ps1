@@ -94,7 +94,9 @@ foreach ($incoming in (Get-ChildItem -LiteralPath $source -Filter '*.csv' | Sort
             $old.Map[$key] = $new.Map[$key]; $updated++
         }
     }
+    # 游戏会把每个语言 CSV 的第一行当表头跳过（官方文件以空行开头），必须保留这个空行。
     $sb = New-Object System.Text.StringBuilder
+    [void]$sb.Append("`r`n")
     foreach ($key in $old.Order) { [void]$sb.Append($key).Append('|').Append($old.Map[$key]).Append("`r`n") }
     $plans += , @($dest, $sb.ToString(), $inserted, $updated, $old.Order.Count)
 }

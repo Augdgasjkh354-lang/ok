@@ -26,6 +26,8 @@ with tempfile.TemporaryDirectory() as tmp:
     (cns / 'troops.csv').write_text(original, 'utf-8')
 
     run(mod)
+    raw = (cns / 'troops.csv').read_bytes()
+    assert raw.startswith(b'\xef\xbb\xbf\r\n'), 'first line must stay an empty header line (engine skips it)'
     merged = (cns / 'troops.csv').read_text('utf-8-sig')
     assert 'trp_swadian_knight|斯 瓦 迪 亚 骑 士　' in merged, 'native translation lost'
     assert 'trp_af04_greywolf_captain|裂 旗　' in merged, 'mod-owned key not refreshed'
