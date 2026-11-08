@@ -54210,6 +54210,8 @@ scripts = [
         (call_script, "script_af04_spawn_gang", ":kind"),
       (else_try),
         (eq, ":valid", 1),
+        # v1.0 第六批（六）：休战平安到期，守约计数 +1（一天只算一次）。
+        (call_script, "script_af23_truce_kept", ":kind"),
         (call_script, "script_af15_gang_recruit", ":kind", ":gang"),  # v1.0
         (party_get_slot, ":home", ":gang", slot_af04_home),
         (party_get_slot, ":target", ":gang", slot_af04_order_target),
@@ -54333,11 +54335,16 @@ scripts = [
     (call_script, "script_af04_main_slot", slot_af04_truce_start, ":kind"),
     (assign, ":slot", reg0),
     (party_get_slot, ":until", "p_main_party", ":slot"),
+    # v1.0 第六批（六）：守约打折，每守约一次 -10%，最多 -30%。
+    (call_script, "script_af23_protection_price", ":kind"),
+    (assign, ":price", reg0),
     (try_begin),
-      (ge, ":gold", 450),
+      (ge, ":gold", ":price"),
       (ge, ":day", ":until"),
-      (troop_remove_gold, "trp_player", 450),
-      (call_script, "script_af15_gang_purse", ":kind", 450),  # v1.0: the gang keeps it
+      # Renewing on the exact day the old truce runs out still earns the kept word.
+      (call_script, "script_af23_truce_kept", ":kind"),
+      (troop_remove_gold, "trp_player", ":price"),
+      (call_script, "script_af15_gang_purse", ":kind", ":price"),  # v1.0: the gang keeps it
       (store_add, ":deadline", ":day", 11),
       (party_set_slot, "p_main_party", ":slot", ":deadline"),
       (call_script, "script_af04_change_trust", ":kind", 10),
@@ -57696,6 +57703,73 @@ scripts = [
       (val_max, ":interest", 25),
     (try_end),
     (assign, reg0, ":interest"),
+  ]),
+
+  # ========== v1.0 第六批（六）：守信与背约（三大匪帮） ==========
+  # The discounted price of a protection deal with one gang, in denars.
+  # Base 450, less 10% per truce kept with that gang, at most -30%.
+  # Input: kind (1-3). Output reg0, assigned last.
+  ("af23_protection_price", [
+    (store_script_param, ":kind", 1),
+    (store_add, ":slot", slot_af23_kept_word_1, ":kind"),
+    (val_sub, ":slot", 1),
+    (party_get_slot, ":kept", "p_main_party", ":slot"),
+    (val_min, ":kept", 3),
+    (val_max, ":kept", 0),
+    (store_mul, ":discount", ":kept", 10),
+    (store_sub, ":pct", 100, ":discount"),
+    (store_mul, ":price", 450, ":pct"),
+    (val_div, ":price", 100),
+    (assign, reg0, ":price"),
+  ]),
+
+  # A truce that ran out peacefully earns one kept word for that gang.
+  # Input: kind (1-3). Output reg0 = 1 if credited, 0 otherwise. Clears the
+  # truce slot when crediting, so one truce is never counted twice.
+  ("af23_truce_kept", [
+    (store_script_param, ":kind", 1),
+    (assign, ":credited", 0),
+    (call_script, "script_af04_main_slot", slot_af04_truce_start, ":kind"),
+    (assign, ":slot", reg0),
+    (party_get_slot, ":until", "p_main_party", ":slot"),
+    (store_current_day, ":day"),
+    (val_add, ":day", 1),
+    (try_begin),
+      (gt, ":until", 0),
+      (ge, ":day", ":until"),
+      (store_add, ":kept_slot", slot_af23_kept_word_1, ":kind"),
+      (val_sub, ":kept_slot", 1),
+      (party_get_slot, ":kept", "p_main_party", ":kept_slot"),
+      (val_add, ":kept", 1),
+      (party_set_slot, "p_main_party", ":kept_slot", ":kept"),
+      (party_set_slot, "p_main_party", ":slot", 0),
+      (assign, ":credited", 1),
+    (try_end),
+    (assign, reg0, ":credited"),
+  ]),
+
+  # The player broke a truce by attacking this gang. Only applies while a
+  # truce is still running: honour -3, trust -30, truce void, kept words
+  # for this gang reset to 0. Input: gang party.
+  ("af23_break_truce", [
+    (store_script_param, ":gang", 1),
+    (party_get_slot, ":kind", ":gang", slot_af04_kind),
+    (call_script, "script_af04_main_slot", slot_af04_truce_start, ":kind"),
+    (assign, ":slot", reg0),
+    (party_get_slot, ":until", "p_main_party", ":slot"),
+    (store_current_day, ":day"),
+    (val_add, ":day", 1),
+    (try_begin),
+      (gt, ":until", ":day"),
+      (party_set_slot, "p_main_party", ":slot", 0),
+      (call_script, "script_change_player_honor", -3),
+      (call_script, "script_af04_change_trust", ":kind", -30),
+      (store_add, ":kept_slot", slot_af23_kept_word_1, ":kind"),
+      (val_sub, ":kept_slot", 1),
+      (party_set_slot, "p_main_party", ":kept_slot", 0),
+      (str_store_party_name, s10, ":gang"),
+      (display_message, "@你撕毁了和{s10}的约定，道上的人都知道了。", 0xFF6666),
+    (try_end),
   ]),
 
 ]

@@ -15182,8 +15182,11 @@ game_menus = [
        (call_script, "script_af04_main_slot", slot_af04_truce_start, ":kind"),
        (party_get_slot, ":until", "p_main_party", reg0),
        (store_current_day, ":day"), (val_add, ":day", 1), (ge, ":day", ":until"),
-       (store_troop_gold, ":gold", "trp_player"), (ge, ":gold", 450)],
-      "支付450第纳尔，签订11天互不侵扰协议（团伙交情+10）",
+       # v1.0 第六批（六）：守约打折后的价格写进菜单文字。
+       (call_script, "script_af23_protection_price", ":kind"),
+       (assign, reg42, reg0),
+       (store_troop_gold, ":gold", "trp_player"), (ge, ":gold", reg42)],
+      "支付{reg42}第纳尔，签订11天互不侵扰协议（团伙交情+10）",
       [(party_get_slot, ":kind", "$g_encountered_party", slot_af04_kind),
        (call_script, "script_af04_buy_protection", ":kind"),
        (try_begin), (eq, reg0, 1), (display_message, "@团伙接受了保护费，短期内承诺不针对你的护送队。"),
@@ -15246,7 +15249,13 @@ game_menus = [
        (else_try), (display_message, "@招安失败：金币、信任或队伍空间不足。"),
          (jump_to_menu, "mnu_af04_gang"), (try_end)]),
      ("af04_attack", [], "剿灭这伙匪帮（进入正常野战）",
-      [(assign, "$g_enemy_party", "$g_encountered_party"),
+      [(try_begin),
+         # v1.0 第六批（六）：休战期内玩家主动攻打，算背约（打赢打输都算，
+         # 所以在开战前就处理；匪帮先动手的不算）。
+         (neg|encountered_party_is_attacker),
+         (call_script, "script_af23_break_truce", "$g_encountered_party"),
+       (try_end),
+       (assign, "$g_enemy_party", "$g_encountered_party"),
        (jump_to_menu, "mnu_simple_encounter")]),
      ("af04_leave", [(neg|encountered_party_is_attacker)], "离开此地",
       [(leave_encounter), (change_screen_return)]),
