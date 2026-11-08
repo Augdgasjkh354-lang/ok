@@ -1,0 +1,44 @@
+name: Import complete Ashfall v0.9 source
+
+on:
+  push:
+    paths:
+      - "archives/ashfall-v0.9-source.tar.zst"
+      - ".github/workflows/import-ashfall.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  import-source:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check archive and extract versioned sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "e0d0e97d7c619971f6e9156823684b2fcec46c59b226df9fa0398a8c077ba255  archives/ashfall-v0.9-source.tar.zst" | sha256sum -c -
+          mkdir -p .ashfall-import
+          zstd -dc archives/ashfall-v0.9-source.tar.zst | tar -x -C .ashfall-import
+          test -f .ashfall-import/Ashfall-v0.9/build_v09.py
+          test -f .ashfall-import/Ashfall-v0.9/AGENTS.md
+          test -f .ashfall-import/Ashfall-v0.9/中文编译与汉化指南.md
+          count=$(find .ashfall-import/Ashfall-v0.9 -type f | wc -l)
+          test "$count" -eq 770
+          rsync -a .ashfall-import/Ashfall-v0.9/ ./
+          rm -rf .ashfall-import
+      - name: Commit verified source files
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Already imported"
+          else
+            git commit -m "source: import complete Ashfall v0.9 project"
+            git push origin HEAD:main
+          fi
