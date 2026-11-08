@@ -4721,6 +4721,7 @@ game_menus = [
                   (try_end),
                   
           (call_script, "script_af18_player_caravan_defeated"),  # v1.0: the caravan's cash box
+          (call_script, "script_af20_on_victory"),  # v1.0: fame
           (call_script, "script_event_player_defeated_enemy_party", "$g_enemy_party"),
           (call_script, "script_clear_party_group", "$g_enemy_party"),
           (try_begin),
@@ -4928,6 +4929,7 @@ game_menus = [
           (call_script, "script_party_remove_all_prisoners", "p_main_party"),
 
           (val_add, "$g_total_defeats", 1),
+          (call_script, "script_af20_on_defeat"),  # v1.0: fame
 
           (try_begin),
             (neq, "$g_player_surrenders", 1),

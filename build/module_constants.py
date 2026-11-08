@@ -2089,3 +2089,7 @@ slot_af18_caravan_purse    = 873 # caravan party: cash box in denars
 af18_caravan_capital       = 600 # working capital a caravan tops up to when it trades
 # v1.0 economy: lords who could not pay the player in full (troop slot).
 slot_af19_lord_owes_player = 874 # lord: denars still owed to the player, paid when they next meet
+# v1.0 fame: enemies who dare not chase a player with a fearsome record.
+slot_af20_fame             = 875 # p_main_party: fame from battles won (kills are read live)
+slot_af20_next_decay       = 876 # p_main_party: day+1 of the next fortnightly fading (reset by battles)
+slot_af20_next_check       = 877 # any map party: hour before which it is not judged again

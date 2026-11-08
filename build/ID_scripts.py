@@ -764,5 +764,11 @@ script_af19_king_pays = 762
 script_af19_town_pays = 763
 script_af19_caravan_pays = 764
 script_af19_settle_debts = 765
+script_af20_fame_total = 766
+script_af20_fame_tier = 767
+script_af20_announce = 768
+script_af20_on_victory = 769
+script_af20_on_defeat = 770
+script_af20_hourly = 771
 
 
