@@ -759,5 +759,10 @@ script_af18_player_caravan_defeated = 757
 script_af18_toll_offer = 758
 script_af18_pay_toll = 759
 script_af18_caravan_disband = 760
+script_af19_lord_pays = 761
+script_af19_king_pays = 762
+script_af19_town_pays = 763
+script_af19_caravan_pays = 764
+script_af19_settle_debts = 765
 
 

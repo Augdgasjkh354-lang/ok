@@ -4088,4 +4088,6 @@ simple_triggers = [
        (call_script, "script_fb71_apply_full_start")]),
   # Ashfall v1.0: hunger when a granary stays nearly empty outside a siege.
   (24 * 7, [(call_script, "script_af17_weekly_hunger")]),
+  # Ashfall v1.0: lords and towns that owe the player pay up when he is near.
+  (1, [(call_script, "script_af19_settle_debts")]),
 ]

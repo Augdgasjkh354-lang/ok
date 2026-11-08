@@ -2087,3 +2087,5 @@ slot_af15_gang_purse_start = 870 # p_main_party 870-872: each named gang's cash;
 # v1.0 economy: caravans carry real money, taken from town treasuries.
 slot_af18_caravan_purse    = 873 # caravan party: cash box in denars
 af18_caravan_capital       = 600 # working capital a caravan tops up to when it trades
+# v1.0 economy: lords who could not pay the player in full (troop slot).
+slot_af19_lord_owes_player = 874 # lord: denars still owed to the player, paid when they next meet

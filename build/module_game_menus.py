@@ -6868,14 +6868,14 @@ game_menus = [
     [
       ("accept_decision",[],"Accept the decision.",
        [
-       (call_script, "script_troop_add_gold", "trp_player", reg6),
+       (call_script, "script_af19_king_pays", "$players_kingdom", reg6),  # v1.0
        (change_screen_return),
        ]),
            
        ("leave_faction",[],"You have been wronged! Renounce your oath to your liege! ",
        [
          (jump_to_menu, "mnu_leave_faction"),
-         (call_script, "script_troop_add_gold", "trp_player", reg6),
+         (call_script, "script_af19_king_pays", "$players_kingdom", reg6),  # v1.0
         ]),
      ],
   ),
@@ -6905,7 +6905,7 @@ game_menus = [
     [
                 ("accept_decision",[],"Accept the decision.",
         [
-        (call_script, "script_troop_add_gold", "trp_player", reg6),
+        (call_script, "script_af19_king_pays", "$players_kingdom", reg6),  # v1.0
         (change_screen_return),
         ]),
     ],
@@ -11691,7 +11691,7 @@ game_menus = [
      ],
     [
       ("ransom_accept",[],"Accept the offer.",
-       [(troop_add_gold, "trp_player", reg12),
+       [(call_script, "script_af19_lord_pays", "$g_ransom_offer_troop", reg12),  # v1.0: the family pays from his wealth
         (party_remove_prisoners, "$g_ransom_offer_party", "$g_ransom_offer_troop", 1),        
         (call_script, "script_remove_troop_from_prison", "$g_ransom_offer_troop"),              
         (try_begin),
@@ -14630,7 +14630,7 @@ game_menus = [
         (store_mul, ":denar_gain", "$g_player_days_as_marshal", 50),
         (val_max, ":denar_gain", 200),
         (val_min, ":denar_gain", 4000),
-        (troop_add_gold, "trp_player", ":denar_gain"),
+        (call_script, "script_af19_king_pays", "$players_kingdom", ":denar_gain"),  # v1.0
         (call_script, "script_change_troop_renown", "trp_player", ":renown_gain"),
         (assign, "$g_player_days_as_marshal", 0),
         (assign, "$g_dont_give_marshalship_to_player_days", 15),
