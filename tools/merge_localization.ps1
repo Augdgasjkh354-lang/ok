@@ -83,25 +83,6 @@ foreach ($incoming in (Get-ChildItem -LiteralPath $source -Filter '*.csv' | Sort
     if (Test-Path -LiteralPath $dest -PathType Leaf) { $previous = Read-Utf8 $dest }
     $old = Parse-Csv $previous
     $new = Parse-Csv (Read-Utf8 $incoming.FullName)
-    # 模组里的该文件不存在、或只含本 Mod 条目时，会挡住游戏自带的完整中文，
-    # 使原版菜单变英文：先从游戏本体复制完整译文作为底稿。
-    $onlyMod = $true
-    foreach ($key in $old.Order) { if (-not $new.Map.ContainsKey($key)) { $onlyMod = $false; break } }
-    if ($onlyMod) {
-        $modulesDir = Split-Path -Parent $ModulePath
-        $gameDir = Split-Path -Parent $modulesDir
-        $base = $null
-        foreach ($cand in @((Join-Path (Join-Path (Join-Path $gameDir 'languages') $Lang) $name),
-                            (Join-Path (Join-Path (Join-Path (Join-Path $modulesDir 'Native') 'languages') $Lang) $name))) {
-            if (Test-Path -LiteralPath $cand -PathType Leaf) { $base = $cand; break }
-        }
-        if ($base) {
-            $old = Parse-Csv (Read-Utf8 $base)
-            Write-Host "${name}: 已从 $base 补入完整原版译文"
-        } else {
-            Write-Host "${name}: 未找到游戏自带的完整 $name，该文件只含本 Mod 条目，原版相关文字可能显示英文" -ForegroundColor Yellow
-        }
-    }
     $inserted = 0; $updated = 0
     foreach ($key in $new.Order) {
         if (-not $old.Map.ContainsKey($key)) {
