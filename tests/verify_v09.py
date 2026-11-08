@@ -13,7 +13,9 @@ for idfile in ('ID_scripts.py','ID_menus.py','ID_troops.py','ID_party_templates.
     assert now[:len(original)]==original, f'Old ID order changed: {idfile}'
 assert (base/'compiled/variables.txt').read_bytes()==(data/'variables.txt').read_bytes(), 'global variables changed'
 # Dialogues may change only where intended (logic edits); text stays as compiled before.
-ALLOWED_DIALOG_CHANGES={'dlga_village_elder_donate:village_elder_pretalk'}  # v1.0: donation stays in village purse
+ALLOWED_DIALOG_CHANGES={'dlga_village_elder_donate:village_elder_pretalk',  # v1.0: donation stays in village purse
+    'dlga_merchant_demand_toll:merchant_demand_toll_2', 'dlga_merchant_demand_toll:merchant_demand_toll_2.1',
+    'dlga_merchant_demand_toll_accept:close_window'}  # v1.0: tolls come out of the caravan's cash box
 _old=(base/'compiled/conversation.txt').read_text('utf-8').split('\n')
 _new=(data/'conversation.txt').read_text('utf-8').split('\n')
 assert len(_old)==len(_new), 'dialogue count changed'

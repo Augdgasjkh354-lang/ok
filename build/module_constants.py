@@ -2084,3 +2084,6 @@ slot_af12_case_global      = 868 # p_main_party: last case anywhere, day+1 (7-da
 # v1.0 economy: military contracts are paid by the town, its lord, then the crown.
 slot_af14_town_owes_player = 869 # town: contract pay still owed to the player
 slot_af15_gang_purse_start = 870 # p_main_party 870-872: each named gang's cash; spent on recruits
+# v1.0 economy: caravans carry real money, taken from town treasuries.
+slot_af18_caravan_purse    = 873 # caravan party: cash box in denars
+af18_caravan_capital       = 600 # working capital a caravan tops up to when it trades

@@ -1968,6 +1968,7 @@ simple_triggers = [
          (faction_get_slot, ":num_towns", ":merchant_faction", slot_faction_num_towns),
          (try_begin),
            (le, ":num_towns", 0),
+           (call_script, "script_af18_caravan_disband", ":party_no"),  # v1.0
            (remove_party, ":party_no"),
          (else_try),
            (party_get_cur_town, ":cur_center", ":party_no"),

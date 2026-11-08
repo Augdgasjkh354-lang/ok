@@ -753,5 +753,11 @@ script_af17_granary_ratio = 751
 script_af17_grain_price_pressure = 752
 script_af17_sell_grain = 753
 script_af17_weekly_hunger = 754
+script_af18_caravan_fund = 755
+script_af18_ai_caravan_defeated = 756
+script_af18_player_caravan_defeated = 757
+script_af18_toll_offer = 758
+script_af18_pay_toll = 759
+script_af18_caravan_disband = 760
 
 

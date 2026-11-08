@@ -18327,10 +18327,12 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   [anyone,"merchant_demand_toll", [(gt, "$g_strength_ratio", 70),
                                         (store_div, reg6, "$g_ally_strength", 2),
                                         (val_add, reg6, 40),
+                                        (call_script, "script_af18_toll_offer", "$g_encountered_party", reg6),  # v1.0: no more than its cash box
                                         (assign, "$temp", reg6),
                                         ], "Please, I don't want any trouble. I can give you {reg6} denars, just let us go.", "merchant_demand_toll_2",[]],
   [anyone,"merchant_demand_toll", [(store_div, reg6, "$g_ally_strength", 4),
                                         (val_add, reg6, 10),
+                                        (call_script, "script_af18_toll_offer", "$g_encountered_party", reg6),  # v1.0: no more than its cash box
                                         (assign, "$temp", reg6),
                                         ], "I don't want any trouble. I can give you {reg6} denars if you'll let us go.", "merchant_demand_toll_2",[]],
   
@@ -18338,6 +18340,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   [anyone,"merchant_demand_toll_accept", [(assign, reg6, "$temp")], "Very well then. Here's {reg6} denars. ", "close_window",
    [(assign, "$g_leave_encounter",1),
     (call_script, "script_troop_add_gold", "trp_player", "$temp"),
+    (call_script, "script_af18_pay_toll", "$g_encountered_party", "$temp"),  # v1.0
     (store_add, ":toll_finish_time", "$g_current_hours", merchant_toll_duration),
     (party_set_slot, "$g_encountered_party", slot_party_last_toll_paid_hours, ":toll_finish_time"),
     (try_begin),

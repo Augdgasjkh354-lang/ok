@@ -3379,6 +3379,7 @@ scripts = [
               (distribute_party_among_party_group, "p_temp_party", ":root_winner_party"),
               
               (call_script, "script_battle_political_consequences", ":root_defeated_party", ":root_winner_party"),
+              (call_script, "script_af18_ai_caravan_defeated", ":root_defeated_party", ":root_winner_party"),  # v1.0
               
               (call_script, "script_clear_party_group", ":root_defeated_party"),
             (try_end),
@@ -15013,6 +15014,7 @@ scripts = [
           (val_add, "$newglob_total_prosperity_from_caravan_trade", 1),
         (try_end),
       (try_end),
+      (call_script, "script_af18_caravan_fund", ":party_no", ":center_no"),  # v1.0: top up the cash box here
   ]),
   
   #script_party_calculate_regular_strength:
@@ -21966,6 +21968,7 @@ scripts = [
           (eq, ":party_type", spt_kingdom_caravan),
           (party_set_slot, ":result", slot_party_home_center, ":spawn_center"),
           (party_set_slot, ":result", slot_party_last_traded_center, ":spawn_center"),
+          (call_script, "script_af18_caravan_fund", ":result", ":spawn_center"),  # v1.0: capital from the town
         (try_end),
         (party_set_slot, ":result", slot_party_type, ":party_type"),
         (party_set_slot, ":result", slot_party_ai_state, spai_undefined),
@@ -56757,6 +56760,148 @@ scripts = [
         (str_store_party_name, s48, ":center"),
         (display_message, "@{s48}的粮仓见底，城里在挨饿，繁荣在下滑。", 0xFF6666),
       (try_end),
+    (try_end),
+  ]),
+
+  # ========== v1.0 economy: caravans carry real money ==========
+  # A caravan's cash box (party slot 873). Merchants draw working capital from
+  # the treasury of the town they set out from or trade in, never more than a
+  # quarter of it. The box empties only through tolls, robbery, or the caravan
+  # being disbanded (then it goes back to its home town).
+  ("af18_caravan_fund", [
+    (store_script_param, ":caravan", 1),
+    (store_script_param, ":center", 2),
+    (try_begin),
+      (party_is_active, ":caravan"),
+      (is_between, ":center", walled_centers_begin, walled_centers_end),
+      (party_get_slot, ":purse", ":caravan", slot_af18_caravan_purse),
+      (val_max, ":purse", 0),
+      (store_sub, ":need", af18_caravan_capital, ":purse"),
+      (gt, ":need", 0),
+      (party_get_slot, ":treasury", ":center", slot_town_wealth),
+      (store_div, ":can", ":treasury", 4),
+      (val_min, ":need", ":can"),
+      (gt, ":need", 0),
+      (val_sub, ":treasury", ":need"),
+      (party_set_slot, ":center", slot_town_wealth, ":treasury"),
+      (val_add, ":purse", ":need"),
+      (party_set_slot, ":caravan", slot_af18_caravan_purse, ":purse"),
+    (try_end),
+  ]),
+
+  # AI battle: whoever beat the caravan takes its cash box. A lord keeps it
+  # (one third to his king); a named gang puts it in its purse; ordinary
+  # bandits share it out among themselves and it leaves the books.
+  ("af18_ai_caravan_defeated", [
+    (store_script_param, ":caravan", 1),
+    (store_script_param, ":winner", 2),
+    (try_begin),
+      (party_slot_eq, ":caravan", slot_party_type, spt_kingdom_caravan),
+      (party_get_slot, ":purse", ":caravan", slot_af18_caravan_purse),
+      (party_set_slot, ":caravan", slot_af18_caravan_purse, 0),
+      (gt, ":purse", 0),
+      (gt, ":winner", 0),
+      (party_is_active, ":winner"),
+      (try_begin),
+        (party_get_num_companion_stacks, ":stacks", ":winner"),
+        (gt, ":stacks", 0),
+        (party_stack_get_troop_id, ":leader", ":winner", 0),
+        (is_between, ":leader", active_npcs_begin, active_npcs_end),
+        (call_script, "script_af16_split_loot", ":leader", ":purse"),
+      (else_try),
+        (party_get_slot, ":kind", ":winner", slot_af04_kind),
+        (is_between, ":kind", 1, 4),
+        (call_script, "script_af04_main_slot", slot_af04_party_start, ":kind"),
+        (party_slot_eq, "p_main_party", reg0, ":winner"),
+        (call_script, "script_af15_gang_purse", ":kind", ":purse"),
+      (try_end),
+    (try_end),
+  ]),
+
+  # The player (or the player with an ally) beat a caravan: its cash box is
+  # shared by contribution; the ally lord's part goes to his wealth.
+  ("af18_player_caravan_defeated", [
+    (try_begin),
+      (gt, "$g_enemy_party", 0),
+      (party_is_active, "$g_enemy_party"),
+      (party_slot_eq, "$g_enemy_party", slot_party_type, spt_kingdom_caravan),
+      (party_get_slot, ":purse", "$g_enemy_party", slot_af18_caravan_purse),
+      (party_set_slot, "$g_enemy_party", slot_af18_caravan_purse, 0),
+      (gt, ":purse", 0),
+      (assign, ":mine", ":purse"),
+      (assign, ":ally_lord", -1),
+      (try_begin),
+        (gt, "$g_ally_party", 0),
+        (party_is_active, "$g_ally_party"),
+        (party_get_num_companion_stacks, ":stacks", "$g_ally_party"),
+        (gt, ":stacks", 0),
+        (party_stack_get_troop_id, ":ally_lord", "$g_ally_party", 0),
+        (store_mul, ":mine", ":purse", "$g_strength_contribution_of_player"),
+        (val_div, ":mine", 100),
+        (val_clamp, ":mine", 0, ":purse"),
+      (try_end),
+      (store_sub, ":rest", ":purse", ":mine"),
+      (try_begin),
+        (gt, ":rest", 0),
+        (is_between, ":ally_lord", active_npcs_begin, active_npcs_end),
+        (call_script, "script_af16_split_loot", ":ally_lord", ":rest"),
+      (try_end),
+      (try_begin),
+        (gt, ":mine", 0),
+        (call_script, "script_af16_split_loot", "trp_player", ":mine"),
+        (assign, reg43, ":purse"),
+        (try_begin),
+          (gt, reg42, 0),
+          (display_message, "@商队的钱箱里有{reg43}第纳尔：你分得{reg41}第纳尔，{reg42}第纳尔上缴{s47}。", 0x66FF66),
+        (else_try),
+          (eq, ":mine", ":purse"),
+          (display_message, "@商队的钱箱里有{reg43}第纳尔，全归你了。", 0x66FF66),
+        (else_try),
+          (display_message, "@商队的钱箱里有{reg43}第纳尔，按出力你分得{reg41}第纳尔。", 0x66FF66),
+        (try_end),
+      (try_end),
+    (try_end),
+  ]),
+
+  # Toll demanded from a caravan: never more than its cash box holds.
+  # An old-save caravan that never had a box fills it from its home town first.
+  # Input: caravan, asked amount. Output: reg6 = what it can pay.
+  ("af18_toll_offer", [
+    (store_script_param, ":caravan", 1),
+    (store_script_param, ":asked", 2),
+    (try_begin),
+      (party_slot_eq, ":caravan", slot_af18_caravan_purse, 0),
+      (party_get_slot, ":home", ":caravan", slot_party_home_center),
+      (call_script, "script_af18_caravan_fund", ":caravan", ":home"),
+    (try_end),
+    (party_get_slot, ":purse", ":caravan", slot_af18_caravan_purse),
+    (val_max, ":purse", 0),
+    (val_min, ":asked", ":purse"),
+    (assign, reg6, ":asked"),
+  ]),
+
+  ("af18_pay_toll", [
+    (store_script_param, ":caravan", 1),
+    (store_script_param, ":amount", 2),
+    (party_get_slot, ":purse", ":caravan", slot_af18_caravan_purse),
+    (val_sub, ":purse", ":amount"),
+    (val_max, ":purse", 0),
+    (party_set_slot, ":caravan", slot_af18_caravan_purse, ":purse"),
+  ]),
+
+  # A caravan disbanded because its kingdom has no towns left: the cash goes
+  # back to the treasury of its home town, whoever holds it now.
+  ("af18_caravan_disband", [
+    (store_script_param, ":caravan", 1),
+    (try_begin),
+      (party_get_slot, ":purse", ":caravan", slot_af18_caravan_purse),
+      (gt, ":purse", 0),
+      (party_get_slot, ":home", ":caravan", slot_party_home_center),
+      (is_between, ":home", walled_centers_begin, walled_centers_end),
+      (party_get_slot, ":treasury", ":home", slot_town_wealth),
+      (val_add, ":treasury", ":purse"),
+      (party_set_slot, ":home", slot_town_wealth, ":treasury"),
+      (party_set_slot, ":caravan", slot_af18_caravan_purse, 0),
     (try_end),
   ]),
 

@@ -4720,6 +4720,7 @@ game_menus = [
                         (call_script, "script_battle_political_consequences", "$g_enemy_party", "p_main_party"),
                   (try_end),
                   
+          (call_script, "script_af18_player_caravan_defeated"),  # v1.0: the caravan's cash box
           (call_script, "script_event_player_defeated_enemy_party", "$g_enemy_party"),
           (call_script, "script_clear_party_group", "$g_enemy_party"),
           (try_begin),
