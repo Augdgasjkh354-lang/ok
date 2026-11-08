@@ -4080,4 +4080,11 @@ simple_triggers = [
   (24, [(call_script, "script_af06_daily_update")]),
   # Ashfall v0.8: territorial accountability and native low-priority patrol results.
   (24, [(call_script, "script_af08_governance_tick"), (call_script, "script_af08_patrol_relief")]),
+  # Ashfall v0.9: deferred full start (see start_character_4). Runs only on the
+  # map, i.e. after the creation character screen closed; one eq check otherwise.
+  (0, [(eq, "$fb71_full_start", 2),
+       (assign, "$fb71_full_start", 1),
+       (call_script, "script_fb71_apply_full_start")]),
+  # Ashfall v1.0: hunger when a granary stays nearly empty outside a siege.
+  (24 * 7, [(call_script, "script_af17_weekly_hunger")]),
 ]

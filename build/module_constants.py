@@ -2070,3 +2070,17 @@ slot_af09_deserter_troop = 854 # specific cultural soldier, from the actual part
 slot_af09_aid_count = 855 # completed, actually paid village aid missions, capped at 2
 slot_af09_aid_ready = 856 # day+1 of the second completed aid
 slot_af09_aid_thanked = 857 # claimed once per village
+# v1.0 mercenary wages paid from the employer king's real purse (p_main_party slots).
+slot_af11_merc_owed        = 860 # unpaid mercenary wages in denars
+slot_af11_merc_employer    = 861 # kingdom the wages are owed by; reset when it changes
+slot_af11_merc_weeks       = 862 # consecutive unpaid paydays
+slot_af11_merc_centers     = 863 # employer's walled centers at last payday (0 = unknown)
+slot_af11_merc_demand_day  = 864 # last demand for back pay, day+1 (7-day cooldown)
+slot_af11_merc_endured     = 865 # unpaid weeks the player sat through and was repaid for
+# v1.0 the lord's court: villagers bring disputes to the player in his own villages.
+slot_af12_case_day         = 866 # village: last case heard, day+1 (30-day cooldown)
+slot_af12_case_kind        = 867 # village: kind of the last case (not repeated next time)
+slot_af12_case_global      = 868 # p_main_party: last case anywhere, day+1 (7-day cooldown)
+# v1.0 economy: military contracts are paid by the town, its lord, then the crown.
+slot_af14_town_owes_player = 869 # town: contract pay still owed to the player
+slot_af15_gang_purse_start = 870 # p_main_party 870-872: each named gang's cash; spent on recruits
