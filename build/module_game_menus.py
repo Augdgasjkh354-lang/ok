@@ -15320,7 +15320,26 @@ game_menus = [
    "三支团伙会在各自文化区域的高战乱村庄周边形成势力。"
    "交情是独立的地下交易记录，不会替代原版村庄关系。",
    "none", [(call_script, "script_af04_prepare_network")],
-   [("af04_network_back", [], "返回营地", [(jump_to_menu, "mnu_camp")])]),
+   [# v1.0 第六批（五）：资助匪帮——钱进该匪帮钱袋，Slot 889 记下这个匪帮。
+    ("af23_back_gang_1",
+     [(call_script, "script_af23_gang_live_party", 1),
+      (gt, reg0, 0)],
+     "资助黑松帮一笔钱（500 第纳尔）",
+     [(call_script, "script_af23_back_gang", 1),
+      (jump_to_menu, "mnu_af04_network")]),
+    ("af23_back_gang_2",
+     [(call_script, "script_af23_gang_live_party", 2),
+      (gt, reg0, 0)],
+     "资助灰狼团一笔钱（500 第纳尔）",
+     [(call_script, "script_af23_back_gang", 2),
+      (jump_to_menu, "mnu_af04_network")]),
+    ("af23_back_gang_3",
+     [(call_script, "script_af23_gang_live_party", 3),
+      (gt, reg0, 0)],
+     "资助盐鸦商路一笔钱（500 第纳尔）",
+     [(call_script, "script_af23_back_gang", 3),
+      (jump_to_menu, "mnu_af04_network")]),
+    ("af04_network_back", [], "返回营地", [(jump_to_menu, "mnu_camp")])]),
 
   ("af04_debug", 0,
    "v0.4 土匪江湖测试^^可以尝试生成三支独立匪帮，手动推进一次每日匪帮逻辑。"

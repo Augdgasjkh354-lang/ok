@@ -782,5 +782,8 @@ script_af23_lady_guardian_pays = 780
 script_af23_protection_price = 781
 script_af23_truce_kept = 782
 script_af23_break_truce = 783
+script_af23_gang_live_party = 784
+script_af23_gang_feud = 785
+script_af23_back_gang = 786
 
 
