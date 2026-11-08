@@ -57254,6 +57254,12 @@ scripts = [
         (store_mul, ":courage", ":nerve", ":ratio"),
         (val_div, ":courage", 100),
         (store_sub, ":chance", ":fame", ":courage"),
+        # v1.0 fame (II): a fearsome name makes them likelier to stay away.
+        (call_script, "script_af20_fame_kind"),
+        (try_begin),
+          (eq, reg0, 2),
+          (val_add, ":chance", 10),
+        (try_end),
         (val_min, ":chance", 90),
         (gt, ":chance", 0),
         (store_random_in_range, ":roll", 0, 100),
@@ -57295,6 +57301,15 @@ scripts = [
     (else_try),
       (str_store_string, s41, "@默默无闻"),
       (str_store_string, s42, "@除了你自己的弟兄，没多少人记得你的名字。"),
+    (try_end),
+    # v1.0 fame (II): what people say about a merciful or a bloody name.
+    (call_script, "script_af20_fame_kind"),
+    (try_begin),
+      (eq, reg0, 1),
+      (str_store_string, s42, "@{s42}人们还说，你不杀降、不欺负弱小。"),
+    (else_try),
+      (eq, reg0, 2),
+      (str_store_string, s42, "@{s42}人们还说你手上沾满了血，见了你的旗号就发怵。"),
     (try_end),
     (store_current_day, ":today"),
     (val_add, ":today", 1),
@@ -57454,6 +57469,21 @@ scripts = [
       (troop_set_slot, ":lord", slot_af20_challenge_day, ":next"),
       (str_store_troop_name, s48, ":lord"),
       (display_message, "@{s48}打败了你，这件事很快就会传遍卡拉迪亚。", 0xFF6666),
+    (try_end),
+  ]),
+
+  # ========== v1.0 fame (II): merciful name / bloody name ==========
+  # Kind of the player's name, from the original $player_honor only: no new
+  # value, no new global. Output reg0: 1 merciful ($player_honor >= 10),
+  # 2 bloody ($player_honor < 0), 0 neither.
+  ("af20_fame_kind", [
+    (assign, reg0, 0),
+    (try_begin),
+      (ge, "$player_honor", 10),
+      (assign, reg0, 1),
+    (else_try),
+      (lt, "$player_honor", 0),
+      (assign, reg0, 2),
     (try_end),
   ]),
 

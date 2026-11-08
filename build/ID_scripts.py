@@ -774,5 +774,6 @@ script_af20_prepare_fame = 772
 script_af20_challenges = 773
 script_af20_challenge_lost = 774
 script_af20_challenge_won = 775
+script_af20_fame_kind = 776
 
 
