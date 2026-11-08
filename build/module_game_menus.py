@@ -10293,7 +10293,8 @@ game_menus = [
         (call_script, "script_change_player_relation_with_center", "$current_town", 1),   
         (assign, reg9, 200),
         (add_xp_to_troop, 250, "trp_player"),
-        (troop_add_gold, "trp_player", reg9),
+        # v1.0 第六批（十）：比武大会奖金由举办的城镇出。
+        (call_script, "script_af19_town_pays", "$current_town", reg9),
         (str_clear, s8),
         (store_add, ":total_win", "$g_tournament_bet_placed", "$g_tournament_bet_win_amount"),
         (try_begin),
@@ -10310,7 +10311,8 @@ game_menus = [
                         (faction_slot_eq, "$g_encountered_party_faction", slot_faction_ai_object, "$g_encountered_party"),
                         (str_store_string, s8, "str_s8_you_are_also_invited_to_attend_the_ongoing_feast_in_the_castle"),
                 (try_end),
-        (troop_add_gold, "trp_player", ":total_win"),
+        # v1.0 第六批（十）：下注赢的钱也由举办的城镇出。
+        (call_script, "script_af19_town_pays", "$current_town", ":total_win"),
         (assign, ":player_odds_sub", 0),
         (store_div, ":player_odds_sub", "$g_tournament_bet_win_amount", 5),
         (party_get_slot, ":player_odds", "$current_town", slot_town_player_odds),

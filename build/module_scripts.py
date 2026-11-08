@@ -57705,6 +57705,32 @@ scripts = [
     (assign, reg0, ":interest"),
   ]),
 
+  # ========== v1.0 第六批（十）：女士的任务报酬由她的监护人出 ==========
+  # A lady's quest reward is paid by her guardian, in this order: husband,
+  # father, the king of her kingdom. No guardian found: the native payment
+  # stands. Input: lady troop, amount. Output: none.
+  ("af23_lady_guardian_pays", [
+    (store_script_param, ":lady", 1),
+    (store_script_param, ":amount", 2),
+    (assign, ":guardian", -1),
+    (troop_get_slot, ":guardian", ":lady", slot_troop_spouse),
+    (try_begin),
+      (neg|is_between, ":guardian", active_npcs_begin, active_npcs_end),
+      (troop_get_slot, ":guardian", ":lady", slot_troop_father),
+    (try_end),
+    (try_begin),
+      (neg|is_between, ":guardian", active_npcs_begin, active_npcs_end),
+      (store_troop_faction, ":faction", ":lady"),
+      (faction_get_slot, ":guardian", ":faction", slot_faction_leader),
+    (try_end),
+    (try_begin),
+      (is_between, ":guardian", active_npcs_begin, active_npcs_end),
+      (call_script, "script_af19_lord_pays", ":guardian", ":amount"),
+    (else_try),
+      (call_script, "script_troop_add_gold", "trp_player", ":amount"),
+    (try_end),
+  ]),
+
   # ========== v1.0 第六批（六）：守信与背约（三大匪帮） ==========
   # The discounted price of a protection deal with one gang, in denars.
   # Base 450, less 10% per truce kept with that gang, at most -30%.

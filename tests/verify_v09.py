@@ -17,7 +17,18 @@ ALLOWED_DIALOG_CHANGES={'dlga_village_elder_donate:village_elder_pretalk',  # v1
     'dlga_merchant_demand_toll:merchant_demand_toll_2', 'dlga_merchant_demand_toll:merchant_demand_toll_2.1',
     'dlga_merchant_demand_toll_accept:close_window'}  # v1.0: tolls come out of the caravan's cash box
 # v1.0: lords, kings and towns pay the player from their real money (af19_*).
+# v1.0 第六批（十）: arena prizes and ladies' quest rewards are paid from
+# real money too (town treasury / the lady's guardian).
 ALLOWED_DIALOG_CHANGES|={
+    'dlga_arena_master_fight_result:arena_master_pre_talk.2',
+    'dlga_arena_master_fight_result:arena_master_pre_talk.3',
+    'dlga_arena_master_fight_result:arena_master_pre_talk.4',
+    'dlga_arena_master_fight_result:arena_master_pre_talk.5',
+    'dlga_arena_master_fight_result:arena_master_pre_talk.6',
+    'dlga_lady_qst_duel_for_lady_succeeded_2:lady_pretalk',
+    'dlga_start:lady_escort_lady_succeeded',
+    'dlga_start:lady_generic_mission_succeeded',
+    'dlga_start:rescue_prisoner_succeed_1',
     'dlga_capture_enemy_hero_thank:capture_enemy_hero_thank_2',
     'dlga_event_triggered:close_window.1',
     'dlga_lord_buy_prisoner_accept:lord_pretalk',
