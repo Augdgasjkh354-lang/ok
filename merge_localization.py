@@ -41,6 +41,16 @@ def read_utf8(path):
         sys.exit(f'{path} 不是 UTF-8 编码（可能是 GBK）。为避免损坏原汉化，本次未修改任何文件。')
 
 
+def fallback_file(module, lang, name):
+    """Full native translation shipped with the game, if any."""
+    module = module.resolve()
+    for cand in (module.parent.parent / 'languages' / lang / name,
+                 module.parent / 'Native' / 'languages' / lang / name):
+        if cand.is_file() and cand.resolve() != (module / 'languages' / lang / name).resolve():
+            return cand
+    return None
+
+
 def parse(text):
     records, order = {}, []
     for raw in text.splitlines():
@@ -86,7 +96,20 @@ def main(argv=None):
     for incoming in sorted(source.glob('*.csv')):
         dest = target / target_name(incoming)
         previous = read_utf8(dest) if dest.is_file() else ''
-        plans.append((dest, *merge(previous, read_utf8(incoming))))
+        incoming_text = read_utf8(incoming)
+        # A module file holding only this mod's keys (missing, or created by an
+        # older merge) shadows the game's full Chinese file, turning native menus
+        # English. Seed it from the full file the game used to fall back to.
+        old_keys, _ = parse(previous)
+        new_keys = set(parse(incoming_text)[0])
+        if all(k in new_keys for k in old_keys):
+            base = fallback_file(module, lang, dest.name)
+            if base:
+                previous = read_utf8(base)
+                print(f'{dest.name}: 已从 {base} 补入完整原版译文')
+            else:
+                print(f'{dest.name}: 未找到游戏自带的完整 {dest.name}，该文件只含本 Mod 条目，原版相关文字可能显示英文')
+        plans.append((dest, *merge(previous, incoming_text)))
 
     target.mkdir(parents=True, exist_ok=True)
     for dest, text, inserted, updated, total in plans:

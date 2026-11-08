@@ -53,6 +53,30 @@ with tempfile.TemporaryDirectory() as tmp:
     assert (mod2 / 'languages' / 'cn_s' / 'troops.csv').is_file()
     assert not (mod2 / 'languages' / 'cns').exists()
 
+    # Seeding: a module file holding only mod keys (left by an older merge) must be
+    # rebuilt from the game's full Chinese file instead of shadowing it.
+    game = Path(tmp) / 'Warband'
+    (game / 'languages' / 'cns').mkdir(parents=True)
+    (game / 'languages' / 'cns' / 'game_menus.csv').write_text('\ufeffmenu_start_game_0|欢迎你，冒险者\n', 'utf-8')
+    (game / 'Modules' / 'Native' / 'languages' / 'cns').mkdir(parents=True)
+    (game / 'Modules' / 'Native' / 'languages' / 'cns' / 'quick_strings.csv').write_text('qstr_native|原版提示\n', 'utf-8')
+    mod4 = game / 'Modules' / 'TestMod'
+    (mod4 / 'languages' / 'cns').mkdir(parents=True)
+    (mod4 / 'module.ini').write_text('')
+    (mod4 / 'languages' / 'cns' / 'troops.csv').write_text(original, 'utf-8')
+    src = root / 'localization' / 'cns'
+    (mod4 / 'languages' / 'cns' / 'game_menus.csv').write_bytes((src / 'game_menus.csv').read_bytes())
+    run(mod4)
+    gm = (mod4 / 'languages' / 'cns' / 'game_menus.csv').read_text('utf-8-sig')
+    assert 'menu_start_game_0|欢迎你，冒险者' in gm, 'root languages fallback not seeded'
+    assert len(gm.splitlines()) == 139
+    qs = (mod4 / 'languages' / 'cns' / 'quick_strings.csv').read_text('utf-8-sig')
+    assert 'qstr_native|原版提示' in qs, 'Native fallback not seeded for missing file'
+    tr = (mod4 / 'languages' / 'cns' / 'troops.csv').read_text('utf-8-sig')
+    assert 'trp_swadian_knight|斯 瓦 迪 亚 骑 士　' in tr and '欢迎' not in tr, 'real module file must not be reseeded'
+    run(mod4)
+    assert (mod4 / 'languages' / 'cns' / 'game_menus.csv').read_text('utf-8-sig') == gm
+
     # Package layout: no CSV under an engine-readable name; merge tools bundled.
     out = Path(tmp) / 'dist'
     subprocess.run([sys.executable, str(root / 'package_v09.py'), str(out)], check=True, capture_output=True)
