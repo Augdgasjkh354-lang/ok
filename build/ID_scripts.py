@@ -778,8 +778,9 @@ script_af20_fame_kind = 776
 script_af21_after_recruit = 777
 script_af21_crown_cut_pct = 778
 script_af22_fief_respect = 779
-script_af23_protection_price = 780
-script_af23_truce_kept = 781
-script_af23_break_truce = 782
+script_af23_lady_guardian_pays = 780
+script_af23_protection_price = 781
+script_af23_truce_kept = 782
+script_af23_break_truce = 783
 
 

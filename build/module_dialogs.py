@@ -16170,7 +16170,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
    [
      (quest_get_slot, ":cur_center", "qst_escort_lady", slot_quest_target_center),
      (add_xp_as_reward, 300),
-     (call_script, "script_troop_add_gold", "trp_player", 250),
+     (call_script, "script_af23_lady_guardian_pays", "$g_talk_troop", 250),  # v1.0 第六批（十）：报酬由女士的监护人出
      (call_script, "script_end_quest", "qst_escort_lady"),
      (call_script, "script_change_player_relation_with_troop", "$g_talk_troop", 2),
      (troop_set_slot, "$g_talk_troop", slot_troop_cur_center, ":cur_center"),
@@ -16436,7 +16436,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   [anyone,"lady_qst_duel_for_lady_succeeded_2", [], "{s10}", "lady_pretalk",
    [(call_script, "script_change_player_relation_with_troop", "$g_talk_troop", 10),
     (add_xp_as_reward, 1000),
-    (call_script, "script_troop_add_gold", "trp_player", 2000),
+    (call_script, "script_af23_lady_guardian_pays", "$g_talk_troop", 2000),  # v1.0 第六批（十）：报酬由女士的监护人出
     (call_script, "script_end_quest", "qst_duel_for_lady"),
     ]],
 
@@ -16513,7 +16513,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
    [
      (call_script, "script_change_player_relation_with_troop", "$g_talk_troop", 8),
      (add_xp_as_reward, 2000),
-     (call_script, "script_troop_add_gold", "trp_player", 1500),
+     (call_script, "script_af23_lady_guardian_pays", "$g_talk_troop", 1500),  # v1.0 第六批（十）：报酬由女士的监护人出
      (call_script, "script_end_quest", "qst_rescue_lord_by_replace"),
      ]],
         
@@ -16531,7 +16531,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
    [   
      (call_script, "script_change_player_relation_with_troop", "$g_talk_troop", 8),
      (add_xp_as_reward, 2000),
-     (call_script, "script_troop_add_gold", "trp_player", 1500),
+     (call_script, "script_af23_lady_guardian_pays", "$g_talk_troop", 1500),  # v1.0 第六批（十）：报酬由女士的监护人出
      (call_script, "script_end_quest", "qst_rescue_prisoner"),
      ]],#rescuerescue               
    [anyone|plyr,"rescue_prisoner_succeed_1", [], "Always an honour to serve, {s65}.", "lady_pretalk",[]],     
@@ -24547,7 +24547,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
      ],
    "You put up quite a good fight there. Good moves. You definitely show promise.\
  And you earned a prize of {reg10} denars for knocking down {reg8} opponents.", "arena_master_pre_talk",[
-     (call_script, "script_troop_add_gold", "trp_player", arena_tier1_prize),
+     (call_script, "script_af19_town_pays", "$current_town", arena_tier1_prize),  # v1.0 第六批（十）：奖金由举办比武的城镇出
      (add_xp_to_troop,5,"trp_player"),
      (assign, "$last_training_fight_town", -1)]],
 
@@ -24561,7 +24561,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
      ],
    "That was a good fight you put up there. You managed to take down no less than {reg8} opponents.\
  And of course, you earned a prize money of {reg10} denars.", "arena_master_pre_talk",[
-     (call_script, "script_troop_add_gold", "trp_player", arena_tier2_prize),
+     (call_script, "script_af19_town_pays", "$current_town", arena_tier2_prize),  # v1.0 第六批（十）：奖金由举办比武的城镇出
      (add_xp_to_troop,10,"trp_player"),
      (assign, "$last_training_fight_town", -1)]],
 
@@ -24574,7 +24574,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
      ],
    "Your performance was amazing! You are without doubt a very skilled fighter.\
  Not everyone can knock down {reg8} people in the fights. Of course you deserve a prize with that performance: {reg10} denars. Nice, eh?", "arena_master_pre_talk",[
-     (call_script, "script_troop_add_gold", "trp_player", arena_tier3_prize),
+     (call_script, "script_af19_town_pays", "$current_town", arena_tier3_prize),  # v1.0 第六批（十）：奖金由举办比武的城镇出
      (add_xp_to_troop,10,"trp_player"),
      (assign, "$last_training_fight_town", -1)]],
 
@@ -24587,14 +24587,14 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
    "That was damned good fighting, {playername}. You have very good moves, excellent tactics.\
  And you earned a prize of {reg10} denars for knocking down {reg8} opponents.", "arena_master_pre_talk",
    [
-     (call_script, "script_troop_add_gold", "trp_player", arena_tier4_prize),
+     (call_script, "script_af19_town_pays", "$current_town", arena_tier4_prize),  # v1.0 第六批（十）：奖金由举办比武的城镇出
      (add_xp_to_troop,10,"trp_player"),
      (assign, "$last_training_fight_town", -1),
      ]],
 
   [anyone ,"arena_master_fight_result", [(assign, reg10, arena_grand_prize)],
    "Congratulations champion! Your fight there was something to remember! You managed to be the last fighter standing beating down everyone else. And of course you won the grand prize of the fights: {reg10} denars.", "arena_master_pre_talk",[
-     (call_script, "script_troop_add_gold", "trp_player", arena_grand_prize),
+     (call_script, "script_af19_town_pays", "$current_town", arena_grand_prize),  # v1.0 第六批（十）：奖金由举办比武的城镇出
      (add_xp_to_troop,200,"trp_player"),
      (assign, "$last_training_fight_town", -1)]],
 
