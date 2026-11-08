@@ -1964,10 +1964,15 @@ game_menus = [
         (troop_raise_skill, "trp_player","skl_looting",1),
       (try_end),
 
-      # V7.1: apply caps AFTER all ordinary background bonuses.
+      # V7.1 full start. v0.9 fix: do NOT apply here. Leveling to 62 grants ~61
+      # free attribute/skill points that cannot be spent (attributes already 63,
+      # skills 10), and the creation character screen refuses to close with
+      # unspent points -> new game stuck. Mark it pending (2); a simple trigger
+      # applies it once the player is on the map, then sets it back to 1
+      # ("applied", the same value v7.x saves already carry).
       (try_begin),
         (eq, "$fb71_full_start", 1),
-        (call_script, "script_fb71_apply_full_start"),
+        (assign, "$fb71_full_start", 2),
       (try_end),
 
            (try_begin),

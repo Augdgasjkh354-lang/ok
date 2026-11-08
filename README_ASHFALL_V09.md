@@ -60,6 +60,10 @@ python tests/verify_v09.py
 - **打包**：`python package_v09.py [输出目录]` 生成 v0.8 增量包、v7.5 累计包和 v7.4 累计包（默认输出到 `dist/`）；`python tests/test_merge_localization.py` 检查合并规则与包结构。
 - 交付文件不是可独立运行的 Native Mod；须保留原模块的资源目录、`module.ini`、`map.txt` 等文件。
 
+## 修复：满级开局卡死
+
+v7.1 起的满级开局在角色创建阶段直接升到 62 级，产生约 61 点无处可加的属性点和技能点（属性已 63、技能已 10），创建角色界面要求点数用完才能继续，导致新游戏卡死（玩家实机反馈）。现改为：创建阶段只记为待生效（`$fb71_full_start`=2），进入大地图后由追加在末尾的一条简单触发器执行原 `script_fb71_apply_full_start`，随后恢复为 1（与 v7.x 旧存档中“已生效”的取值一致）。未新增全局变量；改动文件为 `menus.txt`、`simple_triggers.txt`、`variable_uses.txt`。**待实机验收**：新开满级开局能否顺利进入地图并获得 62 级与满属性。
+
 ## 技术约束和检查
 
 - 仅使用 Party Slot 850～857；v0.8 既有 Slot 及 `variables.txt` 不变。
