@@ -19,6 +19,7 @@ mno_af10_village_word|和 村 长 聊 聊 附 近 的 动 静
 mno_af09_village_echo|村 口 似 乎 有 人 在 等 你 … … 
 mno_af03_contract_board|战 争 承 包 商 · 军 粮 委 托 
 mno_af08_town_rumor_entry|在 城 中 询 问 附 近 的 战 乱 传 闻 
+mno_af10_town_word_entry|找 相 熟 的 粮 商 打 听 军 粮 车 
 mno_af06_recovery_entry|战 后 治 理 ： 查 看 城 池 恢 复 与 重 建 
 mno_af06_supply_entry|秘 密 运 粮 入 城 （ 4袋 谷 物 ， 增 加 约 两 天 粮 食 储 备 ） 
 menu_fb75_intel_book|宫 廷 政 治 情 报 簿 ^^政 治 信 用 ： {reg50}    政 治 嫌 疑 ： {reg51}/100    王 室 调 查 次 数 ： {reg52}^有 效 情 报 ： {reg53}条    有 人 欠 你 选 票 ： {reg54}笔    你 欠 人 的 选 票 ： {reg58}笔 ^^情 报 只 记 录 你 已 经 打 听 到 的 消 息 ； 过 期 线 索 会 自 动 从 本 页 隐 去 。 
@@ -140,3 +141,5 @@ mno_af09_take_aid_watchmen|让 两 个 愿 意 出 门 的 哨 兵 跟 着 队 �
 mno_af09_echo_later|道 谢 ， 先 去 办 自 己 的 事 。 
 menu_af10_village_word|{s40}
 mno_af10_word_back|道 别 。 
+menu_af10_town_word|{s40}
+mno_af10_town_word_back|返 回 城 镇 

@@ -9850,6 +9850,8 @@ game_menus = [
        "\u6218\u4e89\u627f\u5305\u5546\u00b7\u519b\u7cae\u59d4\u6258", [(jump_to_menu, "mnu_af03_contract_board")]),
       ("af08_town_rumor_entry", [(is_between, "$current_town", towns_begin, towns_end)],
        "在城中询问附近的战乱传闻", [(jump_to_menu, "mnu_af08_town_rumor")]),
+      ("af10_town_word_entry", [(is_between, "$current_town", towns_begin, towns_end)],
+       "找相熟的粮商打听军粮车", [(jump_to_menu, "mnu_af10_town_word")]),
       ("af06_recovery_entry",
        [(party_slot_ge, "$current_town", slot_af06_capture_token, 1)],
        "战后治理：查看城池恢复与重建",
@@ -15344,6 +15346,16 @@ game_menus = [
    [(call_script, "script_af10_village_word", "$current_town")],
    [
      ("af10_word_back", [], "道别。", [(jump_to_menu, "mnu_village")]),
+   ]),
+
+
+  # v1.0: what grain merchants share depends on the town's regard.
+  ("af10_town_word", 0,
+   "{s40}",
+   "none",
+   [(call_script, "script_af10_town_convoy_word", "$current_town")],
+   [
+     ("af10_town_word_back", [], "返回城镇", [(jump_to_menu, "mnu_town")]),
    ]),
 
 ]

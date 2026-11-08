@@ -724,5 +724,6 @@ script_af09_take_echo = 722
 script_af10_village_word = 723
 script_af10_gang_name_to_s44 = 724
 script_af10_nearest_center_to_s42 = 725
+script_af10_town_convoy_word = 726
 
 

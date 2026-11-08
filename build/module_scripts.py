@@ -55839,4 +55839,55 @@ scripts = [
     (str_store_party_name, s42, ":best"),
   ]),
 
+
+  # v1.0: town merchants share real v0.3 supply-convoy movements with people
+  # they trust. Input: town. Output: s40. Read-only; scans parties only when the
+  # player opens this menu. Tiers by town relation: <10 nothing useful;
+  # >=10 whether grain is moving nearby; >=30 route and where it is now;
+  # >=60 also its banner and escort size.
+  ("af10_town_convoy_word", [
+    (store_script_param, ":town", 1),
+    (party_get_slot, ":rel", ":town", slot_center_player_relation),
+    (assign, ":best", -1),
+    (assign, ":best_dist", 60),
+    (try_for_parties, ":party"),
+      (party_is_active, ":party"),
+      (party_get_template_id, ":template", ":party"),
+      (eq, ":template", "pt_af03_supply_convoy"),
+      (store_distance_to_party_from_party, ":dist", ":town", ":party"),
+      (lt, ":dist", ":best_dist"),
+      (assign, ":best", ":party"),
+      (assign, ":best_dist", ":dist"),
+    (try_end),
+    (try_begin),
+      (lt, ":rel", 10),
+      (str_store_string, s40, "@商人们聊的都是价钱和天气。见你是生面孔，谁也不提路上的事。"),
+    (else_try),
+      (lt, ":best", 0),
+      (str_store_string, s40, "@相熟的粮商摆摆手：“这几天附近没有军粮车走动，路上倒是清净。”"),
+    (else_try),
+      (lt, ":rel", 30),
+      (str_store_string, s40, "@相熟的粮商说：“前两天有军粮车从附近过，往哪儿去就不清楚了。”"),
+    (else_try),
+      (party_get_slot, ":origin", ":best", slot_af03_origin),
+      (party_get_slot, ":dest", ":best", slot_af03_destination),
+      (is_between, ":origin", centers_begin, centers_end),
+      (is_between, ":dest", centers_begin, centers_end),
+      (str_store_party_name, s45, ":origin"),
+      (str_store_party_name, s46, ":dest"),
+      (call_script, "script_af10_nearest_center_to_s42", ":best"),
+      (try_begin),
+        (lt, ":rel", 60),
+        (str_store_string, s40, "@粮商压低声音：“有一队军粮从{s45}出发，要送到{s46}去。眼下大概走到了{s42}附近。”"),
+      (else_try),
+        (store_faction_of_party, ":faction", ":best"),
+        (str_store_faction_name, s47, ":faction"),
+        (party_get_num_companions, reg41, ":best"),
+        (str_store_string, s40, "@粮商把你拉进后屋：“{s47}的军粮，从{s45}运往{s46}，现在走到{s42}附近了。押车的有{reg41}个人。这话出了门我可没说过。”"),
+      (try_end),
+    (else_try),
+      (str_store_string, s40, "@相熟的粮商说：“附近是有军粮车，可走的是哪条路，我也说不准。”"),
+    (try_end),
+  ]),
+
 ]
