@@ -8587,6 +8587,10 @@ game_menus = [
         (call_script, "script_af16_take_village_cash", "$current_town"),  # v1.0: the village's own cash
         (val_add, ":money_gained", reg0),
         (call_script, "script_troop_add_gold", "trp_player", ":money_gained"),
+        # v1.0 第六批（七）：村子记得这次劫掠，60 天内不给招兵、不来答谢。
+        (store_current_day, ":day"),
+        (val_add, ":day", 1),
+        (party_set_slot, "$current_town", slot_af23_looted_day, ":day"),
                 
         (assign, ":morale_increase", 3),
         (store_div, ":money_gained_div_100", ":money_gained", 100),

@@ -2102,3 +2102,15 @@ slot_af21_fame_volunteers  = 882 # village: how many of the current volunteers c
 slot_af21_recruit_count     = 883 # village: fame volunteers who have left, cumulative (every 100 costs 1 prosperity)
 slot_af21_crown_cut_off     = 884 # p_main_party: negotiated reduction of the crown's cut, in percentage points
 slot_af21_crown_talk_day    = 885 # p_main_party: day+1 from which the crown's cut can be talked about again
+# v1.0 batch six (第六批): pre-assigned slots 886-896.
+slot_af23_flee_until         = 886 # any map party: hour until which it flees from the player
+slot_af23_shield_paid        = 887 # p_main_party: shield money paid for this muster (day+1, cleared when the muster ends)
+slot_af23_ignored_count      = 888 # p_main_party: how many musters the player has ignored in total
+slot_af23_backed_gang        = 889 # p_main_party: gang the player backs (1-3, 0 = none)
+slot_af23_feud_day           = 890 # p_main_party: day+1 of the next gang feud settlement
+slot_af23_kept_word_1        = 891 # p_main_party: truces kept with gang 1
+slot_af23_kept_word_2        = 892 # p_main_party: truces kept with gang 2
+slot_af23_kept_word_3        = 893 # p_main_party: truces kept with gang 3
+slot_af23_looted_day         = 894 # village: day+1 of the player's last loot of this village
+slot_af23_famine_bags        = 895 # town/castle: bags bought at the famine price this week
+slot_af23_famine_week        = 896 # town/castle: which week+1 the famine-bag count belongs to
