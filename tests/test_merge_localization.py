@@ -90,6 +90,8 @@ with tempfile.TemporaryDirectory() as tmp:
         assert not list((mod3 / 'languages' / 'cns').glob('*.merge.csv'))
 
     with zipfile.ZipFile(out / '烽烟与暗流-v0.9-从v7.4累计包.zip') as z:
-        assert len([n for n in z.namelist() if n.startswith('FewerBandits/')]) == 10
+        base = root / 'baseline' / 'v74' / 'compiled'
+        expected = [f for f in (root / 'game-data').glob('*.txt') if f.read_bytes() != (base / f.name).read_bytes()]
+        assert len([n for n in z.namelist() if n.startswith('FewerBandits/')]) == len(expected)
 
 print('merge/package checks passed')

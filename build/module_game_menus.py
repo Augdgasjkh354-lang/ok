@@ -3058,6 +3058,8 @@ game_menus = [
       ("fb75_intel_book", [(eq, 1, 0)], "宫廷政治情报簿",
        [(jump_to_menu, "mnu_fb75_intel_book")]),
       ("af08_desk_entry", [], "烽烟案头：领地、战争与宫廷消息", [(jump_to_menu, "mnu_af08_desk")]),
+      ("af11_arrears_entry", [(call_script, "script_af11_merc_current_owed"), (gt, reg0, 0)],
+       "清点拖欠的饷银", [(jump_to_menu, "mnu_af11_arrears")]),
       ("camp_cheat",
        [(ge, "$cheat_mode", 1)
         ], "CHEAT MENU!",
@@ -15356,6 +15358,37 @@ game_menus = [
    [(call_script, "script_af10_town_convoy_word", "$current_town")],
    [
      ("af10_town_word_back", [], "返回城镇", [(jump_to_menu, "mnu_town")]),
+   ]),
+
+
+  # v1.0: unpaid mercenary wages.
+  ("af11_arrears", 0,
+   "{s40}",
+   "none",
+   [(call_script, "script_af11_prepare_arrears")],
+   [
+     ("af11_demand", [],
+      "派人去国王那里催讨欠饷",
+      [(call_script, "script_af11_demand_back_pay"),
+       (try_begin),
+         (eq, reg0, 1),
+         (display_message, "@国王不太情愿地付清了欠饷。宫里有人说你斤斤计较。"),
+         (jump_to_menu, "mnu_camp"),
+       (else_try),
+         (eq, reg0, 2),
+         (display_message, "@使者带回了国王的口信：“再等等。”语气不太客气。"),
+         (jump_to_menu, "mnu_af11_arrears"),
+       (else_try),
+         (display_message, "@上一个使者才回来没几天，这么快再去只会惹人厌烦。"),
+         (jump_to_menu, "mnu_af11_arrears"),
+       (try_end)]),
+     ("af11_quit",
+      [(party_slot_ge, "p_main_party", slot_af11_merc_weeks, 1)],
+      "撕毁合约，带着弟兄们离开（放弃欠款）",
+      [(call_script, "script_af11_quit_unpaid"),
+       (display_message, "@你撕了合约。欠的饷银是要不回来了，至少弟兄们不用再白白卖命。"),
+       (jump_to_menu, "mnu_camp")]),
+     ("af11_wait", [], "再等等。", [(jump_to_menu, "mnu_camp")]),
    ]),
 
 ]

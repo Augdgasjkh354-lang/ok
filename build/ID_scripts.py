@@ -725,5 +725,10 @@ script_af10_village_word = 723
 script_af10_gang_name_to_s44 = 724
 script_af10_nearest_center_to_s42 = 725
 script_af10_town_convoy_word = 726
+script_af11_merc_payday = 727
+script_af11_merc_current_owed = 728
+script_af11_prepare_arrears = 729
+script_af11_demand_back_pay = 730
+script_af11_quit_unpaid = 731
 
 

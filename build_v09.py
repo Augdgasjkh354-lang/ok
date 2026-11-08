@@ -10,7 +10,7 @@ if compiled.exists():shutil.rmtree(compiled)
 shutil.copytree(base,compiled)
 steps=('process_troops.py','process_party_tmps.py','process_global_variables.py',
        'process_scripts.py','process_mission_tmps.py','process_game_menus.py',
-       'process_simple_triggers.py','process_dialogs.py')
+       'process_simple_triggers.py','process_dialogs.py','process_presentations.py')
 for step in steps:
     print('Compiling',step,flush=True)
     subprocess.run([sys.executable,step],cwd=build,check=True)

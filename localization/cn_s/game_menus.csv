@@ -6,6 +6,7 @@ mno_af05_ledger_entry|战 争 与 宫 廷 ： 秘 密 军 粮 案 卷
 mno_af03_field_journal|军 事 委 托 记 录 
 mno_fb75_intel_book|宫 廷 政 治 情 报 簿 
 mno_af08_desk_entry|烽 烟 案 头 ： 领 地 、 战 争 与 宫 廷 消 息 
+mno_af11_arrears_entry|清 点 拖 欠 的 饷 银 
 mno_fb75_cheat_entry|宫 廷 政 治 测 试 （ v7.5） 
 mno_af01_cheat_entry|烽 烟 与 暗 流 测 试 （ v0.1 / v0.2） 
 mno_af06_cheat_entry|烽 烟 与 暗 流 · 围 城 与 战 后 治 理 测 试 （ v0.6） 
@@ -143,3 +144,7 @@ menu_af10_village_word|{s40}
 mno_af10_word_back|道 别 。 
 menu_af10_town_word|{s40}
 mno_af10_town_word_back|返 回 城 镇 
+menu_af11_arrears|{s40}
+mno_af11_demand|派 人 去 国 王 那 里 催 讨 欠 饷 
+mno_af11_quit|撕 毁 合 约 ， 带 着 弟 兄 们 离 开 （ 放 弃 欠 款 ） 
+mno_af11_wait|再 等 等 。 
