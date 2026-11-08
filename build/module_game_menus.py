@@ -14873,8 +14873,16 @@ game_menus = [
    "\u62a4\u9001\u8bb0\u5f55\uff1a{reg74}\u6b21\u516d\u5c0f\u65f6\u5de1\u903b\u68c0\u67e5^^"
    "\u4f60\u6700\u591a\u540c\u65f6\u7b7e\u8ba2\u4e00\u4efd\u5408\u540c\u3002\u62a4\u9001\u9700\u8981\u6301\u7eed\u8ddf\u968f\u8fd0\u8f93\u961f\u5e76\u5728\u62b5\u8fbe\u65f6\u5728\u573a\uff1b"
    "\u622a\u7cae\u5fc5\u987b\u5b9e\u9645\u53c2\u4e0e\u6467\u6bc1\u76ee\u6807\u961f\u4f0d\u3002\u7ed3\u7b97\u9700\u8981\u8fd4\u56de\u59d4\u6258\u57ce\u9547\u3002",
-   "none", [(call_script, "script_af03_prepare_contract")],
+   "none", [(call_script, "script_af14_collect_debt", "$current_town"), (call_script, "script_af03_prepare_contract")],
    [
+     ("af03_no_funds",
+      [(party_slot_eq, "p_main_party", slot_af03_contract_stage, 0),
+       (call_script, "script_af03_can_accept", 1, "$current_town"), (assign, ":poor1", reg3),
+       (call_script, "script_af03_can_accept", 2, "$current_town"), (assign, ":poor2", reg3),
+       (this_or_next|eq, ":poor1", 1), (eq, ":poor2", 1)],
+      "（城里眼下凑不出委托的钱）",
+      [(display_message, "@军需官摊开账本：城里的金库、城主和王室这阵子都拿不出这笔钱，暂时不发新委托。"),
+       (jump_to_menu, "mnu_af03_contract_board")]),
      ("af03_take_escort",
       [(call_script, "script_af03_can_accept", 1, "$current_town"), (eq, reg0, 1)],
       "\u63a5\u53d6\u62a4\u9001\u519b\u7cae\u59d4\u6258\uff08\u81f3\u5c1115\u540d\u58eb\u5175\uff1b\u671f\u965012\u5929\uff09",
@@ -14898,7 +14906,8 @@ game_menus = [
        (this_or_next|eq, ":status", 2), (eq, ":status", 3)],
       "\u9886\u53d6\u5df2\u5b8c\u6210\u5408\u540c\u7684\u916c\u91d1\uff0f\u767b\u8bb0\u5931\u8d25\u5408\u540c",
       [(call_script, "script_af03_settle_contract", "$current_town"),
-       (try_begin), (eq, reg0, 1), (display_message, "@\u519b\u4e8b\u59d4\u6258\u5df2\u7ed3\u7b97\uff1a\u83b7\u5f97\u7ea6\u5b9a\u62a5\u916c\u4e0e2\u70b9\u58f0\u671b\u3002"),
+       (try_begin), (eq, reg0, 1), (eq, reg42, 0), (display_message, "@军事委托已结算：领取报酬{reg41}第纳尔。"),
+       (else_try), (eq, reg0, 1), (display_message, "@城里只凑出了{reg41}第纳尔，还欠你{reg42}。下次来委托处再结。"),
        (else_try), (eq, reg0, 2), (display_message, "@\u519b\u4e8b\u59d4\u6258\u5df2\u767b\u8bb0\u5931\u8d25\uff0c\u6ca1\u6709\u652f\u4ed8\u62a5\u916c\u3002"),
        (else_try), (display_message, "@\u5f53\u524d\u6ca1\u6709\u53ef\u7ed3\u7b97\u7684\u59d4\u6258\u3002"), (try_end),
        (jump_to_menu, "mnu_af03_contract_board")]),

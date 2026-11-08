@@ -2081,3 +2081,5 @@ slot_af11_merc_endured     = 865 # unpaid weeks the player sat through and was r
 slot_af12_case_day         = 866 # village: last case heard, day+1 (30-day cooldown)
 slot_af12_case_kind        = 867 # village: kind of the last case (not repeated next time)
 slot_af12_case_global      = 868 # p_main_party: last case anywhere, day+1 (7-day cooldown)
+# v1.0 economy: military contracts are paid by the town, its lord, then the crown.
+slot_af14_town_owes_player = 869 # town: contract pay still owed to the player

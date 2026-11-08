@@ -737,5 +737,9 @@ script_af12_prepare_case = 735
 script_af12_judge = 736
 script_af12_verdict_cost = 737
 script_af13_village_purse = 738
+script_af14_contract_reward = 739
+script_af14_center_funds = 740
+script_af14_pay_from_center = 741
+script_af14_collect_debt = 742
 
 

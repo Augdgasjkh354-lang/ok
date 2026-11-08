@@ -65,6 +65,7 @@ mno_af02_deserter_bribe|支 付 250第 纳 尔 使 这 伙 逃 兵 解 散 （ �
 mno_af02_deserter_attack|拒 绝 妥 协 ， 准 备 战 斗 。 
 mno_af02_deserter_leave|放 弃 追 击 。 
 menu_af03_contract_board|战 争 承 包 商 · 军 粮 委 托 ^^当 前 合 同 ： {s20}^委 托 城 镇 ： {s21}^目 标 地 点 ： {s22}^签 约 阵 营 ： {s25}^军 粮 路 线 ： {s24} -> {s22}^进 度 ： {s23}^约 定 报 酬 ： {reg70}第 纳 尔 ^剩 余 天 数 ： {reg71}^护 送 记 录 ： {reg74}次 六 小 时 巡 逻 检 查 ^^你 最 多 同 时 签 订 一 份 合 同 。 护 送 需 要 持 续 跟 随 运 输 队 并 在 抵 达 时 在 场 ； 截 粮 必 须 实 际 参 与 摧 毁 目 标 队 伍 。 结 算 需 要 返 回 委 托 城 镇 。 
+mno_af03_no_funds|（ 城 里 眼 下 凑 不 出 委 托 的 钱 ） 
 mno_af03_take_escort|接 取 护 送 军 粮 委 托 （ 至 少 15名 士 兵 ； 期 限 12天 ） 
 mno_af03_take_intercept|接 取 截 断 敌 军 补 给 委 托 （ 期 限 12天 ） 
 mno_af03_settle|领 取 已 完 成 合 同 的 酬 金 ／ 登 记 失 败 合 同 
