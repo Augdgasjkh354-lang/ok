@@ -79,9 +79,12 @@ $plans = @()
 foreach ($incoming in (Get-ChildItem -LiteralPath $source -Filter '*.csv' | Sort-Object Name)) {
     $name = $incoming.Name -replace '\.merge\.csv$', '.csv'
     $dest = Join-Path $target $name
-    $previous = ''
-    if (Test-Path -LiteralPath $dest -PathType Leaf) { $previous = Read-Utf8 $dest }
-    $old = Parse-Csv $previous
+    if (-not (Test-Path -LiteralPath $dest -PathType Leaf)) {
+        # 模组里原本没有的文件一律不新建：只含少量条目的新文件会挡住游戏自带的中文。
+        Write-Host "${name}: 模组里原本没有此文件，跳过（新建会挡住游戏自带的中文）"
+        continue
+    }
+    $old = Parse-Csv (Read-Utf8 $dest)
     $new = Parse-Csv (Read-Utf8 $incoming.FullName)
     $inserted = 0; $updated = 0
     foreach ($key in $new.Order) {
@@ -96,7 +99,6 @@ foreach ($incoming in (Get-ChildItem -LiteralPath $source -Filter '*.csv' | Sort
     $plans += , @($dest, $sb.ToString(), $inserted, $updated, $old.Order.Count)
 }
 
-if (-not (Test-Path -LiteralPath $target)) { [void](New-Item -ItemType Directory -Path $target) }
 foreach ($plan in $plans) {
     $dest = $plan[0]
     $backup = $dest + '.bak'

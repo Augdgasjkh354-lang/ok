@@ -85,8 +85,15 @@ def main(argv=None):
     plans = []
     for incoming in sorted(source.glob('*.csv')):
         dest = target / target_name(incoming)
-        previous = read_utf8(dest) if dest.is_file() else ''
-        plans.append((dest, *merge(previous, read_utf8(incoming))))
+        if not dest.is_file():
+            # Never create a CSV the module lacks: the new, partial file would
+            # shadow the game's own Chinese for every native key (player report:
+            # the new-game screen turned English). Seeding it from Native is not
+            # safe either, because mods reuse native IDs with new text
+            # (mno_continue became 普通开局, Native translates it 继续……).
+            print(f'{dest.name}: 模组里原本没有此文件，跳过（新建会挡住游戏自带的中文）')
+            continue
+        plans.append((dest, *merge(read_utf8(dest), read_utf8(incoming))))
 
     target.mkdir(parents=True, exist_ok=True)
     for dest, text, inserted, updated, total in plans:

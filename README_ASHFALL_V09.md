@@ -56,7 +56,7 @@ python tests/verify_v09.py
 - **累计安装包**：已装 FewerBandits v7.5 的模块，复制 `FewerBandits/` 下 `.txt` 文件到现有模块根目录。
 - **增量安装包**：已装《烽烟与暗流》v0.8 的模块，复制同名 `.txt` 文件覆盖。
 - **从 v7.4 升级**：使用「从v7.4累计包」，已包含 v7.5，无需另装 v7.5 增量包。
-- **汉化（只能合并）**：游戏每种语言只认固定文件名（如 `troops.csv`），Mod 译文只能写进玩家已有的同名文件，直接复制会覆盖原有完整汉化。因此安装包里的汉化放在 `汉化_需合并_不要直接复制/`，文件改名为 `*.merge.csv`（误复制也不会被游戏读取）。把 `Modules\\TestMod` 文件夹拖到其中的 `双击合并汉化.bat` 上即可合并，无需 Python；装了 Python 也可运行 `python merge_localization.py "C:\\...\\Modules\\TestMod"`。语言目录默认自动选择（已有 `cns` 用 `cns`，只有 `cn_s` 用 `cn_s`），首次合并前的原文件保存为 `*.csv.bak`，重复运行不覆盖备份；遇到非 UTF-8（如 GBK）文件会停止且不改动任何文件。
+- **汉化（只能合并）**：游戏每种语言只认固定文件名（如 `troops.csv`），Mod 译文只能写进玩家已有的同名文件，直接复制会覆盖原有完整汉化。因此安装包里的汉化放在 `汉化_需合并_不要直接复制/`，文件改名为 `*.merge.csv`（误复制也不会被游戏读取）。把 `Modules\\TestMod` 文件夹拖到其中的 `双击合并汉化.bat` 上即可合并，无需 Python；装了 Python 也可运行 `python merge_localization.py "C:\\...\\Modules\\TestMod"`。语言目录默认自动选择（已有 `cns` 用 `cns`，只有 `cn_s` 用 `cn_s`），首次合并前的原文件保存为 `*.csv.bak`，重复运行不覆盖备份；遇到非 UTF-8（如 GBK）文件会停止且不改动任何文件。**只合并进模组已有的 CSV，从不新建**：模组原本没有的文件（如只带 `troops.csv` 的 v7.4）若新建出只含本 Mod 条目的版本，会挡住游戏自带的完整中文，使开局等原版菜单变英文；用 Native 译文补底也不安全，因为 Mod 复用了原版 ID 却改了文字（如 `mno_continue` 改成「普通开局」，Native 译作「继续……」）。本 Mod 的菜单文字大多已直接编译进 `menus.txt`，跳过这些文件影响很小。
 - **打包**：`python package_v09.py [输出目录]` 生成 v0.8 增量包、v7.5 累计包和 v7.4 累计包（默认输出到 `dist/`）；`python tests/test_merge_localization.py` 检查合并规则与包结构。
 - 交付文件不是可独立运行的 Native Mod；须保留原模块的资源目录、`module.ini`、`map.txt` 等文件。
 

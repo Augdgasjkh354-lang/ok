@@ -32,7 +32,7 @@ with tempfile.TemporaryDirectory() as tmp:
     assert 'trp_af04_saltraven_captain_pl|' in merged, 'new key not inserted'
     assert (cns / 'troops.csv.bak').read_text('utf-8') == original
     for name in ('game_menus.csv', 'quick_strings.csv', 'party_templates.csv'):
-        assert (cns / name).is_file()
+        assert not (cns / name).exists(), f'{name} must not be created (shadows native Chinese)'
 
     run(mod)  # idempotent, and the first backup is never overwritten
     assert (cns / 'troops.csv').read_text('utf-8-sig') == merged
@@ -49,8 +49,9 @@ with tempfile.TemporaryDirectory() as tmp:
     mod2 = Path(tmp) / 'Mod2'
     (mod2 / 'languages' / 'cn_s').mkdir(parents=True)
     (mod2 / 'module.ini').write_text('')
+    (mod2 / 'languages' / 'cn_s' / 'troops.csv').write_text(original, 'utf-8')
     run(mod2)
-    assert (mod2 / 'languages' / 'cn_s' / 'troops.csv').is_file()
+    assert 'trp_af04_saltraven_captain|' in (mod2 / 'languages' / 'cn_s' / 'troops.csv').read_text('utf-8-sig')
     assert not (mod2 / 'languages' / 'cns').exists()
 
     # Package layout: no CSV under an engine-readable name; merge tools bundled.
@@ -80,9 +81,10 @@ with tempfile.TemporaryDirectory() as tmp:
         mod3 = Path(tmp) / ('m_' + zp.stem)
         (mod3 / 'languages' / 'cns').mkdir(parents=True)
         (mod3 / 'module.ini').write_text('')
+        (mod3 / 'languages' / 'cns' / 'troops.csv').write_text(original, 'utf-8')
         subprocess.run([sys.executable, str(ext / '汉化_需合并_不要直接复制' / 'merge_localization.py'), str(mod3)],
                        check=True, capture_output=True)
-        assert (mod3 / 'languages' / 'cns' / 'troops.csv').is_file()
+        assert 'trp_af04_blackpine_captain|' in (mod3 / 'languages' / 'cns' / 'troops.csv').read_text('utf-8-sig')
         assert not list((mod3 / 'languages' / 'cns').glob('*.merge.csv'))
 
     with zipfile.ZipFile(out / '烽烟与暗流-v0.9-从v7.4累计包.zip') as z:
