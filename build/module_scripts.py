@@ -57299,6 +57299,17 @@ scripts = [
   # marshal +30. Parties under a paid truce or besieging are left alone.
   # Only pursuit changes: they still fight if the player attacks them.
   ("af20_hourly", [
+    # v1.0 第六批（三）：逃开的土匪 6 小时后交还给原版 AI。
+    (store_current_hours, ":hours"),
+    (try_for_parties, ":party"),
+      (neq, ":party", "p_main_party"),
+      (party_is_active, ":party"),
+      (party_get_slot, ":flee_until", ":party", slot_af23_flee_until),
+      (gt, ":flee_until", 0),
+      (ge, ":hours", ":flee_until"),
+      (party_set_flags, ":party", pf_default_behavior, 1),
+      (party_set_slot, ":party", slot_af23_flee_until, 0),
+    (try_end),
     (call_script, "script_af20_challenges"),
     (store_current_day, ":day"),
     (store_add, ":today", ":day", 1),
@@ -57400,6 +57411,18 @@ scripts = [
         (store_random_in_range, ":roll", 0, 100),
         (lt, ":roll", ":chance"),
         (party_ignore_player, ":party", 12),
+        # v1.0 第六批（三）：不敢追的土匪还会逃开——首领不是领主、兵力
+        # 不比玩家强才跑。领主部队一律不跑，三大匪帮也不跑。
+        (try_begin),
+          (eq, ":is_lord", 0),
+          (le, ":ratio", 100),
+          (party_slot_eq, ":party", slot_af04_kind, 0),
+          (party_set_ai_behavior, ":party", ai_bhvr_avoid_party),
+          (party_set_ai_object, ":party", "p_main_party"),
+          (party_set_flags, ":party", pf_default_behavior, 0),
+          (store_add, ":flee_until", ":hours", 6),
+          (party_set_slot, ":party", slot_af23_flee_until, ":flee_until"),
+        (try_end),
         (try_begin),
           (ge, ":ratio", 120),
           (this_or_next|eq, ":is_lord", 1),
