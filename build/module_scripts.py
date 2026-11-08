@@ -32088,6 +32088,10 @@ scripts = [
         (eq, reg0, 1),
         (val_add, ":bonus", 1),
       (try_end),
+      (try_begin),  # a village that dislikes the player sends nobody, famous or not
+        (lt, ":player_relation", 0),
+        (assign, ":bonus", 0),
+      (try_end),
       (val_add, ":amount", ":bonus"),
       (party_set_slot, ":center_no", slot_af21_fame_volunteers, ":bonus"),
       (party_set_slot, ":center_no", slot_center_volunteer_troop_type, ":volunteer_troop"),
