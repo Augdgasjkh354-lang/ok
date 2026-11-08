@@ -21,6 +21,7 @@ mno_af01_village_status|查 看 地 方 战 乱 与 援 助
 mno_af12_case_entry|有 村 民 请 你 主 持 公 道 
 mno_af10_village_word|和 村 长 聊 聊 附 近 的 动 静 
 mno_af09_village_echo|村 口 似 乎 有 人 在 等 你 … … 
+mno_af21_crown_talk_entry|求 见 国 王 ， 商 谈 缴 获 的 分 成 
 mno_af03_contract_board|战 争 承 包 商 · 军 粮 委 托 
 mno_af08_town_rumor_entry|在 城 中 询 问 附 近 的 战 乱 传 闻 
 mno_af17_sell_grain_entry|把 带 来 的 粮 食 卖 给 官 仓 （ 粮 仓 存 量 {reg41}%） 
@@ -167,3 +168,6 @@ mno_af12_thief_protect|一 口 咬 定 是 误 会 ， 把 告 状 的 老 汉 �
 mno_af12_case_later|改 日 再 说 。 
 menu_af20_fame|{s40}
 mno_af20_fame_back|返 回 营 地 
+menu_af21_crown_talk|{s48}听 你 说 完 ， 端 着 酒 杯 没 有 立 刻 开 口 。 眼 下 缴 获 的 分 成 是 ： 国 王 拿 走 {reg1}%， 你 留 下 {reg4}%。 你 的 威 名 是 {reg2}， 国 王 与 你 的 关 系 是 {reg3}。 
+mno_af21_crown_argue|据 理 力 争 
+mno_af21_crown_leave|算 了 

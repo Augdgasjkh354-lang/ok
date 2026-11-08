@@ -2097,3 +2097,8 @@ slot_af20_challengers_beaten = 878 # p_main_party: challengers the player has be
 slot_af20_challenge        = 879 # lord: 0 none, 1 seeking the player out, 3 crushed (never again)
 slot_af20_challenge_day    = 880 # lord: state 1 start day+1; state 0 day+1 before which he will not try
 slot_af20_surrender_tried  = 881 # any map party: hour+24 until which it cannot be ordered to surrender again
+# v1.0 fame (IV): people come because of the name; the crown takes less.
+slot_af21_fame_volunteers  = 882 # village: how many of the current volunteers came because of fame
+slot_af21_recruit_count     = 883 # village: fame volunteers who have left, cumulative (every 100 costs 1 prosperity)
+slot_af21_crown_cut_off     = 884 # p_main_party: negotiated reduction of the crown's cut, in percentage points
+slot_af21_crown_talk_day    = 885 # p_main_party: day+1 from which the crown's cut can be talked about again
