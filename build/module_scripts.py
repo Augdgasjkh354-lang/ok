@@ -23329,6 +23329,12 @@ scripts = [
             (store_distance_to_party_from_party, ":dist", ":enemy_village_no", ":party_no"),
             (lt, ":dist", 15),
             (party_slot_eq, ":enemy_village_no", slot_village_state, 0), #village is not already raided
+            # v1.0 fame (V): a famous, merciful name makes the player's own
+            # villages less likely to be picked for raiding. A failed roll
+            # skips this village and the loop goes on to the next one.
+            (call_script, "script_af22_fief_respect", ":enemy_village_no"),
+            (store_random_in_range, ":roll", 0, 100),
+            (lt, ":roll", reg0),
             #CHANGE STATE TO RAID THIS VILLAGE
             (assign, ":selected_village", ":enemy_village_no"),
           (try_end),
@@ -46696,7 +46702,15 @@ scripts = [
                   (try_for_range, ":center_no", centers_begin, centers_end),
                     (call_script, "script_npc_decision_checklist_evaluate_enemy_center_for_attack",     ":troop_no", ":center_no", ":attack_by_faction", ":all_vassals_included"),
                     (assign, ":score", reg0),
-                    
+
+                    # v1.0 fame (V): a famous, merciful name makes the player's
+                    # own fiefs less attractive targets. Save the score first:
+                    # the call rewrites reg0.
+                    (assign, ":saved_score", ":score"),
+                    (call_script, "script_af22_fief_respect", ":center_no"),
+                    (store_mul, ":score", ":saved_score", reg0),
+                    (val_div, ":score", 100),
+
                     (gt, ":score", ":score_to_beat"),
                     
                     (assign, ":result", ":center_no"),
@@ -57591,6 +57605,39 @@ scripts = [
     (val_sub, ":pct", ":cut_off"),
     (val_max, ":pct", 10),
     (assign, reg0, ":pct"),
+  ]),
+
+  # ========== v1.0 fame (V): fame and a merciful name protect the player's fiefs ==========
+  # How interesting a center is to an enemy, in percent (100 = as usual).
+  # Input: center. Output reg0, assigned last: the calls in the middle
+  # rewrite reg0. Only the player's own fiefs are affected: tier 2
+  # (威震一方) -25, tier 3 (传奇) -50, a merciful name another -25,
+  # never below 25. A bloody name takes nothing off: a feared player is
+  # also one worth getting rid of.
+  ("af22_fief_respect", [
+    (store_script_param, ":center", 1),
+    (assign, ":interest", 100),
+    (try_begin),
+      (party_slot_eq, ":center", slot_town_lord, "trp_player"),
+      (call_script, "script_af20_fame_total"),
+      (assign, ":fame", reg0),
+      (call_script, "script_af20_fame_tier", ":fame"),
+      (assign, ":tier", reg0),
+      (try_begin),
+        (eq, ":tier", 3),
+        (val_sub, ":interest", 50),
+      (else_try),
+        (eq, ":tier", 2),
+        (val_sub, ":interest", 25),
+      (try_end),
+      (call_script, "script_af20_fame_kind"),
+      (try_begin),
+        (eq, reg0, 1),
+        (val_sub, ":interest", 25),
+      (try_end),
+      (val_max, ":interest", 25),
+    (try_end),
+    (assign, reg0, ":interest"),
   ]),
 
 ]
