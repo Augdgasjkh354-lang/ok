@@ -30,7 +30,7 @@ mno_af21_crown_talk_entry|求 见 国 王 ， 商 谈 缴 获 的 分 成
 mno_af26_bounty_entry|看 看 城 门 口 的 悬 赏 告 示 
 mno_af26_protect_offer|做 这 座 城 镇 的 保 护 人 （ 每 周 收 保 护 费 ） 
 mno_af26_protect_collect|收 本 周 的 保 护 费 
-mno_af26_found_caravan|出 资 组 建 一 支 商 队 （ 3000 第 纳 尔 ） 
+mno_af26_found_caravan|出 资 组 建 一 支 商 队 （ 3000 第 纳 尔 ， 名 下 已 有 {reg0} 支 ， 上 限 36 支 ） 
 mno_af26_caravan_collect|结 算 名 下 商 队 （ 钱 箱 超 600 的 部 分 归 你 ） 
 mno_af03_contract_board|战 争 承 包 商 · 军 粮 委 托 
 mno_af08_town_rumor_entry|在 城 中 询 问 附 近 的 战 乱 传 闻 
