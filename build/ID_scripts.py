@@ -787,5 +787,7 @@ script_af23_gang_feud = 785
 script_af23_back_gang = 786
 script_af24_stock_value = 787
 script_af24_settle_stock = 788
+script_af25_village_looted_recently = 789
+script_af25_lord_first_greeting = 790
 
 

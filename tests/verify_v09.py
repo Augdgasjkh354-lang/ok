@@ -14,6 +14,12 @@ for idfile in ('ID_scripts.py','ID_menus.py','ID_troops.py','ID_party_templates.
 assert (base/'compiled/variables.txt').read_bytes()==(data/'variables.txt').read_bytes(), 'global variables changed'
 # Dialogues may change only where intended (logic edits); text stays as compiled before.
 ALLOWED_DIALOG_CHANGES={'dlga_village_elder_donate:village_elder_pretalk',  # v1.0: donation stays in village purse
+    'dlga_village_elder_talk:village_elder_donate',  # v1.0 NPC对白 A-14: 捐钱选项只写动作和代价
+    'dlga_start:village_elder_talk', 'dlga_start:village_elder_talk.1',  # v1.0 NPC对白 B-3: 村长认出劫掠者, 旧问候加互斥条件
+    'dlga_start:village_elder_talk.2', 'dlga_start:village_elder_talk.3',
+    'dlga_start:lord_meet_neutral',  # v1.0 NPC对白 B-1/B-2/B-6: 领主初见专属招呼, 通用句加互斥条件
+    'dlga_start:tavernkeeper_talk',  # v1.0 NPC对白 B-5: 酒馆老板专属招呼, 通用句加互斥条件
+    'dlga_lady_marriage_discussion:lady_proposal_refused.1',  # v1.0 NPC对白 B-7: 道德派低荣誉拒绝排除凶名
     'dlga_merchant_demand_toll:merchant_demand_toll_2', 'dlga_merchant_demand_toll:merchant_demand_toll_2.1',
     'dlga_merchant_demand_toll_accept:close_window'}  # v1.0: tolls come out of the caravan's cash box
 # v1.0: lords, kings and towns pay the player from their real money (af19_*).
@@ -67,10 +73,18 @@ ALLOWED_DIALOG_CHANGES|={
     'dlga_tavernkeeper_deliver_wine:tavernkeeper_pretalk',
     'dlga_tavernkeeper_deliver_wine_incomplete:tavernkeeper_pretalk',
 }
+# v1.0 NPC对白 B-0: append-only. Old dialogue IDs must appear in order at the
+# head of the new file; new rows may only be appended at the end.
 _old=(base/'compiled/conversation.txt').read_text('utf-8').split('\n')
 _new=(data/'conversation.txt').read_text('utf-8').split('\n')
-assert len(_old)==len(_new), 'dialogue count changed'
-_changed={n.split(' ',1)[0] for o,n in zip(_old,_new) if o!=n}
+if _old and _old[-1]=='': _old=_old[:-1]
+if _new and _new[-1]=='': _new=_new[:-1]
+assert len(_new)>=len(_old), 'dialogue lines removed'
+# v1.0 NPC对白 B-3 修正: 第 0 行是文件头, 第 1 行是对话总数, 都不是对话 ID;
+# 追加行使总数 +1, 只比对第 2 行起的 ID。
+assert int(_new[1])==len(_new)-2, 'dialogue count mismatch'
+assert [n.split(' ',1)[0] for n in _new[2:len(_old)]]==[o.split(' ',1)[0] for o in _old[2:]], 'dialogue order changed'
+_changed={n.split(' ',1)[0] for o,n in zip(_old[2:],_new[2:]) if o!=n}
 assert _changed<=ALLOWED_DIALOG_CHANGES, ('unexpected dialogue changes', _changed-ALLOWED_DIALOG_CHANGES)
 assert (base/'compiled/troops.txt').read_bytes()==(data/'troops.txt').read_bytes(), 'legacy troop data changed'
 assert (base/'compiled/party_templates.txt').read_bytes()==(data/'party_templates.txt').read_bytes()
