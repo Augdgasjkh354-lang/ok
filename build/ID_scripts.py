@@ -818,5 +818,6 @@ script_af27_retaliate = 816
 script_af27_squeeze = 817
 script_af27_submit = 818
 script_af27_clear_gang_lord_flags = 819
+script_af28_king_sponsor = 820
 
 
