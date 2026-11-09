@@ -22387,6 +22387,8 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   
   [anyone,"mayor_investment_possible",[
         (neg|party_slot_ge, "$current_town", slot_center_player_relation, 0),
+        (call_script, "script_af26_trade_exempt"),
+        (eq, reg0, 0),
   ], "Well... To be honest, I think that we in the guild would like to know you a little better. We can be very particular about outsiders coming in here and buying land.", "mayor_pretalk",[
   ]],
   
@@ -26654,5 +26656,56 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
     (eq, reg0, 2),
     ],
     "你的名声我听说过，{playername}。恕我直言，嫁给一个让人闻风丧胆的人，我家里不会答应。", "lady_proposal_refused",[]],
+
+
+  # v1.0 lord relations (L2): ask a friendly lord (>= 10) what is stirring nearby.
+  [anyone|plyr, "lord_talk", [
+    (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
+    (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
+    (call_script, "script_troop_get_relation_with_troop", "trp_player", "$g_talk_troop"),
+    (ge, reg0, 10),
+  ], "最近附近有什么动静？匪帮、敌军，都跟我说说。", "lord_af26_intel", [
+    (call_script, "script_af26_lord_intel"),
+  ]],
+  [anyone, "lord_af26_intel", [], "{s40}", "lord_talk", []],
+
+  # v1.0 lord relations (L2): a close lord (>= 20) introduces the player to
+  # the king once a month; the king's relation rises by 5 (fame doubles it).
+  [anyone|plyr, "lord_talk", [
+    (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
+    (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
+    (is_between, "$players_kingdom", kingdoms_begin, kingdoms_end),
+    (faction_get_slot, ":king", "$players_kingdom", slot_faction_leader),
+    (is_between, ":king", active_npcs_begin, active_npcs_end),
+    (neq, ":king", "$g_talk_troop"),
+    (call_script, "script_troop_get_relation_with_troop", "trp_player", "$g_talk_troop"),
+    (ge, reg0, 20),
+    (store_current_day, ":day"),
+    (party_get_slot, ":last", "p_main_party", slot_af26_intro_day),
+    (ge, ":day", ":last"),
+  ], "请你引荐我去见国王，我想当面跟他谈谈。", "lord_af26_intro", [
+    (faction_get_slot, ":king", "$players_kingdom", slot_faction_leader),
+    (call_script, "script_change_player_relation_with_troop", ":king", 5),
+    (store_current_day, ":day"),
+    (store_add, ":next", ":day", 30),
+    (party_set_slot, "p_main_party", slot_af26_intro_day, ":next"),
+    (str_store_troop_name, s4, ":king"),
+  ]],
+  [anyone, "lord_af26_intro", [], "好，我这就修书一封。你拿着我的信去见{s4}，他会接见你的。", "lord_talk", []],
+
+  # v1.0 lord relations (L7): a lord who likes the player (>= 50) votes for
+  # him in the fief council for free. Reuses the bribe-result lines.
+  [anyone|plyr, "fb73_private_options", [
+    (eq, "$players_kingdom", "$g_talk_troop_faction"),
+    (eq, "$player_has_homage", 1),
+    (is_between, "$g_fb73_private_issue", centers_begin, centers_end),
+    (troop_slot_eq, "$g_talk_troop", slot_troop_stance_on_faction_issue, -1),
+    (troop_slot_eq, "$g_talk_troop", slot_fb73_promise_candidate, 0),
+    (call_script, "script_troop_get_relation_with_troop", "trp_player", "$g_talk_troop"),
+    (ge, reg0, 50),
+  ], "你我交情深厚，这次评议请你直接支持我，不用谈钱。", "fb73_bribe_result", [
+    (call_script, "script_af26_free_vote", "$g_talk_troop"),
+    (assign, "$g_fb73_bribe_result", reg0),
+  ]],
 
 ]

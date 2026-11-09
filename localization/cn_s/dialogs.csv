@@ -49,3 +49,7 @@ dlga_start:lord_meet_neutral.5|你 也 是 有 地 盘 的 人 了 ， {playerna
 dlga_start:village_elder_talk.5|您 是 行 善 的 人 ， 村 里 人 都 记 着 。 
 dlga_start:tavernkeeper_talk.1|您 来 了 ， 大 人 。 楼 上 雅 间 还 给 您 留 着 。 
 dlga_lady_marriage_discussion:lady_proposal_refused.3|你 的 名 声 我 听 说 过 ， {playername}。 恕 我 直 言 ， 嫁 给 一 个 让 人 闻 风 丧 胆 的 人 ， 我 家 里 不 会 答 应 。 
+dlga_lord_talk:lord_af26_intel|最 近 附 近 有 什 么 动 静 ？ 匪 帮 、 敌 军 ， 都 跟 我 说 说 。 
+dlga_lord_talk:lord_af26_intro|请 你 引 荐 我 去 见 国 王 ， 我 想 当 面 跟 他 谈 谈 。 
+dlga_lord_af26_intro:lord_talk|好 ， 我 这 就 修 书 一 封 。 你 拿 着 我 的 信 去 见 {s4}， 他 会 接 见 你 的 。 
+dlga_fb73_private_options:fb73_bribe_result.1|你 我 交 情 深 厚 ， 这 次 评 议 请 你 直 接 支 持 我 ， 不 用 谈 钱 。 

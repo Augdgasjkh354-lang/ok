@@ -23,7 +23,8 @@ ALLOWED_DIALOG_CHANGES={'dlga_village_elder_donate:village_elder_pretalk',  # v1
     'dlga_start:tavernkeeper_talk',  # v1.0 NPC对白 B-5: 酒馆老板专属招呼, 通用句加互斥条件
     'dlga_lady_marriage_discussion:lady_proposal_refused.1',  # v1.0 NPC对白 B-7: 道德派低荣誉拒绝排除凶名
     'dlga_merchant_demand_toll:merchant_demand_toll_2', 'dlga_merchant_demand_toll:merchant_demand_toll_2.1',
-    'dlga_merchant_demand_toll_accept:close_window'}  # v1.0: tolls come out of the caravan's cash box
+    'dlga_merchant_demand_toll_accept:close_window',  # v1.0: tolls come out of the caravan's cash box
+    'dlga_mayor_investment_possible:mayor_pretalk.2'}  # v1.0 领主关系 L4: 领主好感 >= 20 时免除开企业门槛
 # v1.0: lords, kings and towns pay the player from their real money (af19_*).
 # v1.0 第六批（十）: arena prizes and ladies' quest rewards are paid from
 # real money too (town treasury / the lady's guardian).

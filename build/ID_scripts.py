@@ -792,5 +792,10 @@ script_af25_lord_first_greeting = 790
 script_af21_recruit_price = 791
 script_af04_lair_kind = 792
 script_af23_gang_feud_pair_with = 793
+script_af26_trade_exempt = 794
+script_af26_free_vote = 795
+script_af26_lord_intel = 796
+script_af26_count_bandit_prisoners = 797
+script_af26_hand_over_bandits = 798
 
 

@@ -1365,3 +1365,5 @@ fb73_debt_reply
 fb74_poach_answer
 fb74_gossip_reply
 fb74_report_reply
+lord_af26_intel
+lord_af26_intro

@@ -25,6 +25,7 @@ mno_af10_village_word|和 村 长 聊 聊 附 近 的 动 静
 mno_af09_village_echo|村 口 似 乎 有 人 在 等 你 … … 
 mno_af04_visit_lair|拜 访 匪 帮 老 巢 
 mno_af21_crown_talk_entry|求 见 国 王 ， 商 谈 缴 获 的 分 成 
+mno_af26_bounty_entry|看 看 城 门 口 的 悬 赏 告 示 
 mno_af03_contract_board|战 争 承 包 商 · 军 粮 委 托 
 mno_af08_town_rumor_entry|在 城 中 询 问 附 近 的 战 乱 传 闻 
 mno_af17_sell_grain_entry|把 带 来 的 粮 食 卖 给 官 仓 （ 粮 仓 存 量 {reg41}%{reg42?， 饥 荒 价 ， 本 周 还 能 收 {reg43}袋 :}） 
@@ -184,3 +185,6 @@ mno_af20_fame_back|返 回 营 地
 menu_af21_crown_talk|{s48}听 你 说 完 ， 端 着 酒 杯 没 有 立 刻 开 口 。 眼 下 缴 获 的 分 成 是 ： 国 王 拿 走 {reg1}%， 你 留 下 {reg4}%。 你 的 威 名 是 {reg2}， 国 王 与 你 的 关 系 是 {reg3}。 
 mno_af21_crown_argue|据 理 力 争 
 mno_af21_crown_leave|算 了 
+menu_af26_bounty|城 门 口 贴 着 一 张 悬 赏 告 示 ： 凡 缴 获 匪 徒 者 ， 每 颗 人 头 100 第 纳 尔 ， 由 本 镇 金 库 支 付 。 你 手 里 现 在 有 {reg10} 名 匪 徒 俘 虏 ， 可 领 {reg11} 第 纳 尔 。 
+mno_af26_bounty_hand|把 匪 徒 俘 虏 交 给 城 镇 ， 领 {reg11} 第 纳 尔 
+mno_af26_bounty_back|离 开 
