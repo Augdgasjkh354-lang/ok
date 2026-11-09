@@ -393,6 +393,29 @@ af09 村庄回响、af10 村长／粮商打听、af12 领主断案、af11 欠饷
 
 ## 附：对话中文改动路径（B-0 探路结论）
 
-> 实施 B-0-2 探路后填写：动哪几个文件、先后顺序、验证方法。此行留空，探路结论没写进来之前，不批量改对话中文。
+> B-0-2 探路结论，2026-11-09 实测（基线 2292d938）。探路行：A-14 村长捐钱选项。
 
-（待 B-0 探路后填写）
+**路径**：改 `build/module_dialogs.py` 源码行里的中文原文（不加空格，沿用现有写法）→ 构建时 `merge_dialogs` 取新行 → `game-data/conversation.txt` 得到新文本 → `generate_localization.py` 自动从编译行生成逐字加空格的 `dlga_` 条目，进 `localization/cns/dialogs.csv` 与 `localization/cn_s/dialogs.csv`。**不需要手改 CSV**（生成器会清空重建 `localization/`，手改会被覆盖）。
+
+**两个前提**，缺一不可：
+
+1. `build_v09.py` 的 `merge_dialogs` 已按 B-0 改过：只当新 token 是 ASCII（英文源码）时才保留旧行；新 token 是中文时取新行。旧规则下（只看旧 token 是否非 ASCII），A-14 这一行会被旧中文顶掉，改了等于没改。
+2. 该行对话 ID 必须加进 `tests/verify_v09.py` 的 `ALLOWED_DIALOG_CHANGES`，否则校验失败（编译行一变，`_changed` 里就会出现该 ID）。
+
+**探路证据**：A-14 改后构建显示 `dialogue lines taken from source: 51`（原 50）；`game-data/conversation.txt` 第 2485 行与 `localization/cns/dialogs.csv` 第 2 行均为新文本"我想给村子捐点钱（500 第纳尔）。"；"换 1 点好感"在两处计数均为 0；四命令全过；与基线构建比对，变化的文件只有 `game-data/conversation.txt` 与两份 `dialogs.csv`。
+
+**新追加行的键**：编译器按 from:to 自动编号，文本不同时加 `.1`／`.2` 后缀，键唯一，生成器能正常生成条目——这一点在 B 线第一行新对话落地时再核对一次（见第五节 B-3 的验证要求）。
+
+## 附：新行轮到机制（B-3 探路结论）
+
+> B-3 探路结论，2026-11-09 实测（基线 2292d938）。探路行：B-3 村长认出劫掠者。
+
+**办法：收紧旧通用行的条件（互斥），而不是指望新行排在前面。** 新行只能追加在文件末尾，同一状态里旧通用行先被扫到；只有旧行在新行要出现的条件下不匹配，新行才轮得到。B-3 的做法：4 句旧村长问候都加上 `(call_script, "script_af25_village_looted_recently", "$current_town"), (eq, reg0, 0)`；新行条件是同一脚本返回 `reg0 == 1`。两边互斥，旧行被排除后扫描才走到新行。
+
+**辅助脚本** `af25_village_looted_recently`（追加在 `module_scripts.py` 末尾）：取村庄作参数，读 Slot 894，按与 `af09_check_echo`、志愿兵清零同一口径（当天+1 减去劫掠日，小于 60 天）返回 `reg0` 1/0。复用现有脚本不够（`af09_check_echo` 的 reg0 是回响种类，劫掠时与无回响同为 0，分辨不出来），所以新写一个 12 行的小脚本。
+
+**工具链修正**：`conversation.txt` 前两行是文件头（`dialogsfile version 2`）与对话总数，不是对话 ID；B-0 的 `merge_dialogs` 与 `verify_v09.py` 对话校验都得跳过这两行（否则总数 2813→2814 会报 `dialogue order changed`）。已修 `build_v09.py` 与 `tests/verify_v09.py`，零内容改动时四命令仍全过。
+
+**探路证据**：构建显示 `dialogue lines taken from source: 56`（51＋4 旧行条件＋1 总数）；四命令全过；新行在 `game-data/conversation.txt` 末尾，ID 由编译器自动编为 `dlga_start:village_elder_talk.4`，中文原文已进编译行；`localization/cns/dialogs.csv` 有该键的逐字加空格条目；4 句旧问候的编译行已带上新条件（以 `.3` 行为例，条件数 1→3）；旧行 4 个 ID 已进 `ALLOWED_DIALOG_CHANGES`。
+
+**结论**：互斥条件法可行。其余 B 行照此办理——新行追加在末尾，凡是同一状态里已有通用行挡路的，都把通用行收紧（进白名单），新行条件与通用行的排除条件互斥。**实机点**：村长在被劫后 60 天内见到玩家，是否确实说新句（而不是旧句或无话可说），需实机验证。

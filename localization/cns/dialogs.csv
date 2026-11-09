@@ -1,5 +1,5 @@
 ﻿
-dlga_village_elder_talk:village_elder_donate|我 想 给 村 子 捐 点 钱 （ 500 第 纳 尔 换 1 点 好 感 ） 。 
+dlga_village_elder_talk:village_elder_donate|我 想 给 村 子 捐 点 钱 （ 500 第 纳 尔 ） 。 
 dlga_village_elder_donate:village_elder_pretalk|多 谢 您 的 慷 慨 ， {先 生 /夫 人 }！ 这 500 第 纳 尔 一 定 会 用 在 村 子 最 需 要 的 地 方 ， 您 是 我 们 永 远 的 朋 友 。 
 dlga_lord_talk:fb7_memory_answer|你 还 记 得 我 们 过 去 的 恩 怨 吗 ？ 
 dlga_fb7_memory_answer:lord_pretalk|你 放 走 过 我 {reg51}次 ， 也 囚 禁 过 我 {reg52}次 。 我 对 你 的 仇 怨 有 {reg54}之 深 ， 家 族 之 恨 还 有 {reg55}。 这 笔 账 ， 我 不 会 忘 。 
@@ -39,3 +39,12 @@ dlga_fb74_gossip_reply:lord_pretalk.2|近 来 没 有 新 的 可 靠 传 闻 �
 dlga_lord_talk:fb74_report_reply|陛 下 ， 我 掌 握 了 贵 族 秘 密 交 易 的 证 据 。 
 dlga_fb74_report_reply:lord_pretalk|你 为 王 室 立 了 功 。 我 会 调 查 {s65}， 并 记 住 你 的 忠 诚 。 
 dlga_fb74_report_reply:lord_pretalk.1|没 有 更 新 的 证 词 ， 我 无 法 继 续 调 查 此 事 。 
+dlga_start:village_elder_talk.4|你 还 敢 回 来 ？ 上 次 你 抢 走 的 粮 食 ， 村 里 到 现 在 还 没 缓 过 来 。 
+dlga_start:lord_meet_neutral.1|你 的 名 字 我 听 过 ， {playername}。 传 说 你 从 没 打 过 败 仗 。 
+dlga_start:lord_meet_neutral.2|人 们 说 你 从 没 输 过 。 坐 下 说 话 吧 ， {playername}。 
+dlga_start:lord_meet_neutral.3|说 书 人 讲 你 ， 孩 子 们 扮 你 — — 请 坐 ， {playername}。 
+dlga_start:lord_meet_neutral.4|你 的 名 声 臭 得 很 ， 别 指 望 我 跟 你 称 兄 道 弟 。 
+dlga_start:lord_meet_neutral.5|你 也 是 有 地 盘 的 人 了 ， {playername}， 说 话 的 分 量 不 一 样 了 。 
+dlga_start:village_elder_talk.5|您 是 行 善 的 人 ， 村 里 人 都 记 着 。 
+dlga_start:tavernkeeper_talk.1|您 来 了 ， 大 人 。 楼 上 雅 间 还 给 您 留 着 。 
+dlga_lady_marriage_discussion:lady_proposal_refused.3|你 的 名 声 我 听 说 过 ， {playername}。 恕 我 直 言 ， 嫁 给 一 个 让 人 闻 风 丧 胆 的 人 ， 我 家 里 不 会 答 应 。 

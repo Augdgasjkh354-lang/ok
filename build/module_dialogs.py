@@ -6010,6 +6010,7 @@ dialogs = [
                      (eq, "$g_talk_troop_met", 0),
                      (ge, "$g_talk_troop_faction_relation", 0),
                      (le,"$talk_context",tc_siege_commander),
+                     (call_script, "script_af25_lord_first_greeting"), (eq, reg0, 0),  # v1.0 NPC对白 B-1/B-2/B-6: 有专属招呼时不走这句
                      ],
    "Do I know you?", "lord_meet_neutral", []],
   [anyone|plyr ,"lord_meet_neutral", [],  "I am {playername}.", "lord_intro", []],
@@ -17313,7 +17314,8 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   [anyone,"lady_marriage_discussion",
     [
     (troop_slot_eq, "$g_talk_troop", slot_lord_reputation_type, lrep_moralist),
-        (lt, "$player_honor", 10)
+        (lt, "$player_honor", 10),
+        (call_script, "script_af20_fame_kind"), (neq, reg0, 2),  # v1.0 NPC对白 B-7: 凶名走专属拒绝句, 不走这句
         ],
     "It is good to hear that your intentions are honorable. However, I have resolved only to marry a man of the strongest moral fiber. I would like you to prove yourself more in that regard.", "lady_proposal_refused",[
     ]], 
@@ -19801,7 +19803,13 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
 
 #Tavernkeepers
 
-  [anyone ,"start", [(store_conversation_troop,reg(1)),(ge,reg(1),tavernkeepers_begin),(lt,reg(1),tavernkeepers_end)],
+  [anyone ,"start", [(store_conversation_troop,reg(1)),(ge,reg(1),tavernkeepers_begin),(lt,reg(1),tavernkeepers_end),
+                    (troop_get_slot, ":renown", "trp_player", slot_troop_renown),
+                    (party_get_slot, ":fame", "p_main_party", slot_af20_fame),
+                    (call_script, "script_af20_fame_tier", ":fame"),
+                    (assign, ":tier", reg0),
+                    (le, ":renown", 300),
+                    (lt, ":tier", 2)],  # v1.0 NPC对白 B-5: 声望>300 或威名>=2 档时不走这句
    "Good day dear {sir/madam}. How can I help you?", "tavernkeeper_talk",
    [
 #    (store_encountered_party,reg(2)),
@@ -23593,20 +23601,28 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
 
 
   [anyone,"start", [(is_between,"$g_talk_troop", village_elders_begin, village_elders_end),(eq,"$g_talk_troop_met",0),
-                    (str_store_party_name, s9, "$current_town")],
+                    (str_store_party_name, s9, "$current_town"),
+                    (call_script, "script_af25_village_looted_recently", "$current_town"), (eq, reg0, 0),
+                    (call_script, "script_af20_fame_kind"), (neq, reg0, 1)],  # v1.0 NPC对白 B-3/B-2: 被劫过或仁名时不走这句
    "Good day, {sir/madam}, and welcome to {s9}. I am the elder of this village.", "village_elder_talk",[]],
 
   [anyone,"start", [(is_between,"$g_talk_troop", village_elders_begin, village_elders_end),(eq,"$g_talk_troop_met",0),
                     (str_store_party_name, s9, "$current_town"),
-                    (party_slot_eq, "$current_town", slot_town_lord, "trp_player")],
+                    (party_slot_eq, "$current_town", slot_town_lord, "trp_player"),
+                    (call_script, "script_af25_village_looted_recently", "$current_town"), (eq, reg0, 0),
+                    (call_script, "script_af20_fame_kind"), (neq, reg0, 1)],  # v1.0 NPC对白 B-3/B-2: 被劫过或仁名时不走这句
    "Welcome to {s9}, my {lord/lady}. We were rejoiced by the news that you are the new {lord/lady} of our humble village.\
  I am the village elder and I will be honoured to serve you in any way I can.", "village_elder_talk",[]],
   
   [anyone ,"start", [(is_between,"$g_talk_troop",village_elders_begin,village_elders_end),
-                     (party_slot_eq, "$current_town", slot_town_lord, "trp_player")],
+                     (party_slot_eq, "$current_town", slot_town_lord, "trp_player"),
+                     (call_script, "script_af25_village_looted_recently", "$current_town"), (eq, reg0, 0),
+                     (call_script, "script_af20_fame_kind"), (neq, reg0, 1)],  # v1.0 NPC对白 B-3/B-2: 被劫过或仁名时不走这句
    "{My lord/My lady}, you honour our humble village with your presence.", "village_elder_talk",[]],
 
-  [anyone ,"start", [(is_between,"$g_talk_troop",village_elders_begin,village_elders_end)],
+  [anyone ,"start", [(is_between,"$g_talk_troop",village_elders_begin,village_elders_end),
+                    (call_script, "script_af25_village_looted_recently", "$current_town"), (eq, reg0, 0),
+                    (call_script, "script_af20_fame_kind"), (neq, reg0, 1)],  # v1.0 NPC对白 B-3/B-2: 被劫过或仁名时不走这句
    "Good day, {sir/madam}.", "village_elder_talk",[]],
 
   [anyone ,"village_elder_pretalk", [],
@@ -23660,7 +23676,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
 
   # FewerBandits v4: donate 500 denars for +1 village relation, repeatable
   [anyone|plyr,"village_elder_talk", [(store_troop_gold, ":gold", "trp_player"),(ge, ":gold", 500)],
-   "我想给村子捐点钱（500 第纳尔换 1 点好感）。", "village_elder_donate",[]],
+   "我想给村子捐点钱（500 第纳尔）。", "village_elder_donate",[]],  # v1.0 NPC对白 A-14: 选项只写动作和代价
 
   [anyone,"village_elder_donate", [],
    "多谢您的慷慨，{sir/madam}！这 500 第纳尔一定会用在村子最需要的地方，您是我们永远的朋友。", "village_elder_pretalk",
@@ -26563,5 +26579,76 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   [anyone, "fb74_report_reply", [],
     "I cannot proceed with this claim without fresher testimony.",
     "lord_pretalk", []],
+
+  # v1.0 NPC对白 B-3: 60 天内被玩家劫掠过的村子, 村长认出玩家 (新行追加在文件末尾; 旧 4 句已加互斥条件, 本行才轮得到)。
+  [anyone,"start", [(is_between,"$g_talk_troop",village_elders_begin,village_elders_end),
+                    (call_script, "script_af25_village_looted_recently", "$current_town"),
+                    (eq, reg0, 1)],
+   "你还敢回来？上次你抢走的粮食，村里到现在还没缓过来。", "village_elder_talk",[]],
+
+  # v1.0 NPC对白 B-1: 领主初见按威名档位打招呼 (只初见、只友好派系; 档位只看 Slot 875 原始值)。
+  [anyone,"start", [(troop_slot_eq,"$g_talk_troop",slot_troop_occupation, slto_kingdom_hero),
+                    (eq, "$g_talk_troop_met", 0),
+                    (ge, "$g_talk_troop_faction_relation", 0),
+                    (le,"$talk_context",tc_siege_commander),
+                    (call_script, "script_af25_lord_first_greeting"),
+                    (eq, reg0, 3)],
+   "你的名字我听过，{playername}。传说你从没打过败仗。", "lord_meet_neutral",[]],
+  [anyone,"start", [(troop_slot_eq,"$g_talk_troop",slot_troop_occupation, slto_kingdom_hero),
+                    (eq, "$g_talk_troop_met", 0),
+                    (ge, "$g_talk_troop_faction_relation", 0),
+                    (le,"$talk_context",tc_siege_commander),
+                    (call_script, "script_af25_lord_first_greeting"),
+                    (eq, reg0, 4)],
+   "人们说你从没输过。坐下说话吧，{playername}。", "lord_meet_neutral",[]],
+  [anyone,"start", [(troop_slot_eq,"$g_talk_troop",slot_troop_occupation, slto_kingdom_hero),
+                    (eq, "$g_talk_troop_met", 0),
+                    (ge, "$g_talk_troop_faction_relation", 0),
+                    (le,"$talk_context",tc_siege_commander),
+                    (call_script, "script_af25_lord_first_greeting"),
+                    (eq, reg0, 5)],
+   "说书人讲你，孩子们扮你——请坐，{playername}。", "lord_meet_neutral",[]],
+
+  # v1.0 NPC对白 B-2: 正直领主对凶名玩家的初见招呼。
+  [anyone,"start", [(troop_slot_eq,"$g_talk_troop",slot_troop_occupation, slto_kingdom_hero),
+                    (eq, "$g_talk_troop_met", 0),
+                    (ge, "$g_talk_troop_faction_relation", 0),
+                    (le,"$talk_context",tc_siege_commander),
+                    (call_script, "script_af25_lord_first_greeting"),
+                    (eq, reg0, 7)],
+   "你的名声臭得很，别指望我跟你称兄道弟。", "lord_meet_neutral",[]],
+
+  # v1.0 NPC对白 B-6: 玩家封地>=3 座时领主初见招呼。
+  [anyone,"start", [(troop_slot_eq,"$g_talk_troop",slot_troop_occupation, slto_kingdom_hero),
+                    (eq, "$g_talk_troop_met", 0),
+                    (ge, "$g_talk_troop_faction_relation", 0),
+                    (le,"$talk_context",tc_siege_commander),
+                    (call_script, "script_af25_lord_first_greeting"),
+                    (eq, reg0, 6)],
+   "你也是有地盘的人了，{playername}，说话的分量不一样了。", "lord_meet_neutral",[]],
+
+  # v1.0 NPC对白 B-2: 村长对仁名玩家的招呼 (被劫过的村子走 B-3 行, 本行只在未被劫时轮到)。
+  [anyone,"start", [(is_between,"$g_talk_troop",village_elders_begin,village_elders_end),
+                    (call_script, "script_af20_fame_kind"),
+                    (eq, reg0, 1)],
+   "您是行善的人，村里人都记着。", "village_elder_talk",[]],
+
+  # v1.0 NPC对白 B-5: 酒馆老板对声望>300 或威名>=2 档的玩家。
+  [anyone ,"start", [(store_conversation_troop,reg(1)),(ge,reg(1),tavernkeepers_begin),(lt,reg(1),tavernkeepers_end),
+                    (troop_get_slot, ":renown", "trp_player", slot_troop_renown),
+                    (party_get_slot, ":fame", "p_main_party", slot_af20_fame),
+                    (call_script, "script_af20_fame_tier", ":fame"),
+                    (assign, ":tier", reg0),
+                    (this_or_next|gt, ":renown", 300),
+                    (ge, ":tier", 2)],
+   "您来了，大人。楼上雅间还给您留着。", "tavernkeeper_talk",[]],
+
+  # v1.0 NPC对白 B-7: 贵妇求婚线补一档凶名拒绝 (道德派低荣誉行已排除凶名; 本行是兜底拒绝, 其余拒绝理由仍优先)。
+  [anyone,"lady_marriage_discussion",
+    [
+    (call_script, "script_af20_fame_kind"),
+    (eq, reg0, 2),
+    ],
+    "你的名声我听说过，{playername}。恕我直言，嫁给一个让人闻风丧胆的人，我家里不会答应。", "lady_proposal_refused",[]],
 
 ]
