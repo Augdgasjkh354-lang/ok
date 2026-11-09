@@ -2125,3 +2125,9 @@ slot_af26_sanctuary_day      = 904 # p_main_party: L5 sanctuary expiry (day+7); 
 slot_af26_letter_day         = 905 # p_main_party: I3 privateer letter expiry (day+30); 0 = no letter
 slot_af26_letter_issuer      = 906 # p_main_party: I3 issuing kingdom faction id; 0 = no letter
 slot_af26_hold_flag          = 907 # p_main_party: I7 one-time "occupy without becoming king" switch; 1 = hold, cleared after use
+slot_af27_hunt_day           = 908 # lord Troop Slot: L1 last hunt day+1; 0 = never hunted
+slot_af27_sponsor_kind       = 909 # lord Troop Slot: L2 sponsored gang kind 1-3; 0 = none
+slot_af27_sponsor_day        = 910 # lord Troop Slot: L2 last sponsor day+1; 0 = never sponsored
+slot_af27_squeeze_day        = 911 # lord Troop Slot: L4 last squeeze day+1; 0 = never squeezed
+slot_af27_glove_kind         = 912 # lord Troop Slot: L6 submitted gang (black glove) kind 1-3; 0 = none
+slot_af27_bounty_kind        = 913 # lord Troop Slot: L7 bounty on gang kind 1-3; 0 = none
