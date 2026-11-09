@@ -2005,7 +2005,7 @@ slot_af03_contract_origin     = 707  # original departure town, for readable jou
 # p_main_party: three slots per role, gang index 1..3; base+(kind-1).
 slot_af04_relation_start     = 720 # trust toward each named gang, -100..100
 slot_af04_truce_start        = 723 # protection until day+1 (exclusive)
-slot_af04_last_spawn_start   = 726 # last emergence, day+1; used for 30-day respawn
+slot_af04_last_spawn_start   = 726 # last emergence, day+1; used for 14-day respawn
 slot_af04_party_start        = 729 # live leader party ID, verified before use
 slot_af04_service_start      = 732 # last successful service day+1 (7-day cooldown)
 # On each named map group.
@@ -2114,3 +2114,4 @@ slot_af23_kept_word_3        = 893 # p_main_party: truces kept with gang 3
 slot_af23_looted_day         = 894 # village: day+1 of the player's last loot of this village
 slot_af23_famine_bags        = 895 # town/castle: bags bought at the famine price this week
 slot_af23_famine_week        = 896 # town/castle: which week+1 the famine-bag count belongs to
+slot_af23_joined_gang        = 897 # p_main_party: gang the player joined (1-3, 0 = none); cleared if that gang is broken up

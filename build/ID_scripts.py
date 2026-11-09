@@ -790,5 +790,7 @@ script_af24_settle_stock = 788
 script_af25_village_looted_recently = 789
 script_af25_lord_first_greeting = 790
 script_af21_recruit_price = 791
+script_af04_lair_kind = 792
+script_af23_gang_feud_pair_with = 793
 
 
