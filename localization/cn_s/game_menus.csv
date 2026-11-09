@@ -26,6 +26,8 @@ mno_af09_village_echo|村 口 似 乎 有 人 在 等 你 … …
 mno_af04_visit_lair|拜 访 匪 帮 老 巢 
 mno_af21_crown_talk_entry|求 见 国 王 ， 商 谈 缴 获 的 分 成 
 mno_af26_bounty_entry|看 看 城 门 口 的 悬 赏 告 示 
+mno_af26_protect_offer|做 这 座 城 镇 的 保 护 人 （ 每 周 收 保 护 费 ） 
+mno_af26_protect_collect|收 本 周 的 保 护 费 
 mno_af03_contract_board|战 争 承 包 商 · 军 粮 委 托 
 mno_af08_town_rumor_entry|在 城 中 询 问 附 近 的 战 乱 传 闻 
 mno_af17_sell_grain_entry|把 带 来 的 粮 食 卖 给 官 仓 （ 粮 仓 存 量 {reg41}%{reg42?， 饥 荒 价 ， 本 周 还 能 收 {reg43}袋 :}） 
@@ -76,6 +78,7 @@ menu_af03_contract_board|军 需 官 摊 开 账 本 ： '{s26}'^^进 度 ： {s
 mno_af03_no_funds|（ 城 里 眼 下 凑 不 出 委 托 的 钱 ） 
 mno_af03_take_escort|接 护 送 军 粮 的 委 托 
 mno_af03_take_intercept|接 截 断 敌 军 补 给 的 委 托 
+mno_af26_license|花 5000 第 纳 尔 ， 注 册 佣 兵 团 执 照 （ 以 后 接 委 托 报 酬 翻 倍 ） 
 mno_af03_settle|领 取 已 完 成 合 同 的 酬 金 ／ 登 记 失 败 合 同 
 mno_af03_office_to_journal|查 看 当 前 委 托 说 明 
 mno_af03_office_back|返 回 城 镇 

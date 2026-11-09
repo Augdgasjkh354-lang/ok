@@ -797,5 +797,9 @@ script_af26_free_vote = 795
 script_af26_lord_intel = 796
 script_af26_count_bandit_prisoners = 797
 script_af26_hand_over_bandits = 798
+script_af26_borrow_return = 799
+script_af26_protect_blocked_town = 800
+script_af26_protect_conflict_kind = 801
+script_af26_protect_collect = 802
 
 

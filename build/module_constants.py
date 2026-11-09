@@ -2116,3 +2116,8 @@ slot_af23_famine_bags        = 895 # town/castle: bags bought at the famine pric
 slot_af23_famine_week        = 896 # town/castle: which week+1 the famine-bag count belongs to
 slot_af23_joined_gang        = 897 # p_main_party: gang the player joined (1-3, 0 = none); cleared if that gang is broken up
 slot_af26_intro_day          = 898 # p_main_party: day+1 after which a lord may introduce the player to the king again (L2)
+slot_af26_borrow_day         = 899 # p_main_party: L1 borrow return deadline (day+14); 0 = not borrowing
+slot_af26_borrow_count       = 900 # p_main_party: L1 borrowed men count
+slot_af26_borrow_lender      = 901 # p_main_party: L1 lender lord troop id; 0 = none
+slot_af26_license            = 902 # p_main_party: I1 mercenary license, 1 = licensed
+slot_af26_protect_day        = 903 # town: I5 next protection collection day+1; 0 = not protected

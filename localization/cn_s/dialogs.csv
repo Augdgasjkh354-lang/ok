@@ -53,3 +53,10 @@ dlga_lord_talk:lord_af26_intel|最 近 附 近 有 什 么 动 静 ？ 匪 帮 �
 dlga_lord_talk:lord_af26_intro|请 你 引 荐 我 去 见 国 王 ， 我 想 当 面 跟 他 谈 谈 。 
 dlga_lord_af26_intro:lord_talk|好 ， 我 这 就 修 书 一 封 。 你 拿 着 我 的 信 去 见 {s4}， 他 会 接 见 你 的 。 
 dlga_fb73_private_options:fb73_bribe_result.1|你 我 交 情 深 厚 ， 这 次 评 议 请 你 直 接 支 持 我 ， 不 用 谈 钱 。 
+dlga_lord_talk:lord_af26_borrow|向 你 借 一 队 人 手 ， 14 天 后 归 还 。 
+dlga_lord_af26_borrow:lord_talk|好 ， 借 你 {reg10} 个 人 ， 14 天 后 还 我 ， 少 一 个 都 不 行 。 
+dlga_lord_talk:lord_af26_return|把 借 的 兵 还 你 。 
+dlga_lord_talk:lord_af26_feast|听 说 你 们 在 办 宴 会 ， 带 我 一 个 ？ 
+dlga_lord_af26_feast:lord_talk|好 ， 宴 会 就 在 {s4}， 你 来 ， 我 在 门 口 等 你 。 
+dlga_lord_talk:lord_af26_hunt|一 起 去 打 猎 ， 活 动 活 动 筋 骨 。 
+dlga_lord_af26_hunt:lord_talk|走 ， 前 面 林 子 里 有 动 静 ， 跟 我 去 打 猎 。 
