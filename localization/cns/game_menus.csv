@@ -222,4 +222,8 @@ mno_af28_quest_q1_settle|回 来 交 差 ： 军 粮 队 已 经 劫 了
 mno_af28_quest_q3_accept|接 一 单 送 信 的 活 
 mno_af28_quest_q3_deliver|把 信 交 给 {s4}的 接 头 人 
 mno_af28_quest_abandon|这 单 不 干 了 
+mno_af28_quest_q2_accept|接 一 单 护 送 走 私 货 的 活 
+mno_af28_quest_q2_settle|回 来 交 差 ： 走 私 货 已 经 送 到 了 
+mno_af28_quest_q4_accept|接 一 单 劫 村 子 的 活 
+mno_af28_quest_q4_settle|回 来 交 差 ： 那 座 村 子 已 经 劫 了 
 mno_af28_leave|离 开 
