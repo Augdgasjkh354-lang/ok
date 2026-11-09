@@ -1379,3 +1379,4 @@ lord_af27_hush
 lord_af27_submit
 lord_af27_bounty
 lord_af27_inform
+tavernkeeper_af28_contact

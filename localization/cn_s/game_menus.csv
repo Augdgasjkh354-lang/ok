@@ -217,4 +217,9 @@ mno_af28_invest_500|给 这 伙 匪 帮 注 资 500 第 纳 尔
 mno_af28_invest_1000|给 这 伙 匪 帮 注 资 1000 第 纳 尔 
 mno_af28_amnesty|花 1200 第 纳 尔 赦 免 他 们 ， 收 6 个 人 进 队 伍 
 mno_af28_warn|向 他 们 通 风 报 信 ： 有 领 主 正 带 兵 来 剿 你 们 
+mno_af28_quest_q1_accept|接 一 单 劫 军 粮 队 的 活 
+mno_af28_quest_q1_settle|回 来 交 差 ： 军 粮 队 已 经 劫 了 
+mno_af28_quest_q3_accept|接 一 单 送 信 的 活 
+mno_af28_quest_q3_deliver|把 信 交 给 {s4}的 接 头 人 
+mno_af28_quest_abandon|这 单 不 干 了 
 mno_af28_leave|离 开 

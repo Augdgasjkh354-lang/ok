@@ -27060,4 +27060,18 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   ]],
   [anyone, "lord_af27_inform", [], "{s40}", "lord_talk", []],
 
+  # v1.0 六国匪帮第四批 (条目 9): 酒馆老板引荐去见帮里的人。
+  [anyone|plyr,"tavernkeeper_talk", [(is_between, "$current_town", towns_begin, towns_end),
+    (party_slot_eq, "$current_town", slot_party_type, spt_town),
+    (store_faction_of_party, ":faction", "$current_town"),
+    (is_between, ":faction", npc_kingdoms_begin, npc_kingdoms_end),
+    (store_sub, ":kind", ":faction", "fac_kingdom_1"),
+    (val_add, ":kind", 1),
+    (call_script, "script_af23_gang_live_party", ":kind"),
+    (gt, reg0, 0),
+    (call_script, "script_af04_main_slot", slot_af04_relation_start, ":kind"),
+    (party_get_slot, ":trust", "p_main_party", reg0),
+    (ge, ":trust", 10)], "介绍我见帮里的人。", "tavernkeeper_af28_contact",[]],
+  [anyone,"tavernkeeper_af28_contact", [], "行，角落里那位就是他们的接头人，你过去吧，别说是我指的路。", "close_window", [(jump_to_menu, "mnu_af28_contact"), (finish_mission)]],
+
 ]

@@ -819,5 +819,8 @@ script_af27_squeeze = 817
 script_af27_submit = 818
 script_af27_clear_gang_lord_flags = 819
 script_af28_king_sponsor = 820
+script_af28_find_quest_convoy = 821
+script_af28_quest_settle = 822
+script_af28_confirm_victory = 823
 
 
