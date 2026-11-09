@@ -33,6 +33,7 @@ mno_af26_protect_collect|收 本 周 的 保 护 费
 mno_af26_found_caravan|出 资 组 建 一 支 商 队 （ 3000 第 纳 尔 ， 名 下 已 有 {reg0} 支 ， 上 限 36 支 ） 
 mno_af26_caravan_collect|结 算 名 下 商 队 （ 钱 箱 超 600 的 部 分 归 你 ） 
 mno_af03_contract_board|战 争 承 包 商 · 军 粮 委 托 
+mno_af28_contact_entry|去 见 {s4}的 接 头 人 
 mno_af08_town_rumor_entry|在 城 中 询 问 附 近 的 战 乱 传 闻 
 mno_af17_sell_grain_entry|把 带 来 的 粮 食 卖 给 官 仓 （ 粮 仓 存 量 {reg41}%{reg42?， 饥 荒 价 ， 本 周 还 能 收 {reg43}袋 :}） 
 mno_af10_town_word_entry|找 相 熟 的 粮 商 打 听 军 粮 车 
@@ -205,3 +206,15 @@ mno_af26_bounty_back|离 开
 menu_af26_hold_choice|你 攻 下 了 这 座 城 堡 。 按 卡 拉 迪 亚 的 老 规 矩 ， 未 归 附 任 何 势 力 的 领 主 攻 下 中 心 ， 要 么 就 地 称 王 ， 要 么 只 占 下 它 、 当 个 地 方 领 主 。 选 了 只 占 ， 以 后 随 时 可 以 在 营 地 菜 单 里 宣 布 立 国 。 
 mno_af26_hold_become_king|称 王 立 国 
 mno_af26_hold_just_occupy|只 占 下 它 ， 不 称 王 ， 当 个 地 方 领 主 
+menu_af28_contact|角 落 里 那 人 朝 你 点 了 点 头 ， 他 是 {s10}的 接 头 人 。 ^他 们 在 {s11}一 带 活 动 ， 专 长 是 {s12}。 ^这 里 是 {s14}的 地 盘 ， 接 头 人 只 跟 熟 面 孔 打 交 道 。 
+mno_af28_pay_treaty|付 {reg42} 第 纳 尔 ， 签 11 天 互 不 侵 扰 的 协 议 
+mno_af28_join|交 500 第 纳 尔 投 名 状 ， 入 伙 
+mno_af28_hire_raid|花 850 第 纳 尔 ， 请 他 们 袭 扰 一 支 敌 国 军 粮 队 
+mno_af28_buy_grain|从 盐 鸦 商 路 黑 市 买 两 袋 谷 物 （ 360 第 纳 尔 ） 
+mno_af28_hire_men|从 灰 狼 团 招 {reg45} 名 散 兵 （ {reg44} 第 纳 尔 ） 
+mno_af28_invest_200|给 这 伙 匪 帮 注 资 200 第 纳 尔 
+mno_af28_invest_500|给 这 伙 匪 帮 注 资 500 第 纳 尔 
+mno_af28_invest_1000|给 这 伙 匪 帮 注 资 1000 第 纳 尔 
+mno_af28_amnesty|花 1200 第 纳 尔 赦 免 他 们 ， 收 6 个 人 进 队 伍 
+mno_af28_warn|向 他 们 通 风 报 信 ： 有 领 主 正 带 兵 来 剿 你 们 
+mno_af28_leave|离 开 
