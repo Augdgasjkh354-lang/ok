@@ -1371,3 +1371,7 @@ lord_af26_borrow
 lord_af26_return
 lord_af26_feast
 lord_af26_hunt
+lord_af26_sanctuary
+lord_af26_letter
+lord_af26_mediate
+merchant_af26_collect

@@ -801,5 +801,12 @@ script_af26_borrow_return = 799
 script_af26_protect_blocked_town = 800
 script_af26_protect_conflict_kind = 801
 script_af26_protect_collect = 802
+script_af26_sanctuary_needed = 803
+script_af26_sanctuary_clear = 804
+script_af26_can_declare = 805
+script_af26_mediate_target = 806
+script_af26_player_caravan = 807
+script_af26_found_caravan = 808
+script_af26_caravan_collect = 809
 
 

@@ -2121,3 +2121,7 @@ slot_af26_borrow_count       = 900 # p_main_party: L1 borrowed men count
 slot_af26_borrow_lender      = 901 # p_main_party: L1 lender lord troop id; 0 = none
 slot_af26_license            = 902 # p_main_party: I1 mercenary license, 1 = licensed
 slot_af26_protect_day        = 903 # town: I5 next protection collection day+1; 0 = not protected
+slot_af26_sanctuary_day      = 904 # p_main_party: L5 sanctuary expiry (day+7); 0 = not in sanctuary
+slot_af26_letter_day         = 905 # p_main_party: I3 privateer letter expiry (day+30); 0 = no letter
+slot_af26_letter_issuer      = 906 # p_main_party: I3 issuing kingdom faction id; 0 = no letter
+slot_af26_hold_flag          = 907 # p_main_party: I7 one-time "occupy without becoming king" switch; 1 = hold, cleared after use

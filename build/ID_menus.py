@@ -247,3 +247,4 @@ menu_af12_case = 245
 menu_af20_fame = 246
 menu_af21_crown_talk = 247
 menu_af26_bounty = 248
+menu_af26_hold_choice = 249
