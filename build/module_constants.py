@@ -2115,3 +2115,4 @@ slot_af23_looted_day         = 894 # village: day+1 of the player's last loot of
 slot_af23_famine_bags        = 895 # town/castle: bags bought at the famine price this week
 slot_af23_famine_week        = 896 # town/castle: which week+1 the famine-bag count belongs to
 slot_af23_joined_gang        = 897 # p_main_party: gang the player joined (1-3, 0 = none); cleared if that gang is broken up
+slot_af26_intro_day          = 898 # p_main_party: day+1 after which a lord may introduce the player to the king again (L2)

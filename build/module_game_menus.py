@@ -9137,6 +9137,16 @@ game_menus = [
         (jump_to_menu, "mnu_af21_crown_talk"),
       ]),
 
+      # v1.0 independent (I2): town bounty board -- hand in bandit prisoners.
+      ("af26_bounty_entry",
+      [
+        (party_slot_eq, "$current_town", slot_party_type, spt_town),
+      ],
+      "看看城门口的悬赏告示",
+      [
+        (jump_to_menu, "mnu_af26_bounty"),
+      ]),
+
       ("town_center",
       [                        
         (party_slot_eq, "$current_town", slot_party_type, spt_town),
@@ -15507,7 +15517,8 @@ game_menus = [
    "none", [(call_script, "script_af05_prepare_ledger")],
    [
      ("af05_ledger_investigate",
-      [(eq, "$player_has_homage", 1),
+      [(this_or_next|eq, "$player_has_homage", 1),
+       (eq, "$players_kingdom", "fac_player_supporters_faction"),
        (call_script, "script_af05_find_case"),
        (is_between, reg0, active_npcs_begin, active_npcs_end),
        (troop_get_slot, ":hit", reg0, slot_af05_last_hit_token),
@@ -15926,6 +15937,34 @@ game_menus = [
        (try_end),
       ]),
      ("af21_crown_leave", [], "算了", [(jump_to_menu, "mnu_town")]),
+   ]),
+  ("af26_bounty", 0,
+   "城门口贴着一张悬赏告示：凡缴获匪徒者，每颗人头 100 第纳尔，由本镇金库支付。你手里现在有 {reg10} 名匪徒俘虏，可领 {reg11} 第纳尔。",
+   "none",
+   [
+     (call_script, "script_af26_count_bandit_prisoners"),
+     (assign, reg10, reg0),
+     (store_mul, ":pay", reg0, 100),
+     (party_get_slot, ":wealth", "$current_town", slot_town_wealth),
+     (store_div, ":cap", ":wealth", 4),
+     (val_min, ":pay", ":cap"),
+     (assign, reg11, ":pay"),
+   ],
+   [
+     ("af26_bounty_hand",
+      [
+        (gt, reg10, 0),
+        (gt, reg11, 0),
+      ],
+      "把匪徒俘虏交给城镇，领 {reg11} 第纳尔",
+      [
+        (call_script, "script_af26_hand_over_bandits"),
+        (assign, reg12, reg0),
+        (display_message, "@你把匪徒交给了城镇守卫，领到了 {reg12} 第纳尔。"),
+        (jump_to_menu, "mnu_town"),
+      ]),
+     ("af26_bounty_back", [], "离开",
+      [(jump_to_menu, "mnu_town")]),
    ]),
 
 ]

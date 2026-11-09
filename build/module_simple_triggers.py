@@ -4107,4 +4107,35 @@ simple_triggers = [
   (1, [(call_script, "script_af19_settle_debts")]),
   # Ashfall v1.0: fame fades without battles; nearby enemies may not dare to chase.
   (1, [(call_script, "script_af20_hourly")]),
+  # v1.0 lord relations (L6): once a month, the friendly lord the player is
+  # closest to (relation >= 30, same faction) sends 200-500 denars from his
+  # own purse. Fires on days divisible by 30; no slot needed.
+  (24, [
+    (store_current_day, ":day"),
+    (store_mod, ":m", ":day", 30),
+    (eq, ":m", 0),
+    (this_or_next|is_between, "$players_kingdom", kingdoms_begin, kingdoms_end),
+    (eq, "$players_kingdom", "fac_player_supporters_faction"),
+    (assign, ":best", -1),
+    (assign, ":best_rel", 29),
+    (try_for_range, ":lord", active_npcs_begin, active_npcs_end),
+      (store_faction_of_troop, ":fac", ":lord"),
+      (eq, ":fac", "$players_kingdom"),
+      (troop_slot_eq, ":lord", slot_troop_prisoner_of_party, -1),
+      (call_script, "script_troop_get_relation_with_troop", "trp_player", ":lord"),
+      (gt, reg0, ":best_rel"),
+      (assign, ":best_rel", reg0),
+      (assign, ":best", ":lord"),
+    (try_end),
+    (is_between, ":best", active_npcs_begin, active_npcs_end),
+    (troop_get_slot, ":wealth", ":best", slot_troop_wealth),
+    (ge, ":wealth", 200),
+    (store_random_in_range, ":gift", 200, 501),
+    (val_min, ":gift", ":wealth"),
+    (call_script, "script_af14_lord_wealth", ":best", 0, ":gift"),
+    (troop_add_gold, "trp_player", ":gift"),
+    (str_store_troop_name, s4, ":best"),
+    (assign, reg5, ":gift"),
+    (display_message, "@{s4}派人送来了{reg5}第纳尔，说是给老朋友的一点心意。"),
+  ]),
 ]
