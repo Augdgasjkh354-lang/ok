@@ -2039,6 +2039,10 @@ game_menus = [
      (call_script, "script_get_player_party_morale_values"),     
 
      (assign, ":target_morale", reg0),
+     # v1.0 扩展：威名士气加成（与上面每日结算的档位加成同值，显示的数字才能对上）。
+     (call_script, "script_af20_fame_total"),
+     (call_script, "script_af20_fame_tier", reg0),
+     (store_mul, ":fame_bonus", reg0, 2),
      (assign, reg1, "$g_player_party_morale_modifier_party_size"),
      (try_begin),
        (gt, reg1, 0),
@@ -2090,6 +2094,11 @@ game_menus = [
      (assign, reg6, 50),
      
      (str_store_string, s1, "str_current_party_morale_is_reg5_current_party_morale_modifiers_are__base_morale__50_party_size_s2reg1_leadership_s3reg2_food_variety_s4reg3s5s6_recent_events_s7reg4_total__reg5___"),
+     (try_begin),
+       (gt, ":fame_bonus", 0),
+       (assign, reg8, ":fame_bonus"),
+       (str_store_string, s1, "@{s1}^威名：+{reg8}"),
+     (try_end),
         
      (try_for_range, ":kingdom_no", npc_kingdoms_begin, npc_kingdoms_end),
        (faction_get_slot, ":faction_morale", ":kingdom_no",  slot_faction_morale_of_player_troops),
@@ -3029,6 +3038,12 @@ game_menus = [
        [(jump_to_menu, "mnu_camp_action"),
         ]
        ),
+      ("af26_declare_kingdom",
+       [(call_script, "script_af26_can_declare"),
+        (eq, reg0, 1)],
+       "宣布立国（以地方领主之身称王）",
+       [(call_script, "script_activate_player_faction", "trp_player"),
+        (jump_to_menu, "mnu_camp")]),
       ("camp_wait_here",[],"Wait here for some time.",
        [
            (assign,"$g_camp_mode", 1),
@@ -3049,13 +3064,13 @@ game_menus = [
            (change_screen_return),
         ]
        ),
-      ("af07_world_entry", [(eq, 1, 0)], "烽烟与暗流：卡拉迪亚战局总览", [(jump_to_menu, "mnu_af07_world")]),
-      ("af04_network_entry", [(eq, 1, 0)], "地方匪帮与黑市情报", [(jump_to_menu, "mnu_af04_network")]),
-      ("af05_ledger_entry", [(eq, 1, 0)], "战争与宫廷：秘密军粮案卷", [(jump_to_menu, "mnu_af05_ledger")]),
+      ("af07_world_entry", [], "烽烟与暗流：卡拉迪亚战局总览", [(jump_to_menu, "mnu_af07_world")]),
+      ("af04_network_entry", [], "地方匪帮与黑市情报", [(jump_to_menu, "mnu_af04_network")]),
+      ("af05_ledger_entry", [], "战争与宫廷：秘密军粮案卷", [(jump_to_menu, "mnu_af05_ledger")]),
       # Ashfall v0.3: inspect active contract without visiting an office.
-      ("af03_field_journal", [(eq, 1, 0)], "\u519b\u4e8b\u59d4\u6258\u8bb0\u5f55", [(jump_to_menu, "mnu_af03_journal")]),
+      ("af03_field_journal", [], "\u519b\u4e8b\u59d4\u6258\u8bb0\u5f55", [(jump_to_menu, "mnu_af03_journal")]),
       # v7.5: non-cheat, read-only court records.
-      ("fb75_intel_book", [(eq, 1, 0)], "宫廷政治情报簿",
+      ("fb75_intel_book", [], "宫廷政治情报簿",
        [(jump_to_menu, "mnu_fb75_intel_book")]),
       ("af08_desk_entry", [], "烽烟案头：领地、战争与宫廷消息", [(jump_to_menu, "mnu_af08_desk")]),
       ("af11_arrears_entry", [(call_script, "script_af11_merc_current_owed"), (gt, reg0, 0)],
@@ -6063,6 +6078,17 @@ game_menus = [
           (try_end),
         (try_end),
        ]),
+      ("af26_sanctuary_entry",
+       [(party_slot_eq, "$g_encountered_party", slot_party_type, spt_castle),
+        (party_get_slot, ":day", "p_main_party", slot_af26_sanctuary_day),
+        (store_current_day, ":today"),
+        (lt, ":today", ":day"),
+        (party_get_slot, ":lord", "$g_encountered_party", slot_town_lord),
+        (is_between, ":lord", active_npcs_begin, active_npcs_end),
+        (call_script, "script_troop_get_relation_with_troop", "trp_player", ":lord"),
+        (ge, reg0, 40)],
+       "以受庇护者的身份求见城主（领主好感 ≥ 40）",
+       [(jump_to_menu, "mnu_castle_entry_granted")]),
       ("request_meeting_commander",[],
        "Request a meeting with someone.",
        [
@@ -6286,7 +6312,13 @@ game_menus = [
           (this_or_next|eq, ":enemy_finished", 1),
           (eq, "$g_enemy_surrenders", 1),
 
-          (assign, "$g_next_menu", "mnu_castle_taken"), 
+          # v1.0 领主关系与独立玩法·第三波 I7: 独立玩家攻下城堡，先出选择菜单（称王／只占）。
+          (try_begin),
+            (eq, "$players_kingdom", 0),
+            (assign, "$g_next_menu", "mnu_af26_hold_choice"),
+          (else_try),
+            (assign, "$g_next_menu", "mnu_castle_taken"),
+          (try_end),
           (jump_to_menu, "mnu_total_victory"),
         (else_try),
           (call_script, "script_party_count_members_with_full_health", "p_main_party"),
@@ -6410,7 +6442,12 @@ game_menus = [
                                    ],
        "{!}CHEAT: Instant conquer castle.",
        [
-        (assign, "$g_next_menu", "mnu_castle_taken"),
+        (try_begin),
+          (eq, "$players_kingdom", 0),
+          (assign, "$g_next_menu", "mnu_af26_hold_choice"),
+        (else_try),
+          (assign, "$g_next_menu", "mnu_castle_taken"),
+        (try_end),
         (jump_to_menu, "mnu_total_victory"),
        ]),
            
@@ -6826,6 +6863,12 @@ game_menus = [
         (else_try),
           (call_script, "script_give_center_to_faction", "$g_encountered_party", "fac_player_supporters_faction"),          
           (call_script, "script_order_best_besieger_party_to_guard_center", "$g_encountered_party", "fac_player_supporters_faction"),
+          # v1.0 领主关系与独立玩法·第三波 I7: 只占开关开着时，把中心领主记成玩家本人（划派系之后再指派，否则会被重置），开关用完即清。
+          (try_begin),
+            (party_slot_eq, "p_main_party", slot_af26_hold_flag, 1),
+            (call_script, "script_give_center_to_lord", "$g_encountered_party", "trp_player", 0),
+            (party_set_slot, "p_main_party", slot_af26_hold_flag, 0),
+          (try_end),
           (str_store_party_name, s3, "$g_encountered_party"),
           (assign, reg1, 0),
           (try_begin),
@@ -7913,6 +7956,14 @@ game_menus = [
        [(call_script, "script_af09_check_echo", "$current_town"), (gt, reg0, 0)],
        "村口似乎有人在等你……",
        [(jump_to_menu, "mnu_af09_echo")]),
+      ("af04_visit_lair",
+       [(call_script, "script_af04_lair_kind"), (gt, reg0, 0)],
+       "拜访匪帮老巢",
+       [(call_script, "script_af04_lair_kind"),
+        (assign, ":kind", reg0),
+        (call_script, "script_af23_gang_live_party", ":kind"),
+        (assign, "$g_encountered_party", reg0),
+        (jump_to_menu, "mnu_af04_gang")]),
       ("village_leave",[],"Leave...",[(change_screen_return,0)]),
       
     ],
@@ -7976,7 +8027,9 @@ game_menus = [
      (party_get_slot, ":volunteer_amount", "$current_town", slot_center_volunteer_troop_amount),
      (party_get_free_companions_capacity, ":free_capacity", "p_main_party"),
      (store_troop_gold, ":gold", "trp_player"),
-     (store_div, ":gold_capacity", ":gold", 10),#10 denars per man
+     (call_script, "script_af21_recruit_price"),
+     (assign, ":price", reg0),
+     (store_div, ":gold_capacity", ":gold", ":price"),
      (assign, ":party_capacity", ":free_capacity"),
      (val_min, ":party_capacity", ":gold_capacity"),
      (try_begin),
@@ -7993,7 +8046,7 @@ game_menus = [
        (eq, ":volunteer_amount", 0),
        (str_store_string, s18, "@No one here seems to be willing to join your party."),
      (else_try),
-       (store_mul, reg6, ":volunteer_amount", 10),#10 denars per man
+       (store_mul, reg6, ":volunteer_amount", ":price"),
        (str_store_troop_name_by_count, s3, ":volunteer_troop", ":volunteer_amount"),
        (try_begin),
          (eq, reg5, 1),
@@ -9117,6 +9170,93 @@ game_menus = [
       [
         (jump_to_menu, "mnu_af21_crown_talk"),
       ]),
+
+      # v1.0 independent (I2): town bounty board -- hand in bandit prisoners.
+      ("af26_bounty_entry",
+      [
+        (party_slot_eq, "$current_town", slot_party_type, spt_town),
+      ],
+      "看看城门口的悬赏告示",
+      [
+        (jump_to_menu, "mnu_af26_bounty"),
+      ]),
+      ("af26_protect_offer",
+      [
+        (party_slot_eq, "$current_town", slot_party_type, spt_town),
+        (party_get_slot, ":next", "$current_town", slot_af26_protect_day),
+        (eq, ":next", 0),
+        (call_script, "script_af26_protect_blocked_town", "$current_town"),
+        (eq, reg0, 0),
+      ],
+      "做这座城镇的保护人（每周收保护费）",
+      [
+        (store_current_day, ":day"),
+        (store_add, ":next", ":day", 7),
+        (party_set_slot, "$current_town", slot_af26_protect_day, ":next"),
+        (display_message, "@从今天起，你是这座城镇的保护人。每周来收一次保护费，前提是附近没有匪帮出没。"),
+        (jump_to_menu, "mnu_town"),
+      ]),
+      ("af26_protect_collect",
+      [
+        (party_slot_eq, "$current_town", slot_party_type, spt_town),
+        (party_get_slot, ":next", "$current_town", slot_af26_protect_day),
+        (gt, ":next", 0),
+        (store_current_day, ":day"),
+        (ge, ":day", ":next"),
+      ],
+      "收本周的保护费",
+      [
+        (call_script, "script_af26_protect_collect", "$current_town"),
+        (assign, reg10, reg0),
+        (assign, reg11, reg1),
+        (try_begin),
+          (gt, reg10, 0),
+          (display_message, "@你收到了本周的保护费 {reg10} 第纳尔。"),
+        (else_try),
+          (eq, reg11, 1),
+          (display_message, "@附近还有匪帮出没，这周收不到保护费，城镇对你的好感也降了 2 点。"),
+        (else_try),
+          (display_message, "@镇上金库空了，这周收不到保护费。"),
+        (try_end),
+        (jump_to_menu, "mnu_town"),
+      ]),
+      ("af26_found_caravan",
+       [(party_slot_eq, "$current_town", slot_party_type, spt_town),
+        (eq, "$players_kingdom", 0),
+        (call_script, "script_af26_count_caravans"),
+        (lt, reg0, 36),
+        (store_troop_gold, ":gold", "trp_player"),
+        (ge, ":gold", 3000)],
+       "出资组建一支商队（3000 第纳尔，名下已有 {reg0} 支，上限 36 支）",
+       [(troop_remove_gold, "trp_player", 3000),
+        (call_script, "script_af26_found_caravan", "$current_town"),
+        (assign, ":caravan", reg0),
+        (try_begin),
+          (ge, ":caravan", 0),
+          (party_get_slot, ":wealth", "$current_town", slot_town_wealth),
+          (val_add, ":wealth", 2400),
+          (party_set_slot, "$current_town", slot_town_wealth, ":wealth"),
+          (display_message, "@商队已经组建，六百第纳尔进了商队钱箱，两千四进了本镇金库。"),
+        (else_try),
+          (troop_add_gold, "trp_player", 3000),
+          (display_message, "@商队组建失败，钱已退回。"),
+        (try_end),
+        (jump_to_menu, "mnu_town")]),
+      ("af26_caravan_collect",
+       [(party_slot_eq, "$current_town", slot_party_type, spt_town),
+        (call_script, "script_af26_town_caravan", "$current_town"),
+        (gt, reg0, 0)],
+       "结算名下商队（钱箱超 600 的部分归你）",
+       [(call_script, "script_af26_town_caravan", "$current_town"),
+        (call_script, "script_af26_caravan_collect", reg0),
+        (assign, reg10, reg0),
+        (try_begin),
+          (gt, reg10, 0),
+          (display_message, "@你从商队钱箱里结算了 {reg10} 第纳尔，钱箱里留了六百作周转。"),
+        (else_try),
+          (display_message, "@商队钱箱里没有可结算的余钱。"),
+        (try_end),
+        (jump_to_menu, "mnu_town")]),
 
       ("town_center",
       [                        
@@ -14959,41 +15099,38 @@ game_menus = [
 
   # Ashfall v0.1: read-only local status and three paid recovery options.
   ("af01_village_status", 0,
-   "{s10}·地方局势^^战乱度：{reg60}/100（{s11}）^"
-   "你与村民的关系：{reg61}^繁荣度：{reg62}/100^村中存银：{reg66}第纳尔（攒过3500后，每3000会投进村里，繁荣+1）^"
-   "近期事件：{s12}^援助状态：{s13}^^"
-   "从该村庄出发的流民队：{reg64}，逃兵队：{reg65}。^"
-   "战争造成长期动荡；村庄关系和繁荣度仍使用原版数据。^"
-   "所有援助在登记时消耗资源，下一游戏日结算，同村庄共用七天冷却。",
+   "{s10}。^^眼下村里{s11}。村民们对你{s14}。村子{s15}，村里存银 {reg66} 第纳尔。^"
+   "最近：{s12}。^援助：{s13}。^"
+   "村里有人逃了出去：流民 {reg64} 支，逃兵 {reg65} 支。",  # v1.0 NPC对白 A-1: 正文写成句子, 数字先分档写词
    "none",
    [(call_script, "script_af01_prepare_status", "$current_town"),
     (call_script, "script_af02_prepare_status", "$current_town")],
    [
-     ("af01_relief", [], "出资救济（600第纳尔进村里钱袋；战乱-3、关系+4、繁荣+1）",
+     ("af01_relief", [], "拿出 600 第纳尔救济村子",  # v1.0 NPC对白 A-2: 选项只写动作和代价
       [(call_script, "script_af01_begin_aid", "$current_town", 1),
        (try_begin),
          (eq, reg0, 1),
-         (display_message, "@已安排资金救济，次日完成；费用已支付。"),
+         (display_message, "@钱已经送过去了，明天就能到村里。"),  # v1.0 NPC对白 A-13
        (else_try),
          (call_script, "script_af01_prepare_aid_error"),
          (display_message, "@{s31}"),
        (try_end),
        (jump_to_menu, "mnu_af01_village_status")]),
-     ("af01_patrol", [], "组织巡防（200第纳尔、20名士兵；战乱-12、关系+1）",
+     ("af01_patrol", [], "派 20 名士兵巡防（200 第纳尔）",  # v1.0 NPC对白 A-2
       [(call_script, "script_af01_begin_aid", "$current_town", 2),
        (try_begin),
          (eq, reg0, 1),
-         (display_message, "@已安排地方巡防，次日完成；费用已支付。"),
+         (display_message, "@巡防的人明天就到村里。"),  # v1.0 NPC对白 A-13
        (else_try),
          (call_script, "script_af01_prepare_aid_error"),
          (display_message, "@{s31}"),
        (try_end),
        (jump_to_menu, "mnu_af01_village_status")]),
-     ("af01_grain", [], "运送赈灾粮（6份谷物；战乱-5、关系+2、繁荣+3）",
+     ("af01_grain", [], "送 6 袋谷物赈灾",  # v1.0 NPC对白 A-2
       [(call_script, "script_af01_begin_aid", "$current_town", 3),
        (try_begin),
          (eq, reg0, 1),
-         (display_message, "@已交付粮食，次日完成赈灾结算。"),
+         (display_message, "@粮食已经送过去了，明天就能发到村民手里。"),  # v1.0 NPC对白 A-13
        (else_try),
          (call_script, "script_af01_prepare_aid_error"),
          (display_message, "@{s31}"),
@@ -15047,12 +15184,13 @@ game_menus = [
      ("af02_refugee_help",
       [(party_slot_eq, "$g_encountered_party", slot_af02_helped, 0),
        (store_troop_gold, ":money", "trp_player"), (ge, ":money", 150)],
-      "给予150第纳尔作为路费（家乡战乱-2，村庄关系+1）",
+      "给他们 150 第纳尔路费",  # v1.0 NPC对白 A-3: 选项只写动作和代价
       [(troop_remove_gold, "trp_player", 150),
        (party_set_slot, "$g_encountered_party", slot_af02_helped, 1),
        (party_get_slot, ":home", "$g_encountered_party", slot_af02_source),
        (call_script, "script_af01_change_unrest", ":home", -2),
        (call_script, "script_change_player_relation_with_center", ":home", 1),
+       (call_script, "script_change_player_honor", 1),
        (display_message, "@流民收到了路费，仍将继续前往安全城镇。"),
        (leave_encounter), (change_screen_return)]),
      ("af02_refugee_recruit",
@@ -15090,7 +15228,7 @@ game_menus = [
        (assign, ":limit", reg0),
        (store_party_size_wo_prisoners, ":members", "p_main_party"),
        (store_sub, ":space", ":limit", ":members"), (ge, ":space", 6)],
-      "支付600第纳尔招安六名士兵（统御≥2，家乡战乱-6）",
+      "花 600 第纳尔招安六名士兵",  # v1.0 NPC对白 A-3
       [(troop_remove_gold, "trp_player", 600),
        (party_get_slot, ":troop", "$g_encountered_party", slot_af02_origin_troop),
        (party_add_members, "p_main_party", ":troop", 6),
@@ -15105,12 +15243,13 @@ game_menus = [
        (try_end),
        (party_set_slot, ":home", slot_af02_deserter_party, 0),
        (call_script, "script_af01_change_unrest", ":home", -6),
+       (call_script, "script_change_player_honor", 1),
        (remove_party, "$g_encountered_party"),
        (display_message, "@六名逃兵接受招安，其余逃兵就地遣散。"),
        (leave_encounter), (change_screen_return)]),
      ("af02_deserter_bribe",
       [(store_troop_gold, ":money", "trp_player"), (ge, ":money", 250)],
-      "支付250第纳尔使这伙逃兵解散（家乡战乱-2）",
+      "花 250 第纳尔打发这伙逃兵",  # v1.0 NPC对白 A-3
       [(troop_remove_gold, "trp_player", 250),
        (party_get_slot, ":home", "$g_encountered_party", slot_af02_source),
        (party_set_slot, ":home", slot_af02_deserter_party, 0),
@@ -15126,12 +15265,7 @@ game_menus = [
 
   # Ashfall v0.3: wartime contractor's office at any non-besieged, friendly kingdom town.
   ("af03_contract_board", 0,
-   "\u6218\u4e89\u627f\u5305\u5546\u00b7\u519b\u7cae\u59d4\u6258^^\u5f53\u524d\u5408\u540c\uff1a{s20}^\u59d4\u6258\u57ce\u9547\uff1a{s21}^\u76ee\u6807\u5730\u70b9\uff1a{s22}^"
-   "\u7b7e\u7ea6\u9635\u8425\uff1a{s25}^\u519b\u7cae\u8def\u7ebf\uff1a{s24} -> {s22}^"
-   "\u8fdb\u5ea6\uff1a{s23}^\u7ea6\u5b9a\u62a5\u916c\uff1a{reg70}\u7b2c\u7eb3\u5c14^\u5269\u4f59\u5929\u6570\uff1a{reg71}^"
-   "\u62a4\u9001\u8bb0\u5f55\uff1a{reg74}\u6b21\u516d\u5c0f\u65f6\u5de1\u903b\u68c0\u67e5^^"
-   "\u4f60\u6700\u591a\u540c\u65f6\u7b7e\u8ba2\u4e00\u4efd\u5408\u540c\u3002\u62a4\u9001\u9700\u8981\u6301\u7eed\u8ddf\u968f\u8fd0\u8f93\u961f\u5e76\u5728\u62b5\u8fbe\u65f6\u5728\u573a\uff1b"
-   "\u622a\u7cae\u5fc5\u987b\u5b9e\u9645\u53c2\u4e0e\u6467\u6bc1\u76ee\u6807\u961f\u4f0d\u3002\u7ed3\u7b97\u9700\u8981\u8fd4\u56de\u59d4\u6258\u57ce\u9547\u3002",
+   "军需官摊开账本：'{s26}'^^进度：{s23}，已巡逻 {reg74} 次。",  # v1.0 NPC对白 A-7: 正文是军需官一句话, 概况句由 af03_prepare_contract 拼进 s26
    "none", [(call_script, "script_af14_collect_debt", "$current_town"), (call_script, "script_af03_prepare_contract")],
    [
      ("af03_no_funds",
@@ -15144,19 +15278,37 @@ game_menus = [
        (jump_to_menu, "mnu_af03_contract_board")]),
      ("af03_take_escort",
       [(call_script, "script_af03_can_accept", 1, "$current_town"), (eq, reg0, 1)],
-      "\u63a5\u53d6\u62a4\u9001\u519b\u7cae\u59d4\u6258\uff08\u81f3\u5c1115\u540d\u58eb\u5175\uff1b\u671f\u965012\u5929\uff09",
+      "接护送军粮的委托",  # v1.0 NPC对白 A-7,
       [(call_script, "script_af03_accept_contract", 1, "$current_town"),
        (try_begin), (eq, reg0, 1),
-         (display_message, "@\u62a4\u9001\u5408\u540c\u5df2\u751f\u6548\uff1a\u519b\u7cae\u961f\u4ece\u672c\u57ce\u51fa\u53d1\uff0c\u8bf7\u5728\u8def\u9014\u4e2d\u4fdd\u62a4\u5b83\u3002"),
-       (else_try), (display_message, "@\u7b7e\u7ea6\u5931\u8d25\uff1a\u6761\u4ef6\u53d1\u751f\u53d8\u5316\u6216\u5730\u56fe\u8fd0\u8f93\u961f\u5df2\u8fbe\u4e0a\u9650\u3002"), (try_end),
+         (display_message, "@合同签了。军粮队从本城出发，路上就交给你了。"),  # v1.0 NPC对白 A-13
+       (else_try), (eq, reg1, 1), (display_message, "@路上的运输队已经够多了。"),
+       (else_try), (eq, reg1, 2), (display_message, "@情况变了，这单接不了。"),
+       (else_try), (display_message, "@这单眼下接不了。"), (try_end),  # v1.0 NPC对白 A-12: 失败只报真正的原因, 原因号见 af03_accept_contract
        (jump_to_menu, "mnu_af03_contract_board")]),
      ("af03_take_intercept",
       [(call_script, "script_af03_can_accept", 2, "$current_town"), (eq, reg0, 1)],
-      "\u63a5\u53d6\u622a\u65ad\u654c\u519b\u8865\u7ed9\u59d4\u6258\uff08\u671f\u965012\u5929\uff09",
+      "接截断敌军补给的委托",  # v1.0 NPC对白 A-7,
       [(call_script, "script_af03_accept_contract", 2, "$current_town"),
        (try_begin), (eq, reg0, 1),
-         (display_message, "@\u622a\u7cae\u5408\u540c\u5df2\u751f\u6548\uff1a\u654c\u519b\u7cae\u961f\u5df2\u7ecf\u51fa\u53d1\u3002\u653b\u51fb\u8be5\u76ee\u6807\u5e76\u593a\u56de\u59d4\u6258\u57ce\u9547\u9886\u5956\u3002"),
-       (else_try), (display_message, "@\u7b7e\u7ea6\u5931\u8d25\uff1a\u4e0d\u5b58\u5728\u6709\u6548\u654c\u65b9\u8865\u7ed9\u8def\u7ebf\u6216\u8fd0\u8f93\u961f\u5df2\u8fbe\u4e0a\u9650\u3002"), (try_end),
+         (display_message, "@合同签了。敌军粮队已经出发，截下来，回来领赏。"),  # v1.0 NPC对白 A-13
+       (else_try), (eq, reg1, 1), (display_message, "@路上的运输队已经够多了。"),
+       (else_try), (eq, reg1, 2), (display_message, "@眼下没有能截的敌军补给线。"),
+       (else_try), (display_message, "@这单眼下接不了。"), (try_end),  # v1.0 NPC对白 A-12
+       (jump_to_menu, "mnu_af03_contract_board")]),
+     ("af26_license",
+      [(troop_get_slot, ":renown", "trp_player", slot_troop_renown),
+       (ge, ":renown", 100),
+       (party_slot_eq, "p_main_party", slot_af26_license, 0),
+       (store_troop_gold, ":gold", "trp_player"),
+       (ge, ":gold", 5000)],
+      "花 5000 第纳尔，注册佣兵团执照（以后接委托报酬翻倍）",
+      [(troop_remove_gold, "trp_player", 5000),
+       (party_get_slot, ":wealth", "$current_town", slot_town_wealth),
+       (val_add, ":wealth", 5000),
+       (party_set_slot, "$current_town", slot_town_wealth, ":wealth"),
+       (party_set_slot, "p_main_party", slot_af26_license, 1),
+       (display_message, "@你注册了佣兵团执照。以后接军事委托，报酬翻倍；和平时期也能接护送委托。"),
        (jump_to_menu, "mnu_af03_contract_board")]),
      ("af03_settle",
       [(party_get_slot, ":issuer", "p_main_party", slot_af03_contract_issuer),
@@ -15168,7 +15320,8 @@ game_menus = [
        (try_begin), (eq, reg0, 1), (eq, reg42, 0), (display_message, "@军事委托已结算：领取报酬{reg41}第纳尔。"),
        (else_try), (eq, reg0, 1), (display_message, "@城里只凑出了{reg41}第纳尔，还欠你{reg42}。下次来委托处再结。"),
        (else_try), (eq, reg0, 2), (display_message, "@\u519b\u4e8b\u59d4\u6258\u5df2\u767b\u8bb0\u5931\u8d25\uff0c\u6ca1\u6709\u652f\u4ed8\u62a5\u916c\u3002"),
-       (else_try), (display_message, "@\u5f53\u524d\u6ca1\u6709\u53ef\u7ed3\u7b97\u7684\u59d4\u6258\u3002"), (try_end),
+       (else_try), (display_message, "@眼下没有能领的酬金。"), (try_end),  # v1.0 NPC对白 A-13
+       (try_begin), (eq, reg0, 1), (display_message, "@办完这单委托，战功+2。"), (try_end),
        (jump_to_menu, "mnu_af03_contract_board")]),
      ("af03_office_to_journal", [], "\u67e5\u770b\u5f53\u524d\u59d4\u6258\u8bf4\u660e", [(jump_to_menu, "mnu_af03_journal")]),
      ("af03_office_back", [], "\u8fd4\u56de\u57ce\u9547", [(jump_to_menu, "mnu_town")]),
@@ -15233,10 +15386,7 @@ game_menus = [
 
   # Ashfall v0.4: actual gang encounters; no separate NPC dialogue or new scene needed.
   ("af04_gang", 0,
-   "你遭遇了{s10}。^^这支团伙的势力范围是{s11}附近。专长：{s12}。^"
-   "与该团伙的交情：{reg90}；当前协议还剩{reg91}天。^"
-   "已收买的军粮袭击委托：{reg92}（1为正在进行）。^^"
-   "你可以与其交易、通过谈判招安，也可以选择战斗。匪帮可能袭扰经过附近的真实军粮队。",
+   "{s13}他们在{s11}一带活动，专长是{s12}。",  # v1.0 NPC对白 A-4: 正文是头目开场白 (s13, 见 af04_prepare_gang) + 一句活动范围
    "none", [(call_script, "script_af04_prepare_gang", "$g_encountered_party")],
    [
      ("af04_pay_treaty",
@@ -15248,26 +15398,49 @@ game_menus = [
        (call_script, "script_af23_protection_price", ":kind"),
        (assign, reg42, reg0),
        (store_troop_gold, ":gold", "trp_player"), (ge, ":gold", reg42)],
-      "支付{reg42}第纳尔，签订11天互不侵扰协议（团伙交情+10）",
+      "付 {reg42} 第纳尔，签 11 天互不侵扰的协议",  # v1.0 NPC对白 A-4: 选项只写动作和代价
       [(party_get_slot, ":kind", "$g_encountered_party", slot_af04_kind),
        (call_script, "script_af04_buy_protection", ":kind"),
        (try_begin), (eq, reg0, 1), (display_message, "@团伙接受了保护费，短期内承诺不针对你的护送队。"),
-       (else_try), (display_message, "@协议未生效：金币不足或当前协议尚未到期。"), (try_end),
+       (else_try), (eq, reg1, 1), (display_message, "@你手头的钱不够签这份协议。"),  # v1.0 NPC对白 A-12: 失败只报真正的原因
+       (else_try), (eq, reg1, 2), (display_message, "@这会儿签不了，上一份协议还没到期。"),
+       (try_end),
+       (jump_to_menu, "mnu_af04_gang")]),
+     ("af04_join",
+      [(party_get_slot, ":kind", "$g_encountered_party", slot_af04_kind),
+       (call_script, "script_af04_main_slot", slot_af04_relation_start, ":kind"),
+       (party_get_slot, ":trust", "p_main_party", reg0), (ge, ":trust", 30),
+       (party_slot_eq, "p_main_party", slot_af23_joined_gang, 0),
+       # v1.0 领主关系与独立玩法·第二波 I5: 已是该帮老巢市场镇的保护人时，不能入伙（反向互斥）。
+       (call_script, "script_af26_protect_conflict_kind", ":kind"),
+       (eq, reg0, 0),
+       (store_troop_gold, ":gold", "trp_player"), (ge, ":gold", 500)],
+      "交 500 第纳尔投名状，入伙",  # v1.0 匪帮第一批 G1: 信任 ≥ 30 才能入伙，一次只入一家
+      [(party_get_slot, ":kind", "$g_encountered_party", slot_af04_kind),
+       (troop_remove_gold, "trp_player", 500),
+       (call_script, "script_af15_gang_purse", ":kind", 500),
+       (party_set_slot, "p_main_party", slot_af23_joined_gang, ":kind"),
+       (display_message, "@你交了投名状，从今往后就是这伙人的一员了。"),
        (jump_to_menu, "mnu_af04_gang")]),
      ("af04_hire_raid",
       [(party_get_slot, ":kind", "$g_encountered_party", slot_af04_kind),
        (call_script, "script_af04_main_slot", slot_af04_relation_start, ":kind"),
        (party_get_slot, ":trust", "p_main_party", reg0), (ge, ":trust", 8),
+       # v1.0 匪帮第一批 G2: 二当家（信任 ≥ 80）袭扰不限距离，全图找敌国军粮队。
+       (assign, ":max_dist", 55),
+       (try_begin), (ge, ":trust", 80), (assign, ":max_dist", 10000), (try_end),
        (party_slot_eq, "$g_encountered_party", slot_af04_order_target, 0),
        (call_script, "script_af04_main_slot", slot_af04_service_start, ":kind"),
        (party_get_slot, ":last", "p_main_party", reg0),
        (store_current_day, ":day"), (val_add, ":day", 1), (store_sub, ":gap", ":day", ":last"), (ge, ":gap", 7),
        (store_troop_gold, ":gold", "trp_player"), (ge, ":gold", 850),
-       (call_script, "script_af04_find_target", "$g_encountered_party"), (gt, reg0, 0)],
-      "支付850第纳尔，委托袭扰附近敌国军粮队（8天内执行）",
+       (call_script, "script_af04_find_target", "$g_encountered_party", ":max_dist"), (gt, reg0, 0)],
+      "花 850 第纳尔，请他们袭扰一支敌国军粮队",  # v1.0 NPC对白 A-4
       [(call_script, "script_af04_commission_raid", "$g_encountered_party"),
        (try_begin), (eq, reg0, 1), (display_message, "@匪帮已收到钱财，正在追踪敌国军粮队。"),
-       (else_try), (display_message, "@未能接单：没有敌国军粮队或条件发生变化。"), (try_end),
+       (else_try), (eq, reg1, 1), (display_message, "@附近没有能袭扰的敌国军粮队。"),  # v1.0 NPC对白 A-12
+       (else_try), (display_message, "@情况变了，这单接不了。"),
+       (try_end),
        (jump_to_menu, "mnu_af04_gang")]),
      ("af04_buy_grain",
       [(party_slot_eq, "$g_encountered_party", slot_af04_kind, 3),
@@ -15275,25 +15448,64 @@ game_menus = [
        (party_get_slot, ":last", "p_main_party", slot_af04_last_grain_deal),
        (store_sub, ":gap", ":day", ":last"), (ge, ":gap", 3),
        (store_troop_gold, ":gold", "trp_player"), (ge, ":gold", 360)],
-      "从盐鸦商路黑市购买两袋谷物（360第纳尔，3天限购一次）",
+      "从盐鸦商路黑市买两袋谷物（360 第纳尔）",  # v1.0 NPC对白 A-4
       [(call_script, "script_af04_buy_grain"),
        (try_begin), (eq, reg0, 1), (display_message, "@你从走私商人手里买到了两袋谷物。"),
-       (else_try), (display_message, "@交易失败：空间不足、金币不足或冷却尚未结束。"), (try_end),
+       (else_try), (eq, reg1, 1), (display_message, "@黑市三天只做一笔买卖，下次再来。"),  # v1.0 NPC对白 A-12
+       (else_try), (eq, reg1, 2), (display_message, "@你手头的钱不够。"),
+       (else_try), (display_message, "@行囊已满，得先腾出两个空位。"),
+       (try_end),
        (jump_to_menu, "mnu_af04_gang")]),
      ("af04_hire_men",
       [(party_slot_eq, "$g_encountered_party", slot_af04_kind, 2),
+       (call_script, "script_af04_main_slot", slot_af04_relation_start, 2),
+       (party_get_slot, ":trust", "p_main_party", reg0),
+       # v1.0 匪帮第一批 G2: 心腹（信任 ≥ 50）雇散兵 650 → 500，人数 5 → 7。
+       (assign, reg44, 650),
+       (assign, reg45, 5),
+       (try_begin), (ge, ":trust", 50), (assign, reg44, 500), (assign, reg45, 7), (try_end),
        (call_script, "script_af04_main_slot", slot_af04_service_start, 2),
        (party_get_slot, ":last", "p_main_party", reg0),
        (store_current_day, ":day"), (val_add, ":day", 1),
        (store_sub, ":gap", ":day", ":last"), (ge, ":gap", 7),
-       (store_troop_gold, ":gold", "trp_player"), (ge, ":gold", 650),
+       (store_troop_gold, ":gold", "trp_player"), (ge, ":gold", reg44),
        (call_script, "script_game_get_party_companion_limit"),
        (assign, ":limit", reg0), (store_party_size_wo_prisoners, ":size", "p_main_party"),
-       (store_sub, ":space", ":limit", ":size"), (ge, ":space", 5)],
-      "从灰狼团招募5名散兵（650第纳尔，7天冷却）",
+       (store_sub, ":space", ":limit", ":size"), (ge, ":space", reg45)],
+      "从灰狼团招 {reg45} 名散兵（{reg44} 第纳尔）",  # v1.0 NPC对白 A-4
       [(call_script, "script_af04_hire_deserters"),
-       (try_begin), (eq, reg0, 1), (display_message, "@三名雇佣剑士和两名守卫加入你的部队。"),
-       (else_try), (display_message, "@无法招募：金币、队伍空间或冷却不足。"), (try_end),
+       (try_begin), (eq, reg0, 1),
+         (try_begin), (eq, reg2, 7), (display_message, "@四名雇佣剑士和三名守卫加入你的部队。"),
+         (else_try), (display_message, "@三名雇佣剑士和两名守卫加入你的部队。"),
+         (try_end),
+       (else_try), (eq, reg1, 1), (display_message, "@这伙人七天只招一次，下次再来。"),  # v1.0 NPC对白 A-12
+       (else_try), (eq, reg1, 2), (display_message, "@你手头的钱不够。"),
+       (else_try), (display_message, "@队伍里没空位了。"),
+       (try_end),
+       (jump_to_menu, "mnu_af04_gang")]),
+     ("af04_invest_200",
+      [(store_troop_gold, ":gold", "trp_player"), (ge, ":gold", 200)],
+      "给这伙匪帮注资 200 第纳尔",  # v1.0 匪帮第一批 G9: 钱进钱袋，帮按已有规则招兵
+      [(party_get_slot, ":kind", "$g_encountered_party", slot_af04_kind),
+       (troop_remove_gold, "trp_player", 200),
+       (call_script, "script_af15_gang_purse", ":kind", 200),
+       (display_message, "@你给这伙匪帮注资 200 第纳尔，钱进了他们的钱袋。"),
+       (jump_to_menu, "mnu_af04_gang")]),
+     ("af04_invest_500",
+      [(store_troop_gold, ":gold", "trp_player"), (ge, ":gold", 500)],
+      "给这伙匪帮注资 500 第纳尔",  # v1.0 匪帮第一批 G9
+      [(party_get_slot, ":kind", "$g_encountered_party", slot_af04_kind),
+       (troop_remove_gold, "trp_player", 500),
+       (call_script, "script_af15_gang_purse", ":kind", 500),
+       (display_message, "@你给这伙匪帮注资 500 第纳尔，钱进了他们的钱袋。"),
+       (jump_to_menu, "mnu_af04_gang")]),
+     ("af04_invest_1000",
+      [(store_troop_gold, ":gold", "trp_player"), (ge, ":gold", 1000)],
+      "给这伙匪帮注资 1000 第纳尔",  # v1.0 匪帮第一批 G9
+      [(party_get_slot, ":kind", "$g_encountered_party", slot_af04_kind),
+       (troop_remove_gold, "trp_player", 1000),
+       (call_script, "script_af15_gang_purse", ":kind", 1000),
+       (display_message, "@你给这伙匪帮注资 1000 第纳尔，钱进了他们的钱袋。"),
        (jump_to_menu, "mnu_af04_gang")]),
      ("af04_amnesty",
       [(party_get_slot, ":kind", "$g_encountered_party", slot_af04_kind),
@@ -15303,14 +15515,37 @@ game_menus = [
        (call_script, "script_game_get_party_companion_limit"),
        (assign, ":limit", reg0), (store_party_size_wo_prisoners, ":size", "p_main_party"),
        (store_sub, ":room", ":limit", ":size"), (ge, ":room", 6)],
-      "赦免并招安匪帮（1200第纳尔；6名新兵；家乡战乱-12）",
+      "花 1200 第纳尔赦免他们，收 6 个人进队伍",  # v1.0 NPC对白 A-4
       [(call_script, "script_af04_amnesty", "$g_encountered_party"),
        (try_begin), (eq, reg0, 1),
          (display_message, "@招安成功。部分团伙成员加入你的队伍，首领暂时退出江湖。"),
          (leave_encounter), (change_screen_return),
-       (else_try), (display_message, "@招安失败：金币、信任或队伍空间不足。"),
+       (else_try), (eq, reg1, 1), (display_message, "@他们还信不过你。"),  # v1.0 NPC对白 A-12
+         (jump_to_menu, "mnu_af04_gang"),
+       (else_try), (eq, reg1, 2), (display_message, "@你手头的钱不够。"),
+         (jump_to_menu, "mnu_af04_gang"),
+       (else_try), (display_message, "@队伍里没空位了。"),
          (jump_to_menu, "mnu_af04_gang"), (try_end)]),
-     ("af04_attack", [], "剿灭这伙匪帮（进入正常野战）",
+     ("af27_warn",
+      [(party_get_slot, ":kind", "$g_encountered_party", slot_af04_kind),
+       (call_script, "script_af27_hunted_by", ":kind"),
+       (is_between, reg0, active_npcs_begin, active_npcs_end),
+       (assign, ":lord", reg0),
+       (store_current_day, ":day"), (val_add, ":day", 1),
+       (troop_get_slot, ":last", ":lord", slot_af27_hunt_day),
+       (store_sub, ":elapsed", ":day", ":last"),
+       (le, ":elapsed", 1)],
+      "向他们通风报信：有领主正带兵来剿你们",
+      [(party_get_slot, ":kind", "$g_encountered_party", slot_af04_kind),
+       (call_script, "script_af27_hunted_by", ":kind"),
+       (assign, ":lord", reg0),
+       (troop_get_slot, ":lord_party", ":lord", slot_troop_leaded_party),
+       (call_script, "script_af04_change_trust", ":kind", 5),
+       (party_set_ai_behavior, "$g_encountered_party", ai_bhvr_avoid_party),
+       (party_set_ai_object, "$g_encountered_party", ":lord_party"),
+       (display_message, "@你把领主追剿的消息告诉了他们，他们连夜转移了。"),
+       (jump_to_menu, "mnu_af04_gang")]),
+     ("af04_attack", [], "剿灭这伙匪帮",  # v1.0 NPC对白 A-4
       [(try_begin),
          # v1.0 第六批（六）：休战期内玩家主动攻打，算背约（打赢打输都算，
          # 所以在开战前就处理；匪帮先动手的不算）。
@@ -15325,51 +15560,99 @@ game_menus = [
 
   ("af04_network", 0,
    "地方匪帮与黑市情报^^"
-   "黑松帮·铁鬃：{s20}，交情{reg93}，保护协议剩{reg94}天。^"
-   "灰狼团·裂旗：{s21}，交情{reg95}，保护协议剩{reg96}天。^"
-   "盐鸦商路·盐鸦：{s22}，交情{reg97}，保护协议剩{reg98}天。^^"
-   "三支团伙会在各自文化区域的高战乱村庄周边形成势力。"
-   "交情是独立的地下交易记录，不会替代原版村庄关系。",
+   "黑松帮·铁鬃：交情是{s20}^"  # v1.0 NPC对白 A-5: 交情分三档写词, 协议句拼进同一行 (见 af04_prepare_network)
+   "灰狼团·裂旗：交情是{s21}^"
+   "盐鸦商路·盐鸦：交情是{s22}",
    "none", [(call_script, "script_af04_prepare_network")],
    [# v1.0 第六批（五）：资助匪帮——钱进该匪帮钱袋，Slot 889 记下这个匪帮。
     ("af23_back_gang_1",
      [(call_script, "script_af23_gang_live_party", 1),
-      (gt, reg0, 0)],
+      (gt, reg0, 0),
+      # v1.0 领主关系与独立玩法·第二波 I5: 已是该帮老巢市场镇的保护人时，不能资助该帮（反向互斥）。
+      (call_script, "script_af26_protect_conflict_kind", 1),
+      (eq, reg0, 0)],
      "资助黑松帮一笔钱（500 第纳尔）",
      [(call_script, "script_af23_back_gang", 1),
       (jump_to_menu, "mnu_af04_network")]),
     ("af23_back_gang_2",
      [(call_script, "script_af23_gang_live_party", 2),
-      (gt, reg0, 0)],
+      (gt, reg0, 0),
+      # v1.0 领主关系与独立玩法·第二波 I5: 已是该帮老巢市场镇的保护人时，不能资助该帮（反向互斥）。
+      (call_script, "script_af26_protect_conflict_kind", 2),
+      (eq, reg0, 0)],
      "资助灰狼团一笔钱（500 第纳尔）",
      [(call_script, "script_af23_back_gang", 2),
       (jump_to_menu, "mnu_af04_network")]),
     ("af23_back_gang_3",
      [(call_script, "script_af23_gang_live_party", 3),
-      (gt, reg0, 0)],
+      (gt, reg0, 0),
+      # v1.0 领主关系与独立玩法·第二波 I5: 已是该帮老巢市场镇的保护人时，不能资助该帮（反向互斥）。
+      (call_script, "script_af26_protect_conflict_kind", 3),
+      (eq, reg0, 0)],
      "资助盐鸦商路一笔钱（500 第纳尔）",
      [(call_script, "script_af23_back_gang", 3),
+      (jump_to_menu, "mnu_af04_network")]),
+    # v1.0 匪帮第一批 G7: 挑拨离间——400 进该帮钱袋，下次火并日改今天（下个每日结算就打）。
+    # 只有该帮 40 步内有别帮时才出现；火并结算按原有顺序找第一对在 40 步内的帮。
+    ("af23_provoke_gang_1",
+     [(call_script, "script_af23_gang_live_party", 1),
+      (gt, reg0, 0),
+      (call_script, "script_af23_gang_feud_pair_with", 1),
+      (eq, reg0, 1),
+      (store_troop_gold, ":gold", "trp_player"), (ge, ":gold", 400)],
+     "花 400 第纳尔，挑拨黑松帮去跟其他匪帮火并",
+     [(troop_remove_gold, "trp_player", 400),
+      (call_script, "script_af15_gang_purse", 1, 400),
+      (store_current_day, ":day"), (val_add, ":day", 1),
+      (party_set_slot, "p_main_party", slot_af23_feud_day, ":day"),
+      (display_message, "@你往黑松帮的钱袋里塞了 400 第纳尔，怂恿他们去找别帮的麻烦。火并一触即发。"),
+      (jump_to_menu, "mnu_af04_network")]),
+    ("af23_provoke_gang_2",
+     [(call_script, "script_af23_gang_live_party", 2),
+      (gt, reg0, 0),
+      (call_script, "script_af23_gang_feud_pair_with", 2),
+      (eq, reg0, 1),
+      (store_troop_gold, ":gold", "trp_player"), (ge, ":gold", 400)],
+     "花 400 第纳尔，挑拨灰狼团去跟其他匪帮火并",
+     [(troop_remove_gold, "trp_player", 400),
+      (call_script, "script_af15_gang_purse", 2, 400),
+      (store_current_day, ":day"), (val_add, ":day", 1),
+      (party_set_slot, "p_main_party", slot_af23_feud_day, ":day"),
+      (display_message, "@你往灰狼团的钱袋里塞了 400 第纳尔，怂恿他们去找别帮的麻烦。火并一触即发。"),
+      (jump_to_menu, "mnu_af04_network")]),
+    ("af23_provoke_gang_3",
+     [(call_script, "script_af23_gang_live_party", 3),
+      (gt, reg0, 0),
+      (call_script, "script_af23_gang_feud_pair_with", 3),
+      (eq, reg0, 1),
+      (store_troop_gold, ":gold", "trp_player"), (ge, ":gold", 400)],
+     "花 400 第纳尔，挑拨盐鸦商路去跟其他匪帮火并",
+     [(troop_remove_gold, "trp_player", 400),
+      (call_script, "script_af15_gang_purse", 3, 400),
+      (store_current_day, ":day"), (val_add, ":day", 1),
+      (party_set_slot, "p_main_party", slot_af23_feud_day, ":day"),
+      (display_message, "@你往盐鸦商路的钱袋里塞了 400 第纳尔，怂恿他们去找别帮的麻烦。火并一触即发。"),
       (jump_to_menu, "mnu_af04_network")]),
     ("af04_network_back", [], "返回营地", [(jump_to_menu, "mnu_camp")])]),
 
   ("af04_debug", 0,
    "v0.4 土匪江湖测试^^可以尝试生成三支独立匪帮，手动推进一次每日匪帮逻辑。"
-   "若对应地区的村庄战乱不足35，生成会失败。",
+   "战乱不足 35 时也会在战乱最高的村庄强制生成（保底）。",
    "none", [],
    [("af04_debug_spawn_black", [(ge, "$cheat_mode", 1)], "尝试生成黑松帮",
       [(call_script, "script_af04_spawn_gang", 1),
        (try_begin), (gt, reg0, 0), (display_message, "@黑松帮已在地图出现。"),
-       (else_try), (display_message, "@黑松帮未生成：已存在，或无高战乱村庄。"), (try_end),
+       (else_try), (display_message, "@黑松帮未生成：已存在。"), (try_end),
        (jump_to_menu, "mnu_af04_debug")]),
     ("af04_debug_spawn_wolf", [(ge, "$cheat_mode", 1)], "尝试生成灰狼团",
       [(call_script, "script_af04_spawn_gang", 2),
        (try_begin), (gt, reg0, 0), (display_message, "@灰狼团已在地图出现。"),
-       (else_try), (display_message, "@灰狼团未生成：已存在，或无高战乱村庄。"), (try_end),
+       (else_try), (display_message, "@灰狼团未生成：已存在。"), (try_end),
        (jump_to_menu, "mnu_af04_debug")]),
     ("af04_debug_spawn_raven", [(ge, "$cheat_mode", 1)], "尝试生成盐鸦商路",
       [(call_script, "script_af04_spawn_gang", 3),
        (try_begin), (gt, reg0, 0), (display_message, "@盐鸦商路已在地图出现。"),
-       (else_try), (display_message, "@盐鸦商路未生成：已存在，或无高战乱村庄。"), (try_end),
+       (else_try), (display_message, "@盐鸦商路未生成：已存在。"), (try_end),
        (jump_to_menu, "mnu_af04_debug")]),
     ("af04_debug_war", [(ge, "$cheat_mode", 1)], "提高最近村庄战乱至至少70（用于测试生成）",
       [(call_script, "script_af01_find_nearest_village"),
@@ -15388,16 +15671,12 @@ game_menus = [
 
   # Player sees the consequences, not secret conspirators until evidence was uncovered.
   ("af05_ledger", 0,
-   "战争与宫廷 · 秘密军粮案卷^^"
-   "当前存在尚未结案的真实袭扰线索：{reg80}（1为存在）。^"
-   "涉及的军粮目的地：{s41}。^"
-   "已查明幕后资助者：{s40}；证据：{reg81}（1为掌握）。^"
-   "再次调查需等待：{reg82}天。^^"
-   "只有王国封臣可以侦查并向本国国王举报。嫌疑人身份不会在未侦查前公开。",
+   "{s42}",  # v1.0 NPC对白 A-6: 案卷正文按案子状态拼进 s42 (见 af05_prepare_ledger)
    "none", [(call_script, "script_af05_prepare_ledger")],
    [
      ("af05_ledger_investigate",
-      [(eq, "$player_has_homage", 1),
+      [(this_or_next|eq, "$player_has_homage", 1),
+       (eq, "$players_kingdom", "fac_player_supporters_faction"),
        (call_script, "script_af05_find_case"),
        (is_between, reg0, active_npcs_begin, active_npcs_end),
        (troop_get_slot, ":hit", reg0, slot_af05_last_hit_token),
@@ -15408,15 +15687,17 @@ game_menus = [
        (store_current_day, ":day"), (val_add, ":day", 1),
        (store_sub, ":elapsed", ":day", ":last"),
        (this_or_next|eq, ":last", 0), (ge, ":elapsed", 4)],
-      "支付350第纳尔，派密探追查最近的军粮遇袭事件（75%成功，4天冷却）",
+      "花 350 第纳尔，派密探追查最近的军粮遇袭事件",  # v1.0 NPC对白 A-6: 选项只写动作和代价
       [(call_script, "script_af05_investigate"),
        (try_begin), (eq, reg0, 1),
          (str_store_troop_name, s50, reg1),
          (display_message, "@密探找到了{s50}资助匪帮的证据。"),
        (else_try), (eq, reg0, -1),
          (display_message, "@调查未能找到可信证据，密探的费用已经支付。"),
+       (else_try), (eq, reg2, 2),
+         (display_message, "@密探四天才能查一次，再等等。"),  # v1.0 NPC对白 A-12: 失败只报真正的原因
        (else_try),
-         (display_message, "@当前没有可调查案件，或调查仍处于冷却中。"),
+         (display_message, "@眼下没有能查的案子。"),
        (try_end), (jump_to_menu, "mnu_af05_ledger")]),
      ("af05_ledger_report",
       [(call_script, "script_af05_find_proven_case"),
@@ -15424,7 +15705,7 @@ game_menus = [
        (troop_get_slot, ":last", reg0, slot_fb74_last_exposure_day),
        (store_current_day, ":day"), (store_sub, ":elapsed", ":day", ":last"),
        (this_or_next|eq, ":last", 0), (ge, ":elapsed", 7)],
-      "派遣密使将证据呈交国王（得罪幕后领主，王室关系+3）",
+      "把证据呈交给国王",  # v1.0 NPC对白 A-6
       [(call_script, "script_af05_deliver_report"),
        (try_begin), (eq, reg0, 1), (display_message, "@王室已受理袭扰证据，对涉事领主展开追责。"),
        (else_try), (display_message, "@举报未被受理：可能在王室调查冷却期内。"), (try_end),
@@ -15432,7 +15713,7 @@ game_menus = [
      ("af05_ledger_silence",
       [(call_script, "script_af05_find_proven_case"),
        (is_between, reg0, active_npcs_begin, active_npcs_end)],
-      "以证据勒索资助者，收取650第纳尔封口费（自身政治嫌疑+18，荣誉-5）",
+      "拿证据勒索资助者，收 650 第纳尔封口费",  # v1.0 NPC对白 A-6
       [(call_script, "script_af05_silence_case"),
        (try_begin), (eq, reg0, 1), (display_message, "@幕后资助者支付了封口费；这件事也让你的政治名声更加危险。"),
        (else_try), (eq, reg0, 2), (display_message, "@资助者手头拮据，眼下拿不出这笔封口费。"),
@@ -15459,27 +15740,25 @@ game_menus = [
 
   # Ashfall v0.6 siege operations: only accessible via active personal siege.
   ("af06_siege_ops", 0,
-   "{s40}·围城暗战^^粮仓情报：{s41}^"
-   "侦察情报有效：{reg84?是:否}；粮仓破坏冷却剩 {reg85} 天；策反冷却剩 {reg86} 天。^^"
-   "秘密行动仅能由亲自围城的玩家执行；侦察会提高后两项成功率。",
+   "{s42}",  # v1.0 NPC对白 A-8: 围城正文按侦察状态拼进 s42 (见 af06_prepare_siege)
    "none", [(call_script, "script_af06_prepare_siege", "$g_encountered_party")],
    [
-     ("af06_scout_action", [], "派斥候勘察敌军粮仓（150第纳尔，5天内提高成功率）",
+     ("af06_scout_action", [], "派斥候勘察敌军粮仓（150 第纳尔）",  # v1.0 NPC对白 A-8
       [(call_script, "script_af06_scout", "$g_encountered_party"),
        (try_begin), (eq, reg(0), 1), (display_message, "@斥候已经查明守军粮食与防备漏洞。"),
        (else_try), (display_message, "@侦察不可执行：需要150第纳尔，或侦察仍在冷却。"), (try_end),
        (jump_to_menu, "mnu_af06_siege_ops")]),
-     ("af06_sabotage_action", [], "派间谍焚毁敌军粮仓（800第纳尔；40%或65%成功率）",
+     ("af06_sabotage_action", [], "派间谍焚毁敌军粮仓（800 第纳尔）",  # v1.0 NPC对白 A-8
       [(call_script, "script_af06_sabotage", "$g_encountered_party"),
        (assign, ":valid", reg(0)), (assign, ":won", reg(1)), (assign, reg(96), reg(2)),
-       (try_begin), (eq, ":valid", 0), (display_message, "@无法发起破坏：费用不足、粮仓已空或七天冷却未结束。"),
+       (try_begin), (eq, ":valid", 0), (display_message, "@无法发起破坏：费用不足、粮仓已空或两天冷却未结束。"),
        (else_try), (eq, ":won", 1), (display_message, "@破坏成功，敌军损失了{reg96}单位真实粮食储备！"),
        (else_try), (display_message, "@破坏失败，间谍行动耗费的资金已经损失。"), (try_end),
        (jump_to_menu, "mnu_af06_siege_ops")]),
-     ("af06_bribe_action", [], "策反敌军守备士卒（1400第纳尔；有侦察则更易成功）",
+     ("af06_bribe_action", [], "策反敌军守备士卒（1400 第纳尔）",  # v1.0 NPC对白 A-8
       [(call_script, "script_af06_bribe", "$g_encountered_party"),
        (assign, ":valid", reg(0)), (assign, reg(96), reg(1)),
-       (try_begin), (eq, ":valid", 0), (display_message, "@无法策反：资金不足、守军太少或十二天冷却未结束。"),
+       (try_begin), (eq, ":valid", 0), (display_message, "@无法策反：资金不足、守军太少或三天冷却未结束。"),
        (else_try), (gt, reg(96), 0), (display_message, "@收买成功，守军已有{reg96}名士兵逃离城防。"),
        (else_try), (display_message, "@收买行动失败，资金已经损失。"), (try_end),
        (jump_to_menu, "mnu_af06_siege_ops")]),
@@ -15487,18 +15766,15 @@ game_menus = [
    ]),
 
   ("af06_recovery", 0,
-   "{s40}·战后治理^^目前恢复程度：{reg90}/100。^繁荣度：{reg91}；粮食库存：{reg92}。^"
-   "距最近一次王国更替：{reg93}天；本地重建冷却：{reg94}天。^^"
-   "只对真实经历王国更替的城池开放重建；旧存档未发生战乱的城池视为恢复完成。^"
-   "重建会提升城池恢复与原版繁荣度，并降低其附属村庄的战乱度。",
+   "{s42}",  # v1.0 NPC对白 A-8: 战后治理正文按恢复/繁荣分档拼进 s42 (见 af06_prepare_recovery)
    "none", [(call_script, "script_af06_prepare_recovery", "$current_town")],
    [
-     ("af06_invest_action", [], "投资修复城防与市集（1000第纳尔；恢复+20）",
+     ("af06_invest_action", [], "投资修复城防与市集（1000 第纳尔）",  # v1.0 NPC对白 A-8
       [(call_script, "script_af06_rebuild", "$current_town", 1),
        (try_begin), (eq, reg(0), 1), (display_message, "@重建已完成，城池经济和附属村庄的局势得到改善。"),
        (else_try), (display_message, "@重建无法进行：不是战后恢复期、资金不足或冷却未结束。"), (try_end),
        (jump_to_menu, "mnu_af06_recovery")]),
-     ("af06_grain_action", [], "为战后居民提供粮食（4袋谷物；恢复+10）",
+     ("af06_grain_action", [], "为战后居民提供粮食（4 袋谷物）",  # v1.0 NPC对白 A-8
       [(call_script, "script_af06_rebuild", "$current_town", 2),
        (try_begin), (eq, reg(0), 1), (display_message, "@战后赈粮完成，城池与附属村庄得到援助。"),
        (else_try), (display_message, "@赈粮无法进行：需要四袋谷物、友方领地和冷却结束。"), (try_end),
@@ -15534,14 +15810,7 @@ game_menus = [
 
   # Ashfall v0.7: read-only strategic metrics, no player chores or new systems.
   ("af07_world", 0,
-   "卡拉迪亚战局总览（v0.7）^^"
-   "王国战争：{reg73}个王国正在交战；统计村庄：{reg68}座。^"
-   "全图平均战乱度：{reg72}/100；严重动荡村庄：{reg60}座；危机村庄：{reg61}座。^"
-   "最严重村庄：{s10}（战乱{reg69}/100）。^^"
-   "地图动态：流民{reg62}支；逃兵{reg63}支；军粮队{reg64}支；特殊匪帮{reg65}支。^"
-   "尚在战后恢复的城市与城堡：{reg67}处。^"
-   "你的战争委托状态编号：{reg70}（0无、1进行中、2成功待结算、3失败待结算）。^^"
-   "本页面只读取既有村庄关系、战乱度与部队数据，不引入额外民心，也不改变存档经济。",
+   "眼下 {reg73} 个王国正在交战。全图 {reg68} 座村庄，平均战乱 {reg72}。最惨的是{s10}，战乱 {reg69}。流民 {reg62} 支，逃兵 {reg63} 支，军粮队 {reg64} 支，特殊匪帮 {reg65} 支。还在恢复的城市与城堡有 {reg67} 处。你的委托：{s23}。",  # v1.0 NPC对白 A-9: 战局总览正文写成短句, 委托状态拼进 s23
    "none", [(call_script, "script_af07_prepare_world")],
    [
      ("af07_world_contract", [], "查看军事委托详情", [(jump_to_menu, "mnu_af03_journal")]),
@@ -15550,11 +15819,7 @@ game_menus = [
 
   # Existing menus remain unchanged and accessible as read-only subpages.
   ("af08_desk", 0,
-   "烽烟案头 · 守土之责（v0.8）^^"
-   "第{reg80}天 · 你的领地最高乱度：{reg83}/100；失职：{reg81}/100；贤名：{reg82}/100。^"
-   "最近获知：{s40}^^"
-   "当前战争委托状态：{reg84}（0无／1进行中／2成功待结算／3失败待结算）。^^"
-   "只记录你在附近听到的局势或本国公开问责；幕后资助者仍需调查。",
+   "烽烟案头 · 守土之责。你的领地最高乱度 {reg83}，失职 {reg81}，贤名 {reg82}。最近获知：{s40}你的委托：{s23}。",  # v1.0 NPC对白 A-10: 案头正文写成短句, 委托状态拼进 s23; s40 自带句号, 正文不另加
    "none", [(call_script, "script_af08_prepare_desk")],
    [
      ("af08_desk_world", [], "查看卡拉迪亚战局总览", [(jump_to_menu, "mnu_af07_world")]),
@@ -15818,6 +16083,7 @@ game_menus = [
            (val_add, ":cut_off", 5),
            (val_min, ":cut_off", ":max_off"),
            (party_set_slot, "p_main_party", slot_af21_crown_cut_off, ":cut_off"),
+           (call_script, "script_change_player_relation_with_troop", ":king", 1),
            (display_message, "@国王沉吟片刻，答应以后少拿一些。", 0x66FF66),
          (else_try),
            (call_script, "script_change_player_relation_with_troop", ":king", -2),
@@ -15831,5 +16097,47 @@ game_menus = [
       ]),
      ("af21_crown_leave", [], "算了", [(jump_to_menu, "mnu_town")]),
    ]),
+  ("af26_bounty", 0,
+   "城门口贴着一张悬赏告示：凡缴获匪徒者，每颗人头 100 第纳尔，由本镇金库支付。你手里现在有 {reg10} 名匪徒俘虏，可领 {reg11} 第纳尔。",
+   "none",
+   [
+     (call_script, "script_af26_count_bandit_prisoners"),
+     (assign, reg10, reg0),
+     (store_mul, ":pay", reg0, 100),
+     (party_get_slot, ":wealth", "$current_town", slot_town_wealth),
+     (store_div, ":cap", ":wealth", 4),
+     (val_min, ":pay", ":cap"),
+     (assign, reg11, ":pay"),
+   ],
+   [
+     ("af26_bounty_hand",
+      [
+        (gt, reg10, 0),
+        (gt, reg11, 0),
+      ],
+      "把匪徒俘虏交给城镇，领 {reg11} 第纳尔",
+      [
+        (call_script, "script_af26_hand_over_bandits"),
+        (assign, reg12, reg0),
+        (display_message, "@你把匪徒交给了城镇守卫，领到了 {reg12} 第纳尔。"),
+        (jump_to_menu, "mnu_town"),
+      ]),
+     ("af26_bounty_back", [], "离开",
+      [(jump_to_menu, "mnu_town")]),
+   ]),
+
+  (
+    "af26_hold_choice",mnf_scale_picture,
+    "你攻下了这座城堡。按卡拉迪亚的老规矩，未归附任何势力的领主攻下中心，要么就地称王，要么只占下它、当个地方领主。选了只占，以后随时可以在营地菜单里宣布立国。",
+    "none",
+    [],
+    [
+      ("af26_hold_become_king",[],"称王立国",
+       [(jump_to_menu, "mnu_castle_taken")]),
+      ("af26_hold_just_occupy",[],"只占下它，不称王，当个地方领主",
+       [(party_set_slot, "p_main_party", slot_af26_hold_flag, 1),
+        (jump_to_menu, "mnu_castle_taken")]),
+    ]
+  ),
 
 ]

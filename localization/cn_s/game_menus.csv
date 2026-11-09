@@ -1,5 +1,6 @@
 ﻿
 mno_fb71_full_start|满 级 开 局 （ 62级 ／ 全 属 性 63／ 全 技 能 10／ 全 熟 练 度 699） 
+mno_af26_declare_kingdom|宣 布 立 国 （ 以 地 方 领 主 之 身 称 王 ） 
 mno_af07_world_entry|烽 烟 与 暗 流 ： 卡 拉 迪 亚 战 局 总 览 
 mno_af04_network_entry|地 方 匪 帮 与 黑 市 情 报 
 mno_af05_ledger_entry|战 争 与 宫 廷 ： 秘 密 军 粮 案 卷 
@@ -17,13 +18,20 @@ mno_af05_cheat_entry|烽 烟 与 暗 流 · 政 治 战 争 联 动 （ v0.5）
 mno_af04_cheat_entry|烽 烟 与 暗 流 · 匪 帮 网 络 测 试 （ v0.4） 
 mno_af03_cheat_entry|烽 烟 与 暗 流 · 战 争 承 包 商 测 试 （ v0.3） 
 mno_af20_demand_surrender|勒 令 他 们 放 下 武 器 
+mno_af26_sanctuary_entry|以 受 庇 护 者 的 身 份 求 见 城 主 （ 领 主 好 感 ≥ 40） 
 mno_af06_siege_ops_entry|围 城 暗 战 ： 侦 察 、 破 坏 粮 仓 与 策 反 守 军 
 mno_af06_defender_supply|将 随 身 四 袋 谷 物 秘 密 送 入 守 城 粮 仓 
 mno_af01_village_status|查 看 地 方 战 乱 与 援 助 
 mno_af12_case_entry|有 村 民 请 你 主 持 公 道 
 mno_af10_village_word|和 村 长 聊 聊 附 近 的 动 静 
 mno_af09_village_echo|村 口 似 乎 有 人 在 等 你 … … 
+mno_af04_visit_lair|拜 访 匪 帮 老 巢 
 mno_af21_crown_talk_entry|求 见 国 王 ， 商 谈 缴 获 的 分 成 
+mno_af26_bounty_entry|看 看 城 门 口 的 悬 赏 告 示 
+mno_af26_protect_offer|做 这 座 城 镇 的 保 护 人 （ 每 周 收 保 护 费 ） 
+mno_af26_protect_collect|收 本 周 的 保 护 费 
+mno_af26_found_caravan|出 资 组 建 一 支 商 队 （ 3000 第 纳 尔 ， 名 下 已 有 {reg0} 支 ， 上 限 36 支 ） 
+mno_af26_caravan_collect|结 算 名 下 商 队 （ 钱 箱 超 600 的 部 分 归 你 ） 
 mno_af03_contract_board|战 争 承 包 商 · 军 粮 委 托 
 mno_af08_town_rumor_entry|在 城 中 询 问 附 近 的 战 乱 传 闻 
 mno_af17_sell_grain_entry|把 带 来 的 粮 食 卖 给 官 仓 （ 粮 仓 存 量 {reg41}%{reg42?， 饥 荒 价 ， 本 周 还 能 收 {reg43}袋 :}） 
@@ -49,10 +57,10 @@ mno_fb75_debug_evidence|测 试 ： 生 成 一 条 可 向 本 国 国 王 举 
 mno_fb75_debug_court|测 试 ： 手 动 运 行 一 次 王 室 政 治 检 查 
 mno_fb75_debug_flip|测 试 ： 尝 试 一 次 合 法 的 秘 密 派 系 转 投 
 mno_fb75_debug_return|返 回 作 弊 菜 单 
-menu_af01_village_status|{s10}· 地 方 局 势 ^^战 乱 度 ： {reg60}/100（ {s11}） ^你 与 村 民 的 关 系 ： {reg61}^繁 荣 度 ： {reg62}/100^村 中 存 银 ： {reg66}第 纳 尔 （ 攒 过 3500后 ， 每 3000会 投 进 村 里 ， 繁 荣 +1） ^近 期 事 件 ： {s12}^援 助 状 态 ： {s13}^^从 该 村 庄 出 发 的 流 民 队 ： {reg64}， 逃 兵 队 ： {reg65}。 ^战 争 造 成 长 期 动 荡 ； 村 庄 关 系 和 繁 荣 度 仍 使 用 原 版 数 据 。 ^所 有 援 助 在 登 记 时 消 耗 资 源 ， 下 一 游 戏 日 结 算 ， 同 村 庄 共 用 七 天 冷 却 。 
-mno_af01_relief|出 资 救 济 （ 600第 纳 尔 进 村 里 钱 袋 ； 战 乱 -3、 关 系 +4、 繁 荣 +1） 
-mno_af01_patrol|组 织 巡 防 （ 200第 纳 尔 、 20名 士 兵 ； 战 乱 -12、 关 系 +1） 
-mno_af01_grain|运 送 赈 灾 粮 （ 6份 谷 物 ； 战 乱 -5、 关 系 +2、 繁 荣 +3） 
+menu_af01_village_status|{s10}。 ^^眼 下 村 里 {s11}。 村 民 们 对 你 {s14}。 村 子 {s15}， 村 里 存 银 {reg66} 第 纳 尔 。 ^最 近 ： {s12}。 ^援 助 ： {s13}。 ^村 里 有 人 逃 了 出 去 ： 流 民 {reg64} 支 ， 逃 兵 {reg65} 支 。 
+mno_af01_relief|拿 出 600 第 纳 尔 救 济 村 子 
+mno_af01_patrol|派 20 名 士 兵 巡 防 （ 200 第 纳 尔 ） 
+mno_af01_grain|送 6 袋 谷 物 赈 灾 
 mno_af01_status_back|返 回 村 庄 
 menu_af01_debug|烽 烟 与 暗 流 · v0.1 测 试 ^^最 近 村 庄 ： {s10}^战 乱 度 ： {reg60}/100（ {s11}） ^与 玩 家 关 系 ： {reg61}^近 期 事 件 ： {s12}^^下 列 测 试 行 为 会 直 接 修 改 存 档 。 请 使 用 测 试 存 档 。 
 mno_af01_debug_raid|模 拟 完 成 一 次 洗 劫 对 战 乱 及 邻 村 的 影 响 （ 不 扣 原 版 繁 荣 ） 
@@ -62,18 +70,19 @@ mno_af02_debug_refugees|v0.2： 在 最 近 村 庄 生 成 流 民 （ 遵 守 
 mno_af02_debug_deserters|v0.2： 在 最 近 村 庄 生 成 逃 兵 （ 遵 守 全 局 上 限 ） 
 mno_af01_debug_return|返 回 作 弊 菜 单 
 menu_af02_refugees|你 遇 到 了 一 群 因 战 争 离 开 家 乡 的 流 民 。 他 们 正 尝 试 抵 达 安 全 的 城 镇 。 ^^你 可 以 提 供 帮 助 ， 或 者 接 纳 一 些 人 加 入 队 伍 。 
-mno_af02_refugee_help|给 予 150第 纳 尔 作 为 路 费 （ 家 乡 战 乱 -2， 村 庄 关 系 +1） 
+mno_af02_refugee_help|给 他 们 150 第 纳 尔 路 费 
 mno_af02_refugee_recruit|接 纳 六 名 流 民 入 伍 （ 需 要 至 少 六 个 队 伍 空 位 ） 
 mno_af02_refugee_leave|祝 他 们 平 安 ， 继 续 赶 路 。 
 menu_af02_deserters|你 遇 到 一 伙 从 战 场 逃 散 的 士 兵 。 他 们 武 装 完 整 ， 行 踪 可 疑 。 ^^你 可 以 尝 试 招 安 ， 也 可 以 花 钱 让 他 们 离 开 ， 或 直 接 交 战 。 
-mno_af02_deserter_amnesty|支 付 600第 纳 尔 招 安 六 名 士 兵 （ 统 御 ≥ 2， 家 乡 战 乱 -6） 
-mno_af02_deserter_bribe|支 付 250第 纳 尔 使 这 伙 逃 兵 解 散 （ 家 乡 战 乱 -2） 
+mno_af02_deserter_amnesty|花 600 第 纳 尔 招 安 六 名 士 兵 
+mno_af02_deserter_bribe|花 250 第 纳 尔 打 发 这 伙 逃 兵 
 mno_af02_deserter_attack|拒 绝 妥 协 ， 准 备 战 斗 。 
 mno_af02_deserter_leave|放 弃 追 击 。 
-menu_af03_contract_board|战 争 承 包 商 · 军 粮 委 托 ^^当 前 合 同 ： {s20}^委 托 城 镇 ： {s21}^目 标 地 点 ： {s22}^签 约 阵 营 ： {s25}^军 粮 路 线 ： {s24} -> {s22}^进 度 ： {s23}^约 定 报 酬 ： {reg70}第 纳 尔 ^剩 余 天 数 ： {reg71}^护 送 记 录 ： {reg74}次 六 小 时 巡 逻 检 查 ^^你 最 多 同 时 签 订 一 份 合 同 。 护 送 需 要 持 续 跟 随 运 输 队 并 在 抵 达 时 在 场 ； 截 粮 必 须 实 际 参 与 摧 毁 目 标 队 伍 。 结 算 需 要 返 回 委 托 城 镇 。 
+menu_af03_contract_board|军 需 官 摊 开 账 本 ： '{s26}'^^进 度 ： {s23}， 已 巡 逻 {reg74} 次 。 
 mno_af03_no_funds|（ 城 里 眼 下 凑 不 出 委 托 的 钱 ） 
-mno_af03_take_escort|接 取 护 送 军 粮 委 托 （ 至 少 15名 士 兵 ； 期 限 12天 ） 
-mno_af03_take_intercept|接 取 截 断 敌 军 补 给 委 托 （ 期 限 12天 ） 
+mno_af03_take_escort|接 护 送 军 粮 的 委 托 
+mno_af03_take_intercept|接 截 断 敌 军 补 给 的 委 托 
+mno_af26_license|花 5000 第 纳 尔 ， 注 册 佣 兵 团 执 照 （ 以 后 接 委 托 报 酬 翻 倍 ） 
 mno_af03_settle|领 取 已 完 成 合 同 的 酬 金 ／ 登 记 失 败 合 同 
 mno_af03_office_to_journal|查 看 当 前 委 托 说 明 
 mno_af03_office_back|返 回 城 镇 
@@ -87,30 +96,38 @@ menu_af03_debug|v0.3 战 争 承 包 商 测 试 ^^此 菜 单 只 用 于 作 �
 mno_af03_debug_spawn|在 最 近 的 两 座 同 阵 营 城 镇 间 强 制 派 出 军 粮 队 
 mno_af03_debug_tick|执 行 一 次 每 日 后 勤 结 算 与 发 车 检 查 
 mno_af03_debug_back|返 回 作 弊 菜 单 
-menu_af04_gang|你 遭 遇 了 {s10}。 ^^这 支 团 伙 的 势 力 范 围 是 {s11}附 近 。 专 长 ： {s12}。 ^与 该 团 伙 的 交 情 ： {reg90}； 当 前 协 议 还 剩 {reg91}天 。 ^已 收 买 的 军 粮 袭 击 委 托 ： {reg92}（ 1为 正 在 进 行 ） 。 ^^你 可 以 与 其 交 易 、 通 过 谈 判 招 安 ， 也 可 以 选 择 战 斗 。 匪 帮 可 能 袭 扰 经 过 附 近 的 真 实 军 粮 队 。 
-mno_af04_pay_treaty|支 付 {reg42}第 纳 尔 ， 签 订 11天 互 不 侵 扰 协 议 （ 团 伙 交 情 +10） 
-mno_af04_hire_raid|支 付 850第 纳 尔 ， 委 托 袭 扰 附 近 敌 国 军 粮 队 （ 8天 内 执 行 ） 
-mno_af04_buy_grain|从 盐 鸦 商 路 黑 市 购 买 两 袋 谷 物 （ 360第 纳 尔 ， 3天 限 购 一 次 ） 
-mno_af04_hire_men|从 灰 狼 团 招 募 5名 散 兵 （ 650第 纳 尔 ， 7天 冷 却 ） 
-mno_af04_amnesty|赦 免 并 招 安 匪 帮 （ 1200第 纳 尔 ； 6名 新 兵 ； 家 乡 战 乱 -12） 
-mno_af04_attack|剿 灭 这 伙 匪 帮 （ 进 入 正 常 野 战 ） 
+menu_af04_gang|{s13}他 们 在 {s11}一 带 活 动 ， 专 长 是 {s12}。 
+mno_af04_pay_treaty|付 {reg42} 第 纳 尔 ， 签 11 天 互 不 侵 扰 的 协 议 
+mno_af04_join|交 500 第 纳 尔 投 名 状 ， 入 伙 
+mno_af04_hire_raid|花 850 第 纳 尔 ， 请 他 们 袭 扰 一 支 敌 国 军 粮 队 
+mno_af04_buy_grain|从 盐 鸦 商 路 黑 市 买 两 袋 谷 物 （ 360 第 纳 尔 ） 
+mno_af04_hire_men|从 灰 狼 团 招 {reg45} 名 散 兵 （ {reg44} 第 纳 尔 ） 
+mno_af04_invest_200|给 这 伙 匪 帮 注 资 200 第 纳 尔 
+mno_af04_invest_500|给 这 伙 匪 帮 注 资 500 第 纳 尔 
+mno_af04_invest_1000|给 这 伙 匪 帮 注 资 1000 第 纳 尔 
+mno_af04_amnesty|花 1200 第 纳 尔 赦 免 他 们 ， 收 6 个 人 进 队 伍 
+mno_af27_warn|向 他 们 通 风 报 信 ： 有 领 主 正 带 兵 来 剿 你 们 
+mno_af04_attack|剿 灭 这 伙 匪 帮 
 mno_af04_leave|离 开 此 地 
-menu_af04_network|地 方 匪 帮 与 黑 市 情 报 ^^黑 松 帮 · 铁 鬃 ： {s20}， 交 情 {reg93}， 保 护 协 议 剩 {reg94}天 。 ^灰 狼 团 · 裂 旗 ： {s21}， 交 情 {reg95}， 保 护 协 议 剩 {reg96}天 。 ^盐 鸦 商 路 · 盐 鸦 ： {s22}， 交 情 {reg97}， 保 护 协 议 剩 {reg98}天 。 ^^三 支 团 伙 会 在 各 自 文 化 区 域 的 高 战 乱 村 庄 周 边 形 成 势 力 。 交 情 是 独 立 的 地 下 交 易 记 录 ， 不 会 替 代 原 版 村 庄 关 系 。 
+menu_af04_network|地 方 匪 帮 与 黑 市 情 报 ^^黑 松 帮 · 铁 鬃 ： 交 情 是 {s20}^灰 狼 团 · 裂 旗 ： 交 情 是 {s21}^盐 鸦 商 路 · 盐 鸦 ： 交 情 是 {s22}
 mno_af23_back_gang_1|资 助 黑 松 帮 一 笔 钱 （ 500 第 纳 尔 ） 
 mno_af23_back_gang_2|资 助 灰 狼 团 一 笔 钱 （ 500 第 纳 尔 ） 
 mno_af23_back_gang_3|资 助 盐 鸦 商 路 一 笔 钱 （ 500 第 纳 尔 ） 
+mno_af23_provoke_gang_1|花 400 第 纳 尔 ， 挑 拨 黑 松 帮 去 跟 其 他 匪 帮 火 并 
+mno_af23_provoke_gang_2|花 400 第 纳 尔 ， 挑 拨 灰 狼 团 去 跟 其 他 匪 帮 火 并 
+mno_af23_provoke_gang_3|花 400 第 纳 尔 ， 挑 拨 盐 鸦 商 路 去 跟 其 他 匪 帮 火 并 
 mno_af04_network_back|返 回 营 地 
-menu_af04_debug|v0.4 土 匪 江 湖 测 试 ^^可 以 尝 试 生 成 三 支 独 立 匪 帮 ， 手 动 推 进 一 次 每 日 匪 帮 逻 辑 。 若 对 应 地 区 的 村 庄 战 乱 不 足 35， 生 成 会 失 败 。 
+menu_af04_debug|v0.4 土 匪 江 湖 测 试 ^^可 以 尝 试 生 成 三 支 独 立 匪 帮 ， 手 动 推 进 一 次 每 日 匪 帮 逻 辑 。 战 乱 不 足 35 时 也 会 在 战 乱 最 高 的 村 庄 强 制 生 成 （ 保 底 ） 。 
 mno_af04_debug_spawn_black|尝 试 生 成 黑 松 帮 
 mno_af04_debug_spawn_wolf|尝 试 生 成 灰 狼 团 
 mno_af04_debug_spawn_raven|尝 试 生 成 盐 鸦 商 路 
 mno_af04_debug_war|提 高 最 近 村 庄 战 乱 至 至 少 70（ 用 于 测 试 生 成 ） 
 mno_af04_debug_tick|手 动 运 行 一 次 匪 帮 每 日 更 新 
 mno_af04_debug_back|返 回 作 弊 菜 单 
-menu_af05_ledger|战 争 与 宫 廷 · 秘 密 军 粮 案 卷 ^^当 前 存 在 尚 未 结 案 的 真 实 袭 扰 线 索 ： {reg80}（ 1为 存 在 ） 。 ^涉 及 的 军 粮 目 的 地 ： {s41}。 ^已 查 明 幕 后 资 助 者 ： {s40}； 证 据 ： {reg81}（ 1为 掌 握 ） 。 ^再 次 调 查 需 等 待 ： {reg82}天 。 ^^只 有 王 国 封 臣 可 以 侦 查 并 向 本 国 国 王 举 报 。 嫌 疑 人 身 份 不 会 在 未 侦 查 前 公 开 。 
-mno_af05_ledger_investigate|支 付 350第 纳 尔 ， 派 密 探 追 查 最 近 的 军 粮 遇 袭 事 件 （ 75%成 功 ， 4天 冷 却 ） 
-mno_af05_ledger_report|派 遣 密 使 将 证 据 呈 交 国 王 （ 得 罪 幕 后 领 主 ， 王 室 关 系 +3） 
-mno_af05_ledger_silence|以 证 据 勒 索 资 助 者 ， 收 取 650第 纳 尔 封 口 费 （ 自 身 政 治 嫌 疑 +18， 荣 誉 -5） 
+menu_af05_ledger|{s42}
+mno_af05_ledger_investigate|花 350 第 纳 尔 ， 派 密 探 追 查 最 近 的 军 粮 遇 袭 事 件 
+mno_af05_ledger_report|把 证 据 呈 交 给 国 王 
+mno_af05_ledger_silence|拿 证 据 勒 索 资 助 者 ， 收 650 第 纳 尔 封 口 费 
 mno_af05_ledger_book|查 阅 现 有 宫 廷 政 治 情 报 簿 
 mno_af05_ledger_back|返 回 营 地 
 menu_af05_debug|v0.5 政 治 战 争 联 动 测 试 ^^此 菜 单 只 使 用 真 实 存 在 的 匪 帮 和 军 粮 队 ， 不 会 伪 造 王 室 证 据 。 
@@ -118,23 +135,23 @@ mno_af05_debug_plot|尝 试 匹 配 封 地 失 意 领 主 、 匪 帮 与 军 
 mno_af05_debug_gang|前 往 匪 帮 测 试 工 具 
 mno_af05_debug_convoy|前 往 军 粮 队 测 试 工 具 
 mno_af05_debug_back|返 回 作 弊 菜 单 
-menu_af06_siege_ops|{s40}· 围 城 暗 战 ^^粮 仓 情 报 ： {s41}^侦 察 情 报 有 效 ： {reg84?是 :否 }； 粮 仓 破 坏 冷 却 剩 {reg85} 天 ； 策 反 冷 却 剩 {reg86} 天 。 ^^秘 密 行 动 仅 能 由 亲 自 围 城 的 玩 家 执 行 ； 侦 察 会 提 高 后 两 项 成 功 率 。 
-mno_af06_scout_action|派 斥 候 勘 察 敌 军 粮 仓 （ 150第 纳 尔 ， 5天 内 提 高 成 功 率 ） 
-mno_af06_sabotage_action|派 间 谍 焚 毁 敌 军 粮 仓 （ 800第 纳 尔 ； 40%或 65%成 功 率 ） 
-mno_af06_bribe_action|策 反 敌 军 守 备 士 卒 （ 1400第 纳 尔 ； 有 侦 察 则 更 易 成 功 ） 
+menu_af06_siege_ops|{s42}
+mno_af06_scout_action|派 斥 候 勘 察 敌 军 粮 仓 （ 150 第 纳 尔 ） 
+mno_af06_sabotage_action|派 间 谍 焚 毁 敌 军 粮 仓 （ 800 第 纳 尔 ） 
+mno_af06_bribe_action|策 反 敌 军 守 备 士 卒 （ 1400 第 纳 尔 ） 
 mno_af06_ops_back|返 回 围 城 指 挥 
-menu_af06_recovery|{s40}· 战 后 治 理 ^^目 前 恢 复 程 度 ： {reg90}/100。 ^繁 荣 度 ： {reg91}； 粮 食 库 存 ： {reg92}。 ^距 最 近 一 次 王 国 更 替 ： {reg93}天 ； 本 地 重 建 冷 却 ： {reg94}天 。 ^^只 对 真 实 经 历 王 国 更 替 的 城 池 开 放 重 建 ； 旧 存 档 未 发 生 战 乱 的 城 池 视 为 恢 复 完 成 。 ^重 建 会 提 升 城 池 恢 复 与 原 版 繁 荣 度 ， 并 降 低 其 附 属 村 庄 的 战 乱 度 。 
-mno_af06_invest_action|投 资 修 复 城 防 与 市 集 （ 1000第 纳 尔 ； 恢 复 +20） 
-mno_af06_grain_action|为 战 后 居 民 提 供 粮 食 （ 4袋 谷 物 ； 恢 复 +10） 
+menu_af06_recovery|{s42}
+mno_af06_invest_action|投 资 修 复 城 防 与 市 集 （ 1000 第 纳 尔 ） 
+mno_af06_grain_action|为 战 后 居 民 提 供 粮 食 （ 4 袋 谷 物 ） 
 mno_af06_recovery_back|返 回 城 池 
 menu_af06_debug|v0.6 围 城 与 战 后 治 理 测 试 ^^测 试 入 口 不 会 伪 造 真 实 王 国 易 主 事 件 ； 仅 设 置 测 试 城 池 的 恢 复 计 数 。 
 mno_af06_debug_recovery|测 试 ： 将 最 近 一 座 城 池 恢 复 程 度 设 为 35
 mno_af06_debug_daily|测 试 ： 运 行 一 次 战 后 每 日 恢 复 检 查 
 mno_af06_debug_back|返 回 作 弊 菜 单 
-menu_af07_world|卡 拉 迪 亚 战 局 总 览 （ v0.7） ^^王 国 战 争 ： {reg73}个 王 国 正 在 交 战 ； 统 计 村 庄 ： {reg68}座 。 ^全 图 平 均 战 乱 度 ： {reg72}/100； 严 重 动 荡 村 庄 ： {reg60}座 ； 危 机 村 庄 ： {reg61}座 。 ^最 严 重 村 庄 ： {s10}（ 战 乱 {reg69}/100） 。 ^^地 图 动 态 ： 流 民 {reg62}支 ； 逃 兵 {reg63}支 ； 军 粮 队 {reg64}支 ； 特 殊 匪 帮 {reg65}支 。 ^尚 在 战 后 恢 复 的 城 市 与 城 堡 ： {reg67}处 。 ^你 的 战 争 委 托 状 态 编 号 ： {reg70}（ 0无 、 1进 行 中 、 2成 功 待 结 算 、 3失 败 待 结 算 ） 。 ^^本 页 面 只 读 取 既 有 村 庄 关 系 、 战 乱 度 与 部 队 数 据 ， 不 引 入 额 外 民 心 ， 也 不 改 变 存 档 经 济 。 
+menu_af07_world|眼 下 {reg73} 个 王 国 正 在 交 战 。 全 图 {reg68} 座 村 庄 ， 平 均 战 乱 {reg72}。 最 惨 的 是 {s10}， 战 乱 {reg69}。 流 民 {reg62} 支 ， 逃 兵 {reg63} 支 ， 军 粮 队 {reg64} 支 ， 特 殊 匪 帮 {reg65} 支 。 还 在 恢 复 的 城 市 与 城 堡 有 {reg67} 处 。 你 的 委 托 ： {s23}。 
 mno_af07_world_contract|查 看 军 事 委 托 详 情 
 mno_af07_world_return|返 回 营 地 
-menu_af08_desk|烽 烟 案 头 · 守 土 之 责 （ v0.8） ^^第 {reg80}天 · 你 的 领 地 最 高 乱 度 ： {reg83}/100； 失 职 ： {reg81}/100； 贤 名 ： {reg82}/100。 ^最 近 获 知 ： {s40}^^当 前 战 争 委 托 状 态 ： {reg84}（ 0无 ／ 1进 行 中 ／ 2成 功 待 结 算 ／ 3失 败 待 结 算 ） 。 ^^只 记 录 你 在 附 近 听 到 的 局 势 或 本 国 公 开 问 责 ； 幕 后 资 助 者 仍 需 调 查 。 
+menu_af08_desk|烽 烟 案 头 · 守 土 之 责 。 你 的 领 地 最 高 乱 度 {reg83}， 失 职 {reg81}， 贤 名 {reg82}。 最 近 获 知 ： {s40}你 的 委 托 ： {s23}。 
 mno_af08_desk_world|查 看 卡 拉 迪 亚 战 局 总 览 
 mno_af08_desk_contract|查 看 军 粮 委 托 
 mno_af08_desk_gang|查 看 地 方 匪 帮 与 黑 市 
@@ -176,3 +193,9 @@ mno_af20_fame_back|返 回 营 地
 menu_af21_crown_talk|{s48}听 你 说 完 ， 端 着 酒 杯 没 有 立 刻 开 口 。 眼 下 缴 获 的 分 成 是 ： 国 王 拿 走 {reg1}%， 你 留 下 {reg4}%。 你 的 威 名 是 {reg2}， 国 王 与 你 的 关 系 是 {reg3}。 
 mno_af21_crown_argue|据 理 力 争 
 mno_af21_crown_leave|算 了 
+menu_af26_bounty|城 门 口 贴 着 一 张 悬 赏 告 示 ： 凡 缴 获 匪 徒 者 ， 每 颗 人 头 100 第 纳 尔 ， 由 本 镇 金 库 支 付 。 你 手 里 现 在 有 {reg10} 名 匪 徒 俘 虏 ， 可 领 {reg11} 第 纳 尔 。 
+mno_af26_bounty_hand|把 匪 徒 俘 虏 交 给 城 镇 ， 领 {reg11} 第 纳 尔 
+mno_af26_bounty_back|离 开 
+menu_af26_hold_choice|你 攻 下 了 这 座 城 堡 。 按 卡 拉 迪 亚 的 老 规 矩 ， 未 归 附 任 何 势 力 的 领 主 攻 下 中 心 ， 要 么 就 地 称 王 ， 要 么 只 占 下 它 、 当 个 地 方 领 主 。 选 了 只 占 ， 以 后 随 时 可 以 在 营 地 菜 单 里 宣 布 立 国 。 
+mno_af26_hold_become_king|称 王 立 国 
+mno_af26_hold_just_occupy|只 占 下 它 ， 不 称 王 ， 当 个 地 方 领 主 

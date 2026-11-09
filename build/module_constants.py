@@ -2005,7 +2005,7 @@ slot_af03_contract_origin     = 707  # original departure town, for readable jou
 # p_main_party: three slots per role, gang index 1..3; base+(kind-1).
 slot_af04_relation_start     = 720 # trust toward each named gang, -100..100
 slot_af04_truce_start        = 723 # protection until day+1 (exclusive)
-slot_af04_last_spawn_start   = 726 # last emergence, day+1; used for 30-day respawn
+slot_af04_last_spawn_start   = 726 # last emergence, day+1; used for 14-day respawn
 slot_af04_party_start        = 729 # live leader party ID, verified before use
 slot_af04_service_start      = 732 # last successful service day+1 (7-day cooldown)
 # On each named map group.
@@ -2114,3 +2114,20 @@ slot_af23_kept_word_3        = 893 # p_main_party: truces kept with gang 3
 slot_af23_looted_day         = 894 # village: day+1 of the player's last loot of this village
 slot_af23_famine_bags        = 895 # town/castle: bags bought at the famine price this week
 slot_af23_famine_week        = 896 # town/castle: which week+1 the famine-bag count belongs to
+slot_af23_joined_gang        = 897 # p_main_party: gang the player joined (1-3, 0 = none); cleared if that gang is broken up
+slot_af26_intro_day          = 898 # p_main_party: day+1 after which a lord may introduce the player to the king again (L2)
+slot_af26_borrow_day         = 899 # p_main_party: L1 borrow return deadline (day+14); 0 = not borrowing
+slot_af26_borrow_count       = 900 # p_main_party: L1 borrowed men count
+slot_af26_borrow_lender      = 901 # p_main_party: L1 lender lord troop id; 0 = none
+slot_af26_license            = 902 # p_main_party: I1 mercenary license, 1 = licensed
+slot_af26_protect_day        = 903 # town: I5 next protection collection day+1; 0 = not protected
+slot_af26_sanctuary_day      = 904 # p_main_party: L5 sanctuary expiry (day+7); 0 = not in sanctuary
+slot_af26_letter_day         = 905 # p_main_party: I3 privateer letter expiry (day+30); 0 = no letter
+slot_af26_letter_issuer      = 906 # p_main_party: I3 issuing kingdom faction id; 0 = no letter
+slot_af26_hold_flag          = 907 # p_main_party: I7 one-time "occupy without becoming king" switch; 1 = hold, cleared after use
+slot_af27_hunt_day           = 908 # lord Troop Slot: L1 last hunt day+1; 0 = never hunted
+slot_af27_sponsor_kind       = 909 # lord Troop Slot: L2 sponsored gang kind 1-3; 0 = none
+slot_af27_sponsor_day        = 910 # lord Troop Slot: L2 last sponsor day+1; 0 = never sponsored
+slot_af27_squeeze_day        = 911 # lord Troop Slot: L4 last squeeze day+1; 0 = never squeezed
+slot_af27_glove_kind         = 912 # lord Troop Slot: L6 submitted gang (black glove) kind 1-3; 0 = none
+slot_af27_bounty_kind        = 913 # lord Troop Slot: L7 bounty on gang kind 1-3; 0 = none
