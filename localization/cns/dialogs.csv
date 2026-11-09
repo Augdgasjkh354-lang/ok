@@ -68,3 +68,9 @@ dlga_lord_talk:lord_af26_mediate|陛 下 ， 我 想 调 停 你 与 {s4}的 战
 dlga_lord_af26_mediate:lord_talk|谈 成 了 。 {s4}与 {s5}已 经 停 战 ， 四 十 天 内 不 再 开 战 。 这 份 人 情 ， 两 国 都 记 下 了 。 
 dlga_merchant_talk:merchant_af26_collect|这 是 我 的 商 队 ， 把 钱 箱 里 多 余 的 钱 结 算 给 我 。 
 dlga_merchant_af26_collect:merchant_talk|结 算 好 了 ， 共 {reg10} 第 纳 尔 ， 钱 箱 里 留 了 六 百 作 周 转 。 
+dlga_lord_talk:lord_af27_hush|听 说 你 和 匪 帮 有 来 往 ， 给 我 400 第 纳 尔 ， 这 事 我 就 不 往 上 报 了 。 
+dlga_lord_af27_hush:lord_talk|拿 去 ， 400 第 纳 尔 ， 这 事 到 此 为 止 ， 别 再 提 了 。 
+dlga_lord_talk:lord_af27_submit|我 认 识 一 支 弱 帮 ， 想 让 他 们 投 靠 你 。 
+dlga_lord_talk:lord_af27_bounty|听 说 你 在 悬 赏 剿 匪 ？ 
+dlga_lord_af27_bounty:lord_talk|不 错 ， {s4}那 帮 人 闹 得 太 凶 ， 谁 剿 了 他 们 ， 我 出 800 第 纳 尔 。 
+dlga_lord_talk:lord_af27_inform|我 知 道 一 支 匪 帮 的 下 落 ， 你 派 人 去 剿 了 吧 。 

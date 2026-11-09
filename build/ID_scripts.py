@@ -810,5 +810,13 @@ script_af26_found_caravan = 808
 script_af26_caravan_collect = 809
 script_af26_count_caravans = 810
 script_af26_town_caravan = 811
+script_af27_hunted_by = 812
+script_af27_hunt_gang = 813
+script_af27_sponsor = 814
+script_af27_find_sponsor = 815
+script_af27_retaliate = 816
+script_af27_squeeze = 817
+script_af27_submit = 818
+script_af27_clear_gang_lord_flags = 819
 
 
