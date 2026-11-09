@@ -1983,6 +1983,8 @@ simple_triggers = [
          (faction_get_slot, ":num_towns", ":merchant_faction", slot_faction_num_towns),
          (try_begin),
            (le, ":num_towns", 0),
+           # v1.0 领主关系与独立玩法·第三波 I8: 玩家派系商队不因“派系没城镇”而解散（玩家商队由玩家养，不靠城镇数维持）。
+           (neq, ":merchant_faction", "fac_player_supporters_faction"),
            (call_script, "script_af18_caravan_disband", ":party_no"),  # v1.0
            (remove_party, ":party_no"),
          (else_try),

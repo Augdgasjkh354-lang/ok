@@ -60,3 +60,11 @@ dlga_lord_talk:lord_af26_feast|听 说 你 们 在 办 宴 会 ， 带 我 一 �
 dlga_lord_af26_feast:lord_talk|好 ， 宴 会 就 在 {s4}， 你 来 ， 我 在 门 口 等 你 。 
 dlga_lord_talk:lord_af26_hunt|一 起 去 打 猎 ， 活 动 活 动 筋 骨 。 
 dlga_lord_af26_hunt:lord_talk|走 ， 前 面 林 子 里 有 动 静 ， 跟 我 去 打 猎 。 
+dlga_lord_talk:lord_af26_sanctuary|有 人 因 私 仇 在 追 杀 我 ， 求 你 在 你 的 城 堡 里 庇 护 我 几 天 。 
+dlga_lord_af26_sanctuary:lord_talk|好 ， 你 躲 到 我 这 里 来 ， 七 天 之 内 仇 家 不 会 再 追 你 。 交 战 阵 营 里 与 我 交 情 深 厚 的 城 堡 ， 你 也 可 以 进 。 
+dlga_lord_talk:lord_af26_letter|陛 下 ， 我 想 买 一 封 私 掠 证 ， 奉 旨 劫 掠 贵 国 之 敌 的 商 队 。 
+dlga_lord_af26_letter:lord_talk|好 ， 这 封 私 掠 证 有 效 期 三 十 天 ， 只 对 {s4}之 敌 的 商 队 有 效 。 持 证 劫 掠 不 损 你 的 荣 誉 ， 也 不 惹 对 方 宣 战 ； 劫 中 立 国 商 队 、 劫 军 粮 队 都 不 在 此 列 。 
+dlga_lord_talk:lord_af26_mediate|陛 下 ， 我 想 调 停 你 与 {s4}的 战 争 ， 两 边 都 停 手 ， 对 大 家 都 好 。 
+dlga_lord_af26_mediate:lord_talk|谈 成 了 。 {s4}与 {s5}已 经 停 战 ， 四 十 天 内 不 再 开 战 。 这 份 人 情 ， 两 国 都 记 下 了 。 
+dlga_merchant_talk:merchant_af26_collect|这 是 我 的 商 队 ， 把 钱 箱 里 多 余 的 钱 结 算 给 我 。 
+dlga_merchant_af26_collect:merchant_talk|结 算 好 了 ， 共 {reg10} 第 纳 尔 ， 钱 箱 里 留 了 六 百 作 周 转 。 
