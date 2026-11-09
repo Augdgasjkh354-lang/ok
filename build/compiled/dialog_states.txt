@@ -1367,3 +1367,7 @@ fb74_gossip_reply
 fb74_report_reply
 lord_af26_intel
 lord_af26_intro
+lord_af26_borrow
+lord_af26_return
+lord_af26_feast
+lord_af26_hunt
