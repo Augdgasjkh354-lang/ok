@@ -24657,6 +24657,16 @@ scripts = [
       (store_script_param_1, ":center_no"),
       (store_script_param_2, ":difference"),
       
+      # v1.0 扩展：仁名且威名 ≥30 时，据点关系正向变化 ×2（与领主关系 A10 对称）。
+      (try_begin),
+        (gt, ":difference", 0),
+        (call_script, "script_af20_fame_total"),
+        (ge, reg0, 30),
+        (call_script, "script_af20_fame_kind"),
+        (eq, reg0, 1),
+        (val_mul, ":difference", 2),
+      (try_end),
+      
       (party_get_slot, ":player_relation", ":center_no", slot_center_player_relation),
       (assign, reg1, ":player_relation"),
       (val_add, ":player_relation", ":difference"),
@@ -24982,6 +24992,12 @@ scripts = [
         (val_clamp, "$g_player_party_morale_modifier_debt", 1, 31),
         (val_sub, ":new_morale", "$g_player_party_morale_modifier_debt"),
       (try_end),
+      
+      # v1.0 扩展：威名档位加士气——1 档 +2，5 档 +10。只改每日结算，不碰战后士气。
+      (call_script, "script_af20_fame_total"),
+      (call_script, "script_af20_fame_tier", reg0),
+      (store_mul, ":fame_bonus", reg0, 2),
+      (val_add, ":new_morale", ":fame_bonus"),
       
       (val_clamp, ":new_morale", 0, 100),
       (assign, reg0, ":new_morale"),
@@ -34152,11 +34168,13 @@ scripts = [
       (party_get_free_companions_capacity, ":free_capacity", "p_main_party"),
       (val_min, ":volunteer_amount", ":free_capacity"),
       (store_troop_gold, ":gold", "trp_player"),
-      (store_div, ":gold_capacity", ":gold", 10),#10 denars per man
+      (call_script, "script_af21_recruit_price"),
+      (assign, ":price", reg0),
+      (store_div, ":gold_capacity", ":gold", ":price"),
       (val_min, ":volunteer_amount", ":gold_capacity"),
       (party_add_members, "p_main_party", ":volunteer_troop", ":volunteer_amount"),
       (party_set_slot, "$current_town", slot_center_volunteer_troop_amount, -1),
-      (store_mul, ":cost", ":volunteer_amount", 10),#10 denars per man
+      (store_mul, ":cost", ":volunteer_amount", ":price"),
       (troop_remove_gold, "trp_player", ":cost"),
       # v1.0 fame (IV): both recruit paths (village menu and elder dialogue)
       # go through this script, so one call here counts every recruit once.
@@ -53849,6 +53867,10 @@ scripts = [
 
       # v1.0: a finished military contract is a public deed (was +2).
       (call_script, "script_change_troop_renown", "trp_player", 10),
+      # v1.0 扩展：办完委托也是公开功绩，战功 +2（与声望 +10 并列；失败不加）。
+      (party_get_slot, ":fame", "p_main_party", slot_af20_fame),
+      (val_add, ":fame", 2),
+      (party_set_slot, "p_main_party", slot_af20_fame, ":fame"),
       (try_begin),
         # Escort: the town that actually received the grain remembers it.
         (party_slot_eq, "p_main_party", slot_af03_contract_type, 1),
@@ -55136,7 +55158,8 @@ scripts = [
     (assign, reg(0), ":ok"),
   ]),
 
-  # Pay once per 7 days; a success burns TWO native siege-consumption days.
+  # Pay once per 2 days; a success burns 15% of the current food store,
+  # and loosens the siege hardness by 50 (AI auto-siege only).
   ("af06_sabotage", [
     (store_script_param, ":center", 1),
     (call_script, "script_af06_check_siege", ":center"),
@@ -55147,7 +55170,7 @@ scripts = [
     (try_begin),
       (gt, ":last", 0),
       (store_sub, ":since", ":token", ":last"),
-      (lt, ":since", 7),
+      (lt, ":since", 2),
       (assign, ":ok", 0),
     (try_end),
     (party_get_slot, ":food", ":center", slot_party_food_store),
@@ -55166,22 +55189,27 @@ scripts = [
       (eq, ":ok", 1),
       (troop_remove_gold, "trp_player", 800),
       (party_set_slot, ":center", slot_af06_sabotage_token, ":token"),
-      (assign, ":chance", 40),
+      (assign, ":chance", 60),
       (party_get_slot, ":recon", ":center", slot_af06_recon_token),
       (try_begin),
         (gt, ":recon", 0),
         (store_sub, ":elapsed", ":token", ":recon"),
         (is_between, ":elapsed", 0, 5),
-        (val_add, ":chance", 25),
+        (val_add, ":chance", 30),
       (try_end),
       (store_random_in_range, ":roll", 0, 100),
       (try_begin),
         (lt, ":roll", ":chance"),
-        (call_script, "script_center_get_food_consumption", ":center"),
-        (store_mul, ":burned", reg(0), 2),
+        (store_mul, ":burned", ":food", 15),
+        (val_div, ":burned", 100),
         (val_min, ":burned", ":food"),
         (val_sub, ":food", ":burned"),
         (party_set_slot, ":center", slot_party_food_store, ":food"),
+        # v1.0 扩展：大火烧松城防，硬度 -50（只影响 AI 自动攻城结算）。
+        (party_get_slot, ":hardness", ":center", slot_center_siege_hardness),
+        (val_sub, ":hardness", 50),
+        (val_max, ":hardness", 0),
+        (party_set_slot, ":center", slot_center_siege_hardness, ":hardness"),
         (assign, ":success", 1),
       (try_end),
     (try_end),
@@ -55190,7 +55218,7 @@ scripts = [
     (assign, reg(2), ":burned"),
   ]),
 
-  # Attempt to buy 2-4 non-hero regulars out of a garrison. Never below 20.
+  # Attempt to buy 8% of a garrison (at least 3, at most 25). Never below 20.
   ("af06_bribe", [
     (store_script_param, ":center", 1),
     (call_script, "script_af06_check_siege", ":center"),
@@ -55201,7 +55229,7 @@ scripts = [
     (try_begin),
       (gt, ":last", 0),
       (store_sub, ":elapsed", ":token", ":last"),
-      (lt, ":elapsed", 12),
+      (lt, ":elapsed", 3),
       (assign, ":ok", 0),
     (try_end),
     (party_get_num_companions, ":garrison", ":center"),
@@ -55219,18 +55247,21 @@ scripts = [
       (eq, ":ok", 1),
       (troop_remove_gold, "trp_player", 1400),
       (party_set_slot, ":center", slot_af06_bribe_token, ":token"),
-      (assign, ":chance", 35),
+      (assign, ":chance", 55),
       (party_get_slot, ":recon", ":center", slot_af06_recon_token),
       (try_begin),
         (gt, ":recon", 0),
         (store_sub, ":elapsed", ":token", ":recon"),
         (is_between, ":elapsed", 0, 5),
-        (val_add, ":chance", 20),
+        (val_add, ":chance", 25),
       (try_end),
       (store_random_in_range, ":roll", 0, 100),
       (try_begin),
         (lt, ":roll", ":chance"),
-        (store_random_in_range, ":wanted", 2, 5),
+        (store_mul, ":wanted", ":garrison", 8),
+        (val_div, ":wanted", 100),
+        (val_max, ":wanted", 3),
+        (val_min, ":wanted", 25),
         (store_sub, ":maximum", ":garrison", 20),
         (val_min, ":wanted", ":maximum"),
         (party_get_num_companion_stacks, ":stacks", ":center"),
@@ -58365,6 +58396,18 @@ scripts = [
       (ge, ":fiefs", 3),
       (assign, reg0, 6),
     (try_end),
+  ]),
+
+  # v1.0 扩展：志愿兵单价按威名档位打折——0 档 10 第纳尔/人，5 档 5；
+  # 仁名再 -1，最低 4。Output reg0 = denars per volunteer. No new Slot.
+  ("af21_recruit_price", [
+    (call_script, "script_af20_fame_total"),
+    (call_script, "script_af20_fame_tier", reg0),
+    (store_sub, ":price", 10, reg0),
+    (call_script, "script_af20_fame_kind"),
+    (try_begin), (eq, reg0, 1), (val_sub, ":price", 1), (try_end),
+    (val_max, ":price", 4),
+    (assign, reg0, ":price"),
   ]),
 
 ]

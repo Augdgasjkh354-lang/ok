@@ -2039,6 +2039,10 @@ game_menus = [
      (call_script, "script_get_player_party_morale_values"),     
 
      (assign, ":target_morale", reg0),
+     # v1.0 扩展：威名士气加成（与上面每日结算的档位加成同值，显示的数字才能对上）。
+     (call_script, "script_af20_fame_total"),
+     (call_script, "script_af20_fame_tier", reg0),
+     (store_mul, ":fame_bonus", reg0, 2),
      (assign, reg1, "$g_player_party_morale_modifier_party_size"),
      (try_begin),
        (gt, reg1, 0),
@@ -2090,6 +2094,11 @@ game_menus = [
      (assign, reg6, 50),
      
      (str_store_string, s1, "str_current_party_morale_is_reg5_current_party_morale_modifiers_are__base_morale__50_party_size_s2reg1_leadership_s3reg2_food_variety_s4reg3s5s6_recent_events_s7reg4_total__reg5___"),
+     (try_begin),
+       (gt, ":fame_bonus", 0),
+       (assign, reg8, ":fame_bonus"),
+       (str_store_string, s1, "@{s1}^威名：+{reg8}"),
+     (try_end),
         
      (try_for_range, ":kingdom_no", npc_kingdoms_begin, npc_kingdoms_end),
        (faction_get_slot, ":faction_morale", ":kingdom_no",  slot_faction_morale_of_player_troops),
@@ -3049,13 +3058,13 @@ game_menus = [
            (change_screen_return),
         ]
        ),
-      ("af07_world_entry", [(eq, 1, 0)], "烽烟与暗流：卡拉迪亚战局总览", [(jump_to_menu, "mnu_af07_world")]),
-      ("af04_network_entry", [(eq, 1, 0)], "地方匪帮与黑市情报", [(jump_to_menu, "mnu_af04_network")]),
-      ("af05_ledger_entry", [(eq, 1, 0)], "战争与宫廷：秘密军粮案卷", [(jump_to_menu, "mnu_af05_ledger")]),
+      ("af07_world_entry", [], "烽烟与暗流：卡拉迪亚战局总览", [(jump_to_menu, "mnu_af07_world")]),
+      ("af04_network_entry", [], "地方匪帮与黑市情报", [(jump_to_menu, "mnu_af04_network")]),
+      ("af05_ledger_entry", [], "战争与宫廷：秘密军粮案卷", [(jump_to_menu, "mnu_af05_ledger")]),
       # Ashfall v0.3: inspect active contract without visiting an office.
-      ("af03_field_journal", [(eq, 1, 0)], "\u519b\u4e8b\u59d4\u6258\u8bb0\u5f55", [(jump_to_menu, "mnu_af03_journal")]),
+      ("af03_field_journal", [], "\u519b\u4e8b\u59d4\u6258\u8bb0\u5f55", [(jump_to_menu, "mnu_af03_journal")]),
       # v7.5: non-cheat, read-only court records.
-      ("fb75_intel_book", [(eq, 1, 0)], "宫廷政治情报簿",
+      ("fb75_intel_book", [], "宫廷政治情报簿",
        [(jump_to_menu, "mnu_fb75_intel_book")]),
       ("af08_desk_entry", [], "烽烟案头：领地、战争与宫廷消息", [(jump_to_menu, "mnu_af08_desk")]),
       ("af11_arrears_entry", [(call_script, "script_af11_merc_current_owed"), (gt, reg0, 0)],
@@ -7976,7 +7985,9 @@ game_menus = [
      (party_get_slot, ":volunteer_amount", "$current_town", slot_center_volunteer_troop_amount),
      (party_get_free_companions_capacity, ":free_capacity", "p_main_party"),
      (store_troop_gold, ":gold", "trp_player"),
-     (store_div, ":gold_capacity", ":gold", 10),#10 denars per man
+     (call_script, "script_af21_recruit_price"),
+     (assign, ":price", reg0),
+     (store_div, ":gold_capacity", ":gold", ":price"),
      (assign, ":party_capacity", ":free_capacity"),
      (val_min, ":party_capacity", ":gold_capacity"),
      (try_begin),
@@ -7993,7 +8004,7 @@ game_menus = [
        (eq, ":volunteer_amount", 0),
        (str_store_string, s18, "@No one here seems to be willing to join your party."),
      (else_try),
-       (store_mul, reg6, ":volunteer_amount", 10),#10 denars per man
+       (store_mul, reg6, ":volunteer_amount", ":price"),
        (str_store_troop_name_by_count, s3, ":volunteer_troop", ":volunteer_amount"),
        (try_begin),
          (eq, reg5, 1),
@@ -15165,6 +15176,7 @@ game_menus = [
        (else_try), (eq, reg0, 1), (display_message, "@城里只凑出了{reg41}第纳尔，还欠你{reg42}。下次来委托处再结。"),
        (else_try), (eq, reg0, 2), (display_message, "@\u519b\u4e8b\u59d4\u6258\u5df2\u767b\u8bb0\u5931\u8d25\uff0c\u6ca1\u6709\u652f\u4ed8\u62a5\u916c\u3002"),
        (else_try), (display_message, "@眼下没有能领的酬金。"), (try_end),  # v1.0 NPC对白 A-13
+       (try_begin), (eq, reg0, 1), (display_message, "@办完这单委托，战功+2。"), (try_end),
        (jump_to_menu, "mnu_af03_contract_board")]),
      ("af03_office_to_journal", [], "\u67e5\u770b\u5f53\u524d\u59d4\u6258\u8bf4\u660e", [(jump_to_menu, "mnu_af03_journal")]),
      ("af03_office_back", [], "\u8fd4\u56de\u57ce\u9547", [(jump_to_menu, "mnu_town")]),
@@ -15472,14 +15484,14 @@ game_menus = [
      ("af06_sabotage_action", [], "派间谍焚毁敌军粮仓（800 第纳尔）",  # v1.0 NPC对白 A-8
       [(call_script, "script_af06_sabotage", "$g_encountered_party"),
        (assign, ":valid", reg(0)), (assign, ":won", reg(1)), (assign, reg(96), reg(2)),
-       (try_begin), (eq, ":valid", 0), (display_message, "@无法发起破坏：费用不足、粮仓已空或七天冷却未结束。"),
+       (try_begin), (eq, ":valid", 0), (display_message, "@无法发起破坏：费用不足、粮仓已空或两天冷却未结束。"),
        (else_try), (eq, ":won", 1), (display_message, "@破坏成功，敌军损失了{reg96}单位真实粮食储备！"),
        (else_try), (display_message, "@破坏失败，间谍行动耗费的资金已经损失。"), (try_end),
        (jump_to_menu, "mnu_af06_siege_ops")]),
      ("af06_bribe_action", [], "策反敌军守备士卒（1400 第纳尔）",  # v1.0 NPC对白 A-8
       [(call_script, "script_af06_bribe", "$g_encountered_party"),
        (assign, ":valid", reg(0)), (assign, reg(96), reg(1)),
-       (try_begin), (eq, ":valid", 0), (display_message, "@无法策反：资金不足、守军太少或十二天冷却未结束。"),
+       (try_begin), (eq, ":valid", 0), (display_message, "@无法策反：资金不足、守军太少或三天冷却未结束。"),
        (else_try), (gt, reg(96), 0), (display_message, "@收买成功，守军已有{reg96}名士兵逃离城防。"),
        (else_try), (display_message, "@收买行动失败，资金已经损失。"), (try_end),
        (jump_to_menu, "mnu_af06_siege_ops")]),
