@@ -56794,8 +56794,10 @@ scripts = [
           (call_script, "script_change_player_honor", 1),
         (else_try),
           (eq, ":choice", 2),
-          (troop_add_gold, "trp_player", 150),
+          # v1.0 Codex 修复：贿赂只给村长实际有的数。先扣钱袋（返回实扣数），再按实扣数给玩家；村长没钱时得 0。
           (call_script, "script_af13_village_purse", ":village", -150),
+          (assign, ":bribe", reg0),
+          (troop_add_gold, "trp_player", ":bribe"),
           (call_script, "script_change_player_relation_with_center", ":village", -2),
           (call_script, "script_change_player_honor", -2),
         (else_try),
@@ -56811,8 +56813,10 @@ scripts = [
           (call_script, "script_change_player_honor", 1),
         (else_try),
           (eq, ":choice", 2),
-          (troop_add_gold, "trp_player", 200),
+          # v1.0 Codex 修复：贿赂只给磨坊主实际有的数。先扣钱袋（返回实扣数），再按实扣数给玩家；没钱时得 0。
           (call_script, "script_af13_village_purse", ":village", -200),
+          (assign, ":bribe", reg0),
+          (troop_add_gold, "trp_player", ":bribe"),
           (call_script, "script_change_player_relation_with_center", ":village", -3),
           (call_script, "script_change_player_honor", -2),
         (else_try),
@@ -56864,8 +56868,11 @@ scripts = [
   # every 3000 above 3500 is invested as +1 prosperity). Input: village, amount
   # (negative takes money out, never below zero).
   ("af13_village_purse", [
+    # v1.0 Codex 修复：返回实际动了多少钱（reg0）。正数是给村长的数；负数是实际扣到的数（不超过村长现有的钱）。
+    # 村子无效或没有村长时返回 0。调用方按 reg0 给玩家付钱，不再凭空生钱。
     (store_script_param, ":village", 1),
     (store_script_param, ":amount", 2),
+    (assign, reg0, 0),
     (try_begin),
       (is_between, ":village", villages_begin, villages_end),
       (party_get_slot, ":elder", ":village", slot_town_elder),
@@ -56873,6 +56880,7 @@ scripts = [
       (try_begin),
         (gt, ":amount", 0),
         (troop_add_gold, ":elder", ":amount"),
+        (assign, reg0, ":amount"),
       (else_try),
         (lt, ":amount", 0),
         (store_troop_gold, ":gold", ":elder"),
@@ -56880,6 +56888,7 @@ scripts = [
         (val_min, ":take", ":gold"),
         (gt, ":take", 0),
         (troop_remove_gold, ":elder", ":take"),
+        (assign, reg0, ":take"),
       (try_end),
     (try_end),
   ]),
@@ -56936,8 +56945,10 @@ scripts = [
     (party_get_slot, ":have", ":center", slot_town_wealth),
     (try_begin),
       (gt, ":have", 0),
+      # v1.0 Codex 修复：金库一次最多出四分之一，剩下的走领主、国王、欠债链路，不把金库提空。
+      (store_div, ":cap", ":have", 4),
       (store_add, ":take", ":left", 0),
-      (val_min, ":take", ":have"),
+      (val_min, ":take", ":cap"),
       (val_sub, ":have", ":take"),
       (party_set_slot, ":center", slot_town_wealth, ":have"),
       (val_add, ":paid", ":take"),
