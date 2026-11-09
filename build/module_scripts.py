@@ -59019,7 +59019,8 @@ scripts = [
   ]),
 
   ("af26_player_caravan", [
-    # v1.0 领主关系与独立玩法·第三波 I8: 玩家名下的商队。reg0=商队部队号，无则 0（一次只养一支，不会歧义）。
+    # v1.0 领主关系与独立玩法·第三波 I8: 玩家名下的第一支商队。reg0=商队部队号，无则 0。
+    # 商队上限 36 之后不再调用它（组建用 af26_count_caravans 计数，结算用 af26_town_caravan 找本镇那支）；留着是怕删了脚本号后移。
     (assign, reg0, 0),
     (try_for_parties, ":party"),
       (eq, reg0, 0),
@@ -59080,6 +59081,35 @@ scripts = [
       (troop_add_gold, "trp_player", ":take"),
       (assign, reg0, ":take"),
     (try_end),
+  ]),
+
+  ("af26_count_caravans", [
+    # v1.0 商队上限 36: 玩家名下的商队有几支。reg0=支数。
+    (assign, ":count", 0),
+    (try_for_parties, ":party"),
+      (party_slot_eq, ":party", slot_party_type, spt_kingdom_caravan),
+      (store_faction_of_party, ":fac", ":party"),
+      (eq, ":fac", "fac_player_supporters_faction"),
+      (val_add, ":count", 1),
+    (try_end),
+    (assign, reg0, ":count"),
+  ]),
+
+  ("af26_town_caravan", [
+    # v1.0 商队上限 36: 指定城镇里、钱箱超 600 的玩家商队（第一支）。参数：城镇。reg0=商队部队号，无则 0。
+    (store_script_param, ":town", 1),
+    (assign, ":found", 0),
+    (try_for_parties, ":party"),
+      (eq, ":found", 0),
+      (party_slot_eq, ":party", slot_party_type, spt_kingdom_caravan),
+      (store_faction_of_party, ":fac", ":party"),
+      (eq, ":fac", "fac_player_supporters_faction"),
+      (party_is_in_town, ":party", ":town"),
+      (party_get_slot, ":purse", ":party", slot_af18_caravan_purse),
+      (gt, ":purse", af18_caravan_capital),
+      (assign, ":found", ":party"),
+    (try_end),
+    (assign, reg0, ":found"),
   ]),
 
 ]

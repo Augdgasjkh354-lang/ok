@@ -808,5 +808,7 @@ script_af26_mediate_target = 806
 script_af26_player_caravan = 807
 script_af26_found_caravan = 808
 script_af26_caravan_collect = 809
+script_af26_count_caravans = 810
+script_af26_town_caravan = 811
 
 
