@@ -1,6 +1,7 @@
 ﻿
 dlga_village_elder_talk:village_elder_donate|我 想 给 村 子 捐 点 钱 （ 500 第 纳 尔 ） 。 
 dlga_village_elder_donate:village_elder_pretalk|多 谢 您 的 慷 慨 ， {先 生 /夫 人 }！ 这 500 第 纳 尔 一 定 会 用 在 村 子 最 需 要 的 地 方 ， 您 是 我 们 永 远 的 朋 友 。 
+dlga_village_elder_recruit_start:village_elder_recruit_decision|我 想 如 果 你 能 为 {reg7?他 们 每 个 人 的 装 备 :他 的 装 备 }付 {reg6}第 纳 尔 的 话 ， 将 会 有 {reg5}个 人 跳 出 来 争 取 这 个 机 会 。 这 个 中 你 的 意 吧 ？ 
 dlga_lord_talk:fb7_memory_answer|你 还 记 得 我 们 过 去 的 恩 怨 吗 ？ 
 dlga_fb7_memory_answer:lord_pretalk|你 放 走 过 我 {reg51}次 ， 也 囚 禁 过 我 {reg52}次 。 我 对 你 的 仇 怨 有 {reg54}之 深 ， 家 族 之 恨 还 有 {reg55}。 这 笔 账 ， 我 不 会 忘 。 
 dlga_fb7_memory_answer:lord_pretalk.1|你 放 走 过 我 {reg51}次 、 囚 禁 我 {reg52}次 。 我 欠 你 的 恩 情 是 {reg53}， 旧 怨 是 {reg54}。 你 的 仁 慈 ， 我 记 得 。 

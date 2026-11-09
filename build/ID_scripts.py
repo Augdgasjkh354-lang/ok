@@ -789,5 +789,6 @@ script_af24_stock_value = 787
 script_af24_settle_stock = 788
 script_af25_village_looted_recently = 789
 script_af25_lord_first_greeting = 790
+script_af21_recruit_price = 791
 
 

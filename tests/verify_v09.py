@@ -15,6 +15,8 @@ assert (base/'compiled/variables.txt').read_bytes()==(data/'variables.txt').read
 # Dialogues may change only where intended (logic edits); text stays as compiled before.
 ALLOWED_DIALOG_CHANGES={'dlga_village_elder_donate:village_elder_pretalk',  # v1.0: donation stays in village purse
     'dlga_village_elder_talk:village_elder_donate',  # v1.0 NPC对白 A-14: 捐钱选项只写动作和代价
+    'dlga_village_elder_recruit_start:village_elder_talk',  # v1.0 扩展 B1: 村长招兵价按威名档位打折（条件改单价）
+    'dlga_village_elder_recruit_start:village_elder_recruit_decision',  # v1.0 扩展 B1: 同上，文本改中文并显示单价
     'dlga_start:village_elder_talk', 'dlga_start:village_elder_talk.1',  # v1.0 NPC对白 B-3: 村长认出劫掠者, 旧问候加互斥条件
     'dlga_start:village_elder_talk.2', 'dlga_start:village_elder_talk.3',
     'dlga_start:lord_meet_neutral',  # v1.0 NPC对白 B-1/B-2/B-6: 领主初见专属招呼, 通用句加互斥条件
