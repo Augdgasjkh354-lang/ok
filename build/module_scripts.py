@@ -54442,11 +54442,15 @@ scripts = [
           (ge, ":since", 4),
           (store_random_in_range, ":roll", 0, 100),
           (lt, ":roll", 18),
+          # v1.0 六国匪帮第二批 (国王合作 A): 帮不劫本国军粮队——老巢村所属阵营即本国。
+          (store_faction_of_party, ":home_faction", ":home"),
           (assign, ":near", -1),
           (assign, ":near_dist", 8),
           (try_for_parties, ":convoy"),
             (party_get_template_id, ":maybe", ":convoy"),
             (eq, ":maybe", "pt_af03_supply_convoy"),
+            (store_faction_of_party, ":convoy_faction", ":convoy"),
+            (neq, ":convoy_faction", ":home_faction"),
             (store_distance_to_party_from_party, ":distance", ":gang", ":convoy"),
             (lt, ":distance", ":near_dist"),
             (assign, ":near", ":convoy"),
@@ -55205,6 +55209,9 @@ scripts = [
       (try_end),
       # v1.0 领主与匪帮 L2: 领主资助匪帮（每 7 天 500，财产 ≥500 才给）。
       (call_script, "script_af27_sponsor"),
+      # v1.0 六国匪帮第二批 (国王合作 B): 国王每周资助本国那支帮 500。
+      # 挂在 3 天周期里, 7 天冷却由 936 (上次资助日, day+1) 控制, 到期才给。
+      (call_script, "script_af28_king_sponsor"),
     (try_end),
   ]),
 
@@ -59469,6 +59476,9 @@ scripts = [
       (party_get_battle_opponent, ":opponent", ":party"),
       (lt, ":opponent", 0),
       (store_faction_of_troop, ":faction", ":lord"),
+      # v1.0 六国匪帮第二批 (国王合作 A): 国王不亲自猎杀——首都的镇主可能就是国王 (与 af05 / af27_sponsor 同款条件)。
+      (faction_get_slot, ":king", ":faction", slot_faction_leader),
+      (neq, ":lord", ":king"),
       (neg|faction_slot_eq, ":faction", slot_faction_marshall, ":lord"),
       (neg|party_slot_eq, ":party", slot_party_ai_state, spai_accompanying_army),
       (neg|party_slot_eq, ":party", slot_party_ai_state, spai_besieging_center),
@@ -59798,4 +59808,53 @@ scripts = [
     (try_end),
   ]),
 
+  # v1.0 六国匪帮第二批 (国王合作 B): 国王每周资助本国那支帮 500。reg0=本周实际资助了几位国王。
+  # 每 7 天一次、国王财产 ≥500 才给、帮须活着且老巢在本国; 无 grievance / ambition / cabal 门槛。
+  # 钱流: 国王财产 -500 (af14_lord_wealth) → 帮钱袋 +500 (af15_gang_purse)。
+  # 不进 L3 分赃: 只写 935/936, 不碰 909/910 (af27_find_sponsor 只扫 909)。
+  # 有意不同于 af27_sponsor: 那边有 (eq, ":old", 0) 门, 领主资助了活帮后不再重复给
+  # (7 天 day 槽只在帮死后重选时起作用); 这里 935 只记"国王资助的帮"备查, 936 作 7 天冷却,
+  # 同一支帮每 7 天拿一次, 否则"每周 500"只会给一次。挂点见 af05_daily_plots。
+  ("af28_king_sponsor", [
+    (store_current_day, ":day"),
+    (val_add, ":day", 1),
+    (assign, ":paid", 0),
+    (try_for_range, ":faction", npc_kingdoms_begin, npc_kingdoms_end),
+      (faction_slot_eq, ":faction", slot_faction_state, sfs_active),
+      (faction_get_slot, ":king", ":faction", slot_faction_leader),
+      (is_between, ":king", active_npcs_begin, active_npcs_end),
+      (neq, ":king", "trp_player"),
+      (troop_slot_eq, ":king", slot_troop_prisoner_of_party, -1),
+      # kind N ↔ fac_kingdom_N 一对一 (见 af04_find_home)。
+      (store_sub, ":kind", ":faction", "fac_kingdom_1"),
+      (val_add, ":kind", 1),
+      # 资助的帮若已死, 旗标作废 (同 af27_sponsor 的处理)。
+      (troop_get_slot, ":old", ":king", slot_af28_king_sponsor_kind),
+      (try_begin),
+        (is_between, ":old", 1, 7),
+        (call_script, "script_af23_gang_live_party", ":old"),
+        (eq, reg0, 0),
+        (troop_set_slot, ":king", slot_af28_king_sponsor_kind, 0),
+      (try_end),
+      # 帮须活着且老巢在本国 (取法同 af27_sponsor: 老巢村所属阵营)。
+      (call_script, "script_af23_gang_live_party", ":kind"),
+      (gt, reg0, 0),
+      (assign, ":gang", reg0),
+      (party_get_slot, ":home", ":gang", slot_af04_home),
+      (is_between, ":home", villages_begin, villages_end),
+      (store_faction_of_party, ":home_faction", ":home"),
+      (eq, ":home_faction", ":faction"),
+      (troop_slot_ge, ":king", slot_troop_wealth, 500),
+      (troop_get_slot, ":last", ":king", slot_af28_king_sponsor_day),
+      (store_sub, ":elapsed", ":day", ":last"),
+      (this_or_next|eq, ":last", 0),
+      (ge, ":elapsed", 7),
+      (call_script, "script_af14_lord_wealth", ":king", 0, 500),
+      (call_script, "script_af15_gang_purse", ":kind", 500),
+      (troop_set_slot, ":king", slot_af28_king_sponsor_kind, ":kind"),
+      (troop_set_slot, ":king", slot_af28_king_sponsor_day, ":day"),
+      (val_add, ":paid", 1),
+    (try_end),
+    (assign, reg0, ":paid"),
+  ]),
 ]
