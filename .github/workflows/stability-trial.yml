@@ -1,0 +1,38 @@
+name: Build and package Ashfall stability fixes
+
+on:
+  push:
+    branches:
+      - fix/stability-diplomacy-merchant-20261110
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Compile module and validate localization
+        run: |
+          python build_v09.py
+          python generate_localization.py
+          python tests/verify_v09.py
+          python tests/test_merge_localization.py
+      - name: Assemble one ready-to-install trial package
+        run: |
+          mkdir -p dist
+          python tools/package_trial.py player-data/cns dist/ashfall-stability-trial.zip --note docs/试玩说明_稳定性修复.txt
+      - name: Upload the single trial package
+        uses: actions/upload-artifact@v4
+        with:
+          name: ashfall-stability-trial
+          path: dist/ashfall-stability-trial.zip
+          if-no-files-found: error
+          retention-days: 30
