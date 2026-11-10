@@ -1393,3 +1393,9 @@ caravan_af32_shares
 caravan_af32_shares_choose
 caravan_af32_shares_done
 mayor_af32_guild
+mayor_af33_beg
+mayor_af33_beg_choose
+mayor_af33_beg_done
+village_af33_invest
+village_af33_invest_choose
+village_af33_invest_done

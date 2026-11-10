@@ -250,3 +250,5 @@ menu_af26_bounty = 248
 menu_af26_hold_choice = 249
 menu_af28_contact = 250
 menu_af31_bank = 251
+menu_af33_loan_call = 252
+menu_af33_garrison = 253

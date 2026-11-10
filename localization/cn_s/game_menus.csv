@@ -43,6 +43,9 @@ mno_af06_supply_entry|秘 密 运 粮 入 城 （ 4袋 谷 物 ， 增 加 约 �
 mno_af30_town_shares_entry|入 股 本 镇 （ 10000 第 纳 尔 ， 10% 股 份 ， 已 有 {reg41}%） 
 mno_af31_bank_open_entry|开 钱 庄 （ 5000 第 纳 尔 ， 一 城 只 能 开 一 家 ） 
 mno_af31_bank_entry|去 钱 庄 看 看 （ 未 收 回 本 金 {reg41} 第 纳 尔 ） 
+mno_af33_rent_entry|租 地 方 放 兵 （ 每 月 500 第 纳 尔 ） 
+mno_af33_renew_entry|续 租 驻 兵 处 （ 500 第 纳 尔 ， 还 剩 {reg41} 天 ） 
+mno_af33_swap_entry|与 城 外 驻 留 的 兵 换 兵 
 menu_fb75_intel_book|宫 廷 政 治 情 报 簿 ^^政 治 信 用 ： {reg50}    政 治 嫌 疑 ： {reg51}/100    王 室 调 查 次 数 ： {reg52}^有 效 情 报 ： {reg53}条    有 人 欠 你 选 票 ： {reg54}笔    你 欠 人 的 选 票 ： {reg58}笔 ^^情 报 只 记 录 你 已 经 打 听 到 的 消 息 ； 过 期 线 索 会 自 动 从 本 页 隐 去 。 
 mno_fb75_book_clues|查 看 已 掌 握 的 政 治 线 索 
 mno_fb75_book_debts|查 看 欠 你 选 票 的 贵 族 
@@ -236,3 +239,13 @@ mno_af31_bank_lend_1000|放 贷 给 本 城 商 人 ： 借 出 1000 第 纳 尔
 mno_af31_bank_lend_3000|放 贷 给 本 城 商 人 ： 借 出 3000 第 纳 尔 
 mno_af31_bank_collect|收 回 本 金 {reg41} 第 纳 尔 （ 一 次 最 多 拿 金 库 的 四 分 之 一 ） 
 mno_af31_bank_leave|离 开 钱 庄 
+menu_af33_loan_call|{s8}派 信 使 捎 话 来 , 请 你 去 见 他 一 面 。 ^{s9}
+mno_af33_loan_lord_500|借 他 500 第 纳 尔 。 
+mno_af33_loan_lord_1000|借 他 1000 第 纳 尔 。 
+mno_af33_loan_king_5000|投 他 5000 第 纳 尔 。 
+mno_af33_loan_king_10000|投 他 10000 第 纳 尔 。 
+mno_af33_loan_dismiss|先 不 见 ， 打 发 信 使 走 。 
+menu_af33_garrison|这 是 你 租 地 方 存 在 {s10} 城 外 的 兵 。 ^他 们 归 你 管 ， 饷 银 每 周 从 你 身 上 扣 ， 租 金 每 月 500 第 纳 尔 。 ^想 换 兵 就 直 接 换 ， 想 散 就 散 — — 散 了 兵 就 没 了 。 
+mno_af33_garrison_swap|与 驻 留 的 兵 换 兵 
+mno_af33_garrison_disband|解 散 这 支 驻 留 部 队 （ 兵 散 了 ， 租 金 不 退 ） 
+mno_af33_garrison_leave|离 开 

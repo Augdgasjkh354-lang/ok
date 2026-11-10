@@ -2157,3 +2157,8 @@ slot_af30_town_shares        = 947 # town: player-owned shares in percent, 10/20
 slot_af31_workers            = 949 # town: hired workers in the player workshop, 0-10 (capital batch 3, item 6; 948 reserved for tax farming redesign)
 slot_af31_bank_principal     = 950 # town: bank outstanding principal + 1; 0 = no bank ever opened, 1 = bank open with nothing out (capital batch 3, item 7)
 slot_af32_caravan_shares     = 951 # caravan party: player-owned shares in percent, 10/20/30 (capital batch 4, item 8; caravan destroyed/disbanded = shares void, no refund)
+slot_af33_garrison_party     = 952 # town: hired garrison party id; 0 = none (capital 2.0 batch 1, item 1)
+slot_af33_garrison_rent_day  = 953 # town: rent due day; 0 = no rent due / own town (capital 2.0 batch 1, item 1)
+slot_af33_loan_visit_day     = 956 # p_main_party: last day a lord/king visited asking for a loan; 30-day cooldown (capital 2.0 batch 1, item 4; 954-955 batch 2, 957-958 batch 2)
+slot_af33_town_begging       = 959 # town: begging-for-investment expiry day; 0 = not begging (capital 2.0 batch 1, item 6; 957-958 batch 2)
+slot_af33_village_invested   = 960 # village: cumulative denars the player invested (capital 2.0 batch 1, item 7a)
