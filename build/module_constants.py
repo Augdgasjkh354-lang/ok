@@ -2120,6 +2120,7 @@ slot_af26_borrow_day         = 899 # p_main_party: L1 borrow return deadline (da
 slot_af26_borrow_count       = 900 # p_main_party: L1 borrowed men count
 slot_af26_borrow_lender      = 901 # p_main_party: L1 lender lord troop id; 0 = none
 slot_af26_borrow_pre_count   = 967 # p_main_party: L1 pre-borrow count of that troop type in the player's party; 0 = none (audit 13 fix F-03)
+slot_af26_borrow_troop       = 968 # p_main_party: L1 borrowed troop type, captured when lending; 0 = legacy save / no loan
 slot_af26_license            = 902 # p_main_party: I1 mercenary license, 1 = licensed
 slot_af26_protect_day        = 903 # town: I5 next protection collection day+1; 0 = not protected
 slot_af26_sanctuary_day      = 904 # p_main_party: L5 sanctuary expiry (day+7); 0 = not in sanctuary
