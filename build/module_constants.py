@@ -2167,3 +2167,5 @@ slot_af33_warloan_principal  = 957 # lord Troop Slot: war-loan principal owed to
 slot_af33_warloan_due_day    = 958 # lord Troop Slot: war-loan due day (lend day + 30); 0 = no war loan outstanding (capital 2.0 batch 2, item 5)
 slot_af33_town_begging       = 959 # town: begging-for-investment expiry day; 0 = not begging (capital 2.0 batch 1, item 6; 957-958 batch 2)
 slot_af33_village_invested   = 960 # village: cumulative denars the player invested (capital 2.0 batch 1, item 7a)
+slot_af33_gang_invest_kind   = 961 # p_main_party: gang kind 1-6 the player invested in; 0 = none (capital 2.0 batch 3, item 8a)
+slot_af33_gang_invest_amount = 962 # p_main_party: denars invested in the gang in 961; cleared when that gang is wiped out (capital 2.0 batch 3, item 8a)

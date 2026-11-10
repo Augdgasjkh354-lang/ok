@@ -27551,4 +27551,38 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   [anyone|plyr,"af33_warloan_choose", [], "算了，当我没说。", "lord_talk",[]],
   [anyone,"af33_warloan_done", [], "多谢。这钱我会拿去雇兵，30 天后连本带息还你。", "lord_talk",[]],
 
+  # v1.0 资本家 2.0 第三批 (条目 7b): 出钱买和平, I4 外交掮客的反向。
+  # 条件照 I4 (声望 >= 200、两国国王好感 >= 20、两国交战), 再加玩家手头
+  # 有 5000。af33_buy_peace_target 只找“本国是弱势一方”的战争 (对方据点
+  # 比本国多): 赔款 5000 进强势方国王财产 (af14), 两国调同一套停战执行器
+  # diplomacy_start_peace_between_kingdoms。买和平是自愿出价, 不是欠账,
+  # 不走 af19、不记欠账。关系: 被救的国王 +3、收赔款的国王 +2。
+  [anyone|plyr,"lord_talk", [
+    (faction_slot_eq, "$g_talk_troop_faction", slot_faction_leader, "$g_talk_troop"),
+    (troop_get_slot, ":renown", "trp_player", slot_troop_renown),
+    (ge, ":renown", 200),
+    (call_script, "script_troop_get_relation_with_troop", "trp_player", "$g_talk_troop"),
+    (ge, reg0, 20),
+    (call_script, "script_af33_buy_peace_target"),
+    (eq, reg0, 1),
+    (store_troop_gold, ":gold", "trp_player"),
+    (ge, ":gold", 5000),
+  ], "陛下，我出 5000 第纳尔，替你向{s4}买个停战。", "af33_buy_peace",[
+    (call_script, "script_af33_buy_peace_target"),
+    (eq, reg0, 1),
+    (assign, ":kingdom_a", "$g_talk_troop_faction"),
+    (assign, ":kingdom_b", reg1),
+    (faction_get_slot, ":king_b", ":kingdom_b", slot_faction_leader),
+    (store_relation, ":rel", ":kingdom_a", ":kingdom_b"),
+    (lt, ":rel", 0),
+    (troop_remove_gold, "trp_player", 5000),
+    (call_script, "script_af14_lord_wealth", ":king_b", 5000, 0),
+    (call_script, "script_diplomacy_start_peace_between_kingdoms", ":kingdom_a", ":kingdom_b", 1),
+    (call_script, "script_change_player_relation_with_troop", "$g_talk_troop", 3),
+    (call_script, "script_change_player_relation_with_troop", ":king_b", 2),
+    (str_store_faction_name, s4, ":kingdom_a"),
+    (str_store_faction_name, s5, ":kingdom_b"),
+  ]],
+  [anyone,"af33_buy_peace", [], "谈成了。{s4}与{s5}已经停战，四十天内不再开战。你替我国出的这 5000 第纳尔赔款，对方国王已经收下了。这份情，两国都记下了。", "lord_talk",[]],
+
 ]

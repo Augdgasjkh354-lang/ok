@@ -137,3 +137,5 @@ dlga_af33_warloan_choose:af33_warloan_done.1|借 你 3000 第 纳 尔 ， 30 天
 dlga_af33_warloan_choose:af33_warloan_done.2|借 你 5000 第 纳 尔 ， 30 天 后 还 5400。 
 dlga_af33_warloan_choose:lord_talk|算 了 ， 当 我 没 说 。 
 dlga_af33_warloan_done:lord_talk|多 谢 。 这 钱 我 会 拿 去 雇 兵 ， 30 天 后 连 本 带 息 还 你 。 
+dlga_lord_talk:af33_buy_peace|陛 下 ， 我 出 5000 第 纳 尔 ， 替 你 向 {s4}买 个 停 战 。 
+dlga_af33_buy_peace:lord_talk|谈 成 了 。 {s4}与 {s5}已 经 停 战 ， 四 十 天 内 不 再 开 战 。 你 替 我 国 出 的 这 5000 第 纳 尔 赔 款 ， 对 方 国 王 已 经 收 下 了 。 这 份 情 ， 两 国 都 记 下 了 。 

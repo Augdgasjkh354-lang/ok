@@ -252,3 +252,4 @@ menu_af28_contact = 250
 menu_af31_bank = 251
 menu_af33_loan_call = 252
 menu_af33_garrison = 253
+menu_af33_caravan_raid = 254

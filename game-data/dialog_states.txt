@@ -1408,3 +1408,4 @@ af33_fund_war_done
 af33_warloan
 af33_warloan_choose
 af33_warloan_done
+af33_buy_peace
