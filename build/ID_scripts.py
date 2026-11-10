@@ -828,5 +828,10 @@ script_af29_enterprise_bonus = 826
 script_af32_guild_master = 827
 script_af33_loan_caller = 828
 script_af33_find_garrison = 829
+script_af33_faction_at_war = 830
+script_af33_center_price = 831
+script_af33_king_selling = 832
+script_af33_bribe_marshal_vote = 833
+script_af33_settle_warloans = 834
 
 

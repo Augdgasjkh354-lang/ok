@@ -60334,6 +60334,171 @@ scripts = [
     (try_end),
     (assign, reg0, ":town"),
   ]),
+
+  # ========== v1.0 资本家 2.0 第二批 (条目 2+3a/10a+3b+5) ==========
+  # af33_faction_at_war: is the faction at war with any kingdom or the
+  # player's faction? Output: reg0 = 1/0. store_relation < 0 means war
+  # (cf_select_random_town_at_peace_with_faction uses >= 0 for peace).
+  # kingdoms_begin includes fac_player_supporters_faction, so the loop
+  # runs over npc_kingdoms and the player faction is checked separately.
+  ("af33_faction_at_war", [
+    (store_script_param, ":faction", 1),
+    (assign, ":at_war", 0),
+    (try_for_range, ":other", npc_kingdoms_begin, kingdoms_end),
+      (neq, ":other", ":faction"),
+      (store_relation, ":rel", ":faction", ":other"),
+      (lt, ":rel", 0),
+      (assign, ":at_war", 1),
+    (try_end),
+    (try_begin),
+      (eq, ":at_war", 0),
+      (neq, ":faction", "fac_player_supporters_faction"),
+      (store_relation, ":rel2", ":faction", "fac_player_supporters_faction"),
+      (lt, ":rel2", 0),
+      (assign, ":at_war", 1),
+    (try_end),
+    (assign, reg0, ":at_war"),
+  ]),
+
+  # af33_center_price: what a center costs when bought from its king.
+  # Town 50000, castle 30000, village 10000 (report section 2: magnitude
+  # to be playtested). Output: reg0 = price.
+  ("af33_center_price", [
+    (store_script_param, ":center", 1),
+    (assign, ":price", 10000),
+    (try_begin),
+      (party_slot_eq, ":center", slot_party_type, spt_town),
+      (assign, ":price", 50000),
+    (else_try),
+      (party_slot_eq, ":center", slot_party_type, spt_castle),
+      (assign, ":price", 30000),
+    (try_end),
+    (assign, reg0, ":price"),
+  ]),
+
+  # af33_king_selling: does the king hold any center of the player's
+  # kingdom that he could sell? Output: reg0 = 1/0. Only the king's own
+  # demesne is for sale (a vassal's fief is not the king's to sell).
+  ("af33_king_selling", [
+    (store_script_param, ":king", 1),
+    (assign, ":found", 0),
+    (try_for_range, ":center", centers_begin, centers_end),
+      (eq, ":found", 0),
+      (party_slot_eq, ":center", slot_town_lord, ":king"),
+      (store_faction_of_party, ":cf", ":center"),
+      (eq, ":cf", "$players_kingdom"),
+      (assign, ":found", 1),
+    (try_end),
+    (assign, reg0, ":found"),
+  ]),
+
+  # af33_bribe_marshal_vote: buy one lord's vote in a marshal election.
+  # Modelled on fb73_player_bribe (same price via fb73_vote_price, same
+  # acceptance chance, same heat, same 5-day lobby cooldown), but the
+  # marshal issue (slot_faction_political_issue == 1) is NOT a fief issue:
+  # fb73's promise machinery is fief-scoped (fb73_settle_court only runs
+  # for center issues, and the AI vote script says outright "No commitment
+  # affects marshal elections"), so no promise is recorded and no escrow
+  # is kept -- the vote is cast at once by setting the lord's stance to
+  # trp_player, which is exactly what the native tally reads
+  # (slot_troop_stance_on_faction_issue). Output: reg0 = 1/0.
+  ("af33_bribe_marshal_vote", [
+    (store_script_param, ":lord", 1),
+    (assign, ":accepted", 0),
+    (store_faction_of_troop, ":faction", ":lord"),
+    (faction_get_slot, ":issue", ":faction", slot_faction_political_issue),
+    (store_current_day, ":day"),
+    (troop_get_slot, ":last", ":lord", slot_fb73_last_lobby_day),
+    (store_sub, ":elapsed", ":day", ":last"),
+    (try_begin),
+      (eq, ":faction", "$players_kingdom"),
+      (eq, "$player_has_homage", 1),
+      (eq, ":issue", 1),
+      (troop_slot_eq, ":lord", slot_troop_stance_on_faction_issue, -1),
+      (troop_slot_eq, ":lord", slot_fb73_promise_candidate, 0),
+      (this_or_next|eq, ":last", 0),
+      (ge, ":elapsed", 5),
+      (call_script, "script_fb73_vote_price", ":lord"),
+      (assign, ":price", reg0),
+      (store_troop_gold, ":gold", "trp_player"),
+      (ge, ":gold", ":price"),
+      (call_script, "script_troop_get_relation_with_troop", "trp_player", ":lord"),
+      (assign, ":relation", reg0),
+      (call_script, "script_fb73_get_credit", "trp_player"),
+      (store_div, ":cred", reg0, 2),
+      (store_add, ":chance", ":relation", ":cred"),
+      (val_add, ":chance", 30),
+      (val_clamp, ":chance", 5, 86),
+      (store_random_in_range, ":roll", 0, 100),
+      (lt, ":roll", ":chance"),
+      (troop_remove_gold, "trp_player", ":price"),
+      (call_script, "script_af14_lord_wealth", ":lord", ":price", 0),
+      (call_script, "script_fb74_add_heat", ":lord", 26),
+      (call_script, "script_fb74_add_heat", "trp_player", 16),
+      (troop_set_slot, ":lord", slot_troop_stance_on_faction_issue, "trp_player"),
+      (assign, ":accepted", 1),
+    (try_end),
+    (troop_set_slot, ":lord", slot_fb73_last_lobby_day, ":day"),
+    (assign, reg0, ":accepted"),
+  ]),
+
+  # af33_settle_warloans: weekly settlement of war loans (Slots 957/958).
+  # Runs from a weekly simple trigger; no budget_report row (only messages).
+  # Term is 30 days at 2%/week: interest = principal * 2 * weeks / 100
+  # where weeks = (today - lend_day) / 7, lend_day = due_day - 30 (at the
+  # due day that is 4 weeks = 8%, e.g. 1000 -> 1080). Total is capped at
+  # twice the principal, mirroring the 945 interest cap. Settlement:
+  # af19_lord_pays pays what the lord's wealth covers and books the rest
+  # as af19 debt (Slot 874), so a defaulted war loan joins the ordinary
+  # debt-collection chain (paid when the lord next comes near the player
+  # with money). Relation: paid in full +3; partial -2; nothing -5.
+  # A prisoner is skipped and retried next week (interest keeps accruing
+  # under the cap). No claim is made about winning or losing the war:
+  # payment is about the lord's purse, not the battlefield.
+  ("af33_settle_warloans", [
+    (store_current_day, ":today"),
+    (try_for_range, ":lord", active_npcs_begin, active_npcs_end),
+      (troop_get_slot, ":principal", ":lord", slot_af33_warloan_principal),
+      (gt, ":principal", 0),
+      (troop_get_slot, ":due_day", ":lord", slot_af33_warloan_due_day),
+      (gt, ":due_day", 0),
+      (ge, ":today", ":due_day"),
+      (troop_slot_eq, ":lord", slot_troop_prisoner_of_party, -1),
+      (store_sub, ":lend_day", ":due_day", 30),
+      (store_sub, ":elapsed", ":today", ":lend_day"),
+      (store_div, ":weeks", ":elapsed", 7),
+      (val_max, ":weeks", 4),
+      (store_mul, ":interest", ":principal", 2),
+      (val_mul, ":interest", ":weeks"),
+      (val_div, ":interest", 100),
+      (val_min, ":interest", ":principal"),
+      (store_add, ":due", ":principal", ":interest"),
+      (troop_get_slot, ":wealth", ":lord", slot_troop_wealth),
+      (val_max, ":wealth", 0),
+      (assign, ":paid", ":due"),
+      (val_min, ":paid", ":wealth"),
+      (call_script, "script_af19_lord_pays", ":lord", ":due"),
+      (troop_set_slot, ":lord", slot_af33_warloan_principal, 0),
+      (troop_set_slot, ":lord", slot_af33_warloan_due_day, 0),
+      (str_store_troop_name, s48, ":lord"),
+      (assign, reg41, ":due"),
+      (assign, reg42, ":paid"),
+      (try_begin),
+        (eq, ":paid", ":due"),
+        (call_script, "script_change_player_relation_with_troop", ":lord", 3),
+        (display_message, "@{s48}按期还清了战争贷款，连本带息 {reg41} 第纳尔。他说多谢你在他打仗时肯借钱。", 0x66FF66),
+      (else_try),
+        (gt, ":paid", 0),
+        (call_script, "script_change_player_relation_with_troop", ":lord", -2),
+        (store_sub, ":short", ":due", ":paid"),
+        (assign, reg43, ":short"),
+        (display_message, "@{s48}的战争贷款到期了，只还上 {reg42} 第纳尔，剩下的 {reg43} 记进了他的欠账，以后见面再收。", 0xFFCC66),
+      (else_try),
+        (call_script, "script_change_player_relation_with_troop", ":lord", -5),
+        (display_message, "@{s48}的战争贷款到期了，一文没还，整笔 {reg41} 第纳尔记进了他的欠账。", 0xFF6666),
+      (try_end),
+    (try_end),
+  ]),
 ]
 
 

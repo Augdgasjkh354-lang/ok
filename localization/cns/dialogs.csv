@@ -115,3 +115,25 @@ dlga_village_af33_invest:village_af33_invest_choose|您 肯 往 村 里 投 钱 
 dlga_village_af33_invest_choose:village_af33_invest_done|投 2000 第 纳 尔 。 
 dlga_village_af33_invest_choose:village_elder_pretalk|算 了 , 先 不 投 。 
 dlga_village_af33_invest_done:village_elder_pretalk|多 谢 大 人 ！ 村 里 有 了 这 笔 钱 , 往 后 的 日 子 总 算 有 个 盼 头 。 每 周 的 分 红 , 村 长 会 按 时 给 您 送 去 。 
+dlga_lord_talk:af33_buy_center_intro|我 想 买 下 这 座 城 — — 出 个 价 吧 。 
+dlga_af33_buy_center_intro:af33_buy_center_select|你 资 助 过 我 国 打 仗 ， 这 份 情 我 记 着 。 我 的 封 地 可 以 卖 给 你 ： 城 镇 五 万 第 纳 尔 ， 城 堡 三 万 ， 村 庄 一 万 。 你 看 中 哪 一 处 ？ 
+dlga_af33_buy_center_intro:af33_buy_center_select.1|我 的 封 地 可 以 卖 ： 城 镇 五 万 第 纳 尔 ， 城 堡 三 万 ， 村 庄 一 万 。 你 看 中 哪 一 处 ？ 国 库 正 紧 ， 不 然 我 也 不 卖 。 
+dlga_af33_buy_center_select:af33_buy_center_done|{s1} — — {reg0} 第 纳 尔 
+dlga_af33_buy_center_select:lord_pretalk|算 了 ， 先 不 买 。 
+dlga_af33_buy_center_done:lord_pretalk|成 交 。 {s1} 从 今 往 后 归 你 所 有 — — 愿 它 给 你 赚 回 这 {reg41} 第 纳 尔 。 
+dlga_af33_buy_center_done:lord_pretalk.1|你 的 钱 不 够 这 笔 买 卖 。 下 回 带 够 了 钱 再 来 。 
+dlga_fb73_private_options:fb73_bribe_result.2|我 出 {reg40} 第 纳 尔 ， 元 帅 选 举 时 投 我 一 票 。 
+dlga_lord_talk:af33_fund_war|我 想 资 助 贵 国 打 仗 — — 出 一 笔 钱 。 
+dlga_af33_fund_war:af33_fund_war_choose|哦 ？ 你 肯 出 钱 帮 我 国 打 仗 ？ 直 说 吧 ， 能 出 多 少 ？ 这 笔 钱 我 会 拿 去 雇 兵 、 把 队 伍 补 满 — — 但 先 说 明 白 ： 钱 买 不 来 胜 仗 ， 也 变 不 出 一 支 新 军 。 
+dlga_af33_fund_war_choose:af33_fund_war_done|注 资 5000 第 纳 尔 。 
+dlga_af33_fund_war_choose:af33_fund_war_done.1|注 资 10000 第 纳 尔 。 
+dlga_af33_fund_war_choose:lord_pretalk|算 了 ， 先 不 资 助 。 
+dlga_af33_fund_war_done:lord_pretalk|这 笔 钱 我 收 下 了 。 你 资 助 过 我 国 打 仗 ， 这 份 情 我 记 下 了 — — 日 后 我 国 打 下 的 城 ， 优 先 卖 给 你 这 样 的 人 。 
+dlga_af33_fund_war_done:lord_pretalk.1|这 笔 钱 我 收 下 了 。 多 谢 你 的 资 助 ， 这 份 情 我 记 下 了 。 
+dlga_lord_talk:af33_warloan|借 钱 给 你 打 仗 — — 这 笔 钱 专 款 专 用 。 
+dlga_af33_warloan:af33_warloan_choose|你 肯 借 钱 给 我 打 仗 ？ 说 吧 ， 能 借 多 少 。 丑 话 在 前 头 ： 这 钱 我 拿 去 雇 兵 、 把 队 伍 补 满 ， 但 买 不 来 胜 仗 ； 30 天 后 连 本 带 息 还 你 ， 要 是 还 不 上 ， 就 记 在 我 的 欠 账 上 。 
+dlga_af33_warloan_choose:af33_warloan_done|借 你 1000 第 纳 尔 ， 30 天 后 还 1080。 
+dlga_af33_warloan_choose:af33_warloan_done.1|借 你 3000 第 纳 尔 ， 30 天 后 还 3240。 
+dlga_af33_warloan_choose:af33_warloan_done.2|借 你 5000 第 纳 尔 ， 30 天 后 还 5400。 
+dlga_af33_warloan_choose:lord_talk|算 了 ， 当 我 没 说 。 
+dlga_af33_warloan_done:lord_talk|多 谢 。 这 钱 我 会 拿 去 雇 兵 ， 30 天 后 连 本 带 息 还 你 。 

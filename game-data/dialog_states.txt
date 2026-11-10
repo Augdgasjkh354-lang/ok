@@ -1399,3 +1399,12 @@ mayor_af33_beg_done
 village_af33_invest
 village_af33_invest_choose
 village_af33_invest_done
+af33_buy_center_intro
+af33_buy_center_select
+af33_buy_center_done
+af33_fund_war
+af33_fund_war_choose
+af33_fund_war_done
+af33_warloan
+af33_warloan_choose
+af33_warloan_done
