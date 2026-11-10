@@ -27864,4 +27864,40 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   [anyone|plyr, "lord_talk_money", [], "还是说点别的吧。", "lord_talk", []],
   # 菜单摩擦点第五批：从帮组返回 lord_talk 顶层。
   [anyone|plyr, "lord_talk_gang", [], "还是说点别的吧。", "lord_talk", []],
+  # 审计 13 F-04 修复 (方案 B, 玩家 2026-11-10 拍板): 资助的称王者消失
+  # (派系灭了人可能消失, 原版领主不死) 时结算脚本两支都不触发, 963/964
+  # 永久挂起、玩家再也资助不了别人。加“放弃资助”选项: 玩家主动放弃,
+  # 钱打水漂, 但 963/964 清掉、不再卡着。条件 963 非 0 且 964>0 (有在途
+  # 资助); 登基返还期 964<0 时不出现 (返还中的钱不许放弃)。与当前对话
+  # 对象无关: 找另一个称王者说话也能放弃旧的、再资助眼前这位。
+  [anyone|plyr,"pretender_start", [
+    (party_get_slot, ":funded", "p_main_party", slot_af33_funded_pretender),
+    (gt, ":funded", 0),
+    (party_get_slot, ":amt", "p_main_party", slot_af33_pretender_funded_amount),
+    (gt, ":amt", 0),
+    (str_store_troop_name, s48, ":funded"),
+  ], "放弃对{s48}的资助——那笔钱就当打水漂了。", "af33_pretender_abandoned",[
+    (party_get_slot, ":amt", "p_main_party", slot_af33_pretender_funded_amount),
+    (assign, reg41, ":amt"),
+    (party_set_slot, "p_main_party", slot_af33_funded_pretender, 0),
+    (party_set_slot, "p_main_party", slot_af33_pretender_funded_amount, 0),
+    (display_message, "@你放弃了对{s48}的资助，{reg41} 第纳尔打了水漂。往后你可以再资助别人。", 0xFF6666),
+  ]],
+  [anyone,"af33_pretender_abandoned", [], "明白了。这事就此了结——你资助的钱不会退回来，但你随时可以资助别人。", "pretender_start",[]],
+  # 审计 13 F-04 修复 (方案 B): 同款放弃选项, 投效后的 supported_pretender_talk
+  # 路线。只放一处, 另一条路线的玩家放弃不了; 回话回到 supported_pretender_pretalk。
+  [anyone|plyr,"supported_pretender_talk", [
+    (party_get_slot, ":funded", "p_main_party", slot_af33_funded_pretender),
+    (gt, ":funded", 0),
+    (party_get_slot, ":amt", "p_main_party", slot_af33_pretender_funded_amount),
+    (gt, ":amt", 0),
+    (str_store_troop_name, s48, ":funded"),
+  ], "放弃对{s48}的资助——那笔钱就当打水漂了。", "af33_pretender_abandoned_supp",[
+    (party_get_slot, ":amt", "p_main_party", slot_af33_pretender_funded_amount),
+    (assign, reg41, ":amt"),
+    (party_set_slot, "p_main_party", slot_af33_funded_pretender, 0),
+    (party_set_slot, "p_main_party", slot_af33_pretender_funded_amount, 0),
+    (display_message, "@你放弃了对{s48}的资助，{reg41} 第纳尔打了水漂。往后你可以再资助别人。", 0xFF6666),
+  ]],
+  [anyone,"af33_pretender_abandoned_supp", [], "明白了。这事就此了结——你资助的钱不会退回来，但你随时可以资助别人。", "supported_pretender_pretalk",[]],
 ]
