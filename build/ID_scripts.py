@@ -854,5 +854,8 @@ script_af41_trade_gap = 852
 script_af39_lord_remark = 853
 script_af39_town_remark = 854
 script_af39_gang_remark = 855
+script_af42_king_debt = 856
+script_af42_king_debt_take = 857
+script_af42_crown_cut_room = 858
 
 

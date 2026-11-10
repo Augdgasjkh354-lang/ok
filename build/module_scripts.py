@@ -58697,6 +58697,13 @@ scripts = [
     (party_get_slot, ":cut_off", "p_main_party", slot_af21_crown_cut_off),
     (val_sub, ":pct", ":cut_off"),
     (val_max, ":pct", 10),
+    # v1.0 资本家 4.0 第一批: 据理力争能谈到的比例存 reg1 (仍最低 10%);
+    # 欠款抵账换来的点数 (Slot 971) 在那之后再减, 最低 0%。
+    (assign, ":haggle_pct", ":pct"),
+    (party_get_slot, ":debt_off", "p_main_party", slot_af42_crown_debt_off),
+    (val_sub, ":pct", ":debt_off"),
+    (val_max, ":pct", 0),
+    (assign, reg1, ":haggle_pct"),
     (assign, reg0, ":pct"),
   ]),
 
@@ -61372,6 +61379,27 @@ scripts = [
       (try_end),
       (assign, ":shown", 1),
     (try_end),
+    # --- 5b. king's debt (capital 4.0 batch 1): flag when the king owes
+    # enough to talk offset. Same condition as the dialog options
+    # (af42_king_debt reg1 == 1), so the line only shows when the talk
+    # option actually exists. Not a new section, just one line.
+    (try_begin),
+      (is_between, "$players_kingdom", npc_kingdoms_begin, npc_kingdoms_end),
+      (eq, "$player_has_homage", 1),
+      (faction_get_slot, ":king", "$players_kingdom", slot_faction_leader),
+      (is_between, ":king", active_npcs_begin, active_npcs_end),
+      (call_script, "script_af42_king_debt", ":king"),
+      (eq, reg1, 1),
+      (assign, reg41, reg0),
+      (str_store_string, s43, "@国王欠你 {reg41} 第纳尔，可以谈抵账了"),
+      (try_begin),
+        (eq, ":shown", 0),
+        (str_store_string, s40, "@{s43}"),
+      (else_try),
+        (str_store_string, s40, "@{s40}^{s43}"),
+      (try_end),
+      (assign, ":shown", 1),
+    (try_end),
     # --- 6. war loans to lords (slot 957): principal ---
     (assign, ":wl_count", 0),
     (assign, ":wl_total", 0),
@@ -62184,6 +62212,83 @@ scripts = [
                                     "g4": "铁鬃", "g5": "裂旗", "g6": "盐鸦"}[_k]
                                    + "说：'" + _t + "'") + [
     (try_end),
+  ]),
+
+  # ========== v1.0 资本家 4.0 第一批 (王室债主) ==========
+  # af42_king_debt: how much the king owes the player in total, and whether
+  # the "royal creditor" offset options apply. Read-only. Param 1: troop.
+  # Output, assigned last: reg0 = 874 + 945 + 957; reg1 = 1/0.
+  ("af42_king_debt", [
+    (store_script_param, ":lord", 1),
+    (troop_get_slot, ":owed", ":lord", slot_af19_lord_owes_player),
+    (troop_get_slot, ":loan", ":lord", slot_af29_loan_principal),
+    (troop_get_slot, ":warloan", ":lord", slot_af33_warloan_principal),
+    (store_add, ":total", ":owed", ":loan"),
+    (val_add, ":total", ":warloan"),
+    (assign, ":ok", 0),
+    (try_begin),
+      (is_between, "$players_kingdom", npc_kingdoms_begin, npc_kingdoms_end),
+      (eq, "$player_has_homage", 1),
+      (faction_get_slot, ":king", "$players_kingdom", slot_faction_leader),
+      (eq, ":king", ":lord"),
+      (troop_slot_eq, ":lord", slot_troop_prisoner_of_party, -1),
+      (ge, ":total", 10000),
+      (troop_get_slot, ":wealth", ":lord", slot_troop_wealth),
+      (lt, ":wealth", ":total"),
+      (assign, ":ok", 1),
+    (try_end),
+    (assign, reg0, ":total"),
+    (assign, reg1, ":ok"),
+  ]),
+
+  # af42_king_debt_take: deduct :amount from a lord's debt, in order 874,
+  # then 945, then 957. Each takes min(balance, remaining). When 945 hits
+  # 0, clear 946; when 957 hits 0, clear 958 (same as af19_settle_debts /
+  # af33_settle_warloans). Param 1: troop; param 2: amount (> 0). Caller
+  # guarantees amount <= total debt. No register output.
+  ("af42_king_debt_take", [
+    (store_script_param, ":lord", 1),
+    (store_script_param, ":amount", 2),
+    (assign, ":left", ":amount"),
+    (troop_get_slot, ":owed", ":lord", slot_af19_lord_owes_player),
+    (assign, ":take", ":owed"),
+    (val_min, ":take", ":left"),
+    (val_sub, ":owed", ":take"),
+    (troop_set_slot, ":lord", slot_af19_lord_owes_player, ":owed"),
+    (val_sub, ":left", ":take"),
+    (try_begin),
+      (gt, ":left", 0),
+      (troop_get_slot, ":loan", ":lord", slot_af29_loan_principal),
+      (assign, ":take", ":loan"),
+      (val_min, ":take", ":left"),
+      (val_sub, ":loan", ":take"),
+      (troop_set_slot, ":lord", slot_af29_loan_principal, ":loan"),
+      (val_sub, ":left", ":take"),
+      (try_begin),
+        (eq, ":loan", 0),
+        (troop_set_slot, ":lord", slot_af29_loan_day, 0),
+      (try_end),
+    (try_end),
+    (try_begin),
+      (gt, ":left", 0),
+      (troop_get_slot, ":warloan", ":lord", slot_af33_warloan_principal),
+      (assign, ":take", ":warloan"),
+      (val_min, ":take", ":left"),
+      (val_sub, ":warloan", ":take"),
+      (troop_set_slot, ":lord", slot_af33_warloan_principal, ":warloan"),
+      (val_sub, ":left", ":take"),
+      (try_begin),
+        (eq, ":warloan", 0),
+        (troop_set_slot, ":lord", slot_af33_warloan_due_day, 0),
+      (try_end),
+    (try_end),
+  ]),
+
+  # af42_crown_cut_room: how many more points the crown's cut can still be
+  # reduced by debt offset. Read-only, no params. Output: reg0 = current
+  # actual cut (0 = already taking nothing).
+  ("af42_crown_cut_room", [
+    (call_script, "script_af21_crown_cut_pct"),
   ]),
 ]
 

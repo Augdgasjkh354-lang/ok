@@ -1427,3 +1427,9 @@ craftsman_af37_fire_done
 lord_af38_taxdebt
 lord_af38_taxdebt_choose
 lord_af38_taxdebt_done
+af42_fief_intro
+af42_fief_select
+af42_fief_done
+af42_cut_intro
+af42_cut_choose
+af42_cut_done

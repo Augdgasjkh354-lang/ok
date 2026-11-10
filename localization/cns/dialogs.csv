@@ -179,3 +179,14 @@ dlga_lord_af38_taxdebt:lord_af38_taxdebt_choose.1|… … 也 只 能 这 样 �
 dlga_lord_af38_taxdebt_choose:lord_af38_taxdebt_done|就 这 么 办 。 
 dlga_lord_af38_taxdebt_choose:lord_pretalk|算 了 ， 我 再 等 等 。 
 dlga_lord_af38_taxdebt_done:lord_pretalk|我 这 就 给 城 里 的 管 事 写 信 。 这 笔 账 ， 总 算 轻 了 些 。 
+dlga_lord_talk_money:af42_fief_intro|陛 下 欠 我 的 钱 ， 看 来 是 还 不 上 了 。 不 如 拿 一 处 封 地 来 抵 。 
+dlga_af42_fief_intro:af42_fief_select|… … 你 算 得 清 楚 ， 我 也 认 账 ： 前 后 欠 你 {reg41} 第 纳 尔 。 国 库 确 实 空 了 。 我 名 下 的 地 ， 按 买 卖 的 价 钱 算 — — 城 镇 五 万 ， 城 堡 三 万 ， 村 庄 一 万 。 你 挑 一 处 ， 抵 掉 多 少 就 是 多 少 。 
+dlga_af42_fief_select:af42_fief_done|{s1} — — 抵 {reg0} 第 纳 尔 
+dlga_af42_fief_select:lord_pretalk|再 想 想 。 
+dlga_af42_fief_done:lord_pretalk|地 契 拿 去 吧 。 {s1} 从 今 往 后 是 你 的 — — 这 笔 账 ， 就 算 清 了 {reg41} 第 纳 尔 。 
+dlga_af42_fief_done:lord_pretalk.1|这 处 地 眼 下 给 不 了 你 。 改 日 再 谈 。 
+dlga_lord_talk_money:af42_cut_intro|钱 就 不 必 还 了 。 往 后 我 缴 获 的 东 西 ， 王 室 少 抽 几 成 就 是 。 
+dlga_af42_cut_intro:af42_cut_choose|… … 你 倒 会 挑 。 好 ， 往 后 你 的 缴 获 ， 王 室 少 抽 {reg41} 个 百 分 点 ， 抵 你 五 千 。 
+dlga_af42_cut_choose:af42_cut_done|成 交 。 
+dlga_af42_cut_choose:lord_pretalk|算 了 ， 我 再 想 想 。 
+dlga_af42_cut_done:lord_pretalk|规 矩 是 我 定 的 ， 也 由 我 改 。 别 到 处 去 说 。 

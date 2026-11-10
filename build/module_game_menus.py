@@ -9179,7 +9179,9 @@ game_menus = [
         (faction_get_slot, ":king", "$players_kingdom", slot_faction_leader),
         (is_between, ":king", active_npcs_begin, active_npcs_end),
         (call_script, "script_af21_crown_cut_pct"),
-        (gt, reg0, 10),
+        # v1.0 资本家 4.0 第一批: 据理力争只看 884 谈到的比例 (reg1);
+        # 971 换来的点数不算在内, 否则会把抵账换来的减免当成已谈下的。
+        (gt, reg1, 10),
         (assign, ":king_here", 0),
         (troop_get_slot, ":king_party", ":king", slot_troop_leaded_party),
         (try_begin),
@@ -16258,7 +16260,9 @@ game_menus = [
            (lt, ":roll", ":chance"),
            # Success: 5 points off the cut, but never below a 10% cut.
            (call_script, "script_af21_crown_cut_pct"),
-           (assign, ":cur_pct", reg0),
+           # v1.0 资本家 4.0 第一批: 成功谈下的是 884 的部分 (reg1),
+           # 971 换来的点数不动。
+           (assign, ":cur_pct", reg1),
            (party_get_slot, ":cut_off", "p_main_party", slot_af21_crown_cut_off),
            (store_add, ":base_pct", ":cur_pct", ":cut_off"),
            (store_sub, ":max_off", ":base_pct", 10),
