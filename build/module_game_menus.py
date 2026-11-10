@@ -10430,6 +10430,8 @@ game_menus = [
        [(is_between, "$current_town", towns_begin, towns_end),
         (neg|party_slot_eq, "$current_town", slot_town_lord, "trp_player"),
         (party_slot_ge, "$current_town", slot_town_lord, 1),
+        (party_get_slot, ":lord", "$current_town", slot_town_lord),
+        (troop_slot_eq, ":lord", slot_troop_prisoner_of_party, -1),
         (party_get_slot, ":expiry", "$current_town", slot_af30_tax_farm_day),
         (store_current_day, ":today"),
         (this_or_next|eq, ":expiry", 0),
