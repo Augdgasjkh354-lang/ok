@@ -3075,6 +3075,13 @@ game_menus = [
       ("af08_desk_entry", [], "烽烟案头：领地、战争与宫廷消息", [(jump_to_menu, "mnu_af08_desk")]),
       ("af11_arrears_entry", [(call_script, "script_af11_merc_current_owed"), (gt, reg0, 0)],
        "清点拖欠的饷银", [(jump_to_menu, "mnu_af11_arrears")]),
+      ("af26_collect_all_caravans",
+       [(call_script, "script_af26_collect_all_caravans", 0),
+        (gt, reg0, 0)],
+       "一键收取全部商队收益（{reg1} 支商队，共 {reg0} 第纳尔）",
+       [(call_script, "script_af26_collect_all_caravans", 1),
+        (display_message, "@已收取 {reg1} 支商队的收益，共 {reg0} 第纳尔。"),
+        (jump_to_menu, "mnu_camp")]),
       ("af20_fame_entry", [], "听听人们怎么说你", [(jump_to_menu, "mnu_af20_fame")]),
       # v1.0 第六批（四）：封臣的效忠义务——交盾牌钱免役，或装没听见。
       ("af23_pay_shield",
