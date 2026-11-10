@@ -28005,5 +28005,67 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
       (str_store_troop_name, s54, "$g_fb74_flip_target"),
     (try_end),
   ]],
+  # v1.0 资本家 3.0 第一批 (条目: 作坊裁员): 工匠处裁工人, 每人遣散费 20 第纳尔
+  # (一周工资), 玩家付给本镇金库 slot_town_wealth; 三档: 裁 1 / 裁 5 / 全部裁掉。
+  # 先查钱再动手: 条件里 store_troop_gold 查金币, 不够那档不出现; 扣钱和改人数都在后果里。
+  # 提示读 reg42 (本次遣散费) 和 reg41 (裁后工人数), 后果里先赋值再 display_message。
+  [anyone|plyr,"master_craftsman_talk", [
+    (party_slot_ge, "$g_encountered_party", slot_center_player_enterprise, 1),
+    (party_slot_ge, "$g_encountered_party", slot_af31_workers, 1),
+  ], "裁工人。", "craftsman_af37_fire",[]],
+  [anyone,"craftsman_af37_fire", [
+    (party_get_slot, reg41, "$g_encountered_party", slot_af31_workers),
+  ], "裁人？行吧，不过按规矩每人得给一周工钱当遣散费，20 第纳尔一个。如今作坊里有 {reg41} 个工人。你想裁几个？", "craftsman_af37_fire_choose",[]],
+  [anyone|plyr,"craftsman_af37_fire_choose", [
+    (party_slot_ge, "$g_encountered_party", slot_af31_workers, 1),
+    (store_troop_gold, ":gold", "trp_player"),
+    (ge, ":gold", 20),
+  ], "裁 1 个，付 20 第纳尔遣散费。", "craftsman_af37_fire_done",[
+    (assign, reg42, 20),
+    (troop_remove_gold, "trp_player", 20),
+    (party_get_slot, ":treasury", "$g_encountered_party", slot_town_wealth),
+    (val_add, ":treasury", 20),
+    (party_set_slot, "$g_encountered_party", slot_town_wealth, ":treasury"),
+    (party_get_slot, ":workers", "$g_encountered_party", slot_af31_workers),
+    (val_sub, ":workers", 1),
+    (party_set_slot, "$g_encountered_party", slot_af31_workers, ":workers"),
+    (assign, reg41, ":workers"),
+    (display_message, "@你付了 {reg42} 第纳尔遣散费，如今这家作坊有 {reg41} 个工人。", 0x66FF66),
+  ]],
+  [anyone|plyr,"craftsman_af37_fire_choose", [
+    (party_slot_ge, "$g_encountered_party", slot_af31_workers, 5),
+    (store_troop_gold, ":gold", "trp_player"),
+    (ge, ":gold", 100),
+  ], "裁 5 个，付 100 第纳尔遣散费。", "craftsman_af37_fire_done",[
+    (assign, reg42, 100),
+    (troop_remove_gold, "trp_player", 100),
+    (party_get_slot, ":treasury", "$g_encountered_party", slot_town_wealth),
+    (val_add, ":treasury", 100),
+    (party_set_slot, "$g_encountered_party", slot_town_wealth, ":treasury"),
+    (party_get_slot, ":workers", "$g_encountered_party", slot_af31_workers),
+    (val_sub, ":workers", 5),
+    (party_set_slot, "$g_encountered_party", slot_af31_workers, ":workers"),
+    (assign, reg41, ":workers"),
+    (display_message, "@你付了 {reg42} 第纳尔遣散费，如今这家作坊有 {reg41} 个工人。", 0x66FF66),
+  ]],
+  [anyone|plyr,"craftsman_af37_fire_choose", [
+    (party_slot_ge, "$g_encountered_party", slot_af31_workers, 1),
+    (party_get_slot, ":workers", "$g_encountered_party", slot_af31_workers),
+    (store_mul, reg42, ":workers", 20),
+    (store_troop_gold, ":gold", "trp_player"),
+    (ge, ":gold", reg42),
+  ], "全部裁掉，付 {reg42} 第纳尔遣散费。", "craftsman_af37_fire_done",[
+    (party_get_slot, ":workers", "$g_encountered_party", slot_af31_workers),
+    (store_mul, reg42, ":workers", 20),
+    (troop_remove_gold, "trp_player", reg42),
+    (party_get_slot, ":treasury", "$g_encountered_party", slot_town_wealth),
+    (val_add, ":treasury", reg42),
+    (party_set_slot, "$g_encountered_party", slot_town_wealth, ":treasury"),
+    (party_set_slot, "$g_encountered_party", slot_af31_workers, 0),
+    (assign, reg41, 0),
+    (display_message, "@你付了 {reg42} 第纳尔遣散费，如今这家作坊有 {reg41} 个工人。", 0x66FF66),
+  ]],
+  [anyone|plyr,"craftsman_af37_fire_choose", [], "算了，先不裁。", "master_craftsman_pretalk",[]],
+  [anyone,"craftsman_af37_fire_done", [], "人我这就打发走。作坊里清静了，货也会出得慢些。", "master_craftsman_pretalk",[]],
   [anyone|plyr, "lord_talk_court", [], "还是说点别的吧。", "lord_talk", []],
 ]

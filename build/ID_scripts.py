@@ -846,5 +846,6 @@ script_af33_resolve_assassin = 844
 script_af33_intel_buy = 845
 script_af33_intel_brief = 846
 script_af33_intel_weekly = 847
+script_af37_ledger = 848
 
 
