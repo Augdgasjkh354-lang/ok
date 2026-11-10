@@ -59711,7 +59711,6 @@ scripts = [
         (troop_set_slot, ":lord", slot_af27_sponsor_kind, 0),
         (assign, ":old", 0),
       (try_end),
-      (eq, ":old", 0),
       # 找一支活着的、老巢在本阵营的帮。
       (assign, ":found", 0),
       (try_for_range, ":kind", 1, 7),
