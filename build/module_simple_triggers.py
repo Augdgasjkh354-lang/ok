@@ -475,6 +475,23 @@ simple_triggers = [
            (val_mul, ":added_wealth", 3),
            (val_div, ":added_wealth", 2),
          (try_end),
+         # v1.0 资本家 3.0 第四批 (商路断供): 城镇三周没有商队成交, 本周入账少两成; 六周以上少四成。
+         # 只削减原版凭繁荣算出的入账, 不另扣钱; 入股分红按削减后的入账算, 所以股东一起吃亏。
+         # 旧存档 Slot 970 为 0 时从今天开始计。玩家自己的城不走这里 (收入走原版租税和关税, 关税本来就靠商队)。
+         (try_begin),
+           (is_between, ":center_no", towns_begin, towns_end),
+           (call_script, "script_af41_trade_gap", ":center_no"),
+           (assign, ":gap", reg0),
+           (try_begin),
+             (gt, ":gap", 42),
+             (val_mul, ":added_wealth", 60),
+             (val_div, ":added_wealth", 100),
+           (else_try),
+             (gt, ":gap", 21),
+             (val_mul, ":added_wealth", 80),
+             (val_div, ":added_wealth", 100),
+           (try_end),
+         (try_end),
          (val_add, ":cur_wealth", ":added_wealth"),
          (call_script, "script_calculate_weekly_party_wage", ":center_no"),
          (val_sub, ":cur_wealth", reg0),

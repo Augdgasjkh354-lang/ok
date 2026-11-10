@@ -2122,6 +2122,7 @@ slot_af26_borrow_lender      = 901 # p_main_party: L1 lender lord troop id; 0 = 
 slot_af26_borrow_pre_count   = 967 # p_main_party: L1 pre-borrow count of that troop type in the player's party; 0 = none (audit 13 fix F-03)
 # 968 reserved for the F-05 fix (do not use).
 slot_af40_npc_investor       = 969 # town: NPC lord holding a fixed 10% stake; 0 = none (capital 3.0 batch 3)
+slot_af41_last_trade_day     = 970 # town: day+1 a caravan last traded here; 0 = unknown/old save, set on first weekly pass (capital 3.0 batch 4)
 slot_af26_license            = 902 # p_main_party: I1 mercenary license, 1 = licensed
 slot_af26_protect_day        = 903 # town: I5 next protection collection day+1; 0 = not protected
 slot_af26_sanctuary_day      = 904 # p_main_party: L5 sanctuary expiry (day+7); 0 = not in sanctuary

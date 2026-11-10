@@ -228,7 +228,7 @@ mno_af33_intel_renew|续 一 个 月 （ 500 第 纳 尔 ）
 mno_af33_intel_upgrade|升 一 级 （ 500 第 纳 尔 ） 
 mno_af33_intel_brief|要 一 份 最 近 的 简 报 
 mno_af33_intel_back|算 了 ， 先 不 打 点 了 
-menu_af34_trade|经 商 赚 钱 — — 入 股 本 镇 、 开 钱 庄 、 组 建 商 队 ， 都 在 这 里 打 理 。 
+menu_af34_trade|经 商 赚 钱 — — 入 股 本 镇 、 开 钱 庄 、 组 建 商 队 ， 都 在 这 里 打 理 。 {s40}
 mno_af26_found_caravan|出 资 组 建 一 支 商 队 （ 3000 第 纳 尔 ， 名 下 已 有 {reg0} 支 ， 上 限 36 支 ） 
 mno_af26_caravan_collect|结 算 名 下 商 队 （ 钱 箱 超 600 的 部 分 归 你 ） 
 mno_af30_town_shares_entry|入 股 本 镇 （ 10000 第 纳 尔 ， 10% 股 份 ， 已 有 {reg41}%， 还 能 买 {reg43}%） 

@@ -17090,8 +17090,25 @@ game_menus = [
   # 只挪选项、不加新功能，0 新 Slot；入口条件是组内选项条件的 OR，
   # 组内一个都不满足时入口不出现。每个子菜单最底是“返回城镇”。
   ("af34_trade", 0,
-   "经商赚钱——入股本镇、开钱庄、组建商队，都在这里打理。",
-   "none", [],
+   "经商赚钱——入股本镇、开钱庄、组建商队，都在这里打理。{s40}",
+   "none", [
+     # v1.0 资本家 3.0 第四批 (商路断供): 正文补一句本城商路的情况。
+     (str_clear, s40),
+     (try_begin),
+       (is_between, "$current_town", towns_begin, towns_end),
+       (call_script, "script_af41_trade_gap", "$current_town"),
+       (assign, reg41, reg0),
+       (try_begin),
+         (gt, reg41, 42),
+         (str_store_string, s40, "@^商路：已经 {reg41} 天没有商队来成交了，城里每周的进项少了四成。"),
+       (else_try),
+         (gt, reg41, 21),
+         (str_store_string, s40, "@^商路：已经 {reg41} 天没有商队来成交了，城里每周的进项少了两成。"),
+       (else_try),
+         (str_store_string, s40, "@^商路：最近 {reg41} 天里有商队来成交过，买卖照常。"),
+       (try_end),
+     (try_end),
+   ],
    [
      ("af26_found_caravan",
       [(party_slot_eq, "$current_town", slot_party_type, spt_town),

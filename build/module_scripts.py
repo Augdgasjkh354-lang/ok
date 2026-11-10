@@ -14988,6 +14988,13 @@ scripts = [
     [
       (store_script_param_1, ":party_no"),
       (store_script_param_2, ":center_no"),
+      # v1.0 资本家 3.0 第四批 (商路断供): 记下这座城最近一次有商队成交的日子 (day+1)。
+      (try_begin),
+        (is_between, ":center_no", towns_begin, towns_end),
+        (store_current_day, ":af41_day"),
+        (val_add, ":af41_day", 1),
+        (party_set_slot, ":center_no", slot_af41_last_trade_day, ":af41_day"),
+      (try_end),
       
       (party_get_slot, ":origin", ":party_no", slot_party_last_traded_center),
       
@@ -61515,6 +61522,36 @@ scripts = [
       (try_end),
       (assign, ":shown", 1),
     (try_end),
+    # --- 15. (资本家 3.0 第四批) towns where the player has a stake or a workshop but caravans stopped coming ---
+    (assign, ":cut_count", 0),
+    (str_clear, s41),
+    (try_for_range, ":town", towns_begin, towns_end),
+      (this_or_next|party_slot_ge, ":town", slot_af30_town_shares, 10),
+      (party_slot_ge, ":town", slot_center_player_enterprise, 1),
+      (call_script, "script_af41_trade_gap", ":town"),
+      (gt, reg0, 21),
+      (assign, reg46, reg0),
+      (val_add, ":cut_count", 1),
+      (le, ":cut_count", 5),
+      (str_store_party_name, s42, ":town"),
+      (try_begin),
+        (eq, ":cut_count", 1),
+        (str_store_string, s41, "@{s42}（{reg46} 天）"),
+      (else_try),
+        (str_store_string, s41, "@{s41}、{s42}（{reg46} 天）"),
+      (try_end),
+    (try_end),
+    (try_begin),
+      (gt, ":cut_count", 0),
+      (str_store_string, s43, "@商路断了的城：{s41}"),
+      (try_begin),
+        (eq, ":shown", 0),
+        (str_store_string, s40, "@{s43}"),
+      (else_try),
+        (str_store_string, s40, "@{s40}^{s43}"),
+      (try_end),
+      (assign, ":shown", 1),
+    (try_end),
     # --- nothing at all ---
     (try_begin),
       (eq, ":shown", 0),
@@ -61624,6 +61661,24 @@ scripts = [
       (str_store_party_name, s45, ":best_town"),
       (display_message, "@听说{s44}拿出 10000 第纳尔，入股了{s45}，占了一成。", 0xCCCCFF),
     (try_end),
+  ]),
+
+  # ========== v1.0 资本家 3.0 第四批: 商路断供 (Slot 970) ==========
+  # 参数 1: 城镇。输出 reg0 = 距离上次有商队成交过了几天。
+  # Slot 970 为 0 (旧存档或从没记过) 时, 把今天记进去、返回 0, 从今天开始计。
+  ("af41_trade_gap", [
+    (store_script_param, ":town", 1),
+    (store_current_day, ":today"),
+    (party_get_slot, ":last", ":town", slot_af41_last_trade_day),
+    (try_begin),
+      (eq, ":last", 0),
+      (store_add, ":last", ":today", 1),
+      (party_set_slot, ":town", slot_af41_last_trade_day, ":last"),
+    (try_end),
+    (val_sub, ":last", 1),
+    (store_sub, ":gap", ":today", ":last"),
+    (val_max, ":gap", 0),
+    (assign, reg0, ":gap"),
   ]),
 ]
 

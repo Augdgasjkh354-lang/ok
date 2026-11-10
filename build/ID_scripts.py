@@ -850,5 +850,6 @@ script_af37_ledger = 848
 script_af38_taxdebt_town = 849
 script_af40_share_room = 850
 script_af40_npc_invest = 851
+script_af41_trade_gap = 852
 
 
