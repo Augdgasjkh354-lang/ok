@@ -61801,6 +61801,16 @@ scripts = [
         (troop_slot_eq, ":pret", slot_troop_original_faction, ":fac"),
         (assign, ":scene", 1),
       (try_end),
+      # king_debtor: 他是阵营首领, 欠玩家合计 >= 10000 (874+945+957), 且财产不够还。
+      (try_begin),
+        (eq, ":scene", 0),
+        (faction_slot_eq, ":fac", slot_faction_leader, ":lord"),
+        (call_script, "script_af42_king_debt", ":lord"),
+        (ge, reg0, 10000),
+        (troop_get_slot, ":w", ":lord", slot_troop_wealth),
+        (lt, ":w", reg0),
+        (assign, ":scene", 15),
+      (try_end),
       # king_privateer: 本国国王, 私掠证未到期 (905>今天), 发证国是他的阵营。
       (try_begin),
         (eq, ":scene", 0),
@@ -61934,7 +61944,8 @@ scripts = [
   ] + pick_ops('lords.txt',
                ['king_pretender', 'king_privateer', 'gang_friend', 'borrowed_troops',
                 'warloan_owed', 'loan_owed', 'owes_other', 'tax_farm', 'shares_in_town',
-                'funded_war', 'jailed_him', 'spared_him', 'fame_cruel', 'fame_kind'],
+                'funded_war', 'jailed_him', 'spared_him', 'fame_cruel', 'fame_kind',
+                'king_debtor'],
                ['martial', 'quarrelsome', 'selfrighteous', 'cunning', 'debauched',
                 'goodnatured', 'upstanding'],
                ":scene", ":key", ":idx", s42) + [
@@ -62289,6 +62300,80 @@ scripts = [
   # actual cut (0 = already taking nothing).
   ("af42_crown_cut_room", [
     (call_script, "script_af21_crown_cut_pct"),
+  ]),
+
+  # ========== v1.0 资本家 4.0 第二批 (逼债) ==========
+  # af43_rival_pretender: find the rival pretender of a faction. Read-only.
+  # Param 1: faction. Output, assigned last: reg0 = pretender troop (0 if
+  # none); his name in s4 when found. A pretender counts only while he has
+  # not been crowned (faction leader != him), has not left Calradia
+  # (store_faction_of_troop != fac_neutral, cf. af33_settle_pretender),
+  # and is not a prisoner.
+  ("af43_rival_pretender", [
+    (store_script_param, ":fac", 1),
+    (assign, ":found", 0),
+    (try_for_range, ":p", pretenders_begin, pretenders_end),
+      (eq, ":found", 0),
+      (troop_slot_eq, ":p", slot_troop_original_faction, ":fac"),
+      (faction_get_slot, ":leader", ":fac", slot_faction_leader),
+      (neq, ":leader", ":p"),
+      (store_faction_of_troop, ":pfac", ":p"),
+      (neq, ":pfac", "fac_neutral"),
+      (troop_slot_eq, ":p", slot_troop_prisoner_of_party, -1),
+      (assign, ":found", ":p"),
+    (try_end),
+    (try_begin),
+      (gt, ":found", 0),
+      (str_store_troop_name, s4, ":found"),
+    (try_end),
+    (assign, reg0, ":found"),
+  ]),
+
+  # af43_press_king: press the king for debt. Writes state. Param 1: king.
+  # Output, assigned last (relation calls rewrite registers): reg0 = outcome
+  # (1 paid, 2 cannot pay, 3 turned hostile), reg1 = how much was paid
+  # (only outcome 1). Outcome 3: the player already funds this king's
+  # rival pretender (963 = :pret, 964 > 0). Otherwise :pay = wealth / 4,
+  # capped at the total debt; >= 500 pays out, < 500 pays nothing. All
+  # three outcomes write the 30-day cooldown (972 = today + 30).
+  ("af43_press_king", [
+    (store_script_param, ":king", 1),
+    (assign, ":result", 0),
+    (assign, ":paid", 0),
+    (call_script, "script_af42_king_debt", ":king"),
+    (assign, ":debt", reg0),
+    (store_faction_of_troop, ":fac", ":king"),
+    (call_script, "script_af43_rival_pretender", ":fac"),
+    (assign, ":pret", reg0),
+    (party_get_slot, ":funded", "p_main_party", slot_af33_funded_pretender),
+    (party_get_slot, ":funded_amt", "p_main_party", slot_af33_pretender_funded_amount),
+    (try_begin),
+      (eq, ":funded", ":pret"),
+      (gt, ":funded_amt", 0),
+      (assign, ":result", 3),
+      (call_script, "script_change_player_relation_with_troop", ":king", -10),
+    (else_try),
+      (troop_get_slot, ":wealth", ":king", slot_troop_wealth),
+      (store_div, ":pay", ":wealth", 4),
+      (val_min, ":pay", ":debt"),
+      (try_begin),
+        (ge, ":pay", 500),
+        (assign, ":result", 1),
+        (assign, ":paid", ":pay"),
+        (call_script, "script_af14_lord_wealth", ":king", 0, ":pay"),
+        (troop_add_gold, "trp_player", ":pay"),
+        (call_script, "script_af42_king_debt_take", ":king", ":pay"),
+        (call_script, "script_change_player_relation_with_troop", ":king", -5),
+      (else_try),
+        (assign, ":result", 2),
+        (call_script, "script_change_player_relation_with_troop", ":king", -3),
+      (try_end),
+    (try_end),
+    (store_current_day, ":day"),
+    (val_add, ":day", 30),
+    (party_set_slot, "p_main_party", slot_af43_press_day, ":day"),
+    (assign, reg0, ":result"),
+    (assign, reg1, ":paid"),
   ]),
 ]
 

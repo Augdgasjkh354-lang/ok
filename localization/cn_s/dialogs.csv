@@ -190,3 +190,7 @@ dlga_af42_cut_intro:af42_cut_choose|… … 你 倒 会 挑 。 好 ， 往 后 
 dlga_af42_cut_choose:af42_cut_done|成 交 。 
 dlga_af42_cut_choose:lord_pretalk|算 了 ， 我 再 想 想 。 
 dlga_af42_cut_done:lord_pretalk|规 矩 是 我 定 的 ， 也 由 我 改 。 别 到 处 去 说 。 
+dlga_lord_talk_money:af43_press|陛 下 ， 这 笔 账 再 拖 下 去 ， 我 只 好 把 钱 转 去 资 助 {s4}了 。 
+dlga_af43_press:lord_pretalk|… … 你 这 是 拿 刀 架 在 我 脖 子 上 。 好 ， {reg41} 第 纳 尔 ， 拿 去 。 这 笔 账 我 记 下 了 ， 不 止 是 钱 的 账 。 
+dlga_af43_press:lord_pretalk.1|你 尽 管 去 。 国 库 里 一 文 都 没 有 ， 你 逼 我 也 逼 不 出 来 。 
+dlga_af43_press:lord_pretalk.2|你 已 经 在 给 那 个 人 送 钱 了 ， 还 有 脸 来 逼 我 ？ 滚 出 去 。 

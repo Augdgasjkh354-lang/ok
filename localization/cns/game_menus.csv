@@ -6,6 +6,7 @@ mno_af11_arrears_entry|清 点 拖 欠 的 饷 银
 mno_af26_collect_all_caravans|一 键 收 取 全 部 商 队 收 益 （ {reg1} 支 商 队 ， 共 {reg0} 第 纳 尔 ） 
 mno_af20_fame_entry|听 听 人 们 怎 么 说 你 
 mno_af23_pay_shield|派 人 给 元 帅 送 去 盾 牌 钱 ， 免 了 这 次 出 征 （ {reg42}第 纳 尔 ） 
+mno_af43_debt_shield|让 国 王 从 欠 你 的 账 里 扣 掉 这 次 的 盾 牌 钱 （ {reg42}第 纳 尔 ） 
 mno_af23_ignore_muster|装 没 听 见 
 mno_fb75_cheat_entry|宫 廷 政 治 测 试 （ v7.5） 
 mno_af01_cheat_entry|烽 烟 与 暗 流 测 试 （ v0.1 / v0.2） 
