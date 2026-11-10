@@ -11756,7 +11756,9 @@ game_menus = [
 
        (store_random_in_range, ":random_town", towns_begin, towns_end),
 
-       (party_get_slot, ":cur_merchant", ":org_encountered_party", slot_town_merchant),       
+       (party_get_slot, ":cur_merchant", ":org_encountered_party", slot_town_merchant),
+       # The goods merchant may have been permanently removed by af33_resolve_assassin.
+       (ge, ":cur_merchant", 0),
            (assign, ":num_items_in_town_inventory", 0),
        (try_for_range, ":i_slot", num_equipment_kinds, max_inventory_items + num_equipment_kinds),
          (troop_get_inventory_slot, ":slot_item", ":cur_merchant", ":i_slot"),

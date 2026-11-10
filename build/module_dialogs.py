@@ -26748,6 +26748,12 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
     (party_count_members_of_type, ":have", ":party", ":troop"),
     (store_random_in_range, ":n", 10, 21),
     (val_min, ":n", ":have"),
+    # Never grant more troops than the party has free capacity.
+    (call_script, "script_game_get_party_companion_limit"),
+    (assign, ":limit", reg0),
+    (store_party_size_wo_prisoners, ":size", "p_main_party"),
+    (store_sub, ":space", ":limit", ":size"),
+    (val_min, ":n", ":space"),
     (party_remove_members, ":party", ":troop", ":n"),
     (party_count_members_of_type, ":pre", "p_main_party", ":troop"),
     (party_add_members, "p_main_party", ":troop", ":n"),
@@ -26757,6 +26763,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
     (party_set_slot, "p_main_party", slot_af26_borrow_count, ":n"),
     (party_set_slot, "p_main_party", slot_af26_borrow_lender, "$g_talk_troop"),
     (party_set_slot, "p_main_party", slot_af26_borrow_pre_count, ":pre"),
+    (party_set_slot, "p_main_party", slot_af26_borrow_troop, ":troop"),
     (assign, reg10, ":n"),
   ]],
   [anyone, "lord_af26_borrow", [], "好，借你 {reg10} 个人，14 天后还我，少一个都不行。", "lord_talk", []],
@@ -26845,7 +26852,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   [anyone, "lord_af26_sanctuary", [], "好，你躲到我这里来，七天之内仇家不会再追你。交战阵营里与我交情深厚的城堡，你也可以进。", "lord_talk", []],
 
   # v1.0 领主关系与独立玩法·第三波 I3 私掠证（向国王买 3000，有效期 30 天；只对发证国之敌的商队有效）。
-  [anyone|plyr, "lord_talk_money", [(faction_slot_eq, "$g_talk_troop_faction", slot_faction_leader, "$g_talk_troop"),
+  [anyone|plyr, "lord_talk_money_options", [(faction_slot_eq, "$g_talk_troop_faction", slot_faction_leader, "$g_talk_troop"),
                               (call_script, "script_troop_get_relation_with_troop", "trp_player", "$g_talk_troop"),
                               (ge, reg0, 0),
                               (store_troop_gold, ":gold", "trp_player"),
@@ -26902,7 +26909,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   [anyone, "merchant_af26_collect", [], "结算好了，共 {reg10} 第纳尔，钱箱里留了六百作周转。", "merchant_talk", []],
 
   # v1.0 领主与匪帮 L3: 已查实领主养匪/密谋后，问领主要 400 封口费（af19_lord_pays，付不起记欠账）。
-  [anyone|plyr, "lord_talk_gang", [
+  [anyone|plyr, "lord_talk_gang_options", [
     (this_or_next|eq, "$player_has_homage", 1),
     (eq, "$players_kingdom", "fac_player_supporters_faction"),
     (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
@@ -26930,7 +26937,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   [anyone, "lord_af27_hush", [], "拿去，400 第纳尔，这事到此为止，别再提了。", "lord_talk", []],
 
   # v1.0 领主与匪帮 L6: 玩家牵线，弱帮投靠本地领主（帮 <15 人、信任 ≥30、领主好感 ≥10）。
-  [anyone|plyr, "lord_talk_gang", [
+  [anyone|plyr, "lord_talk_gang_options", [
     (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
     (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
     (call_script, "script_troop_get_relation_with_troop", "trp_player", "$g_talk_troop"),
@@ -27000,7 +27007,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   [anyone, "lord_af27_submit", [], "{s40}", "lord_talk", []],
 
   # v1.0 领主与匪帮 L7: 问领主悬赏的是哪支帮（赏金 800，剿匪后自动兑现）。
-  [anyone|plyr, "lord_talk_gang", [
+  [anyone|plyr, "lord_talk_gang_options", [
     (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
     (troop_get_slot, ":bounty", "$g_talk_troop", slot_af27_bounty_kind),
     (is_between, ":bounty", 1, 7),
@@ -27014,7 +27021,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   [anyone, "lord_af27_bounty", [], "不错，{s4}那帮人闹得太凶，谁剿了他们，我出 800 第纳尔。", "lord_talk", []],
 
   # v1.0 领主与匪帮 L8: 向领主告密帮的位置，领主立即按 L1 机制追打。
-  [anyone|plyr, "lord_talk_gang", [
+  [anyone|plyr, "lord_talk_gang_options", [
     (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
     (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
     (assign, ":found", 0),
@@ -27133,7 +27140,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
 
   # v1.0 资本家第一批 (条目 3): 好感 >= 10 的领主可以借钱, 1000/3000/5000 三档, 1%/周息, 见面时走 af19 收债。
   # 只借给财产 >= 本金的领主 (借出时查领主财产); 同一领主未还清时不能再借。
-  [anyone|plyr,"lord_talk_money", [
+  [anyone|plyr, "lord_talk_money_options", [
     (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
     (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
     (troop_slot_eq, "$g_talk_troop", slot_troop_prisoner_of_party, -1),
@@ -27354,7 +27361,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   # 村庄 10000。钱进国王财产 (af14), 调 give_center_to_lord 过户, 玩家成该城
   # 领主 (封地数 +1, 吃原版封地税效递减)。资助过本国打仗 (954 == 玩家阵营)
   # 时引言里优先卖给你——这是 3b“战后分一杯羹”的口子, 不另开 Slot。
-  [anyone|plyr,"lord_talk_money", [
+  [anyone|plyr, "lord_talk_money_options", [
     (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
     (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
     (troop_slot_eq, "$g_talk_troop", slot_troop_prisoner_of_party, -1),
@@ -27438,7 +27445,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   # 资助过本国 (954 == 玩家阵营) 时, 买城对话里国王会优先卖给你 (见买城引言);
   # 资助外国没有买城口子 (外国城本来就不能买), 只拿好感与雇兵预算。
   # 诚实性: 钱只进国王财产、提高雇兵预算, 不承诺多一支军队、不承诺打赢。
-  [anyone|plyr,"lord_talk_money", [
+  [anyone|plyr, "lord_talk_money_options", [
     (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
     (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
     (troop_slot_eq, "$g_talk_troop", slot_troop_prisoner_of_party, -1),
@@ -27506,7 +27513,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   # 本来就是手头紧的那个, 设了门槛就借不出去; 代价是还钱看他以后的光景, 逾期
   # 未还的部分由 af19_lord_pays 记进 874 欠账 (见 af33_settle_warloans)。
   # 条件: 好感 ≥10 (同普通放贷)、对方阵营正在打仗、同一领主没有未还的战争贷款。
-  [anyone|plyr,"lord_talk_money", [
+  [anyone|plyr, "lord_talk_money_options", [
     (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
     (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
     (troop_slot_eq, "$g_talk_troop", slot_troop_prisoner_of_party, -1),
@@ -27562,7 +27569,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   # 比本国多): 赔款 5000 进强势方国王财产 (af14), 两国调同一套停战执行器
   # diplomacy_start_peace_between_kingdoms。买和平是自愿出价, 不是欠账,
   # 不走 af19、不记欠账。关系: 被救的国王 +3、收赔款的国王 +2。
-  [anyone|plyr,"lord_talk_money", [
+  [anyone|plyr, "lord_talk_money_options", [
     (faction_slot_eq, "$g_talk_troop_faction", slot_faction_leader, "$g_talk_troop"),
     (troop_get_slot, ":renown", "trp_player", slot_troop_renown),
     (ge, ":renown", 200),
@@ -27857,13 +27864,13 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
       (eq, ":show", 1),
   ], "谈帮派的事。", "lord_talk_gang", []],
   # 菜单摩擦点第五批：谈钱的回应，下一状态与本状态相同，让钱组选项接着列出来。
-  [anyone, "lord_talk_money", [], "钱的事？说来听听。", "lord_talk_money", []],
+  [anyone, "lord_talk_money", [], "钱的事？说来听听。", "lord_talk_money_options", []],
   # 菜单摩擦点第五批：谈帮派的回应，下一状态与本状态相同，让帮组选项接着列出来。
-  [anyone, "lord_talk_gang", [], "帮派的事？你说。", "lord_talk_gang", []],
+  [anyone, "lord_talk_gang", [], "帮派的事？你说。", "lord_talk_gang_options", []],
   # 菜单摩擦点第五批：从钱组返回 lord_talk 顶层。
-  [anyone|plyr, "lord_talk_money", [], "还是说点别的吧。", "lord_talk", []],
+  [anyone|plyr, "lord_talk_money_options", [], "还是说点别的吧。", "lord_talk", []],
   # 菜单摩擦点第五批：从帮组返回 lord_talk 顶层。
-  [anyone|plyr, "lord_talk_gang", [], "还是说点别的吧。", "lord_talk", []],
+  [anyone|plyr, "lord_talk_gang_options", [], "还是说点别的吧。", "lord_talk", []],
   # 审计 13 F-04 修复 (方案 B, 玩家 2026-11-10 拍板): 资助的称王者消失
   # (派系灭了人可能消失, 原版领主不死) 时结算脚本两支都不触发, 963/964
   # 永久挂起、玩家再也资助不了别人。加“放弃资助”选项: 玩家主动放弃,
