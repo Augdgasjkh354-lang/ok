@@ -7949,17 +7949,23 @@ game_menus = [
       ("village_reports",[(eq, "$cheat_mode", 1),], "{!}CHEAT! Show reports.",
        [(jump_to_menu,"mnu_center_reports"),
            ]),
-      ("af01_village_status", [], "查看地方战乱与援助",
-       [(jump_to_menu, "mnu_af01_village_status")]),
-      ("af12_case_entry",
-       [(call_script, "script_af12_case_kind", "$current_town"), (gt, reg0, 0)],
-       "有村民请你主持公道",
-       [(jump_to_menu, "mnu_af12_case")]),
-      ("af10_village_word",
-       [(party_slot_eq, "$current_town", slot_village_state, 0),
-        (neg|party_slot_ge, "$current_town", slot_village_infested_by_bandits, 1)],
-       "和村长聊聊附近的动静",
-       [(jump_to_menu, "mnu_af10_village_word")]),
+      ("af36_village_affairs_entry",
+       [(try_begin),
+         # 有村民请你主持公道（有案子可断时）
+         (call_script, "script_af12_case_kind", "$current_town"), (gt, reg0, 0),
+         (assign, ":show", 1),
+       (else_try),
+         # 和村长聊聊附近的动静（村庄未被洗劫、未被强盗盘踞时）
+         (party_slot_eq, "$current_town", slot_village_state, 0),
+         (neg|party_slot_ge, "$current_town", slot_village_infested_by_bandits, 1),
+         (assign, ":show", 1),
+       (else_try),
+         # 查看地方战乱与援助（本身无条件，恒可见）
+         (assign, ":show", 1),
+       (try_end),
+       (eq, ":show", 1)],
+       "村里事",
+       [(jump_to_menu, "mnu_af36_village_affairs")]),
       ("af09_village_echo",
        [(call_script, "script_af09_check_echo", "$current_town"), (gt, reg0, 0)],
        "村口似乎有人在等你……",
@@ -17942,5 +17948,27 @@ game_menus = [
      (display_message, "@你往黄沙帮的钱袋里塞了 400 第纳尔，怂恿他们去找别帮的麻烦。火并一触即发。"),
      (jump_to_menu, "mnu_af04_network")]),
     ("af35_network_provoke_back", [], "返回", [(jump_to_menu, "mnu_af04_network")]),
+   ]),
+
+  # 菜单摩擦点普查第四批：村庄菜单分 1 个子菜单“村里事”（2026-11-10，基线 abfd5f03）。
+  # 只挪选项、不加新功能，0 新 Slot；入口条件是组内选项条件的 OR，
+  # 其中“查看地方战乱与援助”本身无条件恒可见，所以入口恒出现，
+  # 子菜单永远不会是空菜单。子菜单最底是“返回村庄”。
+  ("af36_village_affairs", 0,
+   "村里事——查看地方战乱与援助、和村长聊聊附近的动静、有村民请你主持公道。",
+   "none", [],
+   [
+     ("af01_village_status", [], "查看地方战乱与援助",
+      [(jump_to_menu, "mnu_af01_village_status")]),
+     ("af12_case_entry",
+      [(call_script, "script_af12_case_kind", "$current_town"), (gt, reg0, 0)],
+      "有村民请你主持公道",
+      [(jump_to_menu, "mnu_af12_case")]),
+     ("af10_village_word",
+      [(party_slot_eq, "$current_town", slot_village_state, 0),
+       (neg|party_slot_ge, "$current_town", slot_village_infested_by_bandits, 1)],
+      "和村长聊聊附近的动静",
+      [(jump_to_menu, "mnu_af10_village_word")]),
+    ("af36_village_affairs_back", [], "返回村庄", [(jump_to_menu, "mnu_village")]),
    ]),
 ]

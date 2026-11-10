@@ -17,9 +17,7 @@ mno_af20_demand_surrender|勒 令 他 们 放 下 武 器
 mno_af26_sanctuary_entry|以 受 庇 护 者 的 身 份 求 见 城 主 （ 领 主 好 感 ≥ 40） 
 mno_af06_siege_ops_entry|围 城 暗 战 ： 侦 察 、 破 坏 粮 仓 与 策 反 守 军 
 mno_af06_defender_supply|将 随 身 四 袋 谷 物 秘 密 送 入 守 城 粮 仓 
-mno_af01_village_status|查 看 地 方 战 乱 与 援 助 
-mno_af12_case_entry|有 村 民 请 你 主 持 公 道 
-mno_af10_village_word|和 村 长 聊 聊 附 近 的 动 静 
+mno_af36_village_affairs_entry|村 里 事 
 mno_af09_village_echo|村 口 似 乎 有 人 在 等 你 … … 
 mno_af04_visit_lair|拜 访 匪 帮 老 巢 
 mno_af21_crown_talk_entry|求 见 国 王 ， 商 谈 缴 获 的 分 成 
@@ -292,3 +290,8 @@ mno_af23_provoke_gang_4|花 400 第 纳 尔 ， 挑 拨 怒 海 帮 去 跟 其 
 mno_af23_provoke_gang_5|花 400 第 纳 尔 ， 挑 拨 断 峰 帮 去 跟 其 他 匪 帮 火 并 
 mno_af23_provoke_gang_6|花 400 第 纳 尔 ， 挑 拨 黄 沙 帮 去 跟 其 他 匪 帮 火 并 
 mno_af35_network_provoke_back|返 回 
+menu_af36_village_affairs|村 里 事 — — 查 看 地 方 战 乱 与 援 助 、 和 村 长 聊 聊 附 近 的 动 静 、 有 村 民 请 你 主 持 公 道 。 
+mno_af01_village_status|查 看 地 方 战 乱 与 援 助 
+mno_af12_case_entry|有 村 民 请 你 主 持 公 道 
+mno_af10_village_word|和 村 长 聊 聊 附 近 的 动 静 
+mno_af36_village_affairs_back|返 回 村 庄 
