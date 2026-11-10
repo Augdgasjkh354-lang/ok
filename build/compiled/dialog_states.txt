@@ -1421,3 +1421,6 @@ lord_talk_gang
 af33_pretender_abandoned
 af33_pretender_abandoned_supp
 lord_talk_court
+craftsman_af37_fire
+craftsman_af37_fire_choose
+craftsman_af37_fire_done

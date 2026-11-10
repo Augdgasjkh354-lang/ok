@@ -165,4 +165,11 @@ dlga_lord_talk_court:fb7_memory_answer|你 还 记 得 我 们 过 去 的 恩 �
 dlga_lord_talk_court:fb71_compact_answer|我 听 说 贵 族 之 间 常 有 秘 密 盟 约 。 你 参 与 其 中 吗 ？ 
 dlga_lord_talk_court:fb72_claim_answer|你 觊 觎 哪 块 封 地 ？ 你 的 盟 友 又 支 持 谁 ？ 
 dlga_lord_talk_court:fb73_private_entry|我 想 和 你 私 下 谈 谈 王 国 中 的 政 治 交 易 。 
+dlga_master_craftsman_talk:craftsman_af37_fire|裁 工 人 。 
+dlga_craftsman_af37_fire:craftsman_af37_fire_choose|裁 人 ？ 行 吧 ， 不 过 按 规 矩 每 人 得 给 一 周 工 钱 当 遣 散 费 ， 20 第 纳 尔 一 个 。 如 今 作 坊 里 有 {reg41} 个 工 人 。 你 想 裁 几 个 ？ 
+dlga_craftsman_af37_fire_choose:craftsman_af37_fire_done|裁 1 个 ， 付 20 第 纳 尔 遣 散 费 。 
+dlga_craftsman_af37_fire_choose:craftsman_af37_fire_done.1|裁 5 个 ， 付 100 第 纳 尔 遣 散 费 。 
+dlga_craftsman_af37_fire_choose:craftsman_af37_fire_done.2|全 部 裁 掉 ， 付 {reg42} 第 纳 尔 遣 散 费 。 
+dlga_craftsman_af37_fire_choose:master_craftsman_pretalk|算 了 ， 先 不 裁 。 
+dlga_craftsman_af37_fire_done:master_craftsman_pretalk|人 我 这 就 打 发 走 。 作 坊 里 清 静 了 ， 货 也 会 出 得 慢 些 。 
 dlga_lord_talk_court:lord_talk|还 是 说 点 别 的 吧 。 
