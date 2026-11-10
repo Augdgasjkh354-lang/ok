@@ -208,3 +208,7 @@ dlga_af46_grieve_pledge:lord_talk_court|这 话 我 记 下 了 。 到 时 候 
 dlga_af46_grieve_opts:af46_grieve_gold|我 出 1500 第 纳 尔 ， 帮 你 撑 过 这 阵 子 。 
 dlga_af46_grieve_gold:lord_talk_court|… … 这 份 情 我 领 了 。 
 dlga_af46_grieve_opts:lord_talk_court|这 是 陛 下 的 决 定 ， 我 不 便 多 说 。 
+dlga_lord_talk_court:af48_expose_reply|陛 下 ， 议 {s12}之 前 ， 有 件 关 于 {s11}的 事 您 该 知 道 。 
+dlga_af48_expose_reply:lord_talk_court|竟 有 此 事 ？ {s11}的 事 ， 我 会 查 清 楚 。 至 于 这 块 封 地 — — 支 持 {s11}的 人 里 ， 已 经 有 {reg41} 位 收 回 了 话 。 
+dlga_af48_expose_reply:lord_talk_court.1|竟 有 此 事 ？ {s11}的 事 ， 我 会 查 清 楚 。 不 过 替 {s11}说 话 的 人 ， 倒 是 一 个 也 没 走 。 
+dlga_af48_expose_reply:lord_talk_court.2|这 些 话 没 有 凭 据 ， 我 不 能 拿 到 宫 廷 上 去 说 。 

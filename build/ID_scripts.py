@@ -864,5 +864,7 @@ script_af45_prosperity_bonus = 862
 script_af46_agenda_text = 863
 script_af46_broker_vote = 864
 script_af46_broker_settle = 865
+script_af48_find_scandal = 866
+script_af48_court_expose = 867
 
 
