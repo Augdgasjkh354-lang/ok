@@ -159,3 +159,7 @@ dlga_lord_talk_money:lord_talk_money|钱 的 事 ？ 说 来 听 听 。
 dlga_lord_talk_gang:lord_talk_gang|帮 派 的 事 ？ 你 说 。 
 dlga_lord_talk_money:lord_talk|还 是 说 点 别 的 吧 。 
 dlga_lord_talk_gang:lord_talk|还 是 说 点 别 的 吧 。 
+dlga_pretender_start:af33_pretender_abandoned|放 弃 对 {s48}的 资 助 — — 那 笔 钱 就 当 打 水 漂 了 。 
+dlga_af33_pretender_abandoned:pretender_start|明 白 了 。 这 事 就 此 了 结 — — 你 资 助 的 钱 不 会 退 回 来 ， 但 你 随 时 可 以 资 助 别 人 。 
+dlga_supported_pretender_talk:af33_pretender_abandoned_supp|放 弃 对 {s48}的 资 助 — — 那 笔 钱 就 当 打 水 漂 了 。 
+dlga_af33_pretender_abandoned_supp:supported_pretender_pretalk|明 白 了 。 这 事 就 此 了 结 — — 你 资 助 的 钱 不 会 退 回 来 ， 但 你 随 时 可 以 资 助 别 人 。 
