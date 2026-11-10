@@ -2002,14 +2002,14 @@ slot_af03_contract_losses     = 706  # p_main_party, cumulative
 slot_af03_contract_origin     = 707  # original departure town, for readable journal even after target removed
 
 # Ashfall v0.4: independent bandit clans (slot ranges do not overlap v0.1-0.3).
-# p_main_party: three slots per role, gang index 1..3; base+(kind-1).
+# p_main_party: three slots per role, gang index 1..6; base+(kind-1). Kinds 4-6 use 914+ (af28), see af04_main_slot.
 slot_af04_relation_start     = 720 # trust toward each named gang, -100..100
 slot_af04_truce_start        = 723 # protection until day+1 (exclusive)
 slot_af04_last_spawn_start   = 726 # last emergence, day+1; used for 14-day respawn
 slot_af04_party_start        = 729 # live leader party ID, verified before use
 slot_af04_service_start      = 732 # last successful service day+1 (7-day cooldown)
 # On each named map group.
-slot_af04_kind               = 735 # 1 blackpine, 2 wolf, 3 salt-raven
+slot_af04_kind               = 735 # 1 blackpine, 2 wolf, 3 salt-raven, 4 sea-raider, 5 mountain, 6 desert (4-6 reuse tpl 1-3)
 slot_af04_home               = 736 # nearby village
 slot_af04_birth_token        = 737 # day+1
 slot_af04_last_strike        = 738 # day+1, avoid harassing constantly
@@ -2106,7 +2106,7 @@ slot_af21_crown_talk_day    = 885 # p_main_party: day+1 from which the crown's c
 slot_af23_flee_until         = 886 # any map party: hour until which it flees from the player
 slot_af23_shield_paid        = 887 # p_main_party: shield money paid for this muster (day+1, cleared when the muster ends)
 slot_af23_ignored_count      = 888 # p_main_party: how many musters the player has ignored in total
-slot_af23_backed_gang        = 889 # p_main_party: gang the player backs (1-3, 0 = none)
+slot_af23_backed_gang        = 889 # p_main_party: gang the player backs (1-6, 0 = none)
 slot_af23_feud_day           = 890 # p_main_party: day+1 of the next gang feud settlement
 slot_af23_kept_word_1        = 891 # p_main_party: truces kept with gang 1
 slot_af23_kept_word_2        = 892 # p_main_party: truces kept with gang 2
@@ -2114,7 +2114,7 @@ slot_af23_kept_word_3        = 893 # p_main_party: truces kept with gang 3
 slot_af23_looted_day         = 894 # village: day+1 of the player's last loot of this village
 slot_af23_famine_bags        = 895 # town/castle: bags bought at the famine price this week
 slot_af23_famine_week        = 896 # town/castle: which week+1 the famine-bag count belongs to
-slot_af23_joined_gang        = 897 # p_main_party: gang the player joined (1-3, 0 = none); cleared if that gang is broken up
+slot_af23_joined_gang        = 897 # p_main_party: gang the player joined (1-6, 0 = none); cleared if that gang is broken up
 slot_af26_intro_day          = 898 # p_main_party: day+1 after which a lord may introduce the player to the king again (L2)
 slot_af26_borrow_day         = 899 # p_main_party: L1 borrow return deadline (day+14); 0 = not borrowing
 slot_af26_borrow_count       = 900 # p_main_party: L1 borrowed men count
@@ -2126,8 +2126,27 @@ slot_af26_letter_day         = 905 # p_main_party: I3 privateer letter expiry (d
 slot_af26_letter_issuer      = 906 # p_main_party: I3 issuing kingdom faction id; 0 = no letter
 slot_af26_hold_flag          = 907 # p_main_party: I7 one-time "occupy without becoming king" switch; 1 = hold, cleared after use
 slot_af27_hunt_day           = 908 # lord Troop Slot: L1 last hunt day+1; 0 = never hunted
-slot_af27_sponsor_kind       = 909 # lord Troop Slot: L2 sponsored gang kind 1-3; 0 = none
+slot_af27_sponsor_kind       = 909 # lord Troop Slot: L2 sponsored gang kind 1-6; 0 = none
 slot_af27_sponsor_day        = 910 # lord Troop Slot: L2 last sponsor day+1; 0 = never sponsored
 slot_af27_squeeze_day        = 911 # lord Troop Slot: L4 last squeeze day+1; 0 = never squeezed
-slot_af27_glove_kind         = 912 # lord Troop Slot: L6 submitted gang (black glove) kind 1-3; 0 = none
-slot_af27_bounty_kind        = 913 # lord Troop Slot: L7 bounty on gang kind 1-3; 0 = none
+slot_af27_glove_kind         = 912 # lord Troop Slot: L6 submitted gang (black glove) kind 1-6; 0 = none
+slot_af27_bounty_kind        = 913 # lord Troop Slot: L7 bounty on gang kind 1-6; 0 = none
+# v1.0 六国匪帮第一批: kinds 4-6 用 914+ 号段, 与 720-734 五组同布局 (偏移 +194);
+# 钱袋 929-931 (相对 870-872 偏移 +59), 守约 932-934 (相对 891-893 偏移 +41)。
+# 935-936 国王资助 (第二批)、937 接头帮 (第三批)、938-942 帮派任务 (第四批) 先登记, 后几批直接用。
+slot_af28_relation_start     = 914 # p_main_party: trust toward gang 4, 914-916
+slot_af28_truce_start        = 917 # p_main_party: protection until day+1, 917-919
+slot_af28_last_spawn_start   = 920 # p_main_party: last emergence day+1, 920-922
+slot_af28_party_start        = 923 # p_main_party: live leader party ID, 923-925
+slot_af28_service_start      = 926 # p_main_party: last service day+1, 926-928
+slot_af28_gang_purse_start   = 929 # p_main_party: gang 4-6 cash, 929-931
+slot_af28_protection_start   = 932 # p_main_party: truces kept with gang 4-6, 932-934
+slot_af28_king_sponsor_kind  = 935 # king Troop Slot: sponsored gang kind 1-6; 0 = none (batch 2)
+slot_af28_king_sponsor_day   = 936 # king Troop Slot: last king sponsor day+1; 0 = never (batch 2)
+slot_af28_contact_kind       = 937 # town Slot: contact gang kind 1-6; 0 = none (batch 3)
+slot_af28_quest_type         = 938 # p_main_party: gang quest type (batch 4)
+slot_af28_quest_stage        = 939 # p_main_party: gang quest stage (batch 4)
+slot_af28_quest_target       = 940 # p_main_party: gang quest target party/town (batch 4)
+slot_af28_quest_deadline     = 941 # p_main_party: gang quest deadline day+1 (batch 4)
+slot_af28_quest_reward       = 942 # p_main_party: gang quest reward denars (batch 4)
+slot_af28_quest_kind         = 943 # p_main_party: gang quest issuer kind 1-6; 0 = no quest (batch 4)

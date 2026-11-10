@@ -74,3 +74,5 @@ dlga_lord_talk:lord_af27_submit|我 认 识 一 支 弱 帮 ， 想 让 他 们 
 dlga_lord_talk:lord_af27_bounty|听 说 你 在 悬 赏 剿 匪 ？ 
 dlga_lord_af27_bounty:lord_talk|不 错 ， {s4}那 帮 人 闹 得 太 凶 ， 谁 剿 了 他 们 ， 我 出 800 第 纳 尔 。 
 dlga_lord_talk:lord_af27_inform|我 知 道 一 支 匪 帮 的 下 落 ， 你 派 人 去 剿 了 吧 。 
+dlga_tavernkeeper_talk:tavernkeeper_af28_contact|介 绍 我 见 帮 里 的 人 。 
+dlga_tavernkeeper_af28_contact:close_window|行 ， 角 落 里 那 位 就 是 他 们 的 接 头 人 ， 你 过 去 吧 ， 别 说 是 我 指 的 路 。 
