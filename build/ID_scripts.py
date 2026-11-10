@@ -823,5 +823,6 @@ script_af28_find_quest_convoy = 821
 script_af28_quest_settle = 822
 script_af28_confirm_victory = 823
 script_af28_king_plot = 824
+script_af26_collect_all_caravans = 825
 
 
