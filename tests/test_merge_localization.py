@@ -26,7 +26,10 @@ with tempfile.TemporaryDirectory() as tmp:
     (cns / 'troops.csv').write_text(original, 'utf-8')
     loan_key = 'dlga_lord_af26_borrow:lord_talk'
     protected_key = 'dlga_village_elder_donate:village_elder_pretalk'
+    funding_keys = ('dlga_af33_pretender_funded:pretender_start',
+                    'dlga_af33_pretender_funded_supp:supported_pretender_pretalk')
     old_dialogs = '\ufeff\n' + loan_key + '|旧借兵说明\n' + protected_key + '|玩家原有译文\n'
+    old_dialogs += ''.join(key + '|旧资助说明\n' for key in funding_keys)
     (cns / 'dialogs.csv').write_text(old_dialogs, 'utf-8')
     new_dialogs = dict(line.split('|', 1) for line in
                        (root / 'localization/cns/dialogs.csv').read_text('utf-8-sig').splitlines() if '|' in line)
@@ -42,6 +45,8 @@ with tempfile.TemporaryDirectory() as tmp:
     assert (cns / 'troops.csv.bak').read_text('utf-8') == original
     dialog_merged = (cns / 'dialogs.csv').read_text('utf-8-sig')
     assert loan_key + '|' + new_dialogs[loan_key] in dialog_merged, 'old loan terms must be refreshed on upgrade'
+    for key in funding_keys:
+        assert key + '|' + new_dialogs[key] in dialog_merged, 'funding terms must update'
     assert protected_key + '|玩家原有译文' in dialog_merged, 'unrelated dialogue translation overwritten'
     assert (cns / 'dialogs.csv.bak').read_text('utf-8') == old_dialogs
     for name in ('game_menus.csv', 'quick_strings.csv', 'party_templates.csv'):
@@ -87,6 +92,8 @@ with tempfile.TemporaryDirectory() as tmp:
             ps1 = z.read(loc + 'merge_localization.ps1')
             assert ps1.startswith(b'\xef\xbb\xbf'), 'ps1 needs UTF-8 BOM for Windows PowerShell 5.1'
             assert b"'dlga_lord_af26_borrow:'" in ps1, 'Windows merger must refresh the same loan terms'
+            for key in funding_keys:
+                assert key.encode('ascii') in ps1, 'Windows funding rules differ'
             assert z.read('FewerBandits/scripts.txt') == (root / 'game-data' / 'scripts.txt').read_bytes()
 
         # The packaged Python merger must work from the package layout (*.merge.csv).

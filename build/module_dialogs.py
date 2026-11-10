@@ -26761,6 +26761,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
     (party_set_slot, "p_main_party", slot_af26_borrow_day, ":deadline"),
     (party_set_slot, "p_main_party", slot_af26_borrow_count, ":n"),
     (party_set_slot, "p_main_party", slot_af26_borrow_lender, "$g_talk_troop"),
+    (party_set_slot, "p_main_party", slot_af26_borrow_troop, ":troop"),
     (party_set_slot, "p_main_party", slot_af26_borrow_pre_count, ":pre"),
     (assign, reg10, ":n"),
   ]],
@@ -27617,7 +27618,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   ], "我资助你 10000 第纳尔——先说好，这钱是让你多雇些兵的，打赢打输还得看战场，我不包赢。", "af33_pretender_funded",[
     (call_script, "script_af33_fund_pretender", "$g_talk_troop", 10000),
   ]],
-  [anyone,"af33_pretender_funded", [], "好，这笔钱我会拿去雇兵、置办军械。你一共资助了我 {reg1} 第纳尔。我若登基，连本带利一倍半还你——从新王国的金库里出，一次最多拿四分之一，分几周还清；若我败了、被俘了，这笔钱就当沉了。打仗没有包赢的，你我都清楚。", "pretender_start",[]],
+  [anyone,"af33_pretender_funded", [], "好，这笔钱先留作军费。有领主加入我们后，我会拨款给缺钱缺兵的部队，按平常的规矩招人；眼下没有部队可接收，就先存着。你一共资助了我 {reg1} 第纳尔。我若登基，连本带利一倍半还你——从新王国的金库里出，一次最多拿四分之一，分几周还清；若我败了、被俘了，这笔钱就当沉了。打仗没有包赢的，你我都清楚。", "pretender_start",[]],
   # v1.0 资本家 2.0 第四批 (条目 9): 已投效称王者之后再资助, 与 pretender_start
   # 的两项同款 (回话回到 supported_pretender_pretalk, 不是 pretender_start)。
   [anyone|plyr,"supported_pretender_talk", [
@@ -27644,7 +27645,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   ], "我再资助你 10000 第纳尔——先说好，这钱是让你多雇些兵的，打赢打输还得看战场，我不包赢。", "af33_pretender_funded_supp",[
     (call_script, "script_af33_fund_pretender", "$g_talk_troop", 10000),
   ]],
-  [anyone,"af33_pretender_funded_supp", [], "好，这笔钱我会拿去雇兵、置办军械。你一共资助了我 {reg1} 第纳尔。我若登基，连本带利一倍半还你——从新王国的金库里出，一次最多拿四分之一，分几周还清；若我败了、被俘了，这笔钱就当沉了。打仗没有包赢的，你我都清楚。", "supported_pretender_pretalk",[]],
+  [anyone,"af33_pretender_funded_supp", [], "好，这笔钱先留作军费。有领主加入我们后，我会拨款给缺钱缺兵的部队，按平常的规矩招人；眼下没有部队可接收，就先存着。你一共资助了我 {reg1} 第纳尔。我若登基，连本带利一倍半还你——从新王国的金库里出，一次最多拿四分之一，分几周还清；若我败了、被俘了，这笔钱就当沉了。打仗没有包赢的，你我都清楚。", "supported_pretender_pretalk",[]],
   # v1.0 资本家 2.0 第四批 (条目 10c): 经酒馆老板雇刺客, 杀一座城的货商
   # (只杀货商, 不杀领主)。2000 先付, 刺客次日动手 (Slot 965 记目标, 动手
   # 后记 7 天冷却); 成功率 65%, 走漏了扣荣誉与关系; 目标用 repeat_for_troops
@@ -27911,13 +27912,17 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   [anyone, "lord_af26_return", [
     (call_script, "script_af26_borrow_return", 0),
     (eq, reg0, 1),
+    (eq, reg7, 0),
     (str_store_troop_name_plural, s41, reg5),
     (assign, reg10, reg6),
     (assign, reg11, reg4),
     (assign, reg12, reg1),
     (assign, reg13, reg3),
   ], "你借了 {reg10} 名{s41}，本队现在能交还 {reg11} 人，还缺 {reg12} 人。按同兵种人数结清，缺员好感 {reg13}；调走或升级的人可以补齐后再还。你要现在结清吗？", "lord_af26_return_choose", []],
-  [anyone, "lord_af26_return", [], "眼下没有能结清的借兵记录。", "lord_talk", []],
+  [anyone, "lord_af26_return", [
+    (call_script, "script_af26_borrow_return", 0),
+    (eq, reg0, 0),
+  ], "眼下没有能结清的借兵记录。", "lord_talk", []],
   [anyone|plyr, "lord_af26_return_choose", [], "按刚才说的人数交还，缺员一并结清。", "lord_af26_return_done", [
     (call_script, "script_af26_borrow_return", 1),
     (try_begin),
@@ -27932,4 +27937,11 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   ]],
   [anyone|plyr, "lord_af26_return_choose", [], "先不结清，我去把人补齐。", "lord_pretalk", []],
   [anyone, "lord_af26_return_done", [], "{s40}", "lord_talk", []],
+  [anyone, "lord_af26_return", [
+    (call_script, "script_af26_borrow_return", 0),
+    (eq, reg0, 1),
+    (eq, reg7, 1),
+  ], "旧借兵账没有记清兵种，这笔就此作罢。你现有的人手留下，也不再为这笔旧账扣交情。", "lord_talk", [
+    (call_script, "script_af26_borrow_return", 1),
+  ]],
 ]

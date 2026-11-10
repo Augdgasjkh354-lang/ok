@@ -4163,6 +4163,11 @@ simple_triggers = [
   (24, [
     (party_get_slot, ":deadline", "p_main_party", slot_af26_borrow_day),
     (gt, ":deadline", 0),
+    (try_begin),
+      (party_slot_eq, "p_main_party", slot_af26_borrow_troop, 0),
+      (call_script, "script_af26_borrow_return", 1),
+      (display_message, "@旧借兵账没有记录兵种，现已免除。不扣兵员，也不扣关系。"),
+    (else_try),
     (store_current_day, ":today"),
     (store_sub, ":overdue", ":today", ":deadline"),
     (gt, ":overdue", 0),
@@ -4181,6 +4186,7 @@ simple_triggers = [
     (else_try),
       (party_get_slot, ":lender", "p_main_party", slot_af26_borrow_lender),
       (call_script, "script_change_player_relation_with_troop", ":lender", -2),
+    (try_end),
     (try_end),
   ]),
 

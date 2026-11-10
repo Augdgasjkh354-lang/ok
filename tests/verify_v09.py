@@ -121,6 +121,12 @@ ALLOWED_DIALOG_CHANGES |= {
     'dlga_supported_pretender_talk:af33_pretender_funded_supp',
     'dlga_supported_pretender_talk:af33_pretender_funded_supp.1',
 }
+# Menu / audit follow-up: intentional updates to mod-owned dialogue rows.
+ALLOWED_DIALOG_CHANGES |= {
+    'dlga_af33_pretender_funded:pretender_start',
+    'dlga_af33_pretender_funded_supp:supported_pretender_pretalk',
+    'dlga_lord_af26_return:lord_af26_return_choose',
+}
 _old=(base/'compiled/conversation.txt').read_text('utf-8').split('\n')
 _new=(data/'conversation.txt').read_text('utf-8').split('\n')
 if _old and _old[-1]=='': _old=_old[:-1]
@@ -182,6 +188,27 @@ for required in ('slot_af09_refugee_thanked','slot_af09_deserter_thanked','slot_
                  '"af09_check_echo"','"af09_take_echo"','script_af01_change_unrest',
                  'slot_af09_aid_count','slot_af09_refugee_homecoming'):
     assert required in scripts
+# Grouping must keep every former action reachable within two clicks, without
+# growing the town/camp home menus or hiding categories for lack of money.
+menu_source=(current/'module_game_menus.py').read_text('utf8')
+menu_ast=ast.parse(menu_source)
+menu_nodes=next(n.value.elts for n in menu_ast.body if isinstance(n,ast.Assign)
+                and any(isinstance(t,ast.Name) and t.id=='game_menus' for t in n.targets))
+menu_nodes={n.elts[0].value:n for n in menu_nodes}
+for home,limit,targets in (
+    ('town',38,{'af34_trade','af34_war','af34_garrison'}),
+    ('camp',12,{'af07_world','af04_network','af05_ledger','af03_journal','fb75_intel_book'})):
+    assert len(menu_nodes[home].elts[5].elts)<=limit, (home,'home menu grew')
+    reached={home}
+    for _ in range(2):
+        reached |= {v.value[4:] for name in list(reached)
+                    for v in ast.walk(menu_nodes[name].elts[5])
+                    if isinstance(v,ast.Constant) and isinstance(v.value,str)
+                    and v.value.startswith('mnu_')}
+    assert targets<=reached, (home,'lost category',targets-reached)
+for option in menu_nodes['town'].elts[5].elts:
+    if option.elts[0].value in ('af34_trade_entry','af34_war_entry','af34_garrison_entry'):
+        assert 'store_troop_gold' not in ast.get_source_segment(menu_source,option.elts[1])
 print('VERIFY_V09_OK')
 print('Original scripts preserved:',len([x for x in (base/'ID_scripts.py').read_text('utf8').splitlines() if x.strip()]))
 print('New scripts:',len([x for x in (current/'ID_scripts.py').read_text('utf8').splitlines() if x.strip()])-len([x for x in (base/'ID_scripts.py').read_text('utf8').splitlines() if x.strip()]))
