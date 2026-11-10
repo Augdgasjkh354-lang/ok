@@ -304,3 +304,8 @@ menu_af37_ledger|{s40}
 mno_af37_ledger_back|返 回 烽 烟 案 头 
 menu_af46_agenda|{s40}
 mno_af46_agenda_back|返 回 情 报 簿 
+menu_af49_petitions|{s40}
+mno_af49_grant_a|准 {s11}的 军 费 （ 2000） 。 
+mno_af49_grant_b|准 {s12}的 赈 济 （ 1500） 。 
+mno_af49_grant_both|两 份 都 准 （ 3500） 。 
+mno_af49_refuse_both|都 驳 回 。 

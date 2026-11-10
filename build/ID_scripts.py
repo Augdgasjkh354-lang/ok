@@ -869,5 +869,9 @@ script_af48_court_expose = 867
 script_af47_poorest_village = 868
 script_af47_poorest_lord = 869
 script_af47_petition = 870
+script_af49_is_player_king = 871
+script_af49_find_petitions = 872
+script_af49_grant = 873
+script_af49_refuse = 874
 
 

@@ -63236,6 +63236,150 @@ scripts = [
     (try_end),
   ]),
 
+  # v1.0 政治 2.0 第一批: 玩家是不是国王。无参数, 输出 reg0: 1 是, 0 不是。
+  # 条件: $players_kingdom = fac_player_supporters_faction, 并且该阵营的
+  # slot_faction_leader = trp_player (支持称王者时, 国王是那位称王者, 不是你, 不算)。
+  ("af49_is_player_king", [
+    (assign, reg0, 0),
+    (try_begin),
+      (eq, "$players_kingdom", "fac_player_supporters_faction"),
+      (faction_get_slot, ":leader", "fac_player_supporters_faction", slot_faction_leader),
+      (eq, ":leader", "trp_player"),
+      (assign, reg0, 1),
+    (try_end),
+  ]),
+
+  # v1.0 政治 2.0 第一批: 找封臣的请愿。无参数。
+  # 输出 (全部放到最后赋值): reg0 = 要军费的封臣 (没有为 -1);
+  # reg1 = 要赈济的封臣 (没有为 -1); reg2 = 赈济的村子 (没有为 -1)。
+  ("af49_find_petitions", [
+    (assign, ":a", -1),
+    (assign, ":a_wealth", 1000000),
+    (assign, ":b", -1),
+    (assign, ":b_village", -1),
+    (assign, ":b_pros", 1000),
+    # 前提: 玩家是国王。不是就三个都返回 -1。
+    (call_script, "script_af49_is_player_king"),
+    (try_begin),
+      (eq, reg0, 1),
+      # --- A: 要军费的封臣 (王国正在打仗, 财产 < 1000, 挑财产最少的) ---
+      (assign, ":at_war", 0),
+      (try_for_range, ":kingdom", kingdoms_begin, kingdoms_end),
+        (faction_slot_eq, ":kingdom", slot_faction_state, sfs_active),
+        (store_relation, ":rel", "fac_player_supporters_faction", ":kingdom"),
+        (lt, ":rel", 0),
+        (assign, ":at_war", 1),
+      (try_end),
+      (try_begin),
+        (eq, ":at_war", 1),
+        (try_for_range, ":lord", active_npcs_begin, active_npcs_end),
+          (store_faction_of_troop, ":lf", ":lord"),
+          (eq, ":lf", "fac_player_supporters_faction"),
+          (troop_slot_eq, ":lord", slot_troop_occupation, slto_kingdom_hero),
+          (neq, ":lord", "trp_player"),
+          (troop_slot_eq, ":lord", slot_troop_prisoner_of_party, -1),
+          (troop_get_slot, ":wealth", ":lord", slot_troop_wealth),
+          (lt, ":wealth", 1000),
+          (try_begin),
+            (lt, ":wealth", ":a_wealth"),
+            (assign, ":a", ":lord"),
+            (assign, ":a_wealth", ":wealth"),
+          (try_end),
+        (try_end),
+      (try_end),
+      # --- B: 要赈济的封臣 (封地有穷村, 繁荣 < 40 或战乱 >= 20, 挑繁荣最低的村) ---
+      # B 不能和 A 是同一人: 最穷的村的封主就是 A 时跳过这个村、找下一个。
+      # 玩家自己的村子 (slot_town_lord = trp_player) 不算, 那是你自己的事。
+      (try_for_range, ":village", villages_begin, villages_end),
+        (party_get_slot, ":lord", ":village", slot_town_lord),
+        (is_between, ":lord", active_npcs_begin, active_npcs_end),
+        (store_faction_of_troop, ":lf", ":lord"),
+        (eq, ":lf", "fac_player_supporters_faction"),
+        (neq, ":lord", "trp_player"),
+        (party_get_slot, ":state", ":village", slot_village_state),
+        (neq, ":state", svs_being_raided),
+        (call_script, "script_af01_ensure_village", ":village"),
+        (party_get_slot, ":pros", ":village", slot_town_prosperity),
+        (party_get_slot, ":unrest", ":village", slot_af01_unrest),
+        (try_begin),
+          (this_or_next|lt, ":pros", 40),
+          (ge, ":unrest", 20),
+          (neq, ":lord", ":a"),
+          (try_begin),
+            (lt, ":pros", ":b_pros"),
+            (assign, ":b", ":lord"),
+            (assign, ":b_village", ":village"),
+            (assign, ":b_pros", ":pros"),
+          (try_end),
+        (try_end),
+      (try_end),
+    (try_end),
+    (assign, reg0, ":a"),
+    (assign, reg1, ":b"),
+    (assign, reg2, ":b_village"),
+  ]),
+
+  # v1.0 政治 2.0 第一批: 批准一份请愿。
+  # 参数 1 种类 (1 军费, 2 赈济); 参数 2 封臣; 参数 3 村子 (种类 1 时传 -1)。
+  # 输出 reg0: 1 办成, 0 钱不够没办。先查钱, 钱不够什么都不动。
+  # 注意: 玩家当国王时钱就是玩家金币, 用 troop_remove_gold/store_troop_gold,
+  # 不要读写 trp_player 的 slot_troop_wealth。
+  ("af49_grant", [
+    (store_script_param, ":kind", 1),
+    (store_script_param, ":lord", 2),
+    (store_script_param, ":village", 3),
+    (assign, ":ok", 0),
+    (try_begin),
+      (eq, ":kind", 1),
+      (assign, ":amount", 2000),
+    (else_try),
+      (assign, ":amount", 1500),
+    (try_end),
+    (store_troop_gold, ":gold", "trp_player"),
+    (try_begin),
+      (ge, ":gold", ":amount"),
+      (troop_remove_gold, "trp_player", ":amount"),
+      (try_begin),
+        (eq, ":kind", 1),
+        # 军费: 封臣财产 +2000, 玩家↔封臣关系 +4, 封地怨气 -5 (最低 0)。
+        (call_script, "script_af14_lord_wealth", ":lord", 2000, 0),
+        (call_script, "script_troop_change_relation_with_troop", "trp_player", ":lord", 4),
+        (troop_get_slot, ":grievance", ":lord", slot_fb71_fief_grievance),
+        (val_sub, ":grievance", 5),
+        (val_max, ":grievance", 0),
+        (troop_set_slot, ":lord", slot_fb71_fief_grievance, ":grievance"),
+      (else_try),
+        # 赈济: 村长钱袋 +1500, 战乱 -5, 繁荣 +2, 村庄关系 +2 (关系 < 30 时),
+        # 玩家↔封臣关系 +3, 记「收到救济」事件 5。
+        (call_script, "script_af13_village_purse", ":village", 1500),
+        (call_script, "script_af01_change_unrest", ":village", -5),
+        (call_script, "script_change_center_prosperity", ":village", 2),
+        (party_get_slot, ":rel", ":village", slot_center_player_relation),
+        (try_begin),
+          (lt, ":rel", 30),
+          (call_script, "script_change_player_relation_with_center", ":village", 2),
+        (try_end),
+        (call_script, "script_troop_change_relation_with_troop", "trp_player", ":lord", 3),
+        (call_script, "script_af01_record_event", ":village", 5),
+      (try_end),
+      (assign, ":ok", 1),
+    (try_end),
+    (assign, reg0, ":ok"),
+  ]),
+
+  # v1.0 政治 2.0 第一批: 驳回一份请愿。
+  # 参数 1 封臣; 参数 2 另一份是否被批准了 (1/0)。
+  # 玩家↔封臣关系 -2; 参数 2 = 1 时再 -1 (「你先顾了别人」)。不动钱。
+  ("af49_refuse", [
+    (store_script_param, ":lord", 1),
+    (store_script_param, ":other_granted", 2),
+    (call_script, "script_troop_change_relation_with_troop", "trp_player", ":lord", -2),
+    (try_begin),
+      (eq, ":other_granted", 1),
+      (call_script, "script_troop_change_relation_with_troop", "trp_player", ":lord", -1),
+    (try_end),
+  ]),
+
 ]
 
 

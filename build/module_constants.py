@@ -2127,6 +2127,7 @@ slot_af42_crown_debt_off    = 971 # p_main_party: crown-cut points bought with t
 slot_af43_press_day          = 972 # p_main_party: day the player may press the king for debt again (day+30); 0 = never pressed (capital 4.0 batch 2)
 slot_af44_home_remark_day    = 973 # companion troop: day the companion may speak about home again (day+30); 0 = never (companions batch 1)
 slot_af47_petition_token     = 974 # p_main_party: day the player may petition the king again (relief/grant) (day+30); 0 = never (politics 1.0 batch 2)
+slot_af49_petition_day       = 975 # p_main_party: day the next vassal petition may arrive (day+14); 0 = never (politics 2.0 batch 1)
 slot_af26_license            = 902 # p_main_party: I1 mercenary license, 1 = licensed
 slot_af26_protect_day        = 903 # town: I5 next protection collection day+1; 0 = not protected
 slot_af26_sanctuary_day      = 904 # p_main_party: L5 sanctuary expiry (day+7); 0 = not in sanctuary
