@@ -1,11 +1,6 @@
 ﻿
 mno_fb71_full_start|满 级 开 局 （ 62级 ／ 全 属 性 63／ 全 技 能 10／ 全 熟 练 度 699） 
 mno_af26_declare_kingdom|宣 布 立 国 （ 以 地 方 领 主 之 身 称 王 ） 
-mno_af07_world_entry|烽 烟 与 暗 流 ： 卡 拉 迪 亚 战 局 总 览 
-mno_af04_network_entry|地 方 匪 帮 与 黑 市 情 报 
-mno_af05_ledger_entry|战 争 与 宫 廷 ： 秘 密 军 粮 案 卷 
-mno_af03_field_journal|军 事 委 托 记 录 
-mno_fb75_intel_book|宫 廷 政 治 情 报 簿 
 mno_af08_desk_entry|烽 烟 案 头 ： 领 地 、 战 争 与 宫 廷 消 息 
 mno_af11_arrears_entry|清 点 拖 欠 的 饷 银 
 mno_af26_collect_all_caravans|一 键 收 取 全 部 商 队 收 益 （ {reg1} 支 商 队 ， 共 {reg0} 第 纳 尔 ） 
