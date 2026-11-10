@@ -27268,4 +27268,79 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
     (assign, reg41, reg1),
   ], "原来是行会大师大人！全卡拉迪亚的作坊主都听过你的名号——你名下已有 {reg41} 家作坊了。以后你在任何城镇建作坊, 行会都给你打九折, 作坊每周的利也多算你半成。", "mayor_pretalk",[]],
 
+  # v1.0 资本家 2.0 第一批 (条目 6): 繁荣 < 20 的城镇主动求投资。只在求投资状态 (959)
+  # 未到期、繁荣仍 < 20、玩家还没入股、城不是玩家自己的时候出现。入股走 947 (与城镇
+  # 菜单的入股入口同一守卫: 非玩家城镇、有领主、股份 < 30); 振兴款 2000 直接进金库,
+  # 繁荣 +5, 不占股份。投了振兴款后繁荣可能仍 < 20, 选项会留到 959 到期为止。
+  [anyone|plyr,"mayor_talk", [
+    (party_get_slot, ":ask", "$g_encountered_party", slot_af33_town_begging),
+    (gt, ":ask", 0),
+    (store_current_day, ":today"),
+    (lt, ":today", ":ask"),
+    (party_get_slot, ":pros", "$g_encountered_party", slot_town_prosperity),
+    (lt, ":pros", 20),
+    (party_slot_eq, "$g_encountered_party", slot_af30_town_shares, 0),
+    (neg|party_slot_eq, "$g_encountered_party", slot_town_lord, "trp_player"),
+  ], "镇长, 听说你们这儿快荒了, 想让我投点钱？", "mayor_af33_beg",[]],
+  [anyone,"mayor_af33_beg", [], "正是, 大人。镇上快揭不开锅了, 商队都不爱来了。您要是肯入股本镇, 或是直接投一笔振兴款, 大伙儿都有口饭吃。", "mayor_af33_beg_choose",[]],
+  [anyone|plyr,"mayor_af33_beg_choose", [
+    (is_between, "$g_encountered_party", towns_begin, towns_end),
+    (neg|party_slot_eq, "$g_encountered_party", slot_town_lord, "trp_player"),
+    (party_slot_ge, "$g_encountered_party", slot_town_lord, 1),
+    (neg|party_slot_ge, "$g_encountered_party", slot_af30_town_shares, 30),
+    (store_troop_gold, ":gold", "trp_player"),
+    (ge, ":gold", 10000),
+  ], "入股本镇, 投 10000 第纳尔 (10% 股份)。", "mayor_af33_beg_done",[
+    (troop_remove_gold, "trp_player", 10000),
+    (party_get_slot, ":treasury", "$g_encountered_party", slot_town_wealth),
+    (val_add, ":treasury", 10000),
+    (party_set_slot, "$g_encountered_party", slot_town_wealth, ":treasury"),
+    (party_get_slot, ":shares", "$g_encountered_party", slot_af30_town_shares),
+    (val_add, ":shares", 10),
+    (party_set_slot, "$g_encountered_party", slot_af30_town_shares, ":shares"),
+    (assign, reg42, ":shares"),
+    (display_message, "@你往本镇金库里投了 10000 第纳尔，如今占 {reg42}% 的股份，每周等着分红吧。", 0x66FF66),
+  ]],
+  [anyone|plyr,"mayor_af33_beg_choose", [
+    (store_troop_gold, ":gold", "trp_player"),
+    (ge, ":gold", 2000),
+  ], "直接投一笔振兴款 2000 第纳尔。", "mayor_af33_beg_done",[
+    (troop_remove_gold, "trp_player", 2000),
+    (party_get_slot, ":treasury", "$g_encountered_party", slot_town_wealth),
+    (val_add, ":treasury", 2000),
+    (party_set_slot, "$g_encountered_party", slot_town_wealth, ":treasury"),
+    (call_script, "script_change_center_prosperity", "$g_encountered_party", 5),
+    (display_message, "@你往本镇金库里投了 2000 第纳尔振兴款，镇上的日子松快了些。", 0x66FF66),
+  ]],
+  [anyone|plyr,"mayor_af33_beg_choose", [], "算了, 先不投。", "mayor_pretalk",[]],
+  [anyone,"mayor_af33_beg_done", [], "多谢大人！这笔钱一定用在镇上最要紧的地方。", "mayor_pretalk",[]],
+
+  # v1.0 资本家 2.0 第一批 (条目 7a): 投资村庄减战乱。战乱 (Slot 650) >= 30 的村,
+  # 村长对话里出现投资选项: 投 2000, 钱进村长钱袋 (af13), 战乱 -5、繁荣 +2, 累计记
+  # 960。之后每周按繁荣 / 2 从村长钱袋分红 (见每周触发器)。战乱降到 30 以下选项消失,
+  # 想再投等战乱再起来; 分红不受选项影响, 一直按 960 在账上发。
+  [anyone|plyr,"village_elder_talk", [
+    (party_get_slot, ":unrest", "$current_town", slot_af01_unrest),
+    (ge, ":unrest", 30),
+    (store_troop_gold, ":gold", "trp_player"),
+    (ge, ":gold", 2000),
+  ], "给村子投一笔钱 (2000 第纳尔), 让村里安稳些。", "village_af33_invest",[]],
+  [anyone,"village_af33_invest", [], "您肯往村里投钱？那可真是雪中送炭。这笔钱我们用来修房子、买粮食, 日子安稳了, 每周也分您一份利。您真要投 2000 第纳尔？", "village_af33_invest_choose",[]],
+  [anyone|plyr,"village_af33_invest_choose", [
+    (store_troop_gold, ":gold", "trp_player"),
+    (ge, ":gold", 2000),
+  ], "投 2000 第纳尔。", "village_af33_invest_done",[
+    (troop_remove_gold, "trp_player", 2000),
+    (call_script, "script_af13_village_purse", "$current_town", 2000),
+    (call_script, "script_af01_change_unrest", "$current_town", -5),
+    (call_script, "script_change_center_prosperity", "$current_town", 2),
+    (party_get_slot, ":inv", "$current_town", slot_af33_village_invested),
+    (val_add, ":inv", 2000),
+    (party_set_slot, "$current_town", slot_af33_village_invested, ":inv"),
+    (assign, reg41, ":inv"),
+    (display_message, "@你往村里投了 2000 第纳尔，如今累计投了 {reg41} 第纳尔，战乱降了些，繁荣涨了些，每周等着村长分红吧。", 0x66FF66),
+  ]],
+  [anyone|plyr,"village_af33_invest_choose", [], "算了, 先不投。", "village_elder_pretalk",[]],
+  [anyone,"village_af33_invest_done", [], "多谢大人！村里有了这笔钱, 往后的日子总算有个盼头。每周的分红, 村长会按时给您送去。", "village_elder_pretalk",[]],
+
 ]

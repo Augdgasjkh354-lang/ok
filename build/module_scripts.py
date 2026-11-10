@@ -3116,6 +3116,12 @@ scripts = [
           (eq, "$g_encountered_party", "p_camp_bandits"),
           (jump_to_menu, "mnu_camp"),
         (else_try),
+          # v1.0 资本家 2.0 第一批 (条目 1): 撞见自己租地方存的兵, 开驻留部队菜单
+          # (按镇 Slot 952 认, 不按模板认, 所以复用 pt_routed_warriors 不会误伤别处)。
+          (call_script, "script_af33_find_garrison", "$g_encountered_party"),
+          (ge, reg0, 0),
+          (jump_to_menu, "mnu_af33_garrison"),
+        (else_try),
           (jump_to_menu, "mnu_simple_encounter"),
         (try_end),
       (else_try), #Battle or siege
@@ -60268,6 +60274,65 @@ scripts = [
       (ge, ":gold", 50000),
       (assign, reg0, 1),
     (try_end),
+  ]),
+
+  # ========== v1.0 资本家 2.0 第一批 (条目 4+1): 找上门的借钱人与驻留部队查找 ==========
+  # af33_loan_caller: who comes asking for a loan this week.
+  # Output: reg0 = caller troop id, or -1; reg1 = 1 if the caller is a king,
+  # 0 if a lord. King first: leader of the player's kingdom, wealth < 5000.
+  # Else the poorest lord: wealth < 1000, relation >= 10, not a prisoner, no
+  # outstanding loan (Slot 945 == 0). Kings are excluded from the lord scan
+  # (they only come through the king branch, with the big tiers). reg0/reg1
+  # are assigned last: the relation call clobbers reg0 mid-script.
+  ("af33_loan_caller", [
+    (assign, ":caller", -1),
+    (assign, ":is_king", 0),
+    (try_begin),
+      (is_between, "$players_kingdom", kingdoms_begin, kingdoms_end),
+      (faction_get_slot, ":king", "$players_kingdom", slot_faction_leader),
+      (is_between, ":king", active_npcs_begin, active_npcs_end),
+      (neq, ":king", "trp_player"),
+      (troop_slot_eq, ":king", slot_troop_prisoner_of_party, -1),
+      (troop_slot_eq, ":king", slot_af29_loan_principal, 0),
+      (troop_get_slot, ":wealth", ":king", slot_troop_wealth),
+      (lt, ":wealth", 5000),
+      (call_script, "script_troop_get_relation_with_troop", "trp_player", ":king"),
+      (ge, reg0, 10),
+      (assign, ":caller", ":king"),
+      (assign, ":is_king", 1),
+    (try_end),
+    (try_begin),
+      (eq, ":caller", -1),
+      (assign, ":worst", 1000),
+      (try_for_range, ":lord", active_npcs_begin, active_npcs_end),
+        (troop_slot_eq, ":lord", slot_troop_occupation, slto_kingdom_hero),
+        (troop_slot_eq, ":lord", slot_troop_prisoner_of_party, -1),
+        (troop_slot_eq, ":lord", slot_af29_loan_principal, 0),
+        (troop_get_slot, ":w", ":lord", slot_troop_wealth),
+        (lt, ":w", ":worst"),
+        (store_troop_faction, ":fac", ":lord"),
+        (faction_get_slot, ":leader", ":fac", slot_faction_leader),
+        (neq, ":leader", ":lord"),
+        (call_script, "script_troop_get_relation_with_troop", "trp_player", ":lord"),
+        (ge, reg0, 10),
+        (assign, ":worst", ":w"),
+        (assign, ":caller", ":lord"),
+      (try_end),
+    (try_end),
+    (assign, reg0, ":caller"),
+    (assign, reg1, ":is_king"),
+  ]),
+
+  # af33_find_garrison: which town (if any) hired the given party as its
+  # garrison. Input: param1 = party. Output: reg0 = town, or -1.
+  ("af33_find_garrison", [
+    (store_script_param, ":party", 1),
+    (assign, ":town", -1),
+    (try_for_range, ":center", towns_begin, towns_end),
+      (party_slot_eq, ":center", slot_af33_garrison_party, ":party"),
+      (assign, ":town", ":center"),
+    (try_end),
+    (assign, reg0, ":town"),
   ]),
 ]
 
