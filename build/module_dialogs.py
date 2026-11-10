@@ -26721,7 +26721,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   ]],
 
   # v1.0 领主关系与独立玩法·第二波 L1: 好感 ≥ 30 向领主借兵 10-20 人（他那派系的二阶兵），14 天后归还。
-  [plyr, "lord_talk", [
+  [anyone|plyr, "lord_talk", [
     (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
     (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
     (call_script, "script_troop_get_relation_with_troop", "trp_player", "$g_talk_troop"),
@@ -26758,7 +26758,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   [anyone, "lord_af26_borrow", [], "好，借你 {reg10} 个人，14 天后还我，少一个都不行。", "lord_talk", []],
 
   # v1.0 领主关系与独立玩法·第二波 L1: 向借主领主归还借兵（只对借主出现）。
-  [plyr, "lord_talk", [
+  [anyone|plyr, "lord_talk", [
     (party_slot_ge, "p_main_party", slot_af26_borrow_day, 1),
     (party_get_slot, ":lender", "p_main_party", slot_af26_borrow_lender),
     (eq, ":lender", "$g_talk_troop"),
@@ -26778,7 +26778,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
 
   # v1.0 领主关系与独立玩法·第二波 L3: 好感 ≥ 40，领主所在阵营正在办宴会时受邀赴宴（只对非本阵营的外人出现）。
   # 邀请本身给好感 +2、声望 +1；赴宴靠原版 $g_player_eligible_feast_center_no 进场，同一场宴会只能受邀一次。
-  [plyr, "lord_talk", [
+  [anyone|plyr, "lord_talk", [
     (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
     (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
     (call_script, "script_troop_get_relation_with_troop", "trp_player", "$g_talk_troop"),
@@ -26802,7 +26802,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
 
   # v1.0 领主关系与独立玩法·第二波 L3: 好感 ≥ 40，跟领主一起打猎——在他附近刷一小股林匪（4-12 人），
   # 玩家打过去时领主在旁边会以盟友身份参战。要求领主那派系与玩家不敌对。
-  [plyr, "lord_talk", [
+  [anyone|plyr, "lord_talk", [
     (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
     (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
     (call_script, "script_troop_get_relation_with_troop", "trp_player", "$g_talk_troop"),
