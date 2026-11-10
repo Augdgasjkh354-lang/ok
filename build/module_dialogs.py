@@ -28427,4 +28427,76 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
     "竟有此事？{s11}的事，我会查清楚。不过替{s11}说话的人，倒是一个也没走。", "lord_talk_court", []],
   [anyone, "af48_expose_reply", [],
     "这些话没有凭据，我不能拿到宫廷上去说。", "lord_talk_court", []],
+
+  # v1.0 政治 1.0 第二批: 向国王进言——请国王赈济村子、给穷领主拨军费。
+  # 入口在 lord_talk_court。共同条件: 对方是本国国王、同国封臣、30 天冷却 (974)、国王对玩家关系 >= 0。
+  # A 赈济最穷的村子 (af47_poorest_village >= 0, 村名存 s11, 村号存 $temp);
+  # B 拨军费给最穷的领主 (af47_poorest_lord >= 0, 名字存 s11, troop 存 $temp)。
+  # 对话条件是逐条算的, B 的条件会覆盖 A 存的 $temp/s11, 所以后果里重新调一次 finder 拿目标、
+  # 重新存 s11, 不要信 $temp。
+  [anyone|plyr, "lord_talk_court", [
+    (eq, "$player_has_homage", 1),
+    (neq, "$players_kingdom", "fac_player_supporters_faction"),
+    (faction_get_slot, ":king", "$players_kingdom", slot_faction_leader),
+    (eq, "$g_talk_troop", ":king"),
+    (party_get_slot, ":next", "p_main_party", slot_af47_petition_token),
+    (store_current_day, ":today"),
+    (le, ":next", ":today"),
+    (call_script, "script_troop_get_relation_with_troop", "$g_talk_troop", "trp_player"),
+    (ge, reg0, 0),
+    (call_script, "script_af47_poorest_village", "$players_kingdom"),
+    (ge, reg0, 0),
+    (str_store_party_name, s11, reg0),
+    (assign, "$temp", reg0),
+  ], "陛下，{s11}的百姓快撑不下去了，请拨些钱粮。", "af47_petition_reply", [
+    (call_script, "script_af47_poorest_village", "$players_kingdom"),
+    (assign, ":village", reg0),
+    (call_script, "script_af47_petition", 1, ":village"),
+    (assign, "$temp", reg0),
+    (assign, reg41, reg1),
+    (assign, reg42, 1),
+    (str_store_party_name, s11, ":village"),
+  ]],
+  [anyone|plyr, "lord_talk_court", [
+    (eq, "$player_has_homage", 1),
+    (neq, "$players_kingdom", "fac_player_supporters_faction"),
+    (faction_get_slot, ":king", "$players_kingdom", slot_faction_leader),
+    (eq, "$g_talk_troop", ":king"),
+    (party_get_slot, ":next", "p_main_party", slot_af47_petition_token),
+    (store_current_day, ":today"),
+    (le, ":next", ":today"),
+    (call_script, "script_troop_get_relation_with_troop", "$g_talk_troop", "trp_player"),
+    (ge, reg0, 0),
+    (call_script, "script_af47_poorest_lord", "$players_kingdom"),
+    (ge, reg0, 0),
+    (str_store_troop_name, s11, reg0),
+    (assign, "$temp", reg0),
+  ], "陛下，{s11}那边快发不出军饷了，请拨些军费。", "af47_petition_reply", [
+    (call_script, "script_af47_poorest_lord", "$players_kingdom"),
+    (assign, ":lord", reg0),
+    (call_script, "script_af47_petition", 2, ":lord"),
+    (assign, "$temp", reg0),
+    (assign, reg41, reg1),
+    (assign, reg42, 2),
+    (str_store_troop_name, s11, ":lord"),
+  ]],
+  # 国王对进言的回应 ($temp = 结果 1 答应/2 国库见底/3 信不过, reg42 = 种类 1 赈济/2 拨款,
+  # reg41 = 实际拨了多少, s11 = 村名/领主名)。都回 lord_talk_court。
+  # 回应状态里只有 NPC 行, 没有玩家选项, 不会自循环。
+  [anyone, "af47_petition_reply", [
+    (eq, reg42, 1),
+    (eq, "$temp", 1),
+  ], "好。从内库拨 {reg41} 第纳尔给{s11}。告诉他们，我没忘了他们。", "lord_talk_court", []],
+  [anyone, "af47_petition_reply", [
+    (eq, reg42, 2),
+    (eq, "$temp", 1),
+  ], "拨 {reg41} 第纳尔过去。仗还要打，兵不能散。", "lord_talk_court", []],
+  [anyone, "af47_petition_reply", [
+    (eq, "$temp", 2),
+  ], "内库里也没几个钱了。等收了税再说吧。", "lord_talk_court", []],
+  [anyone, "af47_petition_reply", [
+    (eq, "$temp", 3),
+  ], "这种事，自有管事的人操心。你先管好自己的兵。", "lord_talk_court", []],
+  [anyone, "af47_petition_reply", [
+  ], "这种事，自有管事的人操心。你先管好自己的兵。", "lord_talk_court", []],
 ]
