@@ -59493,10 +59493,10 @@ scripts = [
   ("af26_mediate_target", [
     # v1.0 领主关系与独立玩法·第三波 I4: 找一个可调停的战争对象。reg0=1 找到（reg1=对方阵营，s4=对方国名），0 没找到。
     # 对方条件：与对话国王的国家交战、其国王与玩家好感 ≥20。多场战争时取扫描到的第一对。
-    (assign, reg0, 0),
+    (assign, ":found", 0),
     (assign, ":kingdom_a", "$g_talk_troop_faction"),
     (try_for_range, ":kingdom_b", kingdoms_begin, kingdoms_end),
-      (eq, reg0, 0),
+      (eq, ":found", 0),
       (neq, ":kingdom_b", ":kingdom_a"),
       (store_relation, ":rel", ":kingdom_a", ":kingdom_b"),
       (lt, ":rel", 0),
@@ -59507,8 +59507,10 @@ scripts = [
       (ge, ":rel_b", 20),
       (assign, reg1, ":kingdom_b"),
       (str_store_faction_name, s4, ":kingdom_b"),
-      (assign, reg0, 1),
+      (assign, ":found", 1),
     (try_end),
+    # Nested relation calls overwrite reg0; keep the search state local.
+    (assign, reg0, ":found"),
   ]),
 
   ("af26_player_caravan", [
@@ -60551,7 +60553,7 @@ scripts = [
   # go into ITS king's wealth). Output: reg0 = 1/0, reg1 = enemy faction,
   # s4 = enemy faction name.
   ("af33_buy_peace_target", [
-    (assign, reg0, 0),
+    (assign, ":found", 0),
     (assign, ":kingdom_a", "$g_talk_troop_faction"),
     (assign, ":own_centers", 0),
     (try_for_range, ":center", centers_begin, centers_end),
@@ -60560,7 +60562,7 @@ scripts = [
       (val_add, ":own_centers", 1),
     (try_end),
     (try_for_range, ":kingdom_b", kingdoms_begin, kingdoms_end),
-      (eq, reg0, 0),
+      (eq, ":found", 0),
       (neq, ":kingdom_b", ":kingdom_a"),
       (store_relation, ":rel", ":kingdom_a", ":kingdom_b"),
       (lt, ":rel", 0),
@@ -60578,8 +60580,10 @@ scripts = [
       (gt, ":enemy_centers", ":own_centers"),
       (assign, reg1, ":kingdom_b"),
       (str_store_faction_name, s4, ":kingdom_b"),
-      (assign, reg0, 1),
+      (assign, ":found", 1),
     (try_end),
+    # Nested relation calls overwrite reg0; keep the search state local.
+    (assign, reg0, ":found"),
   ]),
 
   # af33_gang_dividend: pay the player's 20% cut when a gang takes loot.
