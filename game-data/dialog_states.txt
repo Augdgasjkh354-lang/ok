@@ -1386,3 +1386,6 @@ craftsman_af29_expand_done
 lord_af29_lend
 lord_af29_lend_choose
 lord_af29_lend_done
+craftsman_af31_hire
+craftsman_af31_hire_choose
+craftsman_af31_hire_done

@@ -41,6 +41,8 @@ mno_af10_town_word_entry|找 相 熟 的 粮 商 打 听 军 粮 车
 mno_af06_recovery_entry|战 后 治 理 ： 查 看 城 池 恢 复 与 重 建 
 mno_af06_supply_entry|秘 密 运 粮 入 城 （ 4袋 谷 物 ， 增 加 约 两 天 粮 食 储 备 ） 
 mno_af30_town_shares_entry|入 股 本 镇 （ 10000 第 纳 尔 ， 10% 股 份 ， 已 有 {reg41}%） 
+mno_af31_bank_open_entry|开 钱 庄 （ 5000 第 纳 尔 ， 一 城 只 能 开 一 家 ） 
+mno_af31_bank_entry|去 钱 庄 看 看 （ 未 收 回 本 金 {reg41} 第 纳 尔 ） 
 menu_fb75_intel_book|宫 廷 政 治 情 报 簿 ^^政 治 信 用 ： {reg50}    政 治 嫌 疑 ： {reg51}/100    王 室 调 查 次 数 ： {reg52}^有 效 情 报 ： {reg53}条    有 人 欠 你 选 票 ： {reg54}笔    你 欠 人 的 选 票 ： {reg58}笔 ^^情 报 只 记 录 你 已 经 打 听 到 的 消 息 ； 过 期 线 索 会 自 动 从 本 页 隐 去 。 
 mno_fb75_book_clues|查 看 已 掌 握 的 政 治 线 索 
 mno_fb75_book_debts|查 看 欠 你 选 票 的 贵 族 
@@ -229,3 +231,8 @@ mno_af28_quest_q2_settle|回 来 交 差 ： 走 私 货 已 经 送 到 了
 mno_af28_quest_q4_accept|接 一 单 劫 村 子 的 活 
 mno_af28_quest_q4_settle|回 来 交 差 ： 那 座 村 子 已 经 劫 了 
 mno_af28_leave|离 开 
+menu_af31_bank|钱 庄 — — {s10}。 ^借 出 去 的 钱 每 周 生 1% 的 息 , 从 本 城 金 库 出 ; 本 金 也 可 以 在 这 里 收 回 , 一 次 最 多 拿 金 库 的 四 分 之 一 。 
+mno_af31_bank_lend_1000|放 贷 给 本 城 商 人 ： 借 出 1000 第 纳 尔 
+mno_af31_bank_lend_3000|放 贷 给 本 城 商 人 ： 借 出 3000 第 纳 尔 
+mno_af31_bank_collect|收 回 本 金 {reg41} 第 纳 尔 （ 一 次 最 多 拿 金 库 的 四 分 之 一 ） 
+mno_af31_bank_leave|离 开 钱 庄 

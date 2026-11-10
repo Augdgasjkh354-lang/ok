@@ -90,3 +90,10 @@ dlga_lord_af29_lend_choose:lord_af29_lend_done.1|借 你 3000 第 纳 尔 。
 dlga_lord_af29_lend_choose:lord_af29_lend_done.2|借 你 5000 第 纳 尔 。 
 dlga_lord_af29_lend_choose:lord_talk|算 了 , 当 我 没 说 。 
 dlga_lord_af29_lend_done:lord_talk|多 谢 了 。 这 钱 我 会 连 本 带 息 还 你 , 下 回 见 面 就 结 清 。 
+dlga_master_craftsman_talk:craftsman_af31_hire|雇 工 人 。 
+dlga_craftsman_af31_hire:craftsman_af31_hire_choose|雇 一 个 工 人 , 每 周 多 20 第 纳 尔 工 资 , 不 过 产 量 也 能 涨 一 成 。 如 今 作 坊 里 有 {reg41} 个 工 人 , 最 多 能 雇 10 个 。 你 想 雇 几 个 ？ 
+dlga_craftsman_af31_hire_choose:craftsman_af31_hire_done|雇 1 个 工 人 。 
+dlga_craftsman_af31_hire_choose:craftsman_af31_hire_done.1|雇 5 个 工 人 。 
+dlga_craftsman_af31_hire_choose:craftsman_af31_hire_done.2|雇 满 10 人 。 
+dlga_craftsman_af31_hire_choose:master_craftsman_pretalk|算 了 , 先 不 雇 。 
+dlga_craftsman_af31_hire_done:master_craftsman_pretalk|好 , 人 手 这 就 安 排 上 。 作 坊 里 人 多 了 , 货 也 出 得 快 了 。 
