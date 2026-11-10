@@ -60505,7 +60505,7 @@ scripts = [
       (store_sub, ":lend_day", ":due_day", 30),
       (store_sub, ":elapsed", ":today", ":lend_day"),
       (store_div, ":weeks", ":elapsed", 7),
-      (val_max, ":weeks", 4),
+      (val_min, ":weeks", 4),
       (store_mul, ":interest", ":principal", 2),
       (val_mul, ":interest", ":weeks"),
       (val_div, ":interest", 100),
