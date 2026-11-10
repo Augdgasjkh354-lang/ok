@@ -12737,6 +12737,14 @@ presentations = [
             (overlay_set_color, reg1, 0xFF0000),
             (val_sub, ":all_centers_accumulated_total", ":wage"),
             (val_sub, ":net_change", ":wage"),
+            # 资本家 3.0 第一批审查补：工资原先从玩家收入里扣掉后凭空消失；
+            # 工人是镇上的人，工资进本镇金库（只在真结算时，预览不动金库）。
+            (try_begin),
+              (eq, "$g_apply_budget_report_to_gold", 1),
+              (party_get_slot, ":wtreasury", ":center_no", slot_town_wealth),
+              (val_add, ":wtreasury", ":wage"),
+              (party_set_slot, ":center_no", slot_town_wealth, ":wtreasury"),
+            (try_end),
             (position_set_x, pos1, 900),
             (position_set_y, pos1, 900),
             (overlay_set_size, reg1, pos1),
