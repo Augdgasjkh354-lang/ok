@@ -148,6 +148,22 @@ dialogs = [
                        (call_script, "script_get_relevant_comment_to_s42"),
                        (assign, "$g_comment_found", reg0),
                      (try_end),
+                     # 开场白文案接入：原版没找到领主评论时，按玩家和他之间的事说一句（s42）。
+                     # $g_comment_found：1＝领主开场白（走原版 lord_start 的 {s42} 行），2＝酒馆老板／镇长／村长开场白。
+                     (try_begin),
+                       (eq, "$g_comment_found", 0),
+                       (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
+                       (call_script, "script_af39_lord_remark", "$g_talk_troop"),
+                       (eq, reg0, 1),
+                       (assign, "$g_comment_found", 1),
+                       (assign, "$log_comment_relation_change", 0),
+                       (assign, "$g_rejoinder_to_last_comment", 0),
+                     (else_try),
+                       (eq, "$g_comment_found", 0),
+                       (call_script, "script_af39_town_remark", "$g_talk_troop"),
+                       (eq, reg0, 1),
+                       (assign, "$g_comment_found", 2),
+                     (try_end),
 
                      (troop_get_type, reg65, "$g_talk_troop"),
                      (try_begin),
@@ -19811,7 +19827,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
                     (call_script, "script_af20_fame_tier", ":fame"),
                     (assign, ":tier", reg0),
                     (le, ":renown", 300),
-                    (lt, ":tier", 2)],  # v1.0 NPC对白 B-5: 声望>300 或威名>=2 档时不走这句
+                    (lt, ":tier", 2), (neq, "$g_comment_found", 2)],  # v1.0 NPC对白 B-5: 声望>300 或威名>=2 档时不走这句
    "Good day dear {sir/madam}. How can I help you?", "tavernkeeper_talk",
    [
 #    (store_encountered_party,reg(2)),
@@ -21975,7 +21991,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
                      (str_store_party_name, s9, "$current_town")],
    "Hello stranger, you seem to be new to {s9}. I am the guild master of the town.", "mayor_talk",[]],
   
-  [anyone ,"start", [(is_between,"$g_talk_troop",mayors_begin,mayors_end)],
+  [anyone ,"start", [(is_between,"$g_talk_troop",mayors_begin,mayors_end), (neq, "$g_comment_found", 2)],
    "Good day, {playername}.", "mayor_begin",
    [
      #Delete last offered quest if peace is formed.
@@ -23619,26 +23635,26 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   [anyone,"start", [(is_between,"$g_talk_troop", village_elders_begin, village_elders_end),(eq,"$g_talk_troop_met",0),
                     (str_store_party_name, s9, "$current_town"),
                     (call_script, "script_af25_village_looted_recently", "$current_town"), (eq, reg0, 0),
-                    (call_script, "script_af20_fame_kind"), (neq, reg0, 1)],  # v1.0 NPC对白 B-3/B-2: 被劫过或仁名时不走这句
+                    (call_script, "script_af20_fame_kind"), (neq, reg0, 1), (neq, "$g_comment_found", 2)],  # v1.0 NPC对白 B-3/B-2: 被劫过或仁名时不走这句
    "Good day, {sir/madam}, and welcome to {s9}. I am the elder of this village.", "village_elder_talk",[]],
 
   [anyone,"start", [(is_between,"$g_talk_troop", village_elders_begin, village_elders_end),(eq,"$g_talk_troop_met",0),
                     (str_store_party_name, s9, "$current_town"),
                     (party_slot_eq, "$current_town", slot_town_lord, "trp_player"),
                     (call_script, "script_af25_village_looted_recently", "$current_town"), (eq, reg0, 0),
-                    (call_script, "script_af20_fame_kind"), (neq, reg0, 1)],  # v1.0 NPC对白 B-3/B-2: 被劫过或仁名时不走这句
+                    (call_script, "script_af20_fame_kind"), (neq, reg0, 1), (neq, "$g_comment_found", 2)],  # v1.0 NPC对白 B-3/B-2: 被劫过或仁名时不走这句
    "Welcome to {s9}, my {lord/lady}. We were rejoiced by the news that you are the new {lord/lady} of our humble village.\
  I am the village elder and I will be honoured to serve you in any way I can.", "village_elder_talk",[]],
   
   [anyone ,"start", [(is_between,"$g_talk_troop",village_elders_begin,village_elders_end),
                      (party_slot_eq, "$current_town", slot_town_lord, "trp_player"),
                      (call_script, "script_af25_village_looted_recently", "$current_town"), (eq, reg0, 0),
-                     (call_script, "script_af20_fame_kind"), (neq, reg0, 1)],  # v1.0 NPC对白 B-3/B-2: 被劫过或仁名时不走这句
+                     (call_script, "script_af20_fame_kind"), (neq, reg0, 1), (neq, "$g_comment_found", 2)],  # v1.0 NPC对白 B-3/B-2: 被劫过或仁名时不走这句
    "{My lord/My lady}, you honour our humble village with your presence.", "village_elder_talk",[]],
 
   [anyone ,"start", [(is_between,"$g_talk_troop",village_elders_begin,village_elders_end),
                     (call_script, "script_af25_village_looted_recently", "$current_town"), (eq, reg0, 0),
-                    (call_script, "script_af20_fame_kind"), (neq, reg0, 1)],  # v1.0 NPC对白 B-3/B-2: 被劫过或仁名时不走这句
+                    (call_script, "script_af20_fame_kind"), (neq, reg0, 1), (neq, "$g_comment_found", 2)],  # v1.0 NPC对白 B-3/B-2: 被劫过或仁名时不走这句
    "Good day, {sir/madam}.", "village_elder_talk",[]],
 
   [anyone ,"village_elder_pretalk", [],
@@ -25872,12 +25888,14 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   # 试玩包十三 bug：B-2/B-3/B-5 的村长、酒馆老板问候追加在文件末尾，排在这句兜底之后；
   # 原版问候让位后，他们会掉进这里喊“投降还是死”。兜底行跳过这两类人，让末尾的专属问候接住。
   [anyone,"start", [(neg|is_between, "$g_talk_troop", tavernkeepers_begin, tavernkeepers_end),
-                    (neg|is_between, "$g_talk_troop", village_elders_begin, village_elders_end)],
+                    (neg|is_between, "$g_talk_troop", village_elders_begin, village_elders_end),
+                    (neg|is_between, "$g_talk_troop", mayors_begin, mayors_end)],
    "Surrender or die. Make your choice", "battle_reason_stated",[]],
   [anyone|plyr,"battle_reason_stated", [], "I am not afraid of you. I will fight.", "close_window",[[encounter_attack]]],
 
   [anyone,"start", [(neg|is_between, "$g_talk_troop", tavernkeepers_begin, tavernkeepers_end),
-                    (neg|is_between, "$g_talk_troop", village_elders_begin, village_elders_end)],
+                    (neg|is_between, "$g_talk_troop", village_elders_begin, village_elders_end),
+                    (neg|is_between, "$g_talk_troop", mayors_begin, mayors_end)],
    "Hello. What can I do for you?", "free",[]],
   [anyone|plyr,"free", [[neg|in_meta_mission]], "Tell me about yourself", "view_char_requested",[]],
   [anyone,"view_char_requested", [], "Very well, listen to this...", "view_char",[[change_screen_view_character]]],
@@ -26613,7 +26631,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   # v1.0 NPC对白 B-3: 60 天内被玩家劫掠过的村子, 村长认出玩家 (新行追加在文件末尾; 旧 4 句已加互斥条件, 本行才轮得到)。
   [anyone,"start", [(is_between,"$g_talk_troop",village_elders_begin,village_elders_end),
                     (call_script, "script_af25_village_looted_recently", "$current_town"),
-                    (eq, reg0, 1)],
+                    (eq, reg0, 1), (neq, "$g_comment_found", 2)],
    "你还敢回来？上次你抢走的粮食，村里到现在还没缓过来。", "village_elder_talk",[]],
 
   # v1.0 NPC对白 B-1: 领主初见按威名档位打招呼 (只初见、只友好派系; 档位只看 Slot 875 原始值)。
@@ -26660,7 +26678,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   # v1.0 NPC对白 B-2: 村长对仁名玩家的招呼 (被劫过的村子走 B-3 行, 本行只在未被劫时轮到)。
   [anyone,"start", [(is_between,"$g_talk_troop",village_elders_begin,village_elders_end),
                     (call_script, "script_af20_fame_kind"),
-                    (eq, reg0, 1)],
+                    (eq, reg0, 1), (neq, "$g_comment_found", 2)],
    "您是行善的人，村里人都记着。", "village_elder_talk",[]],
 
   # v1.0 NPC对白 B-5: 酒馆老板对声望>300 或威名>=2 档的玩家。
@@ -26670,7 +26688,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
                     (call_script, "script_af20_fame_tier", ":fame"),
                     (assign, ":tier", reg0),
                     (this_or_next|gt, ":renown", 300),
-                    (ge, ":tier", 2)],
+                    (ge, ":tier", 2), (neq, "$g_comment_found", 2)],
    "您来了，大人。楼上雅间还给您留着。", "tavernkeeper_talk",[]],
 
   # v1.0 NPC对白 B-7: 贵妇求婚线补一档凶名拒绝 (道德派低荣誉行已排除凶名; 本行是兜底拒绝, 其余拒绝理由仍优先)。
@@ -28124,4 +28142,29 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   ]],
   [anyone|plyr,"lord_af38_taxdebt_choose", [], "算了，我再等等。", "lord_pretalk", []],
   [anyone,"lord_af38_taxdebt_done", [], "我这就给城里的管事写信。这笔账，总算轻了些。", "lord_pretalk", []],
+  # 开场白文案接入：酒馆老板有开场白时说这句（s42 由存变量那行的 af39_town_remark 写好）。
+  [anyone ,"start", [(is_between, "$g_talk_troop", tavernkeepers_begin, tavernkeepers_end),
+                     (eq, "$g_comment_found", 2)],
+   "{s42}", "tavernkeeper_talk", [(assign, "$g_comment_found", 0)]],
+  # 开场白文案接入：村长有开场白时说这句（s42 由存变量那行的 af39_town_remark 写好）。
+  [anyone ,"start", [(is_between, "$g_talk_troop", village_elders_begin, village_elders_end),
+                     (eq, "$g_comment_found", 2)],
+   "{s42}", "village_elder_talk", [(assign, "$g_comment_found", 0)]],
+  # 开场白文案接入：镇长有开场白时说这句（s42 由存变量那行的 af39_town_remark 写好）；下一状态和后果照抄通用问候。
+  [anyone ,"start", [(is_between, "$g_talk_troop", mayors_begin, mayors_end),
+                     (eq, "$g_comment_found", 2)],
+   "{s42}", "mayor_begin",
+   [
+     #Delete last offered quest if peace is formed.
+     (try_begin),
+       (eq, "$merchant_offered_quest", "qst_persuade_lords_to_make_peace"),
+       (party_get_slot, ":target_faction", "qst_persuade_lords_to_make_peace", slot_quest_target_faction),
+       (party_get_slot, ":object_faction", "qst_persuade_lords_to_make_peace", slot_quest_object_faction),
+       (store_relation, ":reln", ":target_faction", ":object_faction"),
+       (ge, ":reln", 0),
+       (assign, "$merchant_quest_last_offerer", -1),
+       (assign, "$merchant_offered_quest", -1),
+     (try_end),
+     (assign, "$g_comment_found", 0),
+     ]],
 ]
