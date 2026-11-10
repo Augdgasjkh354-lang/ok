@@ -62,17 +62,104 @@ dlga_lord_talk:lord_af26_hunt|一 起 去 打 猎 ， 活 动 活 动 筋 骨 �
 dlga_lord_af26_hunt:lord_talk|走 ， 前 面 林 子 里 有 动 静 ， 跟 我 去 打 猎 。 
 dlga_lord_talk:lord_af26_sanctuary|有 人 因 私 仇 在 追 杀 我 ， 求 你 在 你 的 城 堡 里 庇 护 我 几 天 。 
 dlga_lord_af26_sanctuary:lord_talk|好 ， 你 躲 到 我 这 里 来 ， 七 天 之 内 仇 家 不 会 再 追 你 。 交 战 阵 营 里 与 我 交 情 深 厚 的 城 堡 ， 你 也 可 以 进 。 
-dlga_lord_talk:lord_af26_letter|陛 下 ， 我 想 买 一 封 私 掠 证 ， 奉 旨 劫 掠 贵 国 之 敌 的 商 队 。 
+dlga_lord_talk_money:lord_af26_letter|陛 下 ， 我 想 买 一 封 私 掠 证 ， 奉 旨 劫 掠 贵 国 之 敌 的 商 队 。 
 dlga_lord_af26_letter:lord_talk|好 ， 这 封 私 掠 证 有 效 期 三 十 天 ， 只 对 {s4}之 敌 的 商 队 有 效 。 持 证 劫 掠 不 损 你 的 荣 誉 ， 也 不 惹 对 方 宣 战 ； 劫 中 立 国 商 队 、 劫 军 粮 队 都 不 在 此 列 。 
 dlga_lord_talk:lord_af26_mediate|陛 下 ， 我 想 调 停 你 与 {s4}的 战 争 ， 两 边 都 停 手 ， 对 大 家 都 好 。 
 dlga_lord_af26_mediate:lord_talk|谈 成 了 。 {s4}与 {s5}已 经 停 战 ， 四 十 天 内 不 再 开 战 。 这 份 人 情 ， 两 国 都 记 下 了 。 
 dlga_merchant_talk:merchant_af26_collect|这 是 我 的 商 队 ， 把 钱 箱 里 多 余 的 钱 结 算 给 我 。 
 dlga_merchant_af26_collect:merchant_talk|结 算 好 了 ， 共 {reg10} 第 纳 尔 ， 钱 箱 里 留 了 六 百 作 周 转 。 
-dlga_lord_talk:lord_af27_hush|听 说 你 和 匪 帮 有 来 往 ， 给 我 400 第 纳 尔 ， 这 事 我 就 不 往 上 报 了 。 
+dlga_lord_talk_gang:lord_af27_hush|听 说 你 和 匪 帮 有 来 往 ， 给 我 400 第 纳 尔 ， 这 事 我 就 不 往 上 报 了 。 
 dlga_lord_af27_hush:lord_talk|拿 去 ， 400 第 纳 尔 ， 这 事 到 此 为 止 ， 别 再 提 了 。 
-dlga_lord_talk:lord_af27_submit|我 认 识 一 支 弱 帮 ， 想 让 他 们 投 靠 你 。 
-dlga_lord_talk:lord_af27_bounty|听 说 你 在 悬 赏 剿 匪 ？ 
+dlga_lord_talk_gang:lord_af27_submit|我 认 识 一 支 弱 帮 ， 想 让 他 们 投 靠 你 。 
+dlga_lord_talk_gang:lord_af27_bounty|听 说 你 在 悬 赏 剿 匪 ？ 
 dlga_lord_af27_bounty:lord_talk|不 错 ， {s4}那 帮 人 闹 得 太 凶 ， 谁 剿 了 他 们 ， 我 出 800 第 纳 尔 。 
-dlga_lord_talk:lord_af27_inform|我 知 道 一 支 匪 帮 的 下 落 ， 你 派 人 去 剿 了 吧 。 
+dlga_lord_talk_gang:lord_af27_inform|我 知 道 一 支 匪 帮 的 下 落 ， 你 派 人 去 剿 了 吧 。 
 dlga_tavernkeeper_talk:tavernkeeper_af28_contact|介 绍 我 见 帮 里 的 人 。 
 dlga_tavernkeeper_af28_contact:close_window|行 ， 角 落 里 那 位 就 是 他 们 的 接 头 人 ， 你 过 去 吧 ， 别 说 是 我 指 的 路 。 
+dlga_master_craftsman_talk:craftsman_af29_expand|扩 建 作 坊 。 
+dlga_craftsman_af29_expand:craftsman_af29_expand_choose|扩 建 要 花 大 钱 , 不 过 作 坊 越 大 , 赚 得 也 越 多 。 升 一 级 , 每 周 利 润 多 一 半 。 你 想 扩 到 第 几 级 ？ 
+dlga_craftsman_af29_expand_choose:craftsman_af29_expand_done|扩 建 到 1 级 , 花 3000 第 纳 尔 。 
+dlga_craftsman_af29_expand_choose:craftsman_af29_expand_done.1|扩 建 到 2 级 , 花 5000 第 纳 尔 。 
+dlga_craftsman_af29_expand_choose:craftsman_af29_expand_done.2|扩 建 到 3 级 , 花 8000 第 纳 尔 。 
+dlga_craftsman_af29_expand_choose:master_craftsman_pretalk|算 了 , 先 不 扩 。 
+dlga_craftsman_af29_expand_done:master_craftsman_pretalk|好 , 扩 建 这 就 动 工 。 地 方 大 了 , 货 也 出 得 多 了 。 
+dlga_lord_talk_money:lord_af29_lend|借 钱 给 你 , 拿 去 周 转 。 
+dlga_lord_af29_lend:lord_af29_lend_choose|哦 ？ 你 肯 借 钱 给 我 ？ 说 吧 , 能 借 多 少 ？ 
+dlga_lord_af29_lend_choose:lord_af29_lend_done|借 你 1000 第 纳 尔 。 
+dlga_lord_af29_lend_choose:lord_af29_lend_done.1|借 你 3000 第 纳 尔 。 
+dlga_lord_af29_lend_choose:lord_af29_lend_done.2|借 你 5000 第 纳 尔 。 
+dlga_lord_af29_lend_choose:lord_talk|算 了 , 当 我 没 说 。 
+dlga_lord_af29_lend_done:lord_talk|多 谢 了 。 这 钱 我 会 连 本 带 息 还 你 , 下 回 见 面 就 结 清 。 
+dlga_master_craftsman_talk:craftsman_af31_hire|雇 工 人 。 
+dlga_craftsman_af31_hire:craftsman_af31_hire_choose|雇 一 个 工 人 , 每 周 多 20 第 纳 尔 工 资 , 不 过 产 量 也 能 涨 一 成 。 如 今 作 坊 里 有 {reg41} 个 工 人 , 最 多 能 雇 10 个 。 你 想 雇 几 个 ？ 
+dlga_craftsman_af31_hire_choose:craftsman_af31_hire_done|雇 1 个 工 人 。 
+dlga_craftsman_af31_hire_choose:craftsman_af31_hire_done.1|雇 5 个 工 人 。 
+dlga_craftsman_af31_hire_choose:craftsman_af31_hire_done.2|雇 满 10 人 。 
+dlga_craftsman_af31_hire_choose:master_craftsman_pretalk|算 了 , 先 不 雇 。 
+dlga_craftsman_af31_hire_done:master_craftsman_pretalk|好 , 人 手 这 就 安 排 上 。 作 坊 里 人 多 了 , 货 也 出 得 快 了 。 
+dlga_merchant_talk:caravan_af32_shares|入 股 这 支 商 队 。 
+dlga_caravan_af32_shares:caravan_af32_shares_choose|入 股 ？ 行 啊 , 你 出 钱 , 商 队 赚 钱 了 就 按 股 分 你 。 一 成 股 份 2000 第 纳 尔 , 最 多 买 到 三 成 。 如 今 你 在 这 支 商 队 里 已 经 占 了 {reg42} 成 。 丑 话 说 在 前 头 : 商 队 要 是 被 人 打 散 了 , 股 份 就 没 了 , 钱 也 不 退 。 
+dlga_caravan_af32_shares_choose:caravan_af32_shares_done|买 一 成 股 份 , 花 2000 第 纳 尔 。 
+dlga_caravan_af32_shares_choose:merchant_pretalk|算 了 , 先 不 买 。 
+dlga_caravan_af32_shares_done:merchant_pretalk|好 , 钱 收 下 了 。 商 队 跑 一 趟 赚 了 钱 , 就 有 你 一 份 。 
+dlga_mayor_talk:mayor_af32_guild|以 行 会 大 师 的 身 份 和 你 谈 谈 。 
+dlga_mayor_af32_guild:mayor_pretalk|原 来 是 行 会 大 师 大 人 ！ 全 卡 拉 迪 亚 的 作 坊 主 都 听 过 你 的 名 号 — — 你 名 下 已 有 {reg41} 家 作 坊 了 。 以 后 你 在 任 何 城 镇 建 作 坊 , 行 会 都 给 你 打 九 折 , 作 坊 每 周 的 利 也 多 算 你 半 成 。 
+dlga_mayor_talk:mayor_af33_beg|镇 长 , 听 说 你 们 这 儿 快 荒 了 , 想 让 我 投 点 钱 ？ 
+dlga_mayor_af33_beg:mayor_af33_beg_choose|正 是 , 大 人 。 镇 上 快 揭 不 开 锅 了 , 商 队 都 不 爱 来 了 。 您 要 是 肯 入 股 本 镇 , 或 是 直 接 投 一 笔 振 兴 款 , 大 伙 儿 都 有 口 饭 吃 。 
+dlga_mayor_af33_beg_choose:mayor_af33_beg_done|入 股 本 镇 , 投 10000 第 纳 尔 (10% 股 份 )。 
+dlga_mayor_af33_beg_choose:mayor_af33_beg_done.1|直 接 投 一 笔 振 兴 款 2000 第 纳 尔 。 
+dlga_mayor_af33_beg_choose:mayor_pretalk|算 了 , 先 不 投 。 
+dlga_mayor_af33_beg_done:mayor_pretalk|多 谢 大 人 ！ 这 笔 钱 一 定 用 在 镇 上 最 要 紧 的 地 方 。 
+dlga_village_elder_talk:village_af33_invest|给 村 子 投 一 笔 钱 (2000 第 纳 尔 ), 让 村 里 安 稳 些 。 
+dlga_village_af33_invest:village_af33_invest_choose|您 肯 往 村 里 投 钱 ？ 那 可 真 是 雪 中 送 炭 。 这 笔 钱 我 们 用 来 修 房 子 、 买 粮 食 , 日 子 安 稳 了 , 每 周 也 分 您 一 份 利 。 您 真 要 投 2000 第 纳 尔 ？ 
+dlga_village_af33_invest_choose:village_af33_invest_done|投 2000 第 纳 尔 。 
+dlga_village_af33_invest_choose:village_elder_pretalk|算 了 , 先 不 投 。 
+dlga_village_af33_invest_done:village_elder_pretalk|多 谢 大 人 ！ 村 里 有 了 这 笔 钱 , 往 后 的 日 子 总 算 有 个 盼 头 。 每 周 的 分 红 , 村 长 会 按 时 给 您 送 去 。 
+dlga_lord_talk_money:af33_buy_center_intro|我 想 买 下 这 座 城 — — 出 个 价 吧 。 
+dlga_af33_buy_center_intro:af33_buy_center_select|你 资 助 过 我 国 打 仗 ， 这 份 情 我 记 着 。 我 的 封 地 可 以 卖 给 你 ： 城 镇 五 万 第 纳 尔 ， 城 堡 三 万 ， 村 庄 一 万 。 你 看 中 哪 一 处 ？ 
+dlga_af33_buy_center_intro:af33_buy_center_select.1|我 的 封 地 可 以 卖 ： 城 镇 五 万 第 纳 尔 ， 城 堡 三 万 ， 村 庄 一 万 。 你 看 中 哪 一 处 ？ 国 库 正 紧 ， 不 然 我 也 不 卖 。 
+dlga_af33_buy_center_select:af33_buy_center_done|{s1} — — {reg0} 第 纳 尔 
+dlga_af33_buy_center_select:lord_pretalk|算 了 ， 先 不 买 。 
+dlga_af33_buy_center_done:lord_pretalk|成 交 。 {s1} 从 今 往 后 归 你 所 有 — — 愿 它 给 你 赚 回 这 {reg41} 第 纳 尔 。 
+dlga_af33_buy_center_done:lord_pretalk.1|你 的 钱 不 够 这 笔 买 卖 。 下 回 带 够 了 钱 再 来 。 
+dlga_fb73_private_options:fb73_bribe_result.2|我 出 {reg40} 第 纳 尔 ， 元 帅 选 举 时 投 我 一 票 。 
+dlga_lord_talk_money:af33_fund_war|我 想 资 助 贵 国 打 仗 — — 出 一 笔 钱 。 
+dlga_af33_fund_war:af33_fund_war_choose|哦 ？ 你 肯 出 钱 帮 我 国 打 仗 ？ 直 说 吧 ， 能 出 多 少 ？ 这 笔 钱 我 会 拿 去 雇 兵 、 把 队 伍 补 满 — — 但 先 说 明 白 ： 钱 买 不 来 胜 仗 ， 也 变 不 出 一 支 新 军 。 
+dlga_af33_fund_war_choose:af33_fund_war_done|注 资 5000 第 纳 尔 。 
+dlga_af33_fund_war_choose:af33_fund_war_done.1|注 资 10000 第 纳 尔 。 
+dlga_af33_fund_war_choose:lord_pretalk|算 了 ， 先 不 资 助 。 
+dlga_af33_fund_war_done:lord_pretalk|这 笔 钱 我 收 下 了 。 你 资 助 过 我 国 打 仗 ， 这 份 情 我 记 下 了 — — 日 后 我 国 打 下 的 城 ， 优 先 卖 给 你 这 样 的 人 。 
+dlga_af33_fund_war_done:lord_pretalk.1|这 笔 钱 我 收 下 了 。 多 谢 你 的 资 助 ， 这 份 情 我 记 下 了 。 
+dlga_lord_talk_money:af33_warloan|借 钱 给 你 打 仗 — — 这 笔 钱 专 款 专 用 。 
+dlga_af33_warloan:af33_warloan_choose|你 肯 借 钱 给 我 打 仗 ？ 说 吧 ， 能 借 多 少 。 丑 话 在 前 头 ： 这 钱 我 拿 去 雇 兵 、 把 队 伍 补 满 ， 但 买 不 来 胜 仗 ； 30 天 后 连 本 带 息 还 你 ， 要 是 还 不 上 ， 就 记 在 我 的 欠 账 上 。 
+dlga_af33_warloan_choose:af33_warloan_done|借 你 1000 第 纳 尔 ， 30 天 后 还 1080。 
+dlga_af33_warloan_choose:af33_warloan_done.1|借 你 3000 第 纳 尔 ， 30 天 后 还 3240。 
+dlga_af33_warloan_choose:af33_warloan_done.2|借 你 5000 第 纳 尔 ， 30 天 后 还 5400。 
+dlga_af33_warloan_choose:lord_talk|算 了 ， 当 我 没 说 。 
+dlga_af33_warloan_done:lord_talk|多 谢 。 这 钱 我 会 拿 去 雇 兵 ， 30 天 后 连 本 带 息 还 你 。 
+dlga_lord_talk_money:af33_buy_peace|陛 下 ， 我 出 5000 第 纳 尔 ， 替 你 向 {s4}买 个 停 战 。 
+dlga_af33_buy_peace:lord_talk|谈 成 了 。 {s4}与 {s5}已 经 停 战 ， 四 十 天 内 不 再 开 战 。 你 替 我 国 出 的 这 5000 第 纳 尔 赔 款 ， 对 方 国 王 已 经 收 下 了 。 这 份 情 ， 两 国 都 记 下 了 。 
+dlga_pretender_start:af33_pretender_funded|我 资 助 你 5000 第 纳 尔 — — 先 说 好 ， 这 钱 是 让 你 多 雇 些 兵 的 ， 打 赢 打 输 还 得 看 战 场 ， 我 不 包 赢 。 
+dlga_pretender_start:af33_pretender_funded.1|我 资 助 你 10000 第 纳 尔 — — 先 说 好 ， 这 钱 是 让 你 多 雇 些 兵 的 ， 打 赢 打 输 还 得 看 战 场 ， 我 不 包 赢 。 
+dlga_af33_pretender_funded:pretender_start|好 ， 这 笔 钱 我 会 拿 去 雇 兵 、 置 办 军 械 。 你 一 共 资 助 了 我 {reg1} 第 纳 尔 。 我 若 登 基 ， 连 本 带 利 一 倍 半 还 你 — — 从 新 王 国 的 金 库 里 出 ， 一 次 最 多 拿 四 分 之 一 ， 分 几 周 还 清 ； 若 我 败 了 、 被 俘 了 ， 这 笔 钱 就 当 沉 了 。 打 仗 没 有 包 赢 的 ， 你 我 都 清 楚 。 
+dlga_supported_pretender_talk:af33_pretender_funded_supp|我 再 资 助 你 5000 第 纳 尔 — — 先 说 好 ， 这 钱 是 让 你 多 雇 些 兵 的 ， 打 赢 打 输 还 得 看 战 场 ， 我 不 包 赢 。 
+dlga_supported_pretender_talk:af33_pretender_funded_supp.1|我 再 资 助 你 10000 第 纳 尔 — — 先 说 好 ， 这 钱 是 让 你 多 雇 些 兵 的 ， 打 赢 打 输 还 得 看 战 场 ， 我 不 包 赢 。 
+dlga_af33_pretender_funded_supp:supported_pretender_pretalk|好 ， 这 笔 钱 我 会 拿 去 雇 兵 、 置 办 军 械 。 你 一 共 资 助 了 我 {reg1} 第 纳 尔 。 我 若 登 基 ， 连 本 带 利 一 倍 半 还 你 — — 从 新 王 国 的 金 库 里 出 ， 一 次 最 多 拿 四 分 之 一 ， 分 几 周 还 清 ； 若 我 败 了 、 被 俘 了 ， 这 笔 钱 就 当 沉 了 。 打 仗 没 有 包 赢 的 ， 你 我 都 清 楚 。 
+dlga_tavernkeeper_talk:af33_assassin_pick|我 想 雇 个 刺 客 ， 除 掉 一 个 碍 事 的 商 人 — — 见 不 得 光 的 那 种 。 
+dlga_af33_assassin_pick:af33_assassin_choose|哦 ？ 说 吧 ， 想 让 谁 从 市 集 上 消 失 。 2000 第 纳 尔 先 付 ， 刺 客 明 天 动 手 。 成 了 ， 人 就 没 了 ； 败 了 ， 钱 不 退 ； 走 漏 了 ， 荣 誉 和 那 城 领 主 的 关 系 都 得 赔 。 挑 一 个 吧 — — 
+dlga_af33_assassin_choose:af33_assassin_confirm|{s4}的 货 商 
+dlga_af33_assassin_choose:tavernkeeper_pretalk|算 了 。 
+dlga_af33_assassin_confirm:af33_assassin_confirm_2|就 是 {s4}的 货 商 ？ 2000 第 纳 尔 ， 刺 客 明 天 动 手 。 成 了 ， 他 从 市 集 上 消 失 — — 那 座 城 以 后 再 没 有 货 商 卖 货 ； 败 了 ， 钱 不 退 ； 走 漏 了 风 声 ， 荣 誉 和 那 城 领 主 的 关 系 都 得 赔 。 你 确 定 ？ 
+dlga_af33_assassin_confirm_2:af33_assassin_done|就 他 ， 动 手 。 
+dlga_af33_assassin_confirm_2:tavernkeeper_pretalk|算 了 。 
+dlga_af33_assassin_done:tavernkeeper_pretalk|好 ， 钱 我 收 了 。 刺 客 明 天 动 手 ， 你 等 消 息 就 是 。 记 住 ， 这 事 跟 我 没 关 系 。 
+dlga_lord_talk:lord_talk_money|谈 钱 的 事 。 
+dlga_lord_talk:lord_talk_gang|谈 帮 派 的 事 。 
+dlga_lord_talk_money:lord_talk_money|钱 的 事 ？ 说 来 听 听 。 
+dlga_lord_talk_gang:lord_talk_gang|帮 派 的 事 ？ 你 说 。 
+dlga_lord_talk_money:lord_talk|还 是 说 点 别 的 吧 。 
+dlga_lord_talk_gang:lord_talk|还 是 说 点 别 的 吧 。 
+dlga_pretender_start:af33_pretender_abandoned|放 弃 对 {s48}的 资 助 — — 那 笔 钱 就 当 打 水 漂 了 。 
+dlga_af33_pretender_abandoned:pretender_start|明 白 了 。 这 事 就 此 了 结 — — 你 资 助 的 钱 不 会 退 回 来 ， 但 你 随 时 可 以 资 助 别 人 。 
+dlga_supported_pretender_talk:af33_pretender_abandoned_supp|放 弃 对 {s48}的 资 助 — — 那 笔 钱 就 当 打 水 漂 了 。 
+dlga_af33_pretender_abandoned_supp:supported_pretender_pretalk|明 白 了 。 这 事 就 此 了 结 — — 你 资 助 的 钱 不 会 退 回 来 ， 但 你 随 时 可 以 资 助 别 人 。 

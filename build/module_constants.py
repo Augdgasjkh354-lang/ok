@@ -2119,6 +2119,7 @@ slot_af26_intro_day          = 898 # p_main_party: day+1 after which a lord may 
 slot_af26_borrow_day         = 899 # p_main_party: L1 borrow return deadline (day+14); 0 = not borrowing
 slot_af26_borrow_count       = 900 # p_main_party: L1 borrowed men count
 slot_af26_borrow_lender      = 901 # p_main_party: L1 lender lord troop id; 0 = none
+slot_af26_borrow_pre_count   = 967 # p_main_party: L1 pre-borrow count of that troop type in the player's party; 0 = none (audit 13 fix F-03)
 slot_af26_license            = 902 # p_main_party: I1 mercenary license, 1 = licensed
 slot_af26_protect_day        = 903 # town: I5 next protection collection day+1; 0 = not protected
 slot_af26_sanctuary_day      = 904 # p_main_party: L5 sanctuary expiry (day+7); 0 = not in sanctuary
@@ -2150,3 +2151,26 @@ slot_af28_quest_target       = 940 # p_main_party: gang quest target party/town 
 slot_af28_quest_deadline     = 941 # p_main_party: gang quest deadline day+1 (batch 4)
 slot_af28_quest_reward       = 942 # p_main_party: gang quest reward denars (batch 4)
 slot_af28_quest_kind         = 943 # p_main_party: gang quest issuer kind 1-6; 0 = no quest (batch 4)
+slot_af29_expand_level       = 944 # town: workshop expansion level 0-3 (capital batch 1)
+slot_af29_loan_principal     = 945 # lord Troop Slot: outstanding loan balance owed to the player, incl. interest (capital batch 1)
+slot_af29_loan_day           = 946 # lord Troop Slot: day the loan was made (capital batch 1)
+slot_af30_town_shares        = 947 # town: player-owned shares in percent, 10/20/30 (capital batch 2, item 4)
+slot_af30_tax_farm_day       = 948 # town: tax farming expiry day; 0 = none (capital batch 2, item 5, redesigned 2026-11-10: divert at lord rent collection)
+slot_af31_workers            = 949 # town: hired workers in the player workshop, 0-10 (capital batch 3, item 6)
+slot_af31_bank_principal     = 950 # town: bank outstanding principal + 1; 0 = no bank ever opened, 1 = bank open with nothing out (capital batch 3, item 7)
+slot_af32_caravan_shares     = 951 # caravan party: player-owned shares in percent, 10/20/30 (capital batch 4, item 8; caravan destroyed/disbanded = shares void, no refund)
+slot_af33_garrison_party     = 952 # town: hired garrison party id; 0 = none (capital 2.0 batch 1, item 1)
+slot_af33_garrison_rent_day  = 953 # town: rent due day; 0 = no rent due / own town (capital 2.0 batch 1, item 1)
+slot_af33_funded_faction     = 954 # p_main_party: faction the player funded for war; 0 = none (capital 2.0 batch 2, item 3b)
+slot_af33_funded_amount      = 955 # p_main_party: cumulative denars funded to the faction in 954; reset when funding a different faction (capital 2.0 batch 2, item 3b)
+slot_af33_loan_visit_day     = 956 # p_main_party: last day a lord/king visited asking for a loan; 30-day cooldown (capital 2.0 batch 1, item 4; 954-955 batch 2, 957-958 batch 2)
+slot_af33_warloan_principal  = 957 # lord Troop Slot: war-loan principal owed to the player (capital 2.0 batch 2, item 5)
+slot_af33_warloan_due_day    = 958 # lord Troop Slot: war-loan due day (lend day + 30); 0 = no war loan outstanding (capital 2.0 batch 2, item 5)
+slot_af33_town_begging       = 959 # town: begging-for-investment expiry day; 0 = not begging (capital 2.0 batch 1, item 6; 957-958 batch 2)
+slot_af33_village_invested   = 960 # village: cumulative denars the player invested (capital 2.0 batch 1, item 7a)
+slot_af33_gang_invest_kind   = 961 # p_main_party: gang kind 1-6 the player invested in; 0 = none (capital 2.0 batch 3, item 8a)
+slot_af33_gang_invest_amount = 962 # p_main_party: denars invested in the gang in 961; cleared when that gang is wiped out (capital 2.0 batch 3, item 8a)
+slot_af33_funded_pretender   = 963 # p_main_party: pretender troop the player funded; 0 = none (capital 2.0 batch 4, item 9)
+slot_af33_pretender_funded_amount = 964 # p_main_party: cumulative denars funded to the pretender in 963; >= 0 = funded, < 0 = refund due after his coronation (magnitude = 1.5x funded minus paid so far); 0 = none (capital 2.0 batch 4, item 9)
+slot_af33_assassin           = 965 # p_main_party: assassin hit state; > 0 = pending target goods-merchant troop, < 0 = cooldown until day -value (7 days after a hit resolves), 0 = free (capital 2.0 batch 4, item 10c)
+slot_af33_intel_net          = 966 # p_main_party: intel network = level (1-3) * 100000 + expiry day; 0 = no network (capital 2.0 batch 4, item 10d)

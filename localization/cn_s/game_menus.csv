@@ -1,11 +1,6 @@
 ﻿
 mno_fb71_full_start|满 级 开 局 （ 62级 ／ 全 属 性 63／ 全 技 能 10／ 全 熟 练 度 699） 
 mno_af26_declare_kingdom|宣 布 立 国 （ 以 地 方 领 主 之 身 称 王 ） 
-mno_af07_world_entry|烽 烟 与 暗 流 ： 卡 拉 迪 亚 战 局 总 览 
-mno_af04_network_entry|地 方 匪 帮 与 黑 市 情 报 
-mno_af05_ledger_entry|战 争 与 宫 廷 ： 秘 密 军 粮 案 卷 
-mno_af03_field_journal|军 事 委 托 记 录 
-mno_fb75_intel_book|宫 廷 政 治 情 报 簿 
 mno_af08_desk_entry|烽 烟 案 头 ： 领 地 、 战 争 与 宫 廷 消 息 
 mno_af11_arrears_entry|清 点 拖 欠 的 饷 银 
 mno_af26_collect_all_caravans|一 键 收 取 全 部 商 队 收 益 （ {reg1} 支 商 队 ， 共 {reg0} 第 纳 尔 ） 
@@ -22,24 +17,21 @@ mno_af20_demand_surrender|勒 令 他 们 放 下 武 器
 mno_af26_sanctuary_entry|以 受 庇 护 者 的 身 份 求 见 城 主 （ 领 主 好 感 ≥ 40） 
 mno_af06_siege_ops_entry|围 城 暗 战 ： 侦 察 、 破 坏 粮 仓 与 策 反 守 军 
 mno_af06_defender_supply|将 随 身 四 袋 谷 物 秘 密 送 入 守 城 粮 仓 
-mno_af01_village_status|查 看 地 方 战 乱 与 援 助 
-mno_af12_case_entry|有 村 民 请 你 主 持 公 道 
-mno_af10_village_word|和 村 长 聊 聊 附 近 的 动 静 
+mno_af36_village_affairs_entry|村 里 事 
 mno_af09_village_echo|村 口 似 乎 有 人 在 等 你 … … 
 mno_af04_visit_lair|拜 访 匪 帮 老 巢 
 mno_af21_crown_talk_entry|求 见 国 王 ， 商 谈 缴 获 的 分 成 
 mno_af26_bounty_entry|看 看 城 门 口 的 悬 赏 告 示 
 mno_af26_protect_offer|做 这 座 城 镇 的 保 护 人 （ 每 周 收 保 护 费 ） 
 mno_af26_protect_collect|收 本 周 的 保 护 费 
-mno_af26_found_caravan|出 资 组 建 一 支 商 队 （ 3000 第 纳 尔 ， 名 下 已 有 {reg0} 支 ， 上 限 36 支 ） 
-mno_af26_caravan_collect|结 算 名 下 商 队 （ 钱 箱 超 600 的 部 分 归 你 ） 
-mno_af03_contract_board|战 争 承 包 商 · 军 粮 委 托 
 mno_af28_contact_entry|去 见 {s4}的 接 头 人 
 mno_af08_town_rumor_entry|在 城 中 询 问 附 近 的 战 乱 传 闻 
 mno_af17_sell_grain_entry|把 带 来 的 粮 食 卖 给 官 仓 （ 粮 仓 存 量 {reg41}%{reg42?， 饥 荒 价 ， 本 周 还 能 收 {reg43}袋 :}） 
-mno_af10_town_word_entry|找 相 熟 的 粮 商 打 听 军 粮 车 
-mno_af06_recovery_entry|战 后 治 理 ： 查 看 城 池 恢 复 与 重 建 
-mno_af06_supply_entry|秘 密 运 粮 入 城 （ 4袋 谷 物 ， 增 加 约 两 天 粮 食 储 备 ） 
+mno_af33_intel_entry|打 点 情 报 网 
+mno_af30_tax_farm_entry|买 下 本 镇 4 周 包 税 权 （ 5000 第 纳 尔 ） 
+mno_af34_trade_entry|经 商 赚 钱 
+mno_af34_war_entry|军 粮 与 战 事 
+mno_af34_garrison_entry|驻 兵 
 menu_fb75_intel_book|宫 廷 政 治 情 报 簿 ^^政 治 信 用 ： {reg50}    政 治 嫌 疑 ： {reg51}/100    王 室 调 查 次 数 ： {reg52}^有 效 情 报 ： {reg53}条    有 人 欠 你 选 票 ： {reg54}笔    你 欠 人 的 选 票 ： {reg58}笔 ^^情 报 只 记 录 你 已 经 打 听 到 的 消 息 ； 过 期 线 索 会 自 动 从 本 页 隐 去 。 
 mno_fb75_book_clues|查 看 已 掌 握 的 政 治 线 索 
 mno_fb75_book_debts|查 看 欠 你 选 票 的 贵 族 
@@ -101,29 +93,15 @@ mno_af03_debug_back|返 回 作 弊 菜 单
 menu_af04_gang|{s13}他 们 在 {s11}一 带 活 动 ， 专 长 是 {s12}。 
 mno_af04_pay_treaty|付 {reg42} 第 纳 尔 ， 签 11 天 互 不 侵 扰 的 协 议 
 mno_af04_join|交 500 第 纳 尔 投 名 状 ， 入 伙 
-mno_af04_hire_raid|花 850 第 纳 尔 ， 请 他 们 袭 扰 一 支 敌 国 军 粮 队 
-mno_af04_buy_grain|从 盐 鸦 商 路 黑 市 买 两 袋 谷 物 （ 360 第 纳 尔 ） 
-mno_af04_hire_men|从 灰 狼 团 招 {reg45} 名 散 兵 （ {reg44} 第 纳 尔 ） 
-mno_af04_invest_200|给 这 伙 匪 帮 注 资 200 第 纳 尔 
-mno_af04_invest_500|给 这 伙 匪 帮 注 资 500 第 纳 尔 
-mno_af04_invest_1000|给 这 伙 匪 帮 注 资 1000 第 纳 尔 
+mno_af35_gang_hire_entry|雇 他 们 办 事 
+mno_af35_gang_invest_entry|注 资 ／ 入 股 
 mno_af04_amnesty|花 1200 第 纳 尔 赦 免 他 们 ， 收 6 个 人 进 队 伍 
 mno_af27_warn|向 他 们 通 风 报 信 ： 有 领 主 正 带 兵 来 剿 你 们 
 mno_af04_attack|剿 灭 这 伙 匪 帮 
 mno_af04_leave|离 开 此 地 
 menu_af04_network|地 方 匪 帮 与 黑 市 情 报 ^^黑 松 帮 · 铁 鬃 ： 交 情 是 {s20}^灰 狼 团 · 裂 旗 ： 交 情 是 {s21}^盐 鸦 商 路 · 盐 鸦 ： 交 情 是 {s22}^怒 海 帮 · 铁 鬃 ： 交 情 是 {s27}^断 峰 帮 · 裂 旗 ： 交 情 是 {s28}^黄 沙 帮 · 盐 鸦 ： 交 情 是 {s29}
-mno_af23_back_gang_1|资 助 黑 松 帮 一 笔 钱 （ 500 第 纳 尔 ） 
-mno_af23_back_gang_2|资 助 灰 狼 团 一 笔 钱 （ 500 第 纳 尔 ） 
-mno_af23_back_gang_3|资 助 盐 鸦 商 路 一 笔 钱 （ 500 第 纳 尔 ） 
-mno_af23_back_gang_4|资 助 怒 海 帮 一 笔 钱 （ 500 第 纳 尔 ） 
-mno_af23_back_gang_5|资 助 断 峰 帮 一 笔 钱 （ 500 第 纳 尔 ） 
-mno_af23_back_gang_6|资 助 黄 沙 帮 一 笔 钱 （ 500 第 纳 尔 ） 
-mno_af23_provoke_gang_1|花 400 第 纳 尔 ， 挑 拨 黑 松 帮 去 跟 其 他 匪 帮 火 并 
-mno_af23_provoke_gang_2|花 400 第 纳 尔 ， 挑 拨 灰 狼 团 去 跟 其 他 匪 帮 火 并 
-mno_af23_provoke_gang_3|花 400 第 纳 尔 ， 挑 拨 盐 鸦 商 路 去 跟 其 他 匪 帮 火 并 
-mno_af23_provoke_gang_4|花 400 第 纳 尔 ， 挑 拨 怒 海 帮 去 跟 其 他 匪 帮 火 并 
-mno_af23_provoke_gang_5|花 400 第 纳 尔 ， 挑 拨 断 峰 帮 去 跟 其 他 匪 帮 火 并 
-mno_af23_provoke_gang_6|花 400 第 纳 尔 ， 挑 拨 黄 沙 帮 去 跟 其 他 匪 帮 火 并 
+mno_af35_network_fund_entry|资 助 一 伙 
+mno_af35_network_provoke_entry|挑 拨 火 并 
 mno_af04_network_back|返 回 营 地 
 menu_af04_debug|v0.4 土 匪 江 湖 测 试 ^^可 以 尝 试 生 成 三 支 独 立 匪 帮 ， 手 动 推 进 一 次 每 日 匪 帮 逻 辑 。 战 乱 不 足 35 时 也 会 在 战 乱 最 高 的 村 庄 强 制 生 成 （ 保 底 ） 。 
 mno_af04_debug_spawn_black|尝 试 生 成 黑 松 帮 
@@ -210,21 +188,111 @@ mno_af26_hold_just_occupy|只 占 下 它 ， 不 称 王 ， 当 个 地 方 �
 menu_af28_contact|角 落 里 那 人 朝 你 点 了 点 头 ， 他 是 {s10}的 接 头 人 。 ^他 们 在 {s11}一 带 活 动 ， 专 长 是 {s12}。 ^这 里 是 {s14}的 地 盘 ， 接 头 人 只 跟 熟 面 孔 打 交 道 。 
 mno_af28_pay_treaty|付 {reg42} 第 纳 尔 ， 签 11 天 互 不 侵 扰 的 协 议 
 mno_af28_join|交 500 第 纳 尔 投 名 状 ， 入 伙 
-mno_af28_hire_raid|花 850 第 纳 尔 ， 请 他 们 袭 扰 一 支 敌 国 军 粮 队 
-mno_af28_buy_grain|从 盐 鸦 商 路 黑 市 买 两 袋 谷 物 （ 360 第 纳 尔 ） 
-mno_af28_hire_men|从 灰 狼 团 招 {reg45} 名 散 兵 （ {reg44} 第 纳 尔 ） 
+mno_af35_contact_hire_entry|雇 他 们 办 事 
+mno_af35_contact_invest_entry|给 这 伙 匪 帮 注 资 ／ 入 股 
+mno_af28_amnesty|花 1200 第 纳 尔 赦 免 他 们 ， 收 6 个 人 进 队 伍 
+mno_af28_warn|向 他 们 通 风 报 信 ： 有 领 主 正 带 兵 来 剿 你 们 
+mno_af35_contact_quest_entry|接 一 单 活 
+mno_af28_quest_q1_settle|回 来 交 差 ： 军 粮 队 已 经 劫 了 
+mno_af28_quest_q3_deliver|把 信 交 给 {s4}的 接 头 人 
+mno_af28_quest_abandon|这 单 不 干 了 
+mno_af28_quest_q2_settle|回 来 交 差 ： 走 私 货 已 经 送 到 了 
+mno_af28_quest_q4_settle|回 来 交 差 ： 那 座 村 子 已 经 劫 了 
+mno_af28_leave|离 开 
+menu_af31_bank|钱 庄 — — {s10}。 ^借 出 去 的 钱 每 周 生 1% 的 息 , 从 本 城 金 库 出 ; 本 金 也 可 以 在 这 里 收 回 , 一 次 最 多 拿 金 库 的 四 分 之 一 。 
+mno_af31_bank_lend_1000|放 贷 给 本 城 商 人 ： 借 出 1000 第 纳 尔 
+mno_af31_bank_lend_3000|放 贷 给 本 城 商 人 ： 借 出 3000 第 纳 尔 
+mno_af31_bank_collect|收 回 本 金 {reg41} 第 纳 尔 （ 一 次 最 多 拿 金 库 的 四 分 之 一 ） 
+mno_af31_bank_leave|离 开 钱 庄 
+menu_af33_loan_call|{s8}派 信 使 捎 话 来 , 请 你 去 见 他 一 面 。 ^{s9}
+mno_af33_loan_lord_500|借 他 500 第 纳 尔 。 
+mno_af33_loan_lord_1000|借 他 1000 第 纳 尔 。 
+mno_af33_loan_king_5000|投 他 5000 第 纳 尔 。 
+mno_af33_loan_king_10000|投 他 10000 第 纳 尔 。 
+mno_af33_loan_dismiss|先 不 见 ， 打 发 信 使 走 。 
+menu_af33_garrison|这 是 你 租 地 方 存 在 {s10} 城 外 的 兵 。 ^他 们 归 你 管 ， 饷 银 每 周 从 你 身 上 扣 ， 租 金 每 月 500 第 纳 尔 。 ^想 换 兵 就 直 接 换 ， 想 散 就 散 — — 散 了 兵 就 没 了 。 
+mno_af33_garrison_swap|与 驻 留 的 兵 换 兵 
+mno_af33_garrison_disband|解 散 这 支 驻 留 部 队 （ 兵 散 了 ， 租 金 不 退 ） 
+mno_af33_garrison_leave|离 开 
+menu_af33_caravan_raid|花 850 第 纳 尔 ， 请 他 们 去 劫 一 支 王 国 商 队 。 劫 谁 的 ？ 挑 一 家 — — 商 队 是 人 家 的 命 脉 ， 抢 了 别 怪 我 没 提 醒 你 。 
+mno_af33_raid_kingdom_1|去 劫 {s41}的 商 队 
+mno_af33_raid_kingdom_2|去 劫 {s42}的 商 队 
+mno_af33_raid_kingdom_3|去 劫 {s43}的 商 队 
+mno_af33_raid_kingdom_4|去 劫 {s44}的 商 队 
+mno_af33_raid_kingdom_5|去 劫 {s45}的 商 队 
+mno_af33_raid_kingdom_6|去 劫 {s46}的 商 队 
+mno_af33_raid_back|算 了 ， 先 不 劫 了 
+menu_af33_intel|情 报 网 ： {s40}。 每 月 500 第 纳 尔 养 着 ， 每 周 给 你 一 份 附 近 动 静 的 简 报 — — 哪 支 帮 派 在 附 近 出 没 、 最 近 的 敌 军 在 哪 ； 级 别 高 了 还 报 战 事 和 围 城 。 跟 镇 上 的 案 卷 、 领 主 那 边 的 情 报 不 是 一 回 事 ： 那 边 是 查 案 ， 这 边 是 听 风 。 
+mno_af33_intel_renew|续 一 个 月 （ 500 第 纳 尔 ） 
+mno_af33_intel_upgrade|升 一 级 （ 500 第 纳 尔 ） 
+mno_af33_intel_brief|要 一 份 最 近 的 简 报 
+mno_af33_intel_back|算 了 ， 先 不 打 点 了 
+menu_af34_trade|经 商 赚 钱 — — 入 股 本 镇 、 开 钱 庄 、 组 建 商 队 ， 都 在 这 里 打 理 。 
+mno_af26_found_caravan|出 资 组 建 一 支 商 队 （ 3000 第 纳 尔 ， 名 下 已 有 {reg0} 支 ， 上 限 36 支 ） 
+mno_af26_caravan_collect|结 算 名 下 商 队 （ 钱 箱 超 600 的 部 分 归 你 ） 
+mno_af30_town_shares_entry|入 股 本 镇 （ 10000 第 纳 尔 ， 10% 股 份 ， 已 有 {reg41}%） 
+mno_af31_bank_open_entry|开 钱 庄 （ 5000 第 纳 尔 ， 一 城 只 能 开 一 家 ） 
+mno_af31_bank_entry|去 钱 庄 看 看 （ 未 收 回 本 金 {reg41} 第 纳 尔 ） 
+mno_af34_trade_back|返 回 城 镇 
+menu_af34_war|军 粮 与 战 事 — — 军 粮 委 托 、 粮 商 消 息 、 秘 密 运 粮 、 战 后 治 理 。 
+mno_af03_contract_board|战 争 承 包 商 · 军 粮 委 托 
+mno_af10_town_word_entry|找 相 熟 的 粮 商 打 听 军 粮 车 
+mno_af06_recovery_entry|战 后 治 理 ： 查 看 城 池 恢 复 与 重 建 
+mno_af06_supply_entry|秘 密 运 粮 入 城 （ 4袋 谷 物 ， 增 加 约 两 天 粮 食 储 备 ） 
+mno_af34_war_back|返 回 城 镇 
+menu_af34_garrison|驻 兵 — — 在 城 外 租 块 地 方 放 兵 ， 续 租 、 换 兵 都 在 这 里 。 
+mno_af33_rent_entry|租 地 方 放 兵 （ 每 月 500 第 纳 尔 ） 
+mno_af33_renew_entry|续 租 驻 兵 处 （ 500 第 纳 尔 ， 还 剩 {reg41} 天 ） 
+mno_af33_swap_entry|与 城 外 驻 留 的 兵 换 兵 
+mno_af34_garrison_back|返 回 城 镇 
+menu_af35_contact_invest|给 这 伙 匪 帮 注 资 ／ 入 股 — — 注 资 200、 500、 1000 第 纳 尔 ， 或 投 2000 入 股 ， 往 后 他 们 抢 到 钱 分 你 两 成 。 
 mno_af28_invest_200|给 这 伙 匪 帮 注 资 200 第 纳 尔 
 mno_af28_invest_500|给 这 伙 匪 帮 注 资 500 第 纳 尔 
 mno_af28_invest_1000|给 这 伙 匪 帮 注 资 1000 第 纳 尔 
-mno_af28_amnesty|花 1200 第 纳 尔 赦 免 他 们 ， 收 6 个 人 进 队 伍 
-mno_af28_warn|向 他 们 通 风 报 信 ： 有 领 主 正 带 兵 来 剿 你 们 
+mno_af28_invest_gang|投 2000 第 纳 尔 入 股 这 伙 人 ， 往 后 他 们 抢 到 钱 分 你 两 成 
+mno_af35_contact_invest_back|返 回 
+menu_af35_contact_quest|接 一 单 活 — — 劫 军 粮 队 、 送 信 、 护 送 走 私 货 、 劫 村 子 ， 四 种 活 都 在 这 里 接 。 
 mno_af28_quest_q1_accept|接 一 单 劫 军 粮 队 的 活 
-mno_af28_quest_q1_settle|回 来 交 差 ： 军 粮 队 已 经 劫 了 
 mno_af28_quest_q3_accept|接 一 单 送 信 的 活 
-mno_af28_quest_q3_deliver|把 信 交 给 {s4}的 接 头 人 
-mno_af28_quest_abandon|这 单 不 干 了 
 mno_af28_quest_q2_accept|接 一 单 护 送 走 私 货 的 活 
-mno_af28_quest_q2_settle|回 来 交 差 ： 走 私 货 已 经 送 到 了 
 mno_af28_quest_q4_accept|接 一 单 劫 村 子 的 活 
-mno_af28_quest_q4_settle|回 来 交 差 ： 那 座 村 子 已 经 劫 了 
-mno_af28_leave|离 开 
+mno_af35_contact_quest_back|返 回 
+menu_af35_contact_hire|雇 他 们 办 事 — — 袭 扰 敌 国 军 粮 队 、 黑 市 买 粮 、 招 散 兵 ， 花 钱 请 他 们 出 手 。 
+mno_af28_hire_raid|花 850 第 纳 尔 ， 请 他 们 袭 扰 一 支 敌 国 军 粮 队 
+mno_af28_buy_grain|从 盐 鸦 商 路 黑 市 买 两 袋 谷 物 （ 360 第 纳 尔 ） 
+mno_af28_hire_men|从 灰 狼 团 招 {reg45} 名 散 兵 （ {reg44} 第 纳 尔 ） 
+mno_af35_contact_hire_back|返 回 
+menu_af35_gang_invest|注 资 ／ 入 股 — — 注 资 200、 500、 1000 第 纳 尔 ， 或 投 2000 入 股 ， 往 后 他 们 抢 到 钱 分 你 两 成 。 
+mno_af04_invest_200|给 这 伙 匪 帮 注 资 200 第 纳 尔 
+mno_af04_invest_500|给 这 伙 匪 帮 注 资 500 第 纳 尔 
+mno_af04_invest_1000|给 这 伙 匪 帮 注 资 1000 第 纳 尔 
+mno_af33_invest_gang|投 2000 第 纳 尔 入 股 这 伙 人 ， 往 后 他 们 抢 到 钱 分 你 两 成 
+mno_af33_invest_status|问 问 投 的 那 2000 第 纳 尔 怎 么 样 了 
+mno_af35_gang_invest_back|返 回 
+menu_af35_gang_hire|雇 他 们 办 事 — — 袭 扰 敌 国 军 粮 队 、 劫 王 国 商 队 、 黑 市 买 粮 、 招 散 兵 ， 花 钱 请 他 们 出 手 。 
+mno_af04_hire_raid|花 850 第 纳 尔 ， 请 他 们 袭 扰 一 支 敌 国 军 粮 队 
+mno_af33_hire_caravan_raid|花 850 第 纳 尔 ， 请 他 们 去 劫 一 支 王 国 商 队 
+mno_af04_buy_grain|从 盐 鸦 商 路 黑 市 买 两 袋 谷 物 （ 360 第 纳 尔 ） 
+mno_af04_hire_men|从 灰 狼 团 招 {reg45} 名 散 兵 （ {reg44} 第 纳 尔 ） 
+mno_af35_gang_hire_back|返 回 
+menu_af35_network_fund|资 助 一 伙 — — 六 帮 里 挑 一 家 ， 资 助 500 第 纳 尔 。 
+mno_af23_back_gang_1|资 助 黑 松 帮 一 笔 钱 （ 500 第 纳 尔 ） 
+mno_af23_back_gang_2|资 助 灰 狼 团 一 笔 钱 （ 500 第 纳 尔 ） 
+mno_af23_back_gang_3|资 助 盐 鸦 商 路 一 笔 钱 （ 500 第 纳 尔 ） 
+mno_af23_back_gang_4|资 助 怒 海 帮 一 笔 钱 （ 500 第 纳 尔 ） 
+mno_af23_back_gang_5|资 助 断 峰 帮 一 笔 钱 （ 500 第 纳 尔 ） 
+mno_af23_back_gang_6|资 助 黄 沙 帮 一 笔 钱 （ 500 第 纳 尔 ） 
+mno_af35_network_fund_back|返 回 
+menu_af35_network_provoke|挑 拨 火 并 — — 六 帮 里 挑 一 家 ， 花 400 第 纳 尔 挑 拨 他 们 去 跟 其 他 匪 帮 火 并 。 
+mno_af23_provoke_gang_1|花 400 第 纳 尔 ， 挑 拨 黑 松 帮 去 跟 其 他 匪 帮 火 并 
+mno_af23_provoke_gang_2|花 400 第 纳 尔 ， 挑 拨 灰 狼 团 去 跟 其 他 匪 帮 火 并 
+mno_af23_provoke_gang_3|花 400 第 纳 尔 ， 挑 拨 盐 鸦 商 路 去 跟 其 他 匪 帮 火 并 
+mno_af23_provoke_gang_4|花 400 第 纳 尔 ， 挑 拨 怒 海 帮 去 跟 其 他 匪 帮 火 并 
+mno_af23_provoke_gang_5|花 400 第 纳 尔 ， 挑 拨 断 峰 帮 去 跟 其 他 匪 帮 火 并 
+mno_af23_provoke_gang_6|花 400 第 纳 尔 ， 挑 拨 黄 沙 帮 去 跟 其 他 匪 帮 火 并 
+mno_af35_network_provoke_back|返 回 
+menu_af36_village_affairs|村 里 事 — — 查 看 地 方 战 乱 与 援 助 、 和 村 长 聊 聊 附 近 的 动 静 、 有 村 民 请 你 主 持 公 道 。 
+mno_af01_village_status|查 看 地 方 战 乱 与 援 助 
+mno_af12_case_entry|有 村 民 请 你 主 持 公 道 
+mno_af10_village_word|和 村 长 聊 聊 附 近 的 动 静 
+mno_af36_village_affairs_back|返 回 村 庄 

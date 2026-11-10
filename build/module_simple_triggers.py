@@ -479,6 +479,24 @@ simple_triggers = [
          (call_script, "script_calculate_weekly_party_wage", ":center_no"),
          (val_sub, ":cur_wealth", reg0),
          (val_max, ":cur_wealth", 0),
+         # v1.0 资本家第二批 (条目 4): 入股分红, 股份记镇 Slot 947 (百分比 10/20/30)。
+         # 本触发器只给非玩家据点发收入 (上面两行守卫), 玩家自己的城镇本来就不吃这条, 不会重复发。
+         # 分红 = 本周入账 :added_wealth 的股份比例, 单次不超金库 1/4; 金库不够只给实数, 不记欠账。
+         (try_begin),
+           (party_get_slot, ":shares", ":center_no", slot_af30_town_shares),
+           (gt, ":shares", 0),
+           (store_mul, ":dividend", ":added_wealth", ":shares"),
+           (val_div, ":dividend", 100),
+           (gt, ":dividend", 0),
+           (store_div, ":cap", ":cur_wealth", 4),
+           (val_min, ":dividend", ":cap"),
+           (gt, ":dividend", 0),
+           (val_sub, ":cur_wealth", ":dividend"),
+           (troop_add_gold, "trp_player", ":dividend"),
+           (str_store_party_name, s44, ":center_no"),
+           (assign, reg44, ":dividend"),
+           (display_message, "@{s44} 的入股分红 {reg44} 第纳尔已经进了你的口袋。", 0xFFCC66),
+         (try_end),
          (party_set_slot, ":center_no", slot_town_wealth, ":cur_wealth"),
        (try_end),
     ]),
@@ -4164,5 +4182,200 @@ simple_triggers = [
       (party_get_slot, ":lender", "p_main_party", slot_af26_borrow_lender),
       (call_script, "script_change_player_relation_with_troop", ":lender", -2),
     (try_end),
+  ]),
+
+  # v1.0 资本家第一批 (条目 3): 放贷利息, 每周 1% 复利 (照原版 Slot 21 的 101/100)。
+  # 只在借出后 483 天内生息: 1.01^69 约 1.99, 所以总额不超 2 倍本金; 见面结清后 945 清零, 停息。
+  (24*7, [
+    (try_for_range, ":lord", active_npcs_begin, active_npcs_end),
+      (troop_get_slot, ":loan", ":lord", slot_af29_loan_principal),
+      (gt, ":loan", 0),
+      (troop_get_slot, ":day", ":lord", slot_af29_loan_day),
+      (store_current_day, ":today"),
+      (store_sub, ":elapsed", ":today", ":day"),
+      (lt, ":elapsed", 483),
+      (val_mul, ":loan", 101),
+      (val_div, ":loan", 100),
+      (troop_set_slot, ":lord", slot_af29_loan_principal, ":loan"),
+    (try_end),
+  ]),
+
+  # v1.0 资本家第三批 (条目 7): 钱庄利息, 每周按未收回本金的 1% 从城镇金库出 (照原版 Slot 21 的 101/100 的 1% 利率, 单利按周付, 不滚入本金)。
+  # Slot 950 存的是本金+1 (0 = 没开过钱庄, 1 = 开了但没有未收回的本金), 所以先减 1 才是本金。
+  # 单次不超金库 1/4 (照老规矩); 金库不够只给实数, 不记欠账 (利息不是欠账, 照 I2 悬赏的先例)。
+  # 不经过每周收入触发器的非玩家守卫: 玩家自己的城镇也照常付息, 所有城镇一视同仁。
+  (24*7, [
+    (try_for_range, ":center", towns_begin, towns_end),
+      (party_get_slot, ":stored", ":center", slot_af31_bank_principal),
+      (gt, ":stored", 1),
+      (store_sub, ":principal", ":stored", 1),
+      (store_div, ":interest", ":principal", 100),
+      (gt, ":interest", 0),
+      (party_get_slot, ":treasury", ":center", slot_town_wealth),
+      (gt, ":treasury", 0),
+      (store_div, ":cap", ":treasury", 4),
+      (val_min, ":interest", ":cap"),
+      (gt, ":interest", 0),
+      (val_sub, ":treasury", ":interest"),
+      (party_set_slot, ":center", slot_town_wealth, ":treasury"),
+      (troop_add_gold, "trp_player", ":interest"),
+      (str_store_party_name, s44, ":center"),
+      (assign, reg44, ":interest"),
+      (display_message, "@{s44} 的钱庄放贷利息 {reg44} 第纳尔进了你的口袋。", 0xFFCC66),
+    (try_end),
+  ]),
+
+  # v1.0 资本家 2.0 第一批 (条目 4): 每周一位缺钱的领主 / 国王派信使上门借钱。
+  # 956 记上次上门日, 30 天最多一次 (整个地图只记一个, 所以同一时段最多一位来访;
+  # 冷却在触发时就记下, 玩家打发走信使也算用掉这一次, 防刷)。上门后借钱走 945/946,
+  # 利息与收债沿用第一批的链路 (每周 1% 复利、见面并进 874 欠账)。
+  (24*7, [
+    (store_current_day, ":today"),
+    (party_get_slot, ":last", "p_main_party", slot_af33_loan_visit_day),
+    (store_sub, ":since", ":today", ":last"),
+    (ge, ":since", 30),
+    (call_script, "script_af33_loan_caller"),
+    (ge, reg0, 0),
+    (party_set_slot, "p_main_party", slot_af33_loan_visit_day, ":today"),
+    (jump_to_menu, "mnu_af33_loan_call"),
+  ]),
+
+  # v1.0 资本家 2.0 第一批 (条目 6+7a+1): 每周结算——求投资状态扫城镇、村庄投资分红、
+  # 驻兵饷银与租金。只发提示消息, 不动每周结算 (budget_report) 的结构。
+  (24*7, [
+    (store_current_day, ":today"),
+    # --- 条目 6: 繁荣 < 20 且玩家没入股的城镇, 记求投资状态 (959, 30 天到期自动清)。
+    (try_for_range, ":center", towns_begin, towns_end),
+      (party_get_slot, ":ask", ":center", slot_af33_town_begging),
+      (try_begin),
+        (eq, ":ask", 0),
+        (neg|party_slot_eq, ":center", slot_town_lord, "trp_player"),
+        (party_get_slot, ":shares", ":center", slot_af30_town_shares),
+        (eq, ":shares", 0),
+        (party_get_slot, ":pros", ":center", slot_town_prosperity),
+        (lt, ":pros", 20),
+        (store_add, ":until", ":today", 30),
+        (party_set_slot, ":center", slot_af33_town_begging, ":until"),
+      (else_try),
+        (gt, ":ask", 0),
+        (assign, ":clear", 0),
+        (try_begin),
+          (ge, ":today", ":ask"),
+          (assign, ":clear", 1),
+        (else_try),
+          (party_slot_ge, ":center", slot_af30_town_shares, 1),
+          (assign, ":clear", 1),
+        (else_try),
+          (party_slot_eq, ":center", slot_town_lord, "trp_player"),
+          (assign, ":clear", 1),
+        (try_end),
+        (eq, ":clear", 1),
+        (party_set_slot, ":center", slot_af33_town_begging, 0),
+      (try_end),
+    (try_end),
+    # --- 条目 7a: 村庄投资分红, 每周繁荣 / 2, 从村长钱袋出 (af13 负数取 = 只给实数,
+    # 不够不记欠账, 照 I2 悬赏的先例)。村子没村长时 af13 返回 0, 不发钱也不报错。
+    (try_for_range, ":village", villages_begin, villages_end),
+      (party_get_slot, ":inv", ":village", slot_af33_village_invested),
+      (gt, ":inv", 0),
+      (party_get_slot, ":pros2", ":village", slot_town_prosperity),
+      (store_div, ":div", ":pros2", 2),
+      (gt, ":div", 0),
+      (store_sub, ":neg", 0, ":div"),
+      (call_script, "script_af13_village_purse", ":village", ":neg"),
+      (gt, reg0, 0),
+      (assign, ":paid", reg0),
+      (troop_add_gold, "trp_player", ":paid"),
+      (str_store_party_name, s44, ":village"),
+      (assign, reg44, ":paid"),
+      (display_message, "@{s44} 村的投资分红 {reg44} 第纳尔进了你的口袋。", 0xFFCC66),
+    (try_end),
+    # --- 条目 1: 驻兵饷银与租金。饷银按 calculate_weekly_party_wage 算, 从玩家身上扣
+    # (原生每周结算只算主部队与玩家据点驻军, 这支外面的部队得自己扣); 钱不够只付实数,
+    # 不记欠账、兵也不跑, 只提示还差多少。租金到期日 (953) 到了就收 500 进金库并顺延
+    # 30 天; 没钱续租就解散部队 (兵散了)。城归玩家后停收租金 (953 -> 0), 饷银照扣。
+    # 部队不在了 (被打散) 就清掉 952/953 并提示。
+    (try_for_range, ":center2", towns_begin, towns_end),
+      (party_get_slot, ":garrison", ":center2", slot_af33_garrison_party),
+      (gt, ":garrison", 0),
+      (try_begin),
+        (neg|party_is_active, ":garrison"),
+        (party_set_slot, ":center2", slot_af33_garrison_party, 0),
+        (party_set_slot, ":center2", slot_af33_garrison_rent_day, 0),
+        (str_store_party_name, s44, ":center2"),
+        (display_message, "@你租在 {s44} 的兵没了——驻留的部队被打散了。", 0xFF6666),
+      (else_try),
+        (call_script, "script_calculate_weekly_party_wage", ":garrison"),
+        (assign, ":wage", reg0),
+        (try_begin),
+          (gt, ":wage", 0),
+          (store_troop_gold, ":gold", "trp_player"),
+          (assign, ":paid2", ":wage"),
+          (val_min, ":paid2", ":gold"),
+          (try_begin),
+            (gt, ":paid2", 0),
+            (troop_remove_gold, "trp_player", ":paid2"),
+            (str_store_party_name, s44, ":center2"),
+            (assign, reg44, ":paid2"),
+            (display_message, "@驻留在 {s44} 的兵领了 {reg44} 第纳尔饷银。", 0xFFCC66),
+          (try_end),
+          (try_begin),
+            (lt, ":paid2", ":wage"),
+            (store_sub, ":short", ":wage", ":paid2"),
+            (assign, reg45, ":short"),
+            (display_message, "@你手头的钱不够付驻留兵的饷，还差 {reg45} 第纳尔。", 0xFF6666),
+          (try_end),
+        (try_end),
+        (try_begin),
+          (party_slot_eq, ":center2", slot_town_lord, "trp_player"),
+          (party_get_slot, ":rent", ":center2", slot_af33_garrison_rent_day),
+          (gt, ":rent", 0),
+          (party_set_slot, ":center2", slot_af33_garrison_rent_day, 0),
+        (else_try),
+          (party_get_slot, ":rent2", ":center2", slot_af33_garrison_rent_day),
+          (gt, ":rent2", 0),
+          (ge, ":today", ":rent2"),
+          (try_begin),
+            (store_troop_gold, ":gold2", "trp_player"),
+            (ge, ":gold2", 500),
+            (troop_remove_gold, "trp_player", 500),
+            (party_get_slot, ":treasury", ":center2", slot_town_wealth),
+            (val_add, ":treasury", 500),
+            (party_set_slot, ":center2", slot_town_wealth, ":treasury"),
+            (store_add, ":next_rent", ":today", 30),
+            (party_set_slot, ":center2", slot_af33_garrison_rent_day, ":next_rent"),
+            (str_store_party_name, s44, ":center2"),
+            (display_message, "@你续租了 {s44} 的驻兵处，500 第纳尔进了本城金库。", 0xFFCC66),
+          (else_try),
+            (remove_party, ":garrison"),
+            (party_set_slot, ":center2", slot_af33_garrison_party, 0),
+            (party_set_slot, ":center2", slot_af33_garrison_rent_day, 0),
+            (str_store_party_name, s44, ":center2"),
+            (display_message, "@你没钱续租 {s44} 的驻兵处，留在那儿的兵散了。", 0xFF6666),
+          (try_end),
+        (try_end),
+      (try_end),
+    (try_end),
+  ]),
+
+  # v1.0 资本家 2.0 第二批 (条目 5): 每周结算到期的战争贷款 (957/958)。
+  # 只发提示消息, 不动每周结算 (budget_report) 的结构; 逾期未还的部分由
+  # af19_lord_pays 记进 874 欠账, 走原有的见面收债链路。
+  (24*7, [
+    (call_script, "script_af33_settle_warloans"),
+  ]),
+
+  # v1.0 资本家 2.0 第四批 (条目 10c): 刺客次日动手, 每天结算一单
+  # (Slot 965 > 0 是待动手的目标)。
+  (24, [
+    (call_script, "script_af33_resolve_assassin"),
+  ]),
+
+  # v1.0 资本家 2.0 第四批 (条目 9+10d): 每周结算资助的称王者 (登基返还
+  # 1.5 倍分期付、打输作废) 与情报网 (到期断网、没到期发每周简报)。
+  # 只发提示消息, 不动每周结算 (budget_report) 的结构。
+  (24*7, [
+    (call_script, "script_af33_settle_pretender"),
+    (call_script, "script_af33_intel_weekly"),
   ]),
 ]

@@ -824,5 +824,27 @@ script_af28_quest_settle = 822
 script_af28_confirm_victory = 823
 script_af28_king_plot = 824
 script_af26_collect_all_caravans = 825
+script_af29_enterprise_bonus = 826
+script_af32_guild_master = 827
+script_af33_loan_caller = 828
+script_af33_find_garrison = 829
+script_af33_faction_at_war = 830
+script_af33_center_price = 831
+script_af33_king_selling = 832
+script_af33_bribe_marshal_vote = 833
+script_af33_settle_warloans = 834
+script_af33_buy_peace_target = 835
+script_af33_gang_dividend = 836
+script_af33_find_caravan = 837
+script_af33_commission_caravan_raid = 838
+script_af33_gang_hit_caravan = 839
+script_af33_fund_pretender = 840
+script_af33_settle_pretender = 841
+script_af33_hire_assassin = 842
+script_af33_assassin_heat = 843
+script_af33_resolve_assassin = 844
+script_af33_intel_buy = 845
+script_af33_intel_brief = 846
+script_af33_intel_weekly = 847
 
 

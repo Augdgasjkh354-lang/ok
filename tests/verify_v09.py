@@ -21,10 +21,15 @@ ALLOWED_DIALOG_CHANGES={'dlga_village_elder_donate:village_elder_pretalk',  # v1
     'dlga_start:village_elder_talk.2', 'dlga_start:village_elder_talk.3',
     'dlga_start:lord_meet_neutral',  # v1.0 NPC对白 B-1/B-2/B-6: 领主初见专属招呼, 通用句加互斥条件
     'dlga_start:tavernkeeper_talk',  # v1.0 NPC对白 B-5: 酒馆老板专属招呼, 通用句加互斥条件
+    'dlga_start:mercenary_after_recruited',  # 试玩包十一 bug 修复: 雇佣兵通用行只认酒馆语境, 会抢声望>300/威名>=2 档玩家的酒馆老板问候; 加酒馆老板互斥条件
+    'dlga_start:mercenary_tavern_talk',  # 审计 13 修 2: 雇佣兵招募行同款问题, 也抢酒馆老板问候; 加酒馆老板互斥条件
     'dlga_lady_marriage_discussion:lady_proposal_refused.1',  # v1.0 NPC对白 B-7: 道德派低荣誉拒绝排除凶名
+    'dlga_lady_marriage_discussion:close_window',  # 审计 13 修 4: 接受行加凶名守卫 (neq, reg0, 2)，凶名玩家走 B-7 拒绝行
     'dlga_merchant_demand_toll:merchant_demand_toll_2', 'dlga_merchant_demand_toll:merchant_demand_toll_2.1',
     'dlga_merchant_demand_toll_accept:close_window',  # v1.0: tolls come out of the caravan's cash box
-    'dlga_mayor_investment_possible:mayor_pretalk.2'}  # v1.0 领主关系 L4: 领主好感 >= 20 时免除开企业门槛
+    'dlga_mayor_investment_possible:mayor_pretalk.2',  # v1.0 领主关系 L4: 领主好感 >= 20 时免除开企业门槛
+    'dlga_master_craftsman_auction_decide:master_craftsman_liquidation',  # v1.0 资本家第一批: 卖掉作坊时扩建等级 (Slot 944) 清零
+    'dlga_investment_summary:mayor_investment_confirm'}  # v1.0 资本家第四批: 行会大师建作坊 9 折 (只改 $enterprise_cost, 文字不动)
 # v1.0: lords, kings and towns pay the player from their real money (af19_*).
 # v1.0 第六批（十）: arena prizes and ladies' quest rewards are paid from
 # real money too (town treasury / the lady's guardian).
@@ -78,6 +83,28 @@ ALLOWED_DIALOG_CHANGES|={
 }
 # v1.0 NPC对白 B-0: append-only. Old dialogue IDs must appear in order at the
 # head of the new file; new rows may only be appended at the end.
+# 菜单摩擦点第五批 lord_talk 两轮：10 个玩家选项从 lord_talk 搬去新状态
+# lord_talk_money / lord_talk_gang，只改状态字段，条件/文本/下一状态/后果
+# 一字不动；改状态字段会改对话 ID（dlga_<from>:<to>），旧 ID 在此备案。
+# 新 ID 是 dlga_lord_talk_money:lord_af29_lend、dlga_lord_talk_money:lord_af26_letter、
+# dlga_lord_talk_money:af33_buy_center_intro、dlga_lord_talk_money:af33_fund_war、
+# dlga_lord_talk_money:af33_warloan、dlga_lord_talk_money:af33_buy_peace、
+# dlga_lord_talk_gang:lord_af27_hush、dlga_lord_talk_gang:lord_af27_submit、
+# dlga_lord_talk_gang:lord_af27_bounty、dlga_lord_talk_gang:lord_af27_inform。
+# 注：下面的对话比对只覆盖 v0.8 基线范围（2815 行），这 10 行都在基线之后，
+# 搬动本身不触发比对；此处备案是为改动留痕。
+ALLOWED_DIALOG_CHANGES |= {
+    'dlga_lord_talk:lord_af29_lend',
+    'dlga_lord_talk:lord_af26_letter',
+    'dlga_lord_talk:af33_buy_center_intro',
+    'dlga_lord_talk:af33_fund_war',
+    'dlga_lord_talk:af33_warloan',
+    'dlga_lord_talk:af33_buy_peace',
+    'dlga_lord_talk:lord_af27_hush',
+    'dlga_lord_talk:lord_af27_submit',
+    'dlga_lord_talk:lord_af27_bounty',
+    'dlga_lord_talk:lord_af27_inform',
+}
 _old=(base/'compiled/conversation.txt').read_text('utf-8').split('\n')
 _new=(data/'conversation.txt').read_text('utf-8').split('\n')
 if _old and _old[-1]=='': _old=_old[:-1]
