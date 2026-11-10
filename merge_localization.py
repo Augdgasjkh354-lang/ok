@@ -17,7 +17,10 @@ import argparse, shutil, sys
 from pathlib import Path
 
 OWNED_PREFIXES = ('menu_af', 'mno_af', 'trp_af', 'pt_af',
-                  'menu_fb', 'mno_fb', 'trp_fb', 'pt_fb', 'qstr_æ')
+                  'menu_fb', 'mno_fb', 'trp_fb', 'pt_fb', 'qstr_æ',
+                  'dlga_lord_af26_borrow:',
+                  'dlga_af33_pretender_funded:pretender_start',
+                  'dlga_af33_pretender_funded_supp:supported_pretender_pretalk')
 MERGE_SUFFIX = '.merge.csv'
 
 

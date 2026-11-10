@@ -1,7 +1,7 @@
 ﻿
 mno_fb71_full_start|满 级 开 局 （ 62级 ／ 全 属 性 63／ 全 技 能 10／ 全 熟 练 度 699） 
 mno_af26_declare_kingdom|宣 布 立 国 （ 以 地 方 领 主 之 身 称 王 ） 
-mno_af08_desk_entry|烽 烟 案 头 ： 领 地 、 战 争 与 宫 廷 消 息 
+mno_af08_desk_entry|烽 烟 案 头 （ 战 局 ／ 帮 派 ／ 委 托 ／ 宫 廷 ） 
 mno_af11_arrears_entry|清 点 拖 欠 的 饷 银 
 mno_af26_collect_all_caravans|一 键 收 取 全 部 商 队 收 益 （ {reg1} 支 商 队 ， 共 {reg0} 第 纳 尔 ） 
 mno_af20_fame_entry|听 听 人 们 怎 么 说 你 
@@ -29,9 +29,9 @@ mno_af08_town_rumor_entry|在 城 中 询 问 附 近 的 战 乱 传 闻
 mno_af17_sell_grain_entry|把 带 来 的 粮 食 卖 给 官 仓 （ 粮 仓 存 量 {reg41}%{reg42?， 饥 荒 价 ， 本 周 还 能 收 {reg43}袋 :}） 
 mno_af33_intel_entry|打 点 情 报 网 
 mno_af30_tax_farm_entry|买 下 本 镇 4 周 包 税 权 （ 5000 第 纳 尔 ） 
-mno_af34_trade_entry|经 商 赚 钱 
+mno_af34_trade_entry|经 商 与 商 队 
 mno_af34_war_entry|军 粮 与 战 事 
-mno_af34_garrison_entry|驻 兵 
+mno_af34_garrison_entry|驻 兵 管 理 
 menu_fb75_intel_book|宫 廷 政 治 情 报 簿 ^^政 治 信 用 ： {reg50}    政 治 嫌 疑 ： {reg51}/100    王 室 调 查 次 数 ： {reg52}^有 效 情 报 ： {reg53}条    有 人 欠 你 选 票 ： {reg54}笔    你 欠 人 的 选 票 ： {reg58}笔 ^^情 报 只 记 录 你 已 经 打 听 到 的 消 息 ； 过 期 线 索 会 自 动 从 本 页 隐 去 。 
 mno_fb75_book_clues|查 看 已 掌 握 的 政 治 线 索 
 mno_fb75_book_debts|查 看 欠 你 选 票 的 贵 族 
@@ -233,6 +233,7 @@ mno_af26_caravan_collect|结 算 名 下 商 队 （ 钱 箱 超 600 的 部 分
 mno_af30_town_shares_entry|入 股 本 镇 （ 10000 第 纳 尔 ， 10% 股 份 ， 已 有 {reg41}%） 
 mno_af31_bank_open_entry|开 钱 庄 （ 5000 第 纳 尔 ， 一 城 只 能 开 一 家 ） 
 mno_af31_bank_entry|去 钱 庄 看 看 （ 未 收 回 本 金 {reg41} 第 纳 尔 ） 
+mno_af36_caravan_status|组 建 商 队 须 保 持 独 立 身 份 （ 未 向 王 国 效 忠 ） 
 mno_af34_trade_back|返 回 城 镇 
 menu_af34_war|军 粮 与 战 事 — — 军 粮 委 托 、 粮 商 消 息 、 秘 密 运 粮 、 战 后 治 理 。 
 mno_af03_contract_board|战 争 承 包 商 · 军 粮 委 托 
@@ -244,6 +245,7 @@ menu_af34_garrison|驻 兵 — — 在 城 外 租 块 地 方 放 兵 ， 续 �
 mno_af33_rent_entry|租 地 方 放 兵 （ 每 月 500 第 纳 尔 ） 
 mno_af33_renew_entry|续 租 驻 兵 处 （ 500 第 纳 尔 ， 还 剩 {reg41} 天 ） 
 mno_af33_swap_entry|与 城 外 驻 留 的 兵 换 兵 
+mno_af36_garrison_owned|本 镇 归 你 ， 可 在 城 镇 首 页 管 理 驻 军 ， 无 须 另 租 地 方 
 mno_af34_garrison_back|返 回 城 镇 
 menu_af35_contact_invest|给 这 伙 匪 帮 注 资 ／ 入 股 — — 注 资 200、 500、 1000 第 纳 尔 ， 或 投 2000 入 股 ， 往 后 他 们 抢 到 钱 分 你 两 成 。 
 mno_af28_invest_200|给 这 伙 匪 帮 注 资 200 第 纳 尔 
@@ -296,3 +298,5 @@ mno_af01_village_status|查 看 地 方 战 乱 与 援 助
 mno_af12_case_entry|有 村 民 请 你 主 持 公 道 
 mno_af10_village_word|和 村 长 聊 聊 附 近 的 动 静 
 mno_af36_village_affairs_back|返 回 村 庄 
+menu_af36_smuggler|这 是 接 头 人 派 出 的 走 私 队 ， 正 在 赶 往 目 的 地 。 帮 派 的 买 卖 和 招 安 应 找 真 正 的 首 领 商 谈 。 
+mno_af36_smuggler_leave|让 他 们 继 续 赶 路 ， 继 续 护 送 

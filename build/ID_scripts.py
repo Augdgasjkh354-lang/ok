@@ -846,5 +846,7 @@ script_af33_resolve_assassin = 844
 script_af33_intel_buy = 845
 script_af33_intel_brief = 846
 script_af33_intel_weekly = 847
+script_af36_back_rebel_lords = 848
+script_af37_reserved_greeting = 849
 
 

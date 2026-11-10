@@ -1420,3 +1420,8 @@ lord_talk_money
 lord_talk_gang
 af33_pretender_abandoned
 af33_pretender_abandoned_supp
+lord_af26_return_choose
+lord_af26_return_done
+af37_lord_affairs
+af37_lord_personal
+af37_lord_politics

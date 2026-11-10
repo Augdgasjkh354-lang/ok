@@ -24,6 +24,16 @@ with tempfile.TemporaryDirectory() as tmp:
     (mod / 'module.ini').write_text('')
     original = '﻿trp_swadian_knight|斯 瓦 迪 亚 骑 士　\ntrp_af04_greywolf_captain|旧名\n'
     (cns / 'troops.csv').write_text(original, 'utf-8')
+    loan_key = 'dlga_lord_af26_borrow:lord_talk'
+    protected_key = 'dlga_village_elder_donate:village_elder_pretalk'
+    funding_keys = ('dlga_af33_pretender_funded:pretender_start',
+                    'dlga_af33_pretender_funded_supp:supported_pretender_pretalk')
+    old_dialogs = '\ufeff\n' + loan_key + '|旧借兵说明\n' + protected_key + '|玩家原有译文\n'
+    old_dialogs += ''.join(key + '|旧资助说明\n' for key in funding_keys)
+    (cns / 'dialogs.csv').write_text(old_dialogs, 'utf-8')
+    new_dialogs = dict(line.split('|', 1) for line in
+                       (root / 'localization/cns/dialogs.csv').read_text('utf-8-sig').splitlines() if '|' in line)
+    assert loan_key in new_dialogs and protected_key in new_dialogs
 
     run(mod)
     raw = (cns / 'troops.csv').read_bytes()
@@ -33,12 +43,19 @@ with tempfile.TemporaryDirectory() as tmp:
     assert 'trp_af04_greywolf_captain|裂 旗　' in merged, 'mod-owned key not refreshed'
     assert 'trp_af04_saltraven_captain_pl|' in merged, 'new key not inserted'
     assert (cns / 'troops.csv.bak').read_text('utf-8') == original
+    dialog_merged = (cns / 'dialogs.csv').read_text('utf-8-sig')
+    assert loan_key + '|' + new_dialogs[loan_key] in dialog_merged, 'old loan terms must be refreshed on upgrade'
+    for key in funding_keys:
+        assert key + '|' + new_dialogs[key] in dialog_merged, 'funding terms must update'
+    assert protected_key + '|玩家原有译文' in dialog_merged, 'unrelated dialogue translation overwritten'
+    assert (cns / 'dialogs.csv.bak').read_text('utf-8') == old_dialogs
     for name in ('game_menus.csv', 'quick_strings.csv', 'party_templates.csv'):
         assert not (cns / name).exists(), f'{name} must not be created (shadows native Chinese)'
 
     run(mod)  # idempotent, and the first backup is never overwritten
     assert (cns / 'troops.csv').read_text('utf-8-sig') == merged
     assert (cns / 'troops.csv.bak').read_text('utf-8') == original
+    assert (cns / 'dialogs.csv').read_text('utf-8-sig') == dialog_merged
 
     gbk = '兵|骑士\n'.encode('gbk')
     (cns / 'troops.csv').write_bytes(gbk)
@@ -74,6 +91,9 @@ with tempfile.TemporaryDirectory() as tmp:
             assert bat.isascii() and b'\r\n' in bat and b'\n' not in bat.replace(b'\r\n', b'')
             ps1 = z.read(loc + 'merge_localization.ps1')
             assert ps1.startswith(b'\xef\xbb\xbf'), 'ps1 needs UTF-8 BOM for Windows PowerShell 5.1'
+            assert b"'dlga_lord_af26_borrow:'" in ps1, 'Windows merger must refresh the same loan terms'
+            for key in funding_keys:
+                assert key.encode('ascii') in ps1, 'Windows funding rules differ'
             assert z.read('FewerBandits/scripts.txt') == (root / 'game-data' / 'scripts.txt').read_bytes()
 
         # The packaged Python merger must work from the package layout (*.merge.csv).
@@ -84,9 +104,11 @@ with tempfile.TemporaryDirectory() as tmp:
         (mod3 / 'languages' / 'cns').mkdir(parents=True)
         (mod3 / 'module.ini').write_text('')
         (mod3 / 'languages' / 'cns' / 'troops.csv').write_text(original, 'utf-8')
+        (mod3 / 'languages' / 'cns' / 'dialogs.csv').write_text(old_dialogs, 'utf-8')
         subprocess.run([sys.executable, str(ext / '汉化_需合并_不要直接复制' / 'merge_localization.py'), str(mod3)],
                        check=True, capture_output=True)
         assert 'trp_af04_blackpine_captain|' in (mod3 / 'languages' / 'cns' / 'troops.csv').read_text('utf-8-sig')
+        assert (mod3 / 'languages' / 'cns' / 'dialogs.csv').read_text('utf-8-sig') == dialog_merged
         assert not list((mod3 / 'languages' / 'cns').glob('*.merge.csv'))
 
     with zipfile.ZipFile(next(out.glob('烽烟与暗流-*-从v7.4累计包.zip'))) as z:
