@@ -15013,13 +15013,45 @@ scripts = [
       (assign, ":total_change", reg0),
       #Adding the earnings to the wealth (maximum changed price is the earning)
       (val_div, ":total_change", 2),
-      # v1.0 领主关系与独立玩法·第三波 I8: 玩家派系商队的交易收益进自己的钱箱（只加正收益，不设上限）。
+      # 审计 13 F-05 修复: 原版的 :total_change 只是按物价变动算出的数, 不出自任何人的口袋。
+      # 凡是要变成真钱的利润 (玩家组建的商队进钱箱、玩家入股的商队分红), 改由成交城镇的商人
+      # (slot_town_merchant) 掏钱: 最多 :total_change, 单次不超商人身上金币的 1/4; 商人的钱
+      # 每周由 af24_settle_stock 按周转金和金库结算。白送的商队 (Slot 968 = 1) 不拿钱。
+      # 原版关税 (下面按 :total_change 算) 不变。
+      (assign, ":af42_profit", 0),
       (try_begin),
         (gt, ":total_change", 0),
+        (party_slot_eq, ":party_no", slot_party_type, spt_kingdom_caravan),
+        (store_faction_of_party, ":af42_fac", ":party_no"),
+        (assign, ":af42_pay", 0),
+        (try_begin),
+          (eq, ":af42_fac", "fac_player_supporters_faction"),
+          (party_slot_eq, ":party_no", slot_af42_free_caravan, 0),
+          (assign, ":af42_pay", 1),
+        (else_try),
+          (neq, ":af42_fac", "fac_player_supporters_faction"),
+          (party_slot_ge, ":party_no", slot_af32_caravan_shares, 1),
+          (assign, ":af42_pay", 1),
+        (try_end),
+        (eq, ":af42_pay", 1),
+        (party_get_slot, ":af42_merchant", ":center_no", slot_town_merchant),
+        (gt, ":af42_merchant", 0),
+        (store_troop_gold, ":af42_gold", ":af42_merchant"),
+        (store_div, ":af42_cap", ":af42_gold", 4),
+        (assign, ":af42_profit", ":total_change"),
+        (val_min, ":af42_profit", ":af42_cap"),
+        (val_max, ":af42_profit", 0),
+        (gt, ":af42_profit", 0),
+        (troop_remove_gold, ":af42_merchant", ":af42_profit"),
+      (try_end),
+      # v1.0 领主关系与独立玩法·第三波 I8: 玩家派系商队的交易收益进自己的钱箱（只加正收益，不设上限）。
+      # 审计 13 F-05: 收益改为城里商人实付的 :af42_profit; 白送的商队这一项为 0, 什么都不加。
+      (try_begin),
+        (gt, ":af42_profit", 0),
         (store_faction_of_party, ":caravan_faction", ":party_no"),
         (eq, ":caravan_faction", "fac_player_supporters_faction"),
         (party_get_slot, ":purse", ":party_no", slot_af18_caravan_purse),
-        (val_add, ":purse", ":total_change"),
+        (val_add, ":purse", ":af42_profit"),
         (party_set_slot, ":party_no", slot_af18_caravan_purse, ":purse"),
       (else_try),
         # v1.0 资本家第四批 (条目 8): 玩家入股的王国商队交易赚钱时, 先把利润进钱箱 (只对有股份的商队;
@@ -15027,7 +15059,8 @@ scripts = [
         # (分红不是欠账, 照 I2 悬赏的先例); 不设金库 1/4 上限 (1/4 规矩针对城镇金库, 钱箱不是金库)。
         # 分红是商队交易赚的钱, 不是凭空生钱。玩家自己的商队 (fac_player_supporters_faction) 不走这里,
         # 利润本来就全进自己的钱箱。
-        (gt, ":total_change", 0),
+        # 审计 13 F-05: 利润改为城里商人实付的 :af42_profit (见上)。
+        (gt, ":af42_profit", 0),
         (party_slot_eq, ":party_no", slot_party_type, spt_kingdom_caravan),
         (store_faction_of_party, ":caravan_faction", ":party_no"),
         (neq, ":caravan_faction", "fac_player_supporters_faction"),
@@ -15035,8 +15068,8 @@ scripts = [
         (gt, ":shares", 0),
         (party_get_slot, ":purse", ":party_no", slot_af18_caravan_purse),
         (val_max, ":purse", 0),
-        (val_add, ":purse", ":total_change"),
-        (store_mul, ":dividend", ":total_change", ":shares"),
+        (val_add, ":purse", ":af42_profit"),
+        (store_mul, ":dividend", ":af42_profit", ":shares"),
         (val_div, ":dividend", 100),
         (val_min, ":dividend", ":purse"),
         (gt, ":dividend", 0),
@@ -22041,6 +22074,14 @@ scripts = [
           (party_set_slot, ":result", slot_party_home_center, ":spawn_center"),
           (party_set_slot, ":result", slot_party_last_traded_center, ":spawn_center"),
           (call_script, "script_af18_caravan_fund", ":result", ":spawn_center"),  # v1.0: capital from the town
+          # 审计 13 F-05: 引擎白送给玩家阵营的商队打上记号, 交易利润不进钱箱、不算进 36 支上限。
+          # 部队号会被回收, Slot 不会自动清零, 所以两种情况都写。
+          (try_begin),
+            (eq, ":faction_no", "fac_player_supporters_faction"),
+            (party_set_slot, ":result", slot_af42_free_caravan, 1),
+          (else_try),
+            (party_set_slot, ":result", slot_af42_free_caravan, 0),
+          (try_end),
         (try_end),
         (party_set_slot, ":result", slot_party_type, ":party_type"),
         (party_set_slot, ":result", slot_party_ai_state, spai_undefined),
@@ -59552,6 +59593,7 @@ scripts = [
       (party_set_slot, ":caravan", slot_party_type, spt_kingdom_caravan),
       (party_set_slot, ":caravan", slot_party_ai_state, spai_undefined),
       (party_set_slot, ":caravan", slot_af18_caravan_purse, af18_caravan_capital),
+      (party_set_slot, ":caravan", slot_af42_free_caravan, 0),  # 审计 13 F-05: 玩家花钱组建的, 清掉可能残留的记号
       (party_add_template, ":caravan", ":reinf_b"),
       (party_add_template, ":caravan", ":reinf_b"),
       (party_set_ai_behavior, ":caravan", ai_bhvr_travel_to_party),
@@ -59592,6 +59634,7 @@ scripts = [
       (party_slot_eq, ":party", slot_party_type, spt_kingdom_caravan),
       (store_faction_of_party, ":fac", ":party"),
       (eq, ":fac", "fac_player_supporters_faction"),
+      (party_slot_eq, ":party", slot_af42_free_caravan, 0),  # 审计 13 F-05: 白送的不算
       (val_add, ":count", 1),
     (try_end),
     (assign, reg0, ":count"),
