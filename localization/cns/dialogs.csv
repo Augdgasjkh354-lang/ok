@@ -194,3 +194,17 @@ dlga_lord_talk_money:af43_press|陛 下 ， 这 笔 账 再 拖 下 去 ， 我 
 dlga_af43_press:lord_pretalk|… … 你 这 是 拿 刀 架 在 我 脖 子 上 。 好 ， {reg41} 第 纳 尔 ， 拿 去 。 这 笔 账 我 记 下 了 ， 不 止 是 钱 的 账 。 
 dlga_af43_press:lord_pretalk.1|你 尽 管 去 。 国 库 里 一 文 都 没 有 ， 你 逼 我 也 逼 不 出 来 。 
 dlga_af43_press:lord_pretalk.2|你 已 经 在 给 那 个 人 送 钱 了 ， 还 有 脸 来 逼 我 ？ 滚 出 去 。 
+dlga_fb73_private_options:af46_broker_result|这 次 评 议 ， 请 你 支 持 {s11}。 
+dlga_fb73_private_options:af46_broker_result.1|这 次 评 议 ， 请 你 支 持 {s11}。 这 {reg40}第 纳 尔 算 我 一 点 心 意 。 
+dlga_af46_broker_result:fb73_private_options|看 在 你 的 面 子 上 ， 这 一 票 我 投 给 {s11}。 可 别 让 我 后 悔 。 
+dlga_af46_broker_result:fb73_private_options.1|好 吧 。 钱 我 收 下 ， 票 投 给 {s11}。 
+dlga_af46_broker_result:fb73_private_options.2|{s11}？ 我 宁 可 把 票 投 给 马 夫 。 
+dlga_af46_broker_result:fb73_private_options.3|这 事 我 得 自 己 掂 量 ， 你 就 别 替 人 操 心 了 。 
+dlga_lord_talk_court:af46_grieve|你 最 近 好 像 不 太 痛 快 。 
+dlga_af46_grieve:af46_grieve|{s60}是 我 们 一 起 打 下 来 的 ， 陛 下 却 只 记 得 自 己 的 人 。 
+dlga_af46_grieve:af46_grieve.1|这 一 回 陛 下 的 封 赏 ， 没 有 我 的 份 。 
+dlga_af46_grieve:af46_grieve_pledge|下 次 评 议 ， 我 站 在 你 这 边 。 
+dlga_af46_grieve_pledge:lord_talk_court|这 话 我 记 下 了 。 到 时 候 可 别 装 没 看 见 。 
+dlga_af46_grieve:af46_grieve_gold|我 出 1500 第 纳 尔 ， 帮 你 撑 过 这 阵 子 。 
+dlga_af46_grieve_gold:lord_talk_court|… … 这 份 情 我 领 了 。 
+dlga_af46_grieve:lord_talk_court|这 是 陛 下 的 决 定 ， 我 不 便 多 说 。 

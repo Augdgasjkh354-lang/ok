@@ -15158,6 +15158,8 @@ game_menus = [
    "none",
    [ (call_script, "script_fb75_book_overview") ],
    [
+     ("af46_agenda_entry", [], "眼下的议题",
+      [(jump_to_menu, "mnu_af46_agenda")]),
      ("fb75_book_clues", [(gt, reg53, 0)], "查看已掌握的政治线索",
       [(call_script, "script_fb75_find_next_intel", -1),
        (assign, "$g_fb75_view_lord", reg0),
@@ -18106,5 +18108,13 @@ game_menus = [
    "none", [(call_script, "script_af37_ledger")],
    [
      ("af37_ledger_back", [], "返回烽烟案头", [(jump_to_menu, "mnu_af08_desk")]),
+   ]),
+
+  # v1.0 政治 1.0 第一批: 眼下的议题 (只读)。入口在 mnu_fb75_intel_book。
+  ("af46_agenda", 0,
+   "{s40}",
+   "none", [(call_script, "script_af46_agenda_text")],
+   [
+     ("af46_agenda_back", [], "返回情报簿", [(jump_to_menu, "mnu_fb75_intel_book")]),
    ]),
 ]

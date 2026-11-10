@@ -861,5 +861,8 @@ script_af43_rival_pretender = 859
 script_af43_press_king = 860
 script_af44_home_remark = 861
 script_af45_prosperity_bonus = 862
+script_af46_agenda_text = 863
+script_af46_broker_vote = 864
+script_af46_broker_settle = 865
 
 

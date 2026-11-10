@@ -1434,3 +1434,7 @@ af42_cut_intro
 af42_cut_choose
 af42_cut_done
 af43_press
+af46_broker_result
+af46_grieve
+af46_grieve_pledge
+af46_grieve_gold

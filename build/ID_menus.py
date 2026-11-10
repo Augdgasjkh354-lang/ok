@@ -266,3 +266,4 @@ menu_af35_network_fund = 264
 menu_af35_network_provoke = 265
 menu_af36_village_affairs = 266
 menu_af37_ledger = 267
+menu_af46_agenda = 268
