@@ -4357,4 +4357,11 @@ simple_triggers = [
       (try_end),
     (try_end),
   ]),
+
+  # v1.0 资本家 2.0 第二批 (条目 5): 每周结算到期的战争贷款 (957/958)。
+  # 只发提示消息, 不动每周结算 (budget_report) 的结构; 逾期未还的部分由
+  # af19_lord_pays 记进 874 欠账, 走原有的见面收债链路。
+  (24*7, [
+    (call_script, "script_af33_settle_warloans"),
+  ]),
 ]
