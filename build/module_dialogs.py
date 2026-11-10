@@ -21392,6 +21392,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
 
   [anyone, "start", [
   (eq, "$talk_context", tc_tavern_talk),
+  (neg|is_between, "$g_talk_troop", tavernkeepers_begin, tavernkeepers_end),
   ],
    "Any orders, {sir/madam}?", "mercenary_after_recruited", []],
 
