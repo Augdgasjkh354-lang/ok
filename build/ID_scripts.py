@@ -825,5 +825,6 @@ script_af28_confirm_victory = 823
 script_af28_king_plot = 824
 script_af26_collect_all_caravans = 825
 script_af29_enterprise_bonus = 826
+script_af32_guild_master = 827
 
 

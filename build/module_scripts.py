@@ -15007,6 +15007,31 @@ scripts = [
         (party_get_slot, ":purse", ":party_no", slot_af18_caravan_purse),
         (val_add, ":purse", ":total_change"),
         (party_set_slot, ":party_no", slot_af18_caravan_purse, ":purse"),
+      (else_try),
+        # v1.0 资本家第四批 (条目 8): 玩家入股的王国商队交易赚钱时, 先把利润进钱箱 (只对有股份的商队;
+        # 没股份的商队钱箱行为不变), 再按股比从钱箱里扣分红给玩家。钱箱不够只给实数, 不记欠账
+        # (分红不是欠账, 照 I2 悬赏的先例); 不设金库 1/4 上限 (1/4 规矩针对城镇金库, 钱箱不是金库)。
+        # 分红是商队交易赚的钱, 不是凭空生钱。玩家自己的商队 (fac_player_supporters_faction) 不走这里,
+        # 利润本来就全进自己的钱箱。
+        (gt, ":total_change", 0),
+        (party_slot_eq, ":party_no", slot_party_type, spt_kingdom_caravan),
+        (store_faction_of_party, ":caravan_faction", ":party_no"),
+        (neq, ":caravan_faction", "fac_player_supporters_faction"),
+        (party_get_slot, ":shares", ":party_no", slot_af32_caravan_shares),
+        (gt, ":shares", 0),
+        (party_get_slot, ":purse", ":party_no", slot_af18_caravan_purse),
+        (val_max, ":purse", 0),
+        (val_add, ":purse", ":total_change"),
+        (store_mul, ":dividend", ":total_change", ":shares"),
+        (val_div, ":dividend", 100),
+        (val_min, ":dividend", ":purse"),
+        (gt, ":dividend", 0),
+        (val_sub, ":purse", ":dividend"),
+        (party_set_slot, ":party_no", slot_af18_caravan_purse, ":purse"),
+        (troop_add_gold, "trp_player", ":dividend"),
+        (str_store_party_name, s44, ":center_no"),
+        (assign, reg44, ":dividend"),
+        (display_message, "@你入股的商队在 {s44} 做成一笔买卖, 按股分了你 {reg44} 第纳尔。", 0xFFCC66),
       (try_end),
       (str_store_party_name, s1, ":party_no"),
       (str_store_party_name, s2, ":center_no"),
@@ -60221,6 +60246,28 @@ scripts = [
     (val_add, reg0, ":scl"),
     (assign, reg1, ":exp"),
     (assign, reg2, ":scl"),
+  ]),
+
+  # ========== v1.0 资本家第四批 (条目 9): 行会大师判定 ==========
+  # No params. Output: reg0 = 1 when the player owns >= 5 completed workshops
+  # AND carries >= 50000 denars; else 0. reg1 = number of completed workshops.
+  # "Completed" follows the batch-1 scale rule: days_until_complete < 1.
+  # reg0 is assigned last (later native calls can clobber regs).
+  ("af32_guild_master", [
+    (assign, ":count", 0),
+    (try_for_range, ":center", centers_begin, centers_end),
+      (party_slot_ge, ":center", slot_center_player_enterprise, 1),
+      (neg|party_slot_ge, ":center", slot_center_player_enterprise_days_until_complete, 1),
+      (val_add, ":count", 1),
+    (try_end),
+    (store_troop_gold, ":gold", "trp_player"),
+    (assign, reg1, ":count"),
+    (assign, reg0, 0),
+    (try_begin),
+      (ge, ":count", 5),
+      (ge, ":gold", 50000),
+      (assign, reg0, 1),
+    (try_end),
   ]),
 ]
 

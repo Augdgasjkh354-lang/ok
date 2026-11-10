@@ -22447,6 +22447,14 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
     #(store_mul, "$enterprise_cost", ":base_price", ":number_runs"),
     #(val_mul, "$enterprise_cost", 5),    
     (item_get_slot, "$enterprise_cost", "$enterprise_production", slot_item_enterprise_building_cost),
+    # v1.0 资本家第四批 (条目 9): 行会大师建作坊 9 折; 折扣算进 $enterprise_cost 与 reg7, 报价与实扣一致。
+    # 10 种作坊造价都是 500 的倍数, x9/10 没有余数。确认行与购买行都读 $enterprise_cost, 不用再改。
+    (call_script, "script_af32_guild_master"),
+    (try_begin),
+      (eq, reg0, 1),
+      (val_mul, "$enterprise_cost", 9),
+      (val_div, "$enterprise_cost", 10),
+    (try_end),
   
     (assign, reg7, "$enterprise_cost"),
 
@@ -27211,5 +27219,53 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   ]],
   [anyone|plyr,"craftsman_af31_hire_choose", [], "算了, 先不雇。", "master_craftsman_pretalk",[]],
   [anyone,"craftsman_af31_hire_done", [], "好, 人手这就安排上。作坊里人多了, 货也出得快了。", "master_craftsman_pretalk",[]],
+
+  # v1.0 资本家第四批 (条目 8): 野外遭遇王国商队时入股。2000 第纳尔买一成股份, 最多三成;
+  # 买股份的钱进商队钱箱 (Slot 873, 真实转账); 股份记商队 Party Slot 951。只在野外遭遇时出现
+  # (tc_party_encounter), 不对自己名下的商队开放 (fac_player_supporters_faction 排除),
+  # 关系为负的商队也不卖股份。商队被打掉 / 解散时股份作废, 不退钱 (Slot 随部队消失)。
+  [anyone|plyr,"merchant_talk", [
+    (eq, "$talk_context", tc_party_encounter),
+    (party_slot_eq, "$g_encountered_party", slot_party_type, spt_kingdom_caravan),
+    (neq, "$g_encountered_party_faction", "fac_player_supporters_faction"),
+    (ge, "$g_encountered_party_relation", 0),
+    (neg|party_slot_ge, "$g_encountered_party", slot_af32_caravan_shares, 30),
+    (store_troop_gold, ":gold", "trp_player"),
+    (ge, ":gold", 2000),
+  ], "入股这支商队。", "caravan_af32_shares",[]],
+  [anyone,"caravan_af32_shares", [
+    (party_get_slot, ":shares", "$g_encountered_party", slot_af32_caravan_shares),
+    (store_div, reg42, ":shares", 10),
+  ], "入股？行啊, 你出钱, 商队赚钱了就按股分你。一成股份 2000 第纳尔, 最多买到三成。如今你在这支商队里已经占了 {reg42} 成。丑话说在前头: 商队要是被人打散了, 股份就没了, 钱也不退。", "caravan_af32_shares_choose",[]],
+  [anyone|plyr,"caravan_af32_shares_choose", [
+    (neg|party_slot_ge, "$g_encountered_party", slot_af32_caravan_shares, 30),
+    (store_troop_gold, ":gold", "trp_player"),
+    (ge, ":gold", 2000),
+  ], "买一成股份, 花 2000 第纳尔。", "caravan_af32_shares_done",[
+    (troop_remove_gold, "trp_player", 2000),
+    (party_get_slot, ":purse", "$g_encountered_party", slot_af18_caravan_purse),
+    (val_add, ":purse", 2000),
+    (party_set_slot, "$g_encountered_party", slot_af18_caravan_purse, ":purse"),
+    (party_get_slot, ":shares", "$g_encountered_party", slot_af32_caravan_shares),
+    (val_add, ":shares", 10),
+    (val_min, ":shares", 30),
+    (party_set_slot, "$g_encountered_party", slot_af32_caravan_shares, ":shares"),
+    (store_div, reg42, ":shares", 10),
+    (display_message, "@你花 2000 第纳尔买下这支商队一成股份, 如今共占 {reg42} 成。商队每次交易赚钱, 就按股从钱箱里分你一份。", 0x66FF66),
+  ]],
+  [anyone|plyr,"caravan_af32_shares_choose", [], "算了, 先不买。", "merchant_pretalk",[]],
+  [anyone,"caravan_af32_shares_done", [], "好, 钱收下了。商队跑一趟赚了钱, 就有你一份。", "merchant_pretalk",[]],
+
+  # v1.0 资本家第四批 (条目 9): 行会大师称号。名下已建成作坊 >= 5 家且身上现金 >= 50000 时,
+  # 镇长对话里出现这行; 称号本身只是一句对话, 不另占 Slot。建作坊 9 折 (见 investment_summary)
+  # 与作坊利润 +5% (见 budget_report) 都由 af32_guild_master 现算。贵版本 (每城第二家作坊) 不做。
+  [anyone|plyr,"mayor_talk", [
+    (call_script, "script_af32_guild_master"),
+    (eq, reg0, 1),
+  ], "以行会大师的身份和你谈谈。", "mayor_af32_guild",[]],
+  [anyone,"mayor_af32_guild", [
+    (call_script, "script_af32_guild_master"),
+    (assign, reg41, reg1),
+  ], "原来是行会大师大人！全卡拉迪亚的作坊主都听过你的名号——你名下已有 {reg41} 家作坊了。以后你在任何城镇建作坊, 行会都给你打九折, 作坊每周的利也多算你半成。", "mayor_pretalk",[]],
 
 ]
