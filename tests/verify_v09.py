@@ -128,6 +128,12 @@ ALLOWED_DIALOG_CHANGES |= {
 ALLOWED_DIALOG_CHANGES |= {
     'dlga_mayor_af33_beg_choose:mayor_af33_beg_done',
 }
+# 开场白文案接入 (Fable af39): 存变量行调 af39_lord_remark / af39_town_remark，
+# 镇长通用问候加 (neq, "$g_comment_found", 2) 后 ID 顺延一格 (mayor_begin.1)。
+ALLOWED_DIALOG_CHANGES |= {
+    'dlga_start:close_window',
+    'dlga_start:mayor_begin.1',
+}
 _old=(base/'compiled/conversation.txt').read_text('utf-8').split('\n')
 _new=(data/'conversation.txt').read_text('utf-8').split('\n')
 if _old and _old[-1]=='': _old=_old[:-1]
