@@ -3064,14 +3064,6 @@ game_menus = [
            (change_screen_return),
         ]
        ),
-      ("af07_world_entry", [], "烽烟与暗流：卡拉迪亚战局总览", [(jump_to_menu, "mnu_af07_world")]),
-      ("af04_network_entry", [], "地方匪帮与黑市情报", [(jump_to_menu, "mnu_af04_network")]),
-      ("af05_ledger_entry", [], "战争与宫廷：秘密军粮案卷", [(jump_to_menu, "mnu_af05_ledger")]),
-      # Ashfall v0.3: inspect active contract without visiting an office.
-      ("af03_field_journal", [], "\u519b\u4e8b\u59d4\u6258\u8bb0\u5f55", [(jump_to_menu, "mnu_af03_journal")]),
-      # v7.5: non-cheat, read-only court records.
-      ("fb75_intel_book", [], "宫廷政治情报簿",
-       [(jump_to_menu, "mnu_fb75_intel_book")]),
       ("af08_desk_entry", [], "烽烟案头：领地、战争与宫廷消息", [(jump_to_menu, "mnu_af08_desk")]),
       ("af11_arrears_entry", [(call_script, "script_af11_merc_current_owed"), (gt, reg0, 0)],
        "清点拖欠的饷银", [(jump_to_menu, "mnu_af11_arrears")]),
