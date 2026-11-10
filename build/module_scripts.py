@@ -61302,6 +61302,27 @@ scripts = [
     (try_end),
     (assign, reg0, ":spent"),
   ]),
+
+  # Reserved start greetings are appended after Native's generic dialogue rows.
+  # Generic combat/free-chat fallbacks must yield to these identities instead
+  # of intercepting them. reg0=1 reserved, 0 ordinary fallback may handle it.
+  ("af37_reserved_greeting", [
+    (assign, ":reserved", 0),
+    (try_begin),
+      (this_or_next|is_between, "$g_talk_troop", tavernkeepers_begin, tavernkeepers_end),
+      (is_between, "$g_talk_troop", village_elders_begin, village_elders_end),
+      (assign, ":reserved", 1),
+    (else_try),
+      (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
+      (eq, "$g_talk_troop_met", 0),
+      (ge, "$g_talk_troop_faction_relation", 0),
+      (le, "$talk_context", tc_siege_commander),
+      (call_script, "script_af25_lord_first_greeting"),
+      (gt, reg0, 0),
+      (assign, ":reserved", 1),
+    (try_end),
+    (assign, reg0, ":reserved"),
+  ]),
 ]
 
 

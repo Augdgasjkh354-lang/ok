@@ -127,6 +127,34 @@ ALLOWED_DIALOG_CHANGES |= {
     'dlga_af33_pretender_funded_supp:supported_pretender_pretalk',
     'dlga_lord_af26_return:lord_af26_return_choose',
 }
+# 试玩包 13 对话分层与身份分流：保留旧行及 ID，仅停用旧入口。
+ALLOWED_DIALOG_CHANGES |= {
+    'dlga_start:village_elder_talk',
+    'dlga_start:battle_reason_stated',
+    'dlga_start:party_encounter_hostile_attacker',
+    'dlga_start:party_encounter_hostile_defender',
+    'dlga_start:battle_reason_stated.1',
+    'dlga_start:free',
+    'dlga_start:threaten_1',
+    'dlga_lord_talk:fb7_memory_answer',
+    'dlga_lord_talk:fb71_compact_answer',
+    'dlga_lord_talk:fb72_claim_answer',
+    'dlga_lord_talk:fb73_private_entry',
+    'dlga_lord_talk:fb74_gossip_reply',
+    'dlga_lord_talk:fb74_report_reply',
+    'dlga_lord_talk:lord_af26_intel',
+    'dlga_lord_talk:lord_af26_intro',
+    'dlga_lord_talk:lord_af26_borrow',
+    'dlga_lord_talk:lord_af26_return',
+    'dlga_lord_talk:lord_af26_feast',
+    'dlga_lord_talk:lord_af26_hunt',
+    'dlga_lord_talk:lord_af26_sanctuary',
+    'dlga_lord_talk:lord_af26_mediate',
+    'dlga_lord_talk:lord_talk_money',
+    'dlga_lord_talk:lord_talk_gang',
+    'dlga_lord_talk_money:lord_pretalk',
+    'dlga_lord_talk_gang:lord_pretalk',
+}
 _old=(base/'compiled/conversation.txt').read_text('utf-8').split('\n')
 _new=(data/'conversation.txt').read_text('utf-8').split('\n')
 if _old and _old[-1]=='': _old=_old[:-1]
@@ -209,6 +237,32 @@ for home,limit,targets in (
 for option in menu_nodes['town'].elts[5].elts:
     if option.elts[0].value in ('af34_trade_entry','af34_war_entry','af34_garrison_entry'):
         assert 'store_troop_gold' not in ast.get_source_segment(menu_source,option.elts[1])
+# Dialogue regrouping must preserve access while exposing only one new home
+# entry; generic fallbacks must yield to tavern/elder/special lord greetings.
+dialog_source=(current/'module_dialogs.py').read_text('utf8')
+dialog_ast=ast.parse(dialog_source)
+dialog_rows=next(n.value.elts for n in dialog_ast.body if isinstance(n,ast.Assign)
+                 and any(isinstance(t,ast.Name) and t.id=='dialogs' for t in n.targets))
+def disabled(row):
+    return any(ast.dump(op)==ast.dump(ast.parse('(eq, 1, 0)',mode='eval').body)
+               for op in row.elts[2].elts)
+new_targets={'fb7_memory_answer','fb71_compact_answer','fb72_claim_answer','fb73_private_entry',
+             'fb74_gossip_reply','fb74_report_reply','lord_af26_intel','lord_af26_intro',
+             'lord_af26_borrow','lord_af26_return','lord_af26_feast','lord_af26_hunt',
+             'lord_af26_sanctuary','lord_af26_mediate','lord_talk_money','lord_talk_gang'}
+for row in dialog_rows:
+    if row.elts[1].value=='lord_talk' and row.elts[4].value in new_targets:
+        assert disabled(row), ('crowded lord home',row.lineno)
+    if row.elts[1].value=='start' and (row.elts[4].value in
+        ('party_encounter_hostile_attacker','party_encounter_hostile_defender','free','threaten_1')
+        or row.elts[3].value in ('I will drink from your skull!','Surrender or die. Make your choice')):
+        assert 'script_af37_reserved_greeting' in ast.get_source_segment(dialog_source,row.elts[2])
+reached={'lord_talk'}
+for _ in range(3):
+    reached |= {r.elts[4].value for r in dialog_rows if r.elts[1].value in reached and not disabled(r)}
+assert new_targets<=reached, ('lost grouped lord actions',new_targets-reached)
+assert sum(r.elts[1].value=='lord_talk' and r.elts[4].value=='af37_lord_affairs'
+           and not disabled(r) for r in dialog_rows)==1
 print('VERIFY_V09_OK')
 print('Original scripts preserved:',len([x for x in (base/'ID_scripts.py').read_text('utf8').splitlines() if x.strip()]))
 print('New scripts:',len([x for x in (current/'ID_scripts.py').read_text('utf8').splitlines() if x.strip()])-len([x for x in (base/'ID_scripts.py').read_text('utf8').splitlines() if x.strip()]))

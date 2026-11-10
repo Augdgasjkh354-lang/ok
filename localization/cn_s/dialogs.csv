@@ -2,20 +2,16 @@
 dlga_village_elder_talk:village_elder_donate|我 想 给 村 子 捐 点 钱 （ 500 第 纳 尔 ） 。 
 dlga_village_elder_donate:village_elder_pretalk|多 谢 您 的 慷 慨 ， {先 生 /夫 人 }！ 这 500 第 纳 尔 一 定 会 用 在 村 子 最 需 要 的 地 方 ， 您 是 我 们 永 远 的 朋 友 。 
 dlga_village_elder_recruit_start:village_elder_recruit_decision|我 想 如 果 你 能 为 {reg7?他 们 每 个 人 的 装 备 :他 的 装 备 }付 {reg6}第 纳 尔 的 话 ， 将 会 有 {reg5}个 人 跳 出 来 争 取 这 个 机 会 。 这 个 中 你 的 意 吧 ？ 
-dlga_lord_talk:fb7_memory_answer|你 还 记 得 我 们 过 去 的 恩 怨 吗 ？ 
 dlga_fb7_memory_answer:lord_pretalk|你 放 走 过 我 {reg51}次 ， 也 囚 禁 过 我 {reg52}次 。 我 对 你 的 仇 怨 有 {reg54}之 深 ， 家 族 之 恨 还 有 {reg55}。 这 笔 账 ， 我 不 会 忘 。 
 dlga_fb7_memory_answer:lord_pretalk.1|你 放 走 过 我 {reg51}次 、 囚 禁 我 {reg52}次 。 我 欠 你 的 恩 情 是 {reg53}， 旧 怨 是 {reg54}。 你 的 仁 慈 ， 我 记 得 。 
 dlga_fb7_memory_answer:lord_pretalk.2|我 记 得 你 放 走 我 {reg51}次 ， 囚 禁 我 {reg52}次 。 恩 情 {reg53}， 私 怨 {reg54}， 家 族 之 恨 {reg55}。 
-dlga_lord_talk:fb71_compact_answer|我 听 说 贵 族 之 间 常 有 秘 密 盟 约 。 你 参 与 其 中 吗 ？ 
 dlga_fb71_compact_answer:lord_pretalk|宫 廷 里 流 言 四 起 。 至 于 谁 与 谁 私 下 结 盟 ， 我 无 可 奉 告 。 
 dlga_fb71_compact_answer:lord_pretalk.1|我 与 {s61}订 有 盟 约 。 盟 约 忠 诚 度 为 {reg62}， 对 封 地 分 配 的 不 满 为 {reg63}。 盟 友 遇 险 时 ， 我 自 会 伸 出 援 手 。 
 dlga_fb71_compact_answer:lord_pretalk.2|目 前 我 没 有 加 入 任 何 秘 密 派 系 。 贵 族 之 间 的 关 系 总 在 变 化 。 
-dlga_lord_talk:fb72_claim_answer|你 觊 觎 哪 块 封 地 ？ 你 的 盟 友 又 支 持 谁 ？ 
 dlga_fb72_claim_answer:lord_pretalk|我 不 会 向 外 人 透 露 我 的 封 地 野 心 和 宫 廷 谋 划 。 
 dlga_fb72_claim_answer:lord_pretalk.1|我 想 得 到 {s60}。 我 的 封 地 野 心 为 {reg61}， 对 过 往 分 封 的 不 满 为 {reg62}。 目 前 的 封 赏 争 夺 中 ， 我 的 派 系 支 持 {s61}。 
 dlga_fb72_claim_answer:lord_pretalk.2|我 想 得 到 {s60}。 我 的 封 地 野 心 为 {reg61}， 对 过 往 分 封 的 不 满 为 {reg62}。 目 前 我 们 没 有 共 同 推 举 的 候 选 人 。 
 dlga_fb72_claim_answer:lord_pretalk.3|我 暂 时 没 有 锁 定 具 体 的 封 地 目 标 。 我 的 野 心 为 {reg61}， 对 分 封 的 不 满 为 {reg62}。 
-dlga_lord_talk:fb73_private_entry|我 想 和 你 私 下 谈 谈 王 国 中 的 政 治 交 易 。 
 dlga_fb73_private_entry:fb73_private_options|这 里 没 有 旁 人 。 你 的 政 治 信 用 为 {reg41}， 我 的 信 用 为 {reg42}。 说 说 你 的 提 议 吧 。 
 dlga_fb73_private_options:fb73_bribe_result|我 愿 付 出 {reg40}第 纳 尔 ， 换 取 你 在 本 次 封 地 议 事 中 支 持 我 。 
 dlga_fb73_bribe_result:lord_pretalk|成 交 。 本 次 封 地 投 票 我 会 支 持 你 。 我 清 楚 背 信 的 代 价 。 
@@ -33,11 +29,9 @@ dlga_fb73_private_options:lord_pretalk|密 谈 就 到 这 里 吧 。
 dlga_fb73_private_options:fb74_poach_answer|我 出 {reg57}第 纳 尔 ， 你 愿 意 转 投 {s54}的 秘 密 派 系 吗 ？ 
 dlga_fb74_poach_answer:lord_pretalk|交 易 成 立 。 我 已 经 加 入 新 的 派 系 ， 下 一 次 封 地 投 票 还 欠 你 一 票 。 
 dlga_fb74_poach_answer:lord_pretalk.1|我 拒 绝 。 这 种 风 声 在 宫 廷 里 会 害 死 人 。 
-dlga_lord_talk:fb74_gossip_reply|最 近 有 什 么 可 信 的 秘 密 交 易 传 闻 吗 ？ 
 dlga_fb74_gossip_reply:lord_pretalk|有 人 在 议 论 {s63}。 我 掌 握 一 条 可 信 度 为 {reg58}的 线 索 ， 你 可 以 向 国 王 报 告 。 
 dlga_fb74_gossip_reply:lord_pretalk.1|我 最 近 已 经 告 诉 过 你 这 些 风 声 。 请 再 过 {reg59}天 来 打 听 。 
 dlga_fb74_gossip_reply:lord_pretalk.2|近 来 没 有 新 的 可 靠 传 闻 ， 宫 廷 暂 时 风 平 浪 静 。 
-dlga_lord_talk:fb74_report_reply|陛 下 ， 我 掌 握 了 贵 族 秘 密 交 易 的 证 据 。 
 dlga_fb74_report_reply:lord_pretalk|你 为 王 室 立 了 功 。 我 会 调 查 {s65}， 并 记 住 你 的 忠 诚 。 
 dlga_fb74_report_reply:lord_pretalk.1|没 有 更 新 的 证 词 ， 我 无 法 继 续 调 查 此 事 。 
 dlga_start:village_elder_talk.4|你 还 敢 回 来 ？ 上 次 你 抢 走 的 粮 食 ， 村 里 到 现 在 还 没 缓 过 来 。 
@@ -167,3 +161,30 @@ dlga_lord_af26_return:lord_af26_return_choose|你 借 了 {reg10} 名 {s41}， �
 dlga_lord_af26_return_choose:lord_af26_return_done|按 刚 才 说 的 人 数 交 还 ， 缺 员 一 并 结 清 。 
 dlga_lord_af26_return_choose:lord_pretalk|先 不 结 清 ， 我 去 把 人 补 齐 。 
 dlga_lord_af26_return:lord_talk.1|旧 借 兵 账 没 有 记 清 兵 种 ， 这 笔 就 此 作 罢 。 你 现 有 的 人 手 留 下 ， 也 不 再 为 这 笔 旧 账 扣 交 情 。 
+dlga_lord_talk:af37_lord_affairs|另 谈 些 事 情 。 
+dlga_af37_lord_affairs:af37_lord_affairs|你 想 谈 哪 方 面 的 事 ？ 
+dlga_af37_lord_affairs:af37_lord_personal|交 情 与 军 务 。 
+dlga_af37_lord_personal:af37_lord_personal|说 吧 ， 是 要 打 听 消 息 ， 还 是 需 要 我 帮 忙 ？ 
+dlga_af37_lord_affairs:af37_lord_politics|宫 廷 与 旧 事 。 
+dlga_af37_lord_politics:af37_lord_politics|这 里 没 有 外 人 ， 你 说 吧 。 
+dlga_af37_lord_personal:af37_lord_affairs|回 到 刚 才 的 话 题 。 
+dlga_af37_lord_politics:af37_lord_affairs|回 到 刚 才 的 话 题 。 
+dlga_af37_lord_affairs:lord_pretalk|还 是 说 点 别 的 吧 。 
+dlga_af37_lord_politics:fb7_memory_answer|回 顾 我 们 过 去 的 交 情 。 
+dlga_af37_lord_politics:fb71_compact_answer|说 说 你 在 宫 廷 里 的 盟 友 。 
+dlga_af37_lord_politics:fb72_claim_answer|你 对 封 地 有 什 么 打 算 ？ 
+dlga_af37_lord_politics:fb73_private_entry|私 下 谈 谈 政 治 上 的 合 作 。 
+dlga_af37_lord_politics:fb74_gossip_reply|最 近 有 什 么 可 靠 的 宫 廷 消 息 ？ 
+dlga_af37_lord_politics:fb74_report_reply|陛 下 ， 我 掌 握 了 贵 族 暗 中 往 来 的 证 据 。 
+dlga_af37_lord_personal:lord_af26_intel|最 近 附 近 有 什 么 动 静 ？ 匪 帮 、 敌 军 ， 都 跟 我 说 说 。 
+dlga_af37_lord_personal:lord_af26_intro|请 你 引 荐 我 去 见 国 王 ， 我 想 当 面 跟 他 谈 谈 。 
+dlga_af37_lord_personal:lord_af26_borrow|向 你 借 一 队 人 手 ， 14 天 后 归 还 。 
+dlga_af37_lord_personal:lord_af26_return|把 借 的 兵 还 你 。 
+dlga_af37_lord_personal:lord_af26_feast|听 说 你 们 在 办 宴 会 ， 带 我 一 个 ？ 
+dlga_af37_lord_personal:lord_af26_hunt|一 起 去 打 猎 ， 活 动 活 动 筋 骨 。 
+dlga_af37_lord_personal:lord_af26_sanctuary|有 人 因 私 仇 在 追 杀 我 ， 求 你 在 你 的 城 堡 里 庇 护 我 几 天 。 
+dlga_af37_lord_personal:lord_af26_mediate|陛 下 ， 我 想 调 停 你 与 {s4}的 战 争 ， 两 边 都 停 手 ， 对 大 家 都 好 。 
+dlga_af37_lord_affairs:lord_talk_money|谈 钱 的 事 。 
+dlga_af37_lord_affairs:lord_talk_gang|谈 帮 派 的 事 。 
+dlga_lord_talk_money:af37_lord_affairs|还 是 说 点 别 的 吧 。 
+dlga_lord_talk_gang:af37_lord_affairs|还 是 说 点 别 的 吧 。 

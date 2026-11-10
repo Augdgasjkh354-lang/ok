@@ -23616,7 +23616,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
 
 
 
-  [anyone,"start", [(is_between,"$g_talk_troop", village_elders_begin, village_elders_end),(eq,"$g_talk_troop_met",0),
+  [anyone,"start", [(neg|party_slot_eq, "$current_town", slot_town_lord, "trp_player"), (is_between,"$g_talk_troop", village_elders_begin, village_elders_end),(eq,"$g_talk_troop_met",0),
                     (str_store_party_name, s9, "$current_town"),
                     (call_script, "script_af25_village_looted_recently", "$current_town"), (eq, reg0, 0),
                     (call_script, "script_af20_fame_kind"), (neq, reg0, 1)],  # v1.0 NPC对白 B-3/B-2: 被劫过或仁名时不走这句
@@ -25575,7 +25575,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
 
   [anyone,"party_relieved", [], "Thank you for helping us against those bastards.", "close_window",[]],
 
-  [anyone,"start", [(eq,"$talk_context", tc_party_encounter),(store_encountered_party, reg(5)),(party_get_template_id,reg(7),reg(5)),(eq,reg(7),"pt_sea_raiders")],
+  [anyone,"start", [(call_script, "script_af37_reserved_greeting"), (eq, reg0, 0), (eq,"$talk_context", tc_party_encounter),(store_encountered_party, reg(5)),(party_get_template_id,reg(7),reg(5)),(eq,reg(7),"pt_sea_raiders")],
    "I will drink from your skull!", "battle_reason_stated",[(play_sound,"snd_encounter_sea_raiders")]],
   
 ######################################
@@ -25596,7 +25596,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
 # GENERIC PARTY ENCOUNTER
 ######################################
 
-  [anyone,"start", [(eq,"$talk_context",tc_party_encounter),
+  [anyone,"start", [(call_script, "script_af37_reserved_greeting"), (eq, reg0, 0), (eq,"$talk_context",tc_party_encounter),
                     (gt,"$encountered_party_hostile",0),
                     (encountered_party_is_attacker),
                     ],
@@ -25615,7 +25615,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
                     ],
    "Don't attack! We surrender.", "close_window", [(assign,"$g_player_surrenders",1)]],
   
-  [anyone,"start", [(eq,"$talk_context",tc_party_encounter),
+  [anyone,"start", [(call_script, "script_af37_reserved_greeting"), (eq, reg0, 0), (eq,"$talk_context",tc_party_encounter),
                     (neg|encountered_party_is_attacker),
                     ],
    "What do you want?", "party_encounter_hostile_defender",
@@ -25869,17 +25869,17 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   #[  
   #]],
 
-  [anyone,"start", [], "Surrender or die. Make your choice", "battle_reason_stated",[]],
+  [anyone,"start", [(call_script, "script_af37_reserved_greeting"), (eq, reg0, 0), (eq, "$talk_context", tc_party_encounter), ], "Surrender or die. Make your choice", "battle_reason_stated",[]],
   [anyone|plyr,"battle_reason_stated", [], "I am not afraid of you. I will fight.", "close_window",[[encounter_attack]]],
 
-  [anyone,"start", [], "Hello. What can I do for you?", "free",[]],
+  [anyone,"start", [(call_script, "script_af37_reserved_greeting"), (eq, reg0, 0), ], "Hello. What can I do for you?", "free",[]],
   [anyone|plyr,"free", [[neg|in_meta_mission]], "Tell me about yourself", "view_char_requested",[]],
   [anyone,"view_char_requested", [], "Very well, listen to this...", "view_char",[[change_screen_view_character]]],
   [anyone,"view_char", [], "Anything else?", "free",[]],
 
   [anyone|plyr,"end", [], "[Done]", "close_window",[]],
   
-  [anyone|plyr,"start", [], "Drop your weapons and surrender if you want to live", "threaten_1",[]],
+  [anyone|plyr,"start", [(call_script, "script_af37_reserved_greeting"), (eq, reg0, 0), (eq, "$talk_context", tc_party_encounter), ], "Drop your weapons and surrender if you want to live", "threaten_1",[]],
   [anyone,"threaten_1", [], "We will fight you first", "end",[[encounter_attack]]],
 
 #  [anyone|plyr,"free", [[partner_is_mercmaster]], "I need to hire some mercenaries.", "mercenaries_requested",[]],
@@ -26335,7 +26335,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
 #  [anyone,"free", [], "NO MATCHING SENTENCE!", "close_window",[]],
 
   # FewerBandits v7.0: inspect a lord's persistent relationship history.
-  [anyone|plyr, "lord_talk", [
+  [anyone|plyr, "lord_talk", [(eq, 1, 0), 
     (is_between, "$g_talk_troop", kings_begin, lords_end),
   ], "What do you remember of our past dealings?", "fb7_memory_answer", [
     (troop_get_slot, reg51, "$g_talk_troop", slot_fb7_mercy_count),
@@ -26353,7 +26353,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
 
 
   # FewerBandits v7.1: player can ask lords about their private alliances.
-  [anyone|plyr, "lord_talk", [
+  [anyone|plyr, "lord_talk", [(eq, 1, 0), 
     (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
     (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
   ], "Do you have secret alliances at court?", "fb71_compact_answer", [
@@ -26383,7 +26383,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
 
 
   # v7.2: the player can ask a lord about long-term land claims.
-  [anyone|plyr, "lord_talk", [
+  [anyone|plyr, "lord_talk", [(eq, 1, 0), 
     (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
     (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
   ], "Which fief do you covet, and who has your alliance's support?", "fb72_claim_answer", [
@@ -26424,7 +26424,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
 
 
   # v7.3: private politics / one-time paid support / reciprocal oaths.
-  [anyone|plyr, "lord_talk", [
+  [anyone|plyr, "lord_talk", [(eq, 1, 0), 
     (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
     (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
   ], "Let us discuss our political interests in private.", "fb73_private_entry", [
@@ -26547,7 +26547,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
     "I refuse your offer. Such whispers are dangerous at court.", "lord_pretalk", []],
 
   # Noble gossip produces a concrete, time-limited tip about a real conspirator.
-  [anyone|plyr, "lord_talk", [
+  [anyone|plyr, "lord_talk", [(eq, 1, 0), 
     (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
     (eq, "$players_kingdom", "$g_talk_troop_faction"),
     (eq, "$player_has_homage", 1),
@@ -26578,7 +26578,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
     "lord_pretalk", []],
 
   # Bring the best currently valid intelligence to your own reigning monarch.
-  [anyone|plyr, "lord_talk", [
+  [anyone|plyr, "lord_talk", [(eq, 1, 0), 
     (eq, "$player_has_homage", 1),
     (is_between, "$players_kingdom", kingdoms_begin, kingdoms_end),
     (faction_get_slot, ":king", "$players_kingdom", slot_faction_leader),
@@ -26673,7 +26673,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
 
 
   # v1.0 lord relations (L2): ask a friendly lord (>= 10) what is stirring nearby.
-  [anyone|plyr, "lord_talk", [
+  [anyone|plyr, "lord_talk", [(eq, 1, 0), 
     (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
     (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
     (call_script, "script_troop_get_relation_with_troop", "trp_player", "$g_talk_troop"),
@@ -26685,7 +26685,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
 
   # v1.0 lord relations (L2): a close lord (>= 20) introduces the player to
   # the king once a month; the king's relation rises by 5 (fame doubles it).
-  [anyone|plyr, "lord_talk", [
+  [anyone|plyr, "lord_talk", [(eq, 1, 0), 
     (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
     (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
     (is_between, "$players_kingdom", kingdoms_begin, kingdoms_end),
@@ -26723,7 +26723,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   ]],
 
   # v1.0 领主关系与独立玩法·第二波 L1: 好感 ≥ 30 向领主借兵 10-20 人（他那派系的二阶兵），14 天后归还。
-  [anyone|plyr, "lord_talk", [
+  [anyone|plyr, "lord_talk", [(eq, 1, 0), 
     (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
     (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
     (call_script, "script_troop_get_relation_with_troop", "trp_player", "$g_talk_troop"),
@@ -26768,7 +26768,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   [anyone, "lord_af26_borrow", [], "好，借你 {reg10} 个人，14 天后按同兵种人数归还。调走或升了级的兵，要先补齐同兵种再还；缺一个扣一点好感。逾期每天扣两点，超过七天就从你的队伍里按同兵种人数收回，缺员另外算。", "lord_talk", []],
 
   # 先报价并确认，再按同兵种人数结清；不再用借前快照推断谁战死。
-  [anyone|plyr, "lord_talk", [
+  [anyone|plyr, "lord_talk", [(eq, 1, 0), 
     (party_slot_ge, "p_main_party", slot_af26_borrow_day, 1),
     (party_get_slot, ":lender", "p_main_party", slot_af26_borrow_lender),
     (eq, ":lender", "$g_talk_troop"),
@@ -26782,7 +26782,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
 
   # v1.0 领主关系与独立玩法·第二波 L3: 好感 ≥ 40，领主所在阵营正在办宴会时受邀赴宴（只对非本阵营的外人出现）。
   # 邀请本身给好感 +2、声望 +1；赴宴靠原版 $g_player_eligible_feast_center_no 进场，同一场宴会只能受邀一次。
-  [anyone|plyr, "lord_talk", [
+  [anyone|plyr, "lord_talk", [(eq, 1, 0), 
     (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
     (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
     (call_script, "script_troop_get_relation_with_troop", "trp_player", "$g_talk_troop"),
@@ -26806,7 +26806,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
 
   # v1.0 领主关系与独立玩法·第二波 L3: 好感 ≥ 40，跟领主一起打猎——在他附近刷一小股林匪（4-12 人），
   # 玩家打过去时领主在旁边会以盟友身份参战。要求领主那派系与玩家不敌对。
-  [anyone|plyr, "lord_talk", [
+  [anyone|plyr, "lord_talk", [(eq, 1, 0), 
     (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
     (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
     (call_script, "script_troop_get_relation_with_troop", "trp_player", "$g_talk_troop"),
@@ -26831,7 +26831,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   [anyone, "lord_af26_hunt", [], "走，前面林子里有动静，跟我去打猎。", "lord_talk", []],
 
   # v1.0 领主关系与独立玩法·第三波 L5 庇护（好感 ≥40、正被世仇追杀）：庇护 7 天，清掉已在追的仇家。
-  [anyone|plyr, "lord_talk", [(troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
+  [anyone|plyr, "lord_talk", [(eq, 1, 0), (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
                               (call_script, "script_troop_get_relation_with_troop", "trp_player", "$g_talk_troop"),
                               (ge, reg0, 40),
                               (call_script, "script_af26_sanctuary_needed"),
@@ -26864,7 +26864,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   [anyone, "lord_af26_letter", [], "好，这封私掠证有效期三十天，只对{s4}之敌的商队有效。持证劫掠不损你的荣誉，也不惹对方宣战；劫中立国商队、劫军粮队都不在此列。", "lord_talk", []],
 
   # v1.0 领主关系与独立玩法·第三波 I4 外交掮客（声望 ≥200、两国国王好感 ≥20、两国交战）：一次对话调停，两国各付 2000、国王各 +5 好感。
-  [anyone|plyr, "lord_talk", [(faction_slot_eq, "$g_talk_troop_faction", slot_faction_leader, "$g_talk_troop"),
+  [anyone|plyr, "lord_talk", [(eq, 1, 0), (faction_slot_eq, "$g_talk_troop_faction", slot_faction_leader, "$g_talk_troop"),
                               (troop_get_slot, ":renown", "trp_player", slot_troop_renown),
                               (ge, ":renown", 200),
                               (call_script, "script_troop_get_relation_with_troop", "trp_player", "$g_talk_troop"),
@@ -27687,7 +27687,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   # 菜单摩擦点第五批 lord_talk 两轮：入口“谈钱的事。”，条件＝钱组 6 个选项
   # 条件的 OR（try_begin 分支写法）。组内一个都不满足时入口不出现。
   # 入口条件只读不写：各支只调只读脚本（见文件头注释），不写任何持久状态。
-  [anyone|plyr, "lord_talk", [
+  [anyone|plyr, "lord_talk", [(eq, 1, 0), 
       (assign, ":show", 0),
       (try_begin),
       # 借钱给你, 拿去周转。(lord_af29_lend)
@@ -27776,7 +27776,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   ], "谈钱的事。", "lord_talk_money", []],
   # 菜单摩擦点第五批 lord_talk 两轮：入口“谈帮派的事。”，条件＝帮组 4 个选项
   # 条件的 OR（try_begin 分支写法）。组内一个都不满足时入口不出现。
-  [anyone|plyr, "lord_talk", [
+  [anyone|plyr, "lord_talk", [(eq, 1, 0), 
       (assign, ":show", 0),
       (try_begin),
       # 听说你和匪帮有来往，给我 400 第纳尔，这事我就不往上报了。(lord_af27_hush)
@@ -27869,8 +27869,8 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   # 菜单摩擦点第五批：谈帮派的回应，下一状态与本状态相同，让帮组选项接着列出来。
   [anyone, "lord_talk_gang", [], "帮派的事？你说。", "lord_talk_gang", []],
   # 玩家返回先经过 NPC 的 lord_pretalk 回应，再列出 lord_talk 的玩家选项。
-  [anyone|plyr, "lord_talk_money", [], "还是说点别的吧。", "lord_pretalk", []],
-  [anyone|plyr, "lord_talk_gang", [], "还是说点别的吧。", "lord_pretalk", []],
+  [anyone|plyr, "lord_talk_money", [(eq, 1, 0), ], "还是说点别的吧。", "lord_pretalk", []],
+  [anyone|plyr, "lord_talk_gang", [(eq, 1, 0), ], "还是说点别的吧。", "lord_pretalk", []],
   # 审计 13 F-04 修复 (方案 B, 玩家 2026-11-10 拍板): 资助的称王者消失
   # (派系灭了人可能消失, 原版领主不死) 时结算脚本两支都不触发, 963/964
   # 永久挂起、玩家再也资助不了别人。加“放弃资助”选项: 玩家主动放弃,
@@ -27944,4 +27944,286 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   ], "旧借兵账没有记清兵种，这笔就此作罢。你现有的人手留下，也不再为这笔旧账扣交情。", "lord_talk", [
     (call_script, "script_af26_borrow_return", 1),
   ]],
+  # Dialogue tiers: one mod entry on the native home page. Old rows are
+  # retained above (disabled) so every historical dialogue ID stays in place.
+  [anyone|plyr, "lord_talk", [
+    (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
+    (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
+  ], "另谈些事情。", "af37_lord_affairs", []],
+  [anyone, "af37_lord_affairs", [], "你想谈哪方面的事？", "af37_lord_affairs", []],
+  [anyone|plyr, "af37_lord_affairs", [], "交情与军务。", "af37_lord_personal", []],
+  [anyone, "af37_lord_personal", [], "说吧，是要打听消息，还是需要我帮忙？", "af37_lord_personal", []],
+  [anyone|plyr, "af37_lord_affairs", [], "宫廷与旧事。", "af37_lord_politics", []],
+  [anyone, "af37_lord_politics", [], "这里没有外人，你说吧。", "af37_lord_politics", []],
+  [anyone|plyr, "af37_lord_personal", [], "回到刚才的话题。", "af37_lord_affairs", []],
+  [anyone|plyr, "af37_lord_politics", [], "回到刚才的话题。", "af37_lord_affairs", []],
+  [anyone|plyr, "af37_lord_affairs", [], "还是说点别的吧。", "lord_pretalk", []],
+  [anyone|plyr, 'af37_lord_politics', [
+    (is_between, "$g_talk_troop", kings_begin, lords_end),
+  ], '回顾我们过去的交情。', "fb7_memory_answer", [
+    (troop_get_slot, reg51, "$g_talk_troop", slot_fb7_mercy_count),
+    (troop_get_slot, reg52, "$g_talk_troop", slot_fb7_imprisonment_count),
+    (troop_get_slot, reg53, "$g_talk_troop", slot_fb7_favor),
+    (troop_get_slot, reg54, "$g_talk_troop", slot_fb7_grudge),
+    (troop_get_slot, reg55, "$g_talk_troop", slot_fb7_family_grudge),
+  ]],
+  [anyone|plyr, 'af37_lord_politics', [
+    (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
+    (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
+  ], '说说你在宫廷里的盟友。', "fb71_compact_answer", [
+    (call_script, "script_troop_get_relation_with_troop", "trp_player", "$g_talk_troop"),
+    (assign, reg60, reg0),
+    (troop_get_slot, reg61, "$g_talk_troop", slot_fb7_favor),
+    (troop_get_slot, "$g_fb71_talk_anchor", "$g_talk_troop", slot_fb71_cabal_leader),
+    (assign, reg62, 0),
+    (assign, reg63, 0),
+    (try_begin),
+      (gt, "$g_fb71_talk_anchor", 0),
+      (str_store_troop_name, s61, "$g_fb71_talk_anchor"),
+      (troop_get_slot, reg62, "$g_talk_troop", slot_fb71_oath_strength),
+      (troop_get_slot, reg63, "$g_talk_troop", slot_fb71_fief_grievance),
+    (try_end),
+  ]],
+  [anyone|plyr, 'af37_lord_politics', [
+    (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
+    (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
+  ], '你对封地有什么打算？', "fb72_claim_answer", [
+    (call_script, "script_troop_get_relation_with_troop", "trp_player", "$g_talk_troop"),
+    (assign, reg60, reg0),
+    (troop_get_slot, "$g_fb72_talk_target", "$g_talk_troop", slot_fb72_desired_center),
+    (troop_get_slot, reg61, "$g_talk_troop", slot_fb72_ambition),
+    (troop_get_slot, reg62, "$g_talk_troop", slot_fb71_fief_grievance),
+    (assign, "$g_fb72_talk_nominee", -1),
+    (store_faction_of_troop, ":faction", "$g_talk_troop"),
+    (faction_get_slot, ":issue", ":faction", slot_faction_political_issue),
+    (try_begin),
+      (is_between, ":issue", centers_begin, centers_end),
+      (call_script, "script_fb72_choose_caucus_nominee", "$g_talk_troop", ":issue"),
+      (assign, "$g_fb72_talk_nominee", reg0),
+    (try_end),
+    (try_begin),
+      (is_between, "$g_fb72_talk_target", centers_begin, centers_end),
+      (str_store_party_name, s60, "$g_fb72_talk_target"),
+    (try_end),
+    (try_begin),
+      (is_between, "$g_fb72_talk_nominee", active_npcs_begin, active_npcs_end),
+      (str_store_troop_name, s61, "$g_fb72_talk_nominee"),
+    (try_end),
+  ]],
+  [anyone|plyr, 'af37_lord_politics', [
+    (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
+    (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
+  ], '私下谈谈政治上的合作。', "fb73_private_entry", [
+    (store_faction_of_troop, ":faction", "$g_talk_troop"),
+    (faction_get_slot, "$g_fb73_private_issue", ":faction", slot_faction_political_issue),
+    (call_script, "script_fb73_vote_price", "$g_talk_troop"),
+    (assign, "$g_fb73_private_price", reg0),
+    (assign, reg40, reg0),
+    (call_script, "script_fb73_get_credit", "trp_player"),
+    (assign, reg41, reg0),
+    (call_script, "script_fb73_get_credit", "$g_talk_troop"),
+    (assign, reg42, reg0),
+    (troop_get_slot, reg43, "trp_player", slot_fb73_breaches),
+    (call_script, "script_fb74_find_rival", "$g_talk_troop"),
+    (assign, "$g_fb74_flip_target", reg0),
+    (assign, "$g_fb74_flip_price", 0),
+    (try_begin),
+      (gt, "$g_fb74_flip_target", 0),
+      (call_script, "script_fb74_flip_price", "$g_talk_troop"),
+      (assign, "$g_fb74_flip_price", reg0),
+      (assign, reg57, reg0),
+      (str_store_troop_name, s54, "$g_fb74_flip_target"),
+    (try_end),
+  ]],
+  [anyone|plyr, 'af37_lord_politics', [
+    (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
+    (eq, "$players_kingdom", "$g_talk_troop_faction"),
+    (eq, "$player_has_homage", 1),
+    (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
+  ], '最近有什么可靠的宫廷消息？', "fb74_gossip_reply", [
+    (call_script, "script_fb75_gossip_wait", "$g_talk_troop"),
+    (assign, "$g_fb75_gossip_wait", reg0),
+    (assign, "$g_fb74_rumor_subject", -1),
+    (try_begin),
+      (eq, "$g_fb75_gossip_wait", 0),
+      (call_script, "script_fb74_listen_rumor", "$g_talk_troop"),
+      (assign, "$g_fb74_rumor_subject", reg0),
+    (try_end),
+    (try_begin),
+      (gt, "$g_fb74_rumor_subject", 0),
+      (str_store_troop_name, s63, "$g_fb74_rumor_subject"),
+      (troop_get_slot, reg58, "$g_fb74_rumor_subject", slot_fb74_intel_strength),
+    (try_end),
+  ]],
+  [anyone|plyr, 'af37_lord_politics', [
+    (eq, "$player_has_homage", 1),
+    (is_between, "$players_kingdom", kingdoms_begin, kingdoms_end),
+    (faction_get_slot, ":king", "$players_kingdom", slot_faction_leader),
+    (eq, "$g_talk_troop", ":king"),
+    (call_script, "script_fb74_find_report"),
+    (gt, reg0, 0),
+  ], '陛下，我掌握了贵族暗中往来的证据。', "fb74_report_reply", [
+    (call_script, "script_fb74_player_report", "$g_talk_troop"),
+    (assign, "$g_fb74_report_subject", reg0),
+    (try_begin),
+      (gt, "$g_fb74_report_subject", 0),
+      (str_store_troop_name, s65, "$g_fb74_report_subject"),
+    (try_end),
+  ]],
+  [anyone|plyr, 'af37_lord_personal', [
+    (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
+    (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
+    (call_script, "script_troop_get_relation_with_troop", "trp_player", "$g_talk_troop"),
+    (ge, reg0, 10),
+  ], "最近附近有什么动静？匪帮、敌军，都跟我说说。", "lord_af26_intel", [
+    (call_script, "script_af26_lord_intel"),
+  ]],
+  [anyone|plyr, 'af37_lord_personal', [
+    (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
+    (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
+    (is_between, "$players_kingdom", kingdoms_begin, kingdoms_end),
+    (faction_get_slot, ":king", "$players_kingdom", slot_faction_leader),
+    (is_between, ":king", active_npcs_begin, active_npcs_end),
+    (neq, ":king", "$g_talk_troop"),
+    (call_script, "script_troop_get_relation_with_troop", "trp_player", "$g_talk_troop"),
+    (ge, reg0, 20),
+    (store_current_day, ":day"),
+    (party_get_slot, ":last", "p_main_party", slot_af26_intro_day),
+    (ge, ":day", ":last"),
+  ], "请你引荐我去见国王，我想当面跟他谈谈。", "lord_af26_intro", [
+    (faction_get_slot, ":king", "$players_kingdom", slot_faction_leader),
+    (call_script, "script_change_player_relation_with_troop", ":king", 5),
+    (store_current_day, ":day"),
+    (store_add, ":next", ":day", 30),
+    (party_set_slot, "p_main_party", slot_af26_intro_day, ":next"),
+    (str_store_troop_name, s4, ":king"),
+  ]],
+  [anyone|plyr, 'af37_lord_personal', [
+    (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
+    (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
+    (call_script, "script_troop_get_relation_with_troop", "trp_player", "$g_talk_troop"),
+    (ge, reg0, 30),
+    (party_slot_eq, "p_main_party", slot_af26_borrow_day, 0),
+    (troop_get_slot, ":party", "$g_talk_troop", slot_troop_leaded_party),
+    (party_is_active, ":party"),
+    (troop_slot_eq, "$g_talk_troop", slot_troop_prisoner_of_party, -1),
+    (store_faction_of_troop, ":fac", "$g_talk_troop"),
+    (faction_get_slot, ":troop", ":fac", slot_faction_tier_2_troop),
+    (party_count_members_of_type, ":have", ":party", ":troop"),
+    (ge, ":have", 10),
+    (call_script, "script_game_get_party_companion_limit"),
+    (assign, ":limit", reg0),
+    (store_party_size_wo_prisoners, ":size", "p_main_party"),
+    (store_sub, ":space", ":limit", ":size"),
+    (ge, ":space", 10),
+  ], "向你借一队人手，14 天后归还。", "lord_af26_borrow", [
+    (store_faction_of_troop, ":fac", "$g_talk_troop"),
+    (faction_get_slot, ":troop", ":fac", slot_faction_tier_2_troop),
+    (troop_get_slot, ":party", "$g_talk_troop", slot_troop_leaded_party),
+    (party_count_members_of_type, ":have", ":party", ":troop"),
+    (store_random_in_range, ":n", 10, 21),
+    (val_min, ":n", ":have"),
+    (call_script, "script_game_get_party_companion_limit"),
+    (assign, ":limit", reg0),
+    (store_party_size_wo_prisoners, ":size", "p_main_party"),
+    (store_sub, ":space", ":limit", ":size"),
+    (val_min, ":n", ":space"),
+    (party_remove_members, ":party", ":troop", ":n"),
+    (party_count_members_of_type, ":pre", "p_main_party", ":troop"),
+    (party_add_members, "p_main_party", ":troop", ":n"),
+    (store_current_day, ":day"),
+    (store_add, ":deadline", ":day", 14),
+    (party_set_slot, "p_main_party", slot_af26_borrow_day, ":deadline"),
+    (party_set_slot, "p_main_party", slot_af26_borrow_count, ":n"),
+    (party_set_slot, "p_main_party", slot_af26_borrow_lender, "$g_talk_troop"),
+    (party_set_slot, "p_main_party", slot_af26_borrow_troop, ":troop"),
+    (party_set_slot, "p_main_party", slot_af26_borrow_pre_count, ":pre"),
+    (assign, reg10, ":n"),
+  ]],
+  [anyone|plyr, 'af37_lord_personal', [
+    (party_slot_ge, "p_main_party", slot_af26_borrow_day, 1),
+    (party_get_slot, ":lender", "p_main_party", slot_af26_borrow_lender),
+    (eq, ":lender", "$g_talk_troop"),
+  ], "把借的兵还你。", "lord_af26_return", []],
+  [anyone|plyr, 'af37_lord_personal', [
+    (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
+    (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
+    (call_script, "script_troop_get_relation_with_troop", "trp_player", "$g_talk_troop"),
+    (ge, reg0, 40),
+    (store_faction_of_troop, ":fac", "$g_talk_troop"),
+    (neq, "$players_kingdom", ":fac"),
+    (faction_get_slot, ":state", ":fac", slot_faction_ai_state),
+    (eq, ":state", sfai_feast),
+    (faction_get_slot, ":town", ":fac", slot_faction_ai_object),
+    (is_between, ":town", towns_begin, towns_end),
+    (neq, "$g_player_eligible_feast_center_no", ":town"),
+  ], "听说你们在办宴会，带我一个？", "lord_af26_feast", [
+    (store_faction_of_troop, ":fac", "$g_talk_troop"),
+    (faction_get_slot, ":town", ":fac", slot_faction_ai_object),
+    (assign, "$g_player_eligible_feast_center_no", ":town"),
+    (call_script, "script_change_player_relation_with_troop", "$g_talk_troop", 2),
+    (call_script, "script_change_troop_renown", "trp_player", 1),
+    (str_store_party_name, s4, ":town"),
+  ]],
+  [anyone|plyr, 'af37_lord_personal', [
+    (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
+    (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
+    (call_script, "script_troop_get_relation_with_troop", "trp_player", "$g_talk_troop"),
+    (ge, reg0, 40),
+    (troop_get_slot, ":party", "$g_talk_troop", slot_troop_leaded_party),
+    (party_is_active, ":party"),
+    (troop_slot_eq, "$g_talk_troop", slot_troop_prisoner_of_party, -1),
+    (store_faction_of_troop, ":fac", "$g_talk_troop"),
+    (store_relation, ":rel", ":fac", "$players_kingdom"),
+    (ge, ":rel", 0),
+  ], "一起去打猎，活动活动筋骨。", "lord_af26_hunt", [
+    (spawn_around_party, "p_main_party", "pt_forest_bandits"),
+    (assign, ":bandits", reg0),
+    (try_begin),
+      (gt, ":bandits", 0),
+      (party_count_members_of_type, ":size", ":bandits", "trp_forest_bandit"),
+      (store_sub, ":excess", ":size", 12),
+      (gt, ":excess", 0),
+      (party_remove_members, ":bandits", "trp_forest_bandit", ":excess"),
+    (try_end),
+  ]],
+  [anyone|plyr, 'af37_lord_personal', [(troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
+                              (call_script, "script_troop_get_relation_with_troop", "trp_player", "$g_talk_troop"),
+                              (ge, reg0, 40),
+                              (call_script, "script_af26_sanctuary_needed"),
+                              (eq, reg0, 1)],
+   "有人因私仇在追杀我，求你在你的城堡里庇护我几天。", "lord_af26_sanctuary",
+   [(store_current_day, ":today"),
+    (store_add, ":until", ":today", 7),
+    (party_set_slot, "p_main_party", slot_af26_sanctuary_day, ":until"),
+    (call_script, "script_af26_sanctuary_clear"),
+    (str_store_troop_name, s4, "$g_talk_troop")]],
+  [anyone|plyr, 'af37_lord_personal', [(faction_slot_eq, "$g_talk_troop_faction", slot_faction_leader, "$g_talk_troop"),
+                              (troop_get_slot, ":renown", "trp_player", slot_troop_renown),
+                              (ge, ":renown", 200),
+                              (call_script, "script_troop_get_relation_with_troop", "trp_player", "$g_talk_troop"),
+                              (ge, reg0, 20),
+                              (call_script, "script_af26_mediate_target"),
+                              (eq, reg0, 1)],
+   "陛下，我想调停你与{s4}的战争，两边都停手，对大家都好。", "lord_af26_mediate",
+   [(call_script, "script_af26_mediate_target"),
+    (eq, reg0, 1),
+    (assign, ":king_a", "$g_talk_troop"),
+    (assign, ":kingdom_a", "$g_talk_troop_faction"),
+    (assign, ":kingdom_b", reg1),
+    (faction_get_slot, ":king_b", ":kingdom_b", slot_faction_leader),
+    (store_relation, ":rel", ":kingdom_a", ":kingdom_b"),
+    (lt, ":rel", 0),
+    (call_script, "script_diplomacy_start_peace_between_kingdoms", ":kingdom_a", ":kingdom_b", 1),
+    (call_script, "script_af19_king_pays", ":kingdom_a", 2000),
+    (call_script, "script_af19_king_pays", ":kingdom_b", 2000),
+    (call_script, "script_change_player_relation_with_troop", ":king_a", 5),
+    (call_script, "script_change_player_relation_with_troop", ":king_b", 5),
+    (str_store_faction_name, s4, ":kingdom_a"),
+    (str_store_faction_name, s5, ":kingdom_b")]],
+  [anyone|plyr, 'af37_lord_affairs', [(is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end), (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero)], "谈钱的事。", "lord_talk_money", []],
+  [anyone|plyr, 'af37_lord_affairs', [(is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end), (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero)], "谈帮派的事。", "lord_talk_gang", []],
+  [anyone|plyr, "lord_talk_money", [], "还是说点别的吧。", "af37_lord_affairs", []],
+  [anyone|plyr, "lord_talk_gang", [], "还是说点别的吧。", "af37_lord_affairs", []],
+
 ]
