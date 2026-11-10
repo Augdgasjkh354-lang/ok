@@ -173,3 +173,9 @@ dlga_craftsman_af37_fire_choose:craftsman_af37_fire_done.2|全 部 裁 掉 ， �
 dlga_craftsman_af37_fire_choose:master_craftsman_pretalk|算 了 ， 先 不 裁 。 
 dlga_craftsman_af37_fire_done:master_craftsman_pretalk|人 我 这 就 打 发 走 。 作 坊 里 清 静 了 ， 货 也 会 出 得 慢 些 。 
 dlga_lord_talk_court:lord_talk|还 是 说 点 别 的 吧 。 
+dlga_lord_talk_money:lord_af38_taxdebt|你 手 头 紧 ， 就 别 硬 撑 了 — — 拿 城 里 的 税 抵 账 吧 。 
+dlga_lord_af38_taxdebt:lord_af38_taxdebt_choose|… … 也 只 能 这 样 了 。 {s4}往 后 四 周 的 租 税 归 你 收 ， 抵 掉 {reg41} 第 纳 尔 。 剩 下 {reg42} 照 旧 记 着 。 
+dlga_lord_af38_taxdebt:lord_af38_taxdebt_choose.1|… … 也 只 能 这 样 了 。 {s4}往 后 四 周 的 租 税 归 你 收 ， 这 笔 账 就 算 两 清 了 。 
+dlga_lord_af38_taxdebt_choose:lord_af38_taxdebt_done|就 这 么 办 。 
+dlga_lord_af38_taxdebt_choose:lord_pretalk|算 了 ， 我 再 等 等 。 
+dlga_lord_af38_taxdebt_done:lord_pretalk|我 这 就 给 城 里 的 管 事 写 信 。 这 笔 账 ， 总 算 轻 了 些 。 

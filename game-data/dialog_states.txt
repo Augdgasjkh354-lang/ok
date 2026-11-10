@@ -1424,3 +1424,6 @@ lord_talk_court
 craftsman_af37_fire
 craftsman_af37_fire_choose
 craftsman_af37_fire_done
+lord_af38_taxdebt
+lord_af38_taxdebt_choose
+lord_af38_taxdebt_done

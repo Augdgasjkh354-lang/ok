@@ -117,6 +117,12 @@ ALLOWED_DIALOG_CHANGES |= {
     'dlga_start:battle_reason_stated.1',
     'dlga_start:free',
 }
+# 资本家 3.0 第二批 (以税抵债): 「谈钱的事。」入口条件加一支 (lord_af38_taxdebt)，
+# 领主欠账 ≥ 3000 且财产不够还、名下有可抵账的城镇时入口出现。
+# 这一行在 v0.8 基线之后，verify 的逐行比对覆盖不到；照第五批的先例备案留痕。
+ALLOWED_DIALOG_CHANGES |= {
+    'dlga_lord_talk:lord_talk_money',
+}
 _old=(base/'compiled/conversation.txt').read_text('utf-8').split('\n')
 _new=(data/'conversation.txt').read_text('utf-8').split('\n')
 if _old and _old[-1]=='': _old=_old[:-1]

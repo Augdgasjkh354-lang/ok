@@ -61492,6 +61492,38 @@ scripts = [
       (str_store_string, s40, "@你还没有任何产业和债权。"),
     (try_end),
   ]),
+
+  # v1.0 资本家 3.0 第二批 (以税抵债): 找领主名下第一座可抵账的城镇。
+  # 只读, 不写任何状态。reg0 = 可抵账的城镇 (没有就是 0);
+  # reg1 = 这次能抵掉的金额 = min(874 欠账, 5000), 没有可抵的城就是 0。
+  ("af38_taxdebt_town", [
+    (store_script_param, ":lord", 1),
+    (assign, ":town", 0),
+    (assign, ":offset", 0),
+    (try_begin),
+      (is_between, ":lord", active_npcs_begin, active_npcs_end),
+      (troop_slot_eq, ":lord", slot_troop_prisoner_of_party, -1),
+      (troop_get_slot, ":owed", ":lord", slot_af19_lord_owes_player),
+      (ge, ":owed", 3000),
+      (troop_get_slot, ":wealth", ":lord", slot_troop_wealth),
+      (lt, ":wealth", ":owed"),
+      (store_current_day, ":today"),
+      (assign, ":found", 0),
+      (try_for_range, ":center", towns_begin, towns_end),
+        (eq, ":found", 0),
+        (party_slot_eq, ":center", slot_town_lord, ":lord"),
+        (party_get_slot, ":farm_day", ":center", slot_af30_tax_farm_day),
+        (le, ":farm_day", ":today"),
+        (assign, ":found", ":center"),
+      (try_end),
+      (gt, ":found", 0),
+      (assign, ":town", ":found"),
+      (val_min, ":owed", 5000),
+      (assign, ":offset", ":owed"),
+    (try_end),
+    (assign, reg0, ":town"),
+    (assign, reg1, ":offset"),
+  ]),
 ]
 
 
