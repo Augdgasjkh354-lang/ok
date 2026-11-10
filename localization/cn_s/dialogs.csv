@@ -76,3 +76,17 @@ dlga_lord_af27_bounty:lord_talk|不 错 ， {s4}那 帮 人 闹 得 太 凶 ， 
 dlga_lord_talk:lord_af27_inform|我 知 道 一 支 匪 帮 的 下 落 ， 你 派 人 去 剿 了 吧 。 
 dlga_tavernkeeper_talk:tavernkeeper_af28_contact|介 绍 我 见 帮 里 的 人 。 
 dlga_tavernkeeper_af28_contact:close_window|行 ， 角 落 里 那 位 就 是 他 们 的 接 头 人 ， 你 过 去 吧 ， 别 说 是 我 指 的 路 。 
+dlga_master_craftsman_talk:craftsman_af29_expand|扩 建 作 坊 。 
+dlga_craftsman_af29_expand:craftsman_af29_expand_choose|扩 建 要 花 大 钱 , 不 过 作 坊 越 大 , 赚 得 也 越 多 。 升 一 级 , 每 周 利 润 多 一 半 。 你 想 扩 到 第 几 级 ？ 
+dlga_craftsman_af29_expand_choose:craftsman_af29_expand_done|扩 建 到 1 级 , 花 3000 第 纳 尔 。 
+dlga_craftsman_af29_expand_choose:craftsman_af29_expand_done.1|扩 建 到 2 级 , 花 5000 第 纳 尔 。 
+dlga_craftsman_af29_expand_choose:craftsman_af29_expand_done.2|扩 建 到 3 级 , 花 8000 第 纳 尔 。 
+dlga_craftsman_af29_expand_choose:master_craftsman_pretalk|算 了 , 先 不 扩 。 
+dlga_craftsman_af29_expand_done:master_craftsman_pretalk|好 , 扩 建 这 就 动 工 。 地 方 大 了 , 货 也 出 得 多 了 。 
+dlga_lord_talk:lord_af29_lend|借 钱 给 你 , 拿 去 周 转 。 
+dlga_lord_af29_lend:lord_af29_lend_choose|哦 ？ 你 肯 借 钱 给 我 ？ 说 吧 , 能 借 多 少 ？ 
+dlga_lord_af29_lend_choose:lord_af29_lend_done|借 你 1000 第 纳 尔 。 
+dlga_lord_af29_lend_choose:lord_af29_lend_done.1|借 你 3000 第 纳 尔 。 
+dlga_lord_af29_lend_choose:lord_af29_lend_done.2|借 你 5000 第 纳 尔 。 
+dlga_lord_af29_lend_choose:lord_talk|算 了 , 当 我 没 说 。 
+dlga_lord_af29_lend_done:lord_talk|多 谢 了 。 这 钱 我 会 连 本 带 息 还 你 , 下 回 见 面 就 结 清 。 

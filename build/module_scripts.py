@@ -57986,6 +57986,29 @@ scripts = [
   # the player is at its gates. Only lords and towns with a debt are touched.
   ("af19_settle_debts", [
     (try_for_range, ":lord", active_npcs_begin, active_npcs_end),
+      # v1.0 资本家第一批 (条目 3): 放贷的本息在领主靠近玩家时并进 874 欠账, 走同一条收债链路;
+      # 本金+利息一次转完, 之后只按 874 结算 (不再生息)。领主没钱时只转不还, 欠账留着下回结。
+      (try_begin),
+        (troop_get_slot, ":loan", ":lord", slot_af29_loan_principal),
+        (gt, ":loan", 0),
+        (troop_slot_eq, ":lord", slot_troop_prisoner_of_party, -1),
+        (troop_get_slot, ":lparty", ":lord", slot_troop_leaded_party),
+        (gt, ":lparty", 0),
+        (party_is_active, ":lparty"),
+        (store_distance_to_party_from_party, ":ldist", ":lparty", "p_main_party"),
+        (le, ":ldist", 2),
+        (store_troop_faction, ":lfac", ":lord"),
+        (store_relation, ":lrel", ":lfac", "fac_player_supporters_faction"),
+        (ge, ":lrel", 0),
+        (troop_get_slot, ":owed2", ":lord", slot_af19_lord_owes_player),
+        (val_add, ":owed2", ":loan"),
+        (troop_set_slot, ":lord", slot_af19_lord_owes_player, ":owed2"),
+        (troop_set_slot, ":lord", slot_af29_loan_principal, 0),
+        (troop_set_slot, ":lord", slot_af29_loan_day, 0),
+        (str_store_troop_name, s48, ":lord"),
+        (assign, reg41, ":loan"),
+        (display_message, "@{s48}派人来说, 上回借的 {reg41} 第纳尔已经记下了。", 0xFFCC66),
+      (try_end),
       (troop_get_slot, ":owed", ":lord", slot_af19_lord_owes_player),
       (gt, ":owed", 0),
       (troop_slot_eq, ":lord", slot_troop_prisoner_of_party, -1),
@@ -60160,6 +60183,44 @@ scripts = [
     (try_end),
     (assign, reg0, ":total"),
     (assign, reg1, ":count"),
+  ]),
+
+  # ========== v1.0 资本家第一批 (条目 1+2): 作坊扩建与规模效应的每周加成 ==========
+  # Input: center, enterprise item, final net profit of that workshop this week
+  # (after warehouse adjustments; 0 when sequestrated). Output: reg0 total
+  # bonus, reg1 expansion bonus (+50% per level, slot 944), reg2 scale bonus
+  # (+10% when the player owns >= 3 workshops of the same kind, completed only).
+  # Bonus is a straight multiple of net profit, so a losing week scales the
+  # loss too; sequestrated workshops pay 0 because :net is already 0.
+  ("af29_enterprise_bonus", [
+    (store_script_param, ":center", 1),
+    (store_script_param, ":output", 2),
+    (store_script_param, ":net", 3),
+    (assign, ":exp", 0),
+    (assign, ":scl", 0),
+    (party_get_slot, ":level", ":center", slot_af29_expand_level),
+    (try_begin),
+      (gt, ":level", 0),
+      (store_mul, ":exp", ":net", 50),
+      (val_mul, ":exp", ":level"),
+      (val_div, ":exp", 100),
+    (try_end),
+    (assign, ":count", 0),
+    (try_for_range, ":c2", centers_begin, centers_end),
+      (party_get_slot, ":out2", ":c2", slot_center_player_enterprise),
+      (eq, ":out2", ":output"),
+      (neg|party_slot_ge, ":c2", slot_center_player_enterprise_days_until_complete, 1),
+      (val_add, ":count", 1),
+    (try_end),
+    (try_begin),
+      (ge, ":count", 3),
+      (store_mul, ":scl", ":net", 10),
+      (val_div, ":scl", 100),
+    (try_end),
+    (assign, reg0, ":exp"),
+    (val_add, reg0, ":scl"),
+    (assign, reg1, ":exp"),
+    (assign, reg2, ":scl"),
   ]),
 ]
 

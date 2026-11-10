@@ -1380,3 +1380,9 @@ lord_af27_submit
 lord_af27_bounty
 lord_af27_inform
 tavernkeeper_af28_contact
+craftsman_af29_expand
+craftsman_af29_expand_choose
+craftsman_af29_expand_done
+lord_af29_lend
+lord_af29_lend_choose
+lord_af29_lend_done

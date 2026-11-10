@@ -4165,4 +4165,20 @@ simple_triggers = [
       (call_script, "script_change_player_relation_with_troop", ":lender", -2),
     (try_end),
   ]),
+
+  # v1.0 资本家第一批 (条目 3): 放贷利息, 每周 1% 复利 (照原版 Slot 21 的 101/100)。
+  # 只在借出后 483 天内生息: 1.01^69 约 1.99, 所以总额不超 2 倍本金; 见面结清后 945 清零, 停息。
+  (24*7, [
+    (try_for_range, ":lord", active_npcs_begin, active_npcs_end),
+      (troop_get_slot, ":loan", ":lord", slot_af29_loan_principal),
+      (gt, ":loan", 0),
+      (troop_get_slot, ":day", ":lord", slot_af29_loan_day),
+      (store_current_day, ":today"),
+      (store_sub, ":elapsed", ":today", ":day"),
+      (lt, ":elapsed", 483),
+      (val_mul, ":loan", 101),
+      (val_div, ":loan", 100),
+      (troop_set_slot, ":lord", slot_af29_loan_principal, ":loan"),
+    (try_end),
+  ]),
 ]

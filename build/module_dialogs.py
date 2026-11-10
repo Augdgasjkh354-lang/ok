@@ -21937,6 +21937,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   (troop_clear_inventory, "$g_talk_troop"),
   (party_set_slot, "$g_encountered_party", slot_center_player_enterprise, 0),
   (party_set_slot, "$g_encountered_party", slot_center_player_enterprise_production_order, 0),
+  (party_set_slot, "$g_encountered_party", slot_af29_expand_level, 0), # v1.0 资本家第一批: 卖掉作坊, 扩建等级清零, 重建不继承
   
   ]],
   
@@ -27073,5 +27074,100 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
     (party_get_slot, ":trust", "p_main_party", reg0),
     (ge, ":trust", 10)], "介绍我见帮里的人。", "tavernkeeper_af28_contact",[]],
   [anyone,"tavernkeeper_af28_contact", [], "行，角落里那位就是他们的接头人，你过去吧，别说是我指的路。", "close_window", [(jump_to_menu, "mnu_af28_contact"), (finish_mission)]],
+
+  # v1.0 资本家第一批 (条目 1): 工匠处扩建作坊, 每家最多 3 级, 每级 3000/5000/8000, 利润 +50%/级; 扩建费一半进城镇金库。
+  [anyone|plyr,"master_craftsman_talk", [
+    (neg|party_slot_ge, "$g_encountered_party", slot_af29_expand_level, 3),
+  ], "扩建作坊。", "craftsman_af29_expand",[]],
+  [anyone,"craftsman_af29_expand", [], "扩建要花大钱, 不过作坊越大, 赚得也越多。升一级, 每周利润多一半。你想扩到第几级？", "craftsman_af29_expand_choose",[]],
+  [anyone|plyr,"craftsman_af29_expand_choose", [
+    (party_slot_eq, "$g_encountered_party", slot_af29_expand_level, 0),
+    (store_troop_gold, ":gold", "trp_player"),
+    (ge, ":gold", 3000),
+  ], "扩建到 1 级, 花 3000 第纳尔。", "craftsman_af29_expand_done",[
+    (troop_remove_gold, "trp_player", 3000),
+    (party_get_slot, ":treasury", "$g_encountered_party", slot_town_wealth),
+    (val_add, ":treasury", 1500),
+    (party_set_slot, "$g_encountered_party", slot_town_wealth, ":treasury"),
+    (party_set_slot, "$g_encountered_party", slot_af29_expand_level, 1),
+  ]],
+  [anyone|plyr,"craftsman_af29_expand_choose", [
+    (party_slot_eq, "$g_encountered_party", slot_af29_expand_level, 1),
+    (store_troop_gold, ":gold", "trp_player"),
+    (ge, ":gold", 5000),
+  ], "扩建到 2 级, 花 5000 第纳尔。", "craftsman_af29_expand_done",[
+    (troop_remove_gold, "trp_player", 5000),
+    (party_get_slot, ":treasury", "$g_encountered_party", slot_town_wealth),
+    (val_add, ":treasury", 2500),
+    (party_set_slot, "$g_encountered_party", slot_town_wealth, ":treasury"),
+    (party_set_slot, "$g_encountered_party", slot_af29_expand_level, 2),
+  ]],
+  [anyone|plyr,"craftsman_af29_expand_choose", [
+    (party_slot_eq, "$g_encountered_party", slot_af29_expand_level, 2),
+    (store_troop_gold, ":gold", "trp_player"),
+    (ge, ":gold", 8000),
+  ], "扩建到 3 级, 花 8000 第纳尔。", "craftsman_af29_expand_done",[
+    (troop_remove_gold, "trp_player", 8000),
+    (party_get_slot, ":treasury", "$g_encountered_party", slot_town_wealth),
+    (val_add, ":treasury", 4000),
+    (party_set_slot, "$g_encountered_party", slot_town_wealth, ":treasury"),
+    (party_set_slot, "$g_encountered_party", slot_af29_expand_level, 3),
+  ]],
+  [anyone|plyr,"craftsman_af29_expand_choose", [], "算了, 先不扩。", "master_craftsman_pretalk",[]],
+  [anyone,"craftsman_af29_expand_done", [], "好, 扩建这就动工。地方大了, 货也出得多了。", "master_craftsman_pretalk",[]],
+
+  # v1.0 资本家第一批 (条目 3): 好感 >= 10 的领主可以借钱, 1000/3000/5000 三档, 1%/周息, 见面时走 af19 收债。
+  # 只借给财产 >= 本金的领主 (借出时查领主财产); 同一领主未还清时不能再借。
+  [anyone|plyr,"lord_talk", [
+    (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
+    (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
+    (troop_slot_eq, "$g_talk_troop", slot_troop_prisoner_of_party, -1),
+    (troop_slot_eq, "$g_talk_troop", slot_af29_loan_principal, 0),
+    (call_script, "script_troop_get_relation_with_troop", "trp_player", "$g_talk_troop"),
+    (ge, reg0, 10),
+    (store_troop_gold, ":gold", "trp_player"),
+    (ge, ":gold", 1000),
+    (troop_get_slot, ":wealth", "$g_talk_troop", slot_troop_wealth),
+    (ge, ":wealth", 1000),
+  ], "借钱给你, 拿去周转。", "lord_af29_lend",[]],
+  [anyone,"lord_af29_lend", [], "哦？你肯借钱给我？说吧, 能借多少？", "lord_af29_lend_choose",[]],
+  [anyone|plyr,"lord_af29_lend_choose", [
+    (store_troop_gold, ":gold", "trp_player"),
+    (ge, ":gold", 1000),
+    (troop_get_slot, ":wealth", "$g_talk_troop", slot_troop_wealth),
+    (ge, ":wealth", 1000),
+  ], "借你 1000 第纳尔。", "lord_af29_lend_done",[
+    (troop_remove_gold, "trp_player", 1000),
+    (call_script, "script_af14_lord_wealth", "$g_talk_troop", 1000, 0),
+    (troop_set_slot, "$g_talk_troop", slot_af29_loan_principal, 1000),
+    (store_current_day, ":day"),
+    (troop_set_slot, "$g_talk_troop", slot_af29_loan_day, ":day"),
+  ]],
+  [anyone|plyr,"lord_af29_lend_choose", [
+    (store_troop_gold, ":gold", "trp_player"),
+    (ge, ":gold", 3000),
+    (troop_get_slot, ":wealth", "$g_talk_troop", slot_troop_wealth),
+    (ge, ":wealth", 3000),
+  ], "借你 3000 第纳尔。", "lord_af29_lend_done",[
+    (troop_remove_gold, "trp_player", 3000),
+    (call_script, "script_af14_lord_wealth", "$g_talk_troop", 3000, 0),
+    (troop_set_slot, "$g_talk_troop", slot_af29_loan_principal, 3000),
+    (store_current_day, ":day"),
+    (troop_set_slot, "$g_talk_troop", slot_af29_loan_day, ":day"),
+  ]],
+  [anyone|plyr,"lord_af29_lend_choose", [
+    (store_troop_gold, ":gold", "trp_player"),
+    (ge, ":gold", 5000),
+    (troop_get_slot, ":wealth", "$g_talk_troop", slot_troop_wealth),
+    (ge, ":wealth", 5000),
+  ], "借你 5000 第纳尔。", "lord_af29_lend_done",[
+    (troop_remove_gold, "trp_player", 5000),
+    (call_script, "script_af14_lord_wealth", "$g_talk_troop", 5000, 0),
+    (troop_set_slot, "$g_talk_troop", slot_af29_loan_principal, 5000),
+    (store_current_day, ":day"),
+    (troop_set_slot, "$g_talk_troop", slot_af29_loan_day, ":day"),
+  ]],
+  [anyone|plyr,"lord_af29_lend_choose", [], "算了, 当我没说。", "lord_talk",[]],
+  [anyone,"lord_af29_lend_done", [], "多谢了。这钱我会连本带息还你, 下回见面就结清。", "lord_talk",[]],
 
 ]
