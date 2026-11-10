@@ -170,7 +170,7 @@ for required in ('slot_af09_refugee_thanked','slot_af09_deserter_thanked','slot_
 def _script_section(name):
     marker = '  ("' + name + '", ['
     start = scripts.index(marker)
-    end = scripts.index('\\n  ]),', start)
+    end = scripts.index('  ]),', start)
     return scripts[start:end]
 
 for _name in ('af26_mediate_target', 'af33_buy_peace_target'):
