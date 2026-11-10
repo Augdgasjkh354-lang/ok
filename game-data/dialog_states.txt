@@ -1420,3 +1420,4 @@ lord_talk_money
 lord_talk_gang
 af33_pretender_abandoned
 af33_pretender_abandoned_supp
+lord_talk_court

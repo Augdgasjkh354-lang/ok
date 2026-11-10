@@ -25869,10 +25869,16 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   #[  
   #]],
 
-  [anyone,"start", [], "Surrender or die. Make your choice", "battle_reason_stated",[]],
+  # 试玩包十三 bug：B-2/B-3/B-5 的村长、酒馆老板问候追加在文件末尾，排在这句兜底之后；
+  # 原版问候让位后，他们会掉进这里喊“投降还是死”。兜底行跳过这两类人，让末尾的专属问候接住。
+  [anyone,"start", [(neg|is_between, "$g_talk_troop", tavernkeepers_begin, tavernkeepers_end),
+                    (neg|is_between, "$g_talk_troop", village_elders_begin, village_elders_end)],
+   "Surrender or die. Make your choice", "battle_reason_stated",[]],
   [anyone|plyr,"battle_reason_stated", [], "I am not afraid of you. I will fight.", "close_window",[[encounter_attack]]],
 
-  [anyone,"start", [], "Hello. What can I do for you?", "free",[]],
+  [anyone,"start", [(neg|is_between, "$g_talk_troop", tavernkeepers_begin, tavernkeepers_end),
+                    (neg|is_between, "$g_talk_troop", village_elders_begin, village_elders_end)],
+   "Hello. What can I do for you?", "free",[]],
   [anyone|plyr,"free", [[neg|in_meta_mission]], "Tell me about yourself", "view_char_requested",[]],
   [anyone,"view_char_requested", [], "Very well, listen to this...", "view_char",[[change_screen_view_character]]],
   [anyone,"view_char", [], "Anything else?", "free",[]],
@@ -26336,6 +26342,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
 
   # FewerBandits v7.0: inspect a lord's persistent relationship history.
   [anyone|plyr, "lord_talk", [
+    (eq, 1, 0),  # 试玩包十三反馈：搬进“聊聊宫廷里的事”二级对话（原行留位不删，ID 不动）
     (is_between, "$g_talk_troop", kings_begin, lords_end),
   ], "What do you remember of our past dealings?", "fb7_memory_answer", [
     (troop_get_slot, reg51, "$g_talk_troop", slot_fb7_mercy_count),
@@ -26354,6 +26361,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
 
   # FewerBandits v7.1: player can ask lords about their private alliances.
   [anyone|plyr, "lord_talk", [
+    (eq, 1, 0),  # 试玩包十三反馈：搬进“聊聊宫廷里的事”二级对话（原行留位不删，ID 不动）
     (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
     (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
   ], "Do you have secret alliances at court?", "fb71_compact_answer", [
@@ -26384,6 +26392,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
 
   # v7.2: the player can ask a lord about long-term land claims.
   [anyone|plyr, "lord_talk", [
+    (eq, 1, 0),  # 试玩包十三反馈：搬进“聊聊宫廷里的事”二级对话（原行留位不删，ID 不动）
     (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
     (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
   ], "Which fief do you covet, and who has your alliance's support?", "fb72_claim_answer", [
@@ -26425,6 +26434,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
 
   # v7.3: private politics / one-time paid support / reciprocal oaths.
   [anyone|plyr, "lord_talk", [
+    (eq, 1, 0),  # 试玩包十三反馈：搬进“聊聊宫廷里的事”二级对话（原行留位不删，ID 不动）
     (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
     (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
   ], "Let us discuss our political interests in private.", "fb73_private_entry", [
@@ -27900,4 +27910,100 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
     (display_message, "@你放弃了对{s48}的资助，{reg41} 第纳尔打了水漂。往后你可以再资助别人。", 0xFF6666),
   ]],
   [anyone,"af33_pretender_abandoned_supp", [], "明白了。这事就此了结——你资助的钱不会退回来，但你随时可以资助别人。", "supported_pretender_pretalk",[]],
+  # 试玩包十三反馈：FewerBandits v7.0–7.3 的四个宫廷问话（恩怨／盟约／封地／密谈）
+  # 原先摆在跟领主说话的第一层，几乎用不上又占地方，挪进二级对话“聊聊宫廷里的事。”。
+  # 原行加 (eq, 1, 0) 藏起来（ID、顺序不动），这里按原样复制一份，只改状态和中文文本；
+  # 条件、下一状态、后果一字不动，回答仍回 lord_pretalk。
+  # 入口条件＝四个选项条件的 OR。
+  [anyone|plyr, "lord_talk", [
+      (assign, ":show", 0),
+      (try_begin),
+        (is_between, "$g_talk_troop", kings_begin, lords_end),
+        (assign, ":show", 1),
+      (else_try),
+        (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
+        (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
+        (assign, ":show", 1),
+      (try_end),
+      (eq, ":show", 1),
+  ], "聊聊宫廷里的事。", "lord_talk_court", []],
+  [anyone, "lord_talk_court", [], "宫廷里的事？你想打听什么？", "lord_talk_court", []],
+  [anyone|plyr, "lord_talk_court", [
+    (is_between, "$g_talk_troop", kings_begin, lords_end),
+  ], "你还记得我们过去的恩怨吗？", "fb7_memory_answer", [
+    (troop_get_slot, reg51, "$g_talk_troop", slot_fb7_mercy_count),
+    (troop_get_slot, reg52, "$g_talk_troop", slot_fb7_imprisonment_count),
+    (troop_get_slot, reg53, "$g_talk_troop", slot_fb7_favor),
+    (troop_get_slot, reg54, "$g_talk_troop", slot_fb7_grudge),
+    (troop_get_slot, reg55, "$g_talk_troop", slot_fb7_family_grudge),
+  ]],
+  [anyone|plyr, "lord_talk_court", [
+    (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
+    (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
+  ], "我听说贵族之间常有秘密盟约。你参与其中吗？", "fb71_compact_answer", [
+    (call_script, "script_troop_get_relation_with_troop", "trp_player", "$g_talk_troop"),
+    (assign, reg60, reg0),
+    (troop_get_slot, reg61, "$g_talk_troop", slot_fb7_favor),
+    (troop_get_slot, "$g_fb71_talk_anchor", "$g_talk_troop", slot_fb71_cabal_leader),
+    (assign, reg62, 0),
+    (assign, reg63, 0),
+    (try_begin),
+      (gt, "$g_fb71_talk_anchor", 0),
+      (str_store_troop_name, s61, "$g_fb71_talk_anchor"),
+      (troop_get_slot, reg62, "$g_talk_troop", slot_fb71_oath_strength),
+      (troop_get_slot, reg63, "$g_talk_troop", slot_fb71_fief_grievance),
+    (try_end),
+  ]],
+  [anyone|plyr, "lord_talk_court", [
+    (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
+    (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
+  ], "你觊觎哪块封地？你的盟友又支持谁？", "fb72_claim_answer", [
+    (call_script, "script_troop_get_relation_with_troop", "trp_player", "$g_talk_troop"),
+    (assign, reg60, reg0),
+    (troop_get_slot, "$g_fb72_talk_target", "$g_talk_troop", slot_fb72_desired_center),
+    (troop_get_slot, reg61, "$g_talk_troop", slot_fb72_ambition),
+    (troop_get_slot, reg62, "$g_talk_troop", slot_fb71_fief_grievance),
+    (assign, "$g_fb72_talk_nominee", -1),
+    (store_faction_of_troop, ":faction", "$g_talk_troop"),
+    (faction_get_slot, ":issue", ":faction", slot_faction_political_issue),
+    (try_begin),
+      (is_between, ":issue", centers_begin, centers_end),
+      (call_script, "script_fb72_choose_caucus_nominee", "$g_talk_troop", ":issue"),
+      (assign, "$g_fb72_talk_nominee", reg0),
+    (try_end),
+    (try_begin),
+      (is_between, "$g_fb72_talk_target", centers_begin, centers_end),
+      (str_store_party_name, s60, "$g_fb72_talk_target"),
+    (try_end),
+    (try_begin),
+      (is_between, "$g_fb72_talk_nominee", active_npcs_begin, active_npcs_end),
+      (str_store_troop_name, s61, "$g_fb72_talk_nominee"),
+    (try_end),
+  ]],
+  [anyone|plyr, "lord_talk_court", [
+    (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
+    (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
+  ], "我想和你私下谈谈王国中的政治交易。", "fb73_private_entry", [
+    (store_faction_of_troop, ":faction", "$g_talk_troop"),
+    (faction_get_slot, "$g_fb73_private_issue", ":faction", slot_faction_political_issue),
+    (call_script, "script_fb73_vote_price", "$g_talk_troop"),
+    (assign, "$g_fb73_private_price", reg0),
+    (assign, reg40, reg0),
+    (call_script, "script_fb73_get_credit", "trp_player"),
+    (assign, reg41, reg0),
+    (call_script, "script_fb73_get_credit", "$g_talk_troop"),
+    (assign, reg42, reg0),
+    (troop_get_slot, reg43, "trp_player", slot_fb73_breaches),
+    (call_script, "script_fb74_find_rival", "$g_talk_troop"),
+    (assign, "$g_fb74_flip_target", reg0),
+    (assign, "$g_fb74_flip_price", 0),
+    (try_begin),
+      (gt, "$g_fb74_flip_target", 0),
+      (call_script, "script_fb74_flip_price", "$g_talk_troop"),
+      (assign, "$g_fb74_flip_price", reg0),
+      (assign, reg57, reg0),
+      (str_store_troop_name, s54, "$g_fb74_flip_target"),
+    (try_end),
+  ]],
+  [anyone|plyr, "lord_talk_court", [], "还是说点别的吧。", "lord_talk", []],
 ]

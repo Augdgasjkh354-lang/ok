@@ -105,6 +105,18 @@ ALLOWED_DIALOG_CHANGES |= {
     'dlga_lord_talk:lord_af27_bounty',
     'dlga_lord_talk:lord_af27_inform',
 }
+# 试玩包十三反馈：(1) FewerBandits v7.0–7.3 的四个宫廷问话原行加 (eq,1,0) 藏起，
+# 复制到二级对话 lord_talk_court（新 ID dlga_lord_talk_court:…，追加在末尾）；
+# (2) 原版兜底“Surrender or die”／“Hello”两行跳过酒馆老板和村长，让末尾的
+# B-2/B-3/B-5 专属问候接住（否则他们会喊“投降还是死”）。
+ALLOWED_DIALOG_CHANGES |= {
+    'dlga_lord_talk:fb7_memory_answer',
+    'dlga_lord_talk:fb71_compact_answer',
+    'dlga_lord_talk:fb72_claim_answer',
+    'dlga_lord_talk:fb73_private_entry',
+    'dlga_start:battle_reason_stated.1',
+    'dlga_start:free',
+}
 _old=(base/'compiled/conversation.txt').read_text('utf-8').split('\n')
 _new=(data/'conversation.txt').read_text('utf-8').split('\n')
 if _old and _old[-1]=='': _old=_old[:-1]
