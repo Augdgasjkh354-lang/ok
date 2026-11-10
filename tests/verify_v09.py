@@ -193,7 +193,7 @@ assert _merchant_slot < _merchant_guard < _merchant_read, 'invalid goods merchan
 # Borrowed troops: preserve their original type after the lending lord defects.
 _constants = (current/'module_constants.py').read_text('utf-8')
 _dialogs = (current/'module_dialogs.py').read_text('utf-8')
-assert re.search(r'^slot_af26_borrow_troop\\s*=\\s*968\\b', _constants, re.M), 'loan troop save slot'
+assert re.search(r'^slot_af26_borrow_troop\s*=\s*968\b', _constants, re.M), 'loan troop save slot'
 _borrow = _script_section('af26_borrow_return')
 assert '(party_get_slot, ":troop", "p_main_party", slot_af26_borrow_troop)' in _borrow
 assert '(party_set_slot, "p_main_party", slot_af26_borrow_troop, 0)' in _borrow
@@ -206,8 +206,8 @@ for _state, _prompt in (('lord_talk_money', '钱的事？说来听听。'),
                         ('lord_talk_gang', '帮派的事？你说。')):
     _lead = '[anyone, "' + _state + '", [], "' + _prompt + '", "' + _state + '_options", []]'
     assert _lead in _dialogs, ('looping NPC dialogue', _state)
-    assert re.search(r'\\[anyone\\|plyr,\\s*"' + _state + r'_options"', _dialogs), _state
-    assert not re.search(r'\\[anyone\\|plyr,\\s*"' + _state + r'"\\s*,', _dialogs), _state
+    assert re.search(r'\[anyone\|plyr,\s*"' + _state + r'_options"', _dialogs), _state
+    assert not re.search(r'\[anyone\|plyr,\s*"' + _state + r'"\s*,', _dialogs), _state
 
 print('VERIFY_V09_OK')
 print('Original scripts preserved:',len([x for x in (base/'ID_scripts.py').read_text('utf8').splitlines() if x.strip()]))
