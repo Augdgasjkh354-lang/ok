@@ -2124,6 +2124,7 @@ slot_af42_free_caravan       = 968 # caravan party: 1 = spawned free by the engi
 slot_af40_npc_investor       = 969 # town: NPC lord holding a fixed 10% stake; 0 = none (capital 3.0 batch 3)
 slot_af41_last_trade_day     = 970 # town: day+1 a caravan last traded here; 0 = unknown/old save, set on first weekly pass (capital 3.0 batch 4)
 slot_af42_crown_debt_off    = 971 # p_main_party: crown-cut points bought with the king's debt (capital 4.0 batch 1); 0 = none
+slot_af43_press_day          = 972 # p_main_party: day the player may press the king for debt again (day+30); 0 = never pressed (capital 4.0 batch 2)
 slot_af26_license            = 902 # p_main_party: I1 mercenary license, 1 = licensed
 slot_af26_protect_day        = 903 # town: I5 next protection collection day+1; 0 = not protected
 slot_af26_sanctuary_day      = 904 # p_main_party: L5 sanctuary expiry (day+7); 0 = not in sanctuary

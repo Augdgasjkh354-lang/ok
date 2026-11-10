@@ -28261,4 +28261,22 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   ]],
   [anyone|plyr,"af42_cut_choose", [], "算了，我再想想。", "lord_pretalk", []],
   [anyone,"af42_cut_done", [], "规矩是我定的，也由我改。别到处去说。", "lord_pretalk", []],
+  # v1.0 资本家 4.0 第二批: 逼债——再不还, 就把钱转去资助本国称王者。
+  [anyone|plyr,"lord_talk_money", [
+    (call_script, "script_af42_king_debt", "$g_talk_troop"),
+    (eq, reg1, 1),
+    (party_get_slot, ":next", "p_main_party", slot_af43_press_day),
+    (store_current_day, ":today"),
+    (le, ":next", ":today"),
+    (store_faction_of_troop, ":fac", "$g_talk_troop"),
+    (call_script, "script_af43_rival_pretender", ":fac"),
+    (gt, reg0, 0),
+  ], "陛下，这笔账再拖下去，我只好把钱转去资助{s4}了。", "af43_press", [
+    (call_script, "script_af43_press_king", "$g_talk_troop"),
+    (assign, "$temp", reg0),
+    (assign, reg41, reg1),
+  ]],
+  [anyone,"af43_press", [(eq, "$temp", 1)], "……你这是拿刀架在我脖子上。好，{reg41} 第纳尔，拿去。这笔账我记下了，不止是钱的账。", "lord_pretalk", []],
+  [anyone,"af43_press", [(eq, "$temp", 2)], "你尽管去。国库里一文都没有，你逼我也逼不出来。", "lord_pretalk", []],
+  [anyone,"af43_press", [], "你已经在给那个人送钱了，还有脸来逼我？滚出去。", "lord_pretalk", []],
 ]
