@@ -34940,26 +34940,8 @@ scripts = [
   
   ("post_battle_personality_clash_check",
     [
-      (try_for_range, ":npc", companions_begin, companions_end),
-        (eq, "$disable_npc_complaints", 0),
-        
-        (main_party_has_troop, ":npc"),
-        (neg|troop_is_wounded, ":npc"),
-        
-        (troop_get_slot, ":other_npc", ":npc", slot_troop_personalityclash2_object),
-        (main_party_has_troop, ":other_npc"),
-        (neg|troop_is_wounded, ":other_npc"),
-        
-        #                (store_random_in_range, ":random", 0, 3),
-        (try_begin),
-          (troop_slot_eq, ":npc", slot_troop_personalityclash2_state, 0),
-          (try_begin),
-            #                        (eq, ":random", 0),
-            (assign, "$npc_with_personality_clash_2", ":npc"),
-          (try_end),
-        (try_end),
-        
-      (try_end),
+      # v1.0 同伴：玩家拍板取消「合不来」，战后不再挑同伴吵架；合得来的对话照旧。
+      (assign, "$npc_with_personality_clash_2", 0),
       
       (try_for_range, ":npc", companions_begin, companions_end),
         (troop_slot_eq, ":npc", slot_troop_personalitymatch_state, 0),
@@ -35064,7 +35046,10 @@ scripts = [
       (store_script_param_1, ":npc"),
       
       (troop_get_slot, ":morality_grievances", ":npc", slot_troop_morality_penalties),
-      (troop_get_slot, ":personality_grievances", ":npc", slot_troop_personalityclash_penalties),
+      # v1.0 同伴：玩家拍板取消「合不来」。同伴之间看不顺眼不再影响士气，
+      # 也就不会因此离队（离队判断在 module_triggers 里调本脚本）。
+      # 旧存档里攒下的 slot_troop_personalityclash_penalties 一并不算。
+      (assign, ":personality_grievances", 0),
       (party_get_morale, ":party_morale", "p_main_party"),
       
       (store_sub, ":troop_morale", ":party_morale", ":morality_grievances"),

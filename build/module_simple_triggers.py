@@ -3653,20 +3653,9 @@ simple_triggers = [
             (try_end),
         (else_try),
             (gt, "$npc_with_personality_clash", 0),
-            (eq, "$g_infinite_camping", 0),
-            (eq, "$disable_npc_complaints", 0),
-            (troop_get_slot, ":object", "$npc_with_personality_clash", slot_troop_personalityclash_object),
-            (try_begin),
-                (main_party_has_troop, "$npc_with_personality_clash"),
-                (main_party_has_troop, ":object"),
-                (neq, "$g_player_is_captive", 1),
-                                
-                (assign, "$npc_map_talk_context", slot_troop_personalityclash_state),
-                                (str_store_string, s51, "str_triggered_by_npc_has_personality_clash"),
-                (start_map_conversation, "$npc_with_personality_clash", -1),
-            (else_try),
-                (assign, "$npc_with_personality_clash", 0),
-            (try_end),
+            # v1.0 同伴：玩家拍板取消「合不来」。挑人的触发器在不编译的
+            # module_triggers 里，没法改，这里收到就清掉，不再开吵架对话。
+            (assign, "$npc_with_personality_clash", 0),
         (else_try), #### Political issue
             (gt, "$npc_with_political_grievance", 0),
             (eq, "$g_infinite_camping", 0),
