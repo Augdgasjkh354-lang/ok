@@ -4431,6 +4431,13 @@ simple_triggers = [
       (store_distance_to_party_from_party, ":dist", ":home", "p_main_party"),
       (lt, ":dist", 7),
       (troop_get_slot, ":next", ":npc", slot_af44_home_remark_day),
+      # 审查补: 973 为 0 (刚听完原版第一次回乡的话, 或旧存档) 时先记 30 天后,
+      # 这次不弹, 免得原版那段话说完几个小时后又弹一次。
+      (try_begin),
+        (eq, ":next", 0),
+        (store_add, ":next", ":today", 30),
+        (troop_set_slot, ":npc", slot_af44_home_remark_day, ":next"),
+      (try_end),
       (le, ":next", ":today"),
       (call_script, "script_af44_home_remark", ":npc"),
       (eq, reg0, 1),
