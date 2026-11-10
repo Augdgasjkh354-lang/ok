@@ -17342,6 +17342,8 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
         
   [anyone,"lady_marriage_discussion",
     [
+        (call_script, "script_af20_fame_kind"),
+        (neq, reg0, 2),
         (call_script, "script_get_kingdom_lady_social_determinants", "$g_talk_troop"),
         (assign, ":guardian", reg0),
         (call_script, "script_troop_get_family_relation_to_troop", ":guardian", "$g_talk_troop"),
