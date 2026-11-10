@@ -18296,4 +18296,49 @@ game_menus = [
        (call_script, "script_troop_change_relation_with_troop", "trp_player", ":lord", -1),
        (change_screen_return)]),
    ]),
+
+  # v1.0 政治 3.0 第一批: 贵族联合逼宫。
+  # 进菜单调 af50_find_crisis, 领头的名字进 s11, 人数进 reg41。
+  ("af50_crisis", mnf_scale_picture,
+   "{s11}派信使捎来口信：『我们为陛下流过血，好地却都给了身边的人。连我在内，已经有 {reg41} 位大人商量好了，要一起去问陛下，这个王国究竟是谁打下来的。你站哪边？』",
+   "none",
+   [(set_background_mesh, "mesh_pic_messenger"),
+    (call_script, "script_af50_find_crisis"),
+    (assign, ":leader", reg0),
+    (assign, reg41, reg1),
+    (str_store_troop_name, s11, ":leader")],
+   [
+     ("af50_pressure",
+      [(call_script, "script_af50_find_crisis"),
+       (ge, reg0, 0)],
+      "我跟你们一起去。",
+      [(call_script, "script_af50_resolve", 1),
+       (jump_to_menu, "mnu_af50_result")]),
+     ("af50_dissuade",
+      [(call_script, "script_af50_find_crisis"),
+       (ge, reg0, 0)],
+      "陛下自有考量，你们还是算了吧。",
+      [(call_script, "script_af50_resolve", 2),
+       (jump_to_menu, "mnu_af50_result")]),
+     ("af50_neutral",
+      [],
+      "这事我不掺和。",
+      [(call_script, "script_af50_resolve", 3),
+       (jump_to_menu, "mnu_af50_result")]),
+     ("af50_inform",
+      [(call_script, "script_af50_find_crisis"),
+       (ge, reg0, 0)],
+      "（先去禀告陛下。）",
+      [(call_script, "script_af50_resolve", 4),
+       (jump_to_menu, "mnu_af50_result")]),
+   ]),
+
+  # v1.0 政治 3.0 第一批: 逼宫的结果。正文 "{s40}", 不要进菜单操作
+  # (不然会把 s40 冲掉)。
+  ("af50_result", 0,
+   "{s40}",
+   "none", [],
+   [
+     ("af50_result_continue", [], "继续赶路", [(change_screen_return)]),
+   ]),
 ]

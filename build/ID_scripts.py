@@ -877,5 +877,8 @@ script_af51_expire_player_promise = 875
 script_af51_find_lobbyist = 876
 script_af51_paid_vote_price = 877
 script_af51_take_paid_vote = 878
+script_af50_is_malcontent = 879
+script_af50_find_crisis = 880
+script_af50_resolve = 881
 
 

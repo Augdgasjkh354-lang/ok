@@ -313,3 +313,10 @@ menu_af51_lobby|{s11}派 信 使 捎 话 来 ： 『 陛 下 在 议 {s12}的 �
 mno_af51_support|我 支 持 你 。 
 mno_af51_paid|这 一 票 不 白 给 ， {reg41} 第 纳 尔 。 
 mno_af51_think|这 事 我 还 得 想 想 。 
+menu_af50_crisis|{s11}派 信 使 捎 来 口 信 ： 『 我 们 为 陛 下 流 过 血 ， 好 地 却 都 给 了 身 边 的 人 。 连 我 在 内 ， 已 经 有 {reg41} 位 大 人 商 量 好 了 ， 要 一 起 去 问 陛 下 ， 这 个 王 国 究 竟 是 谁 打 下 来 的 。 你 站 哪 边 ？ 』 
+mno_af50_pressure|我 跟 你 们 一 起 去 。 
+mno_af50_dissuade|陛 下 自 有 考 量 ， 你 们 还 是 算 了 吧 。 
+mno_af50_neutral|这 事 我 不 掺 和 。 
+mno_af50_inform|（ 先 去 禀 告 陛 下 。 ） 
+menu_af50_result|{s40}
+mno_af50_result_continue|继 续 赶 路 
