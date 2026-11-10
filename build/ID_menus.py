@@ -254,3 +254,6 @@ menu_af33_loan_call = 252
 menu_af33_garrison = 253
 menu_af33_caravan_raid = 254
 menu_af33_intel = 255
+menu_af34_trade = 256
+menu_af34_war = 257
+menu_af34_garrison = 258
