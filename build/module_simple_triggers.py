@@ -475,6 +475,23 @@ simple_triggers = [
            (val_mul, ":added_wealth", 3),
            (val_div, ":added_wealth", 2),
          (try_end),
+         # v1.0 资本家 3.0 第四批 (商路断供): 城镇三周没有商队成交, 本周入账少两成; 六周以上少四成。
+         # 只削减原版凭繁荣算出的入账, 不另扣钱; 入股分红按削减后的入账算, 所以股东一起吃亏。
+         # 旧存档 Slot 970 为 0 时从今天开始计。玩家自己的城不走这里 (收入走原版租税和关税, 关税本来就靠商队)。
+         (try_begin),
+           (is_between, ":center_no", towns_begin, towns_end),
+           (call_script, "script_af41_trade_gap", ":center_no"),
+           (assign, ":gap", reg0),
+           (try_begin),
+             (gt, ":gap", 42),
+             (val_mul, ":added_wealth", 60),
+             (val_div, ":added_wealth", 100),
+           (else_try),
+             (gt, ":gap", 21),
+             (val_mul, ":added_wealth", 80),
+             (val_div, ":added_wealth", 100),
+           (try_end),
+         (try_end),
          (val_add, ":cur_wealth", ":added_wealth"),
          (call_script, "script_calculate_weekly_party_wage", ":center_no"),
          (val_sub, ":cur_wealth", reg0),
@@ -496,6 +513,31 @@ simple_triggers = [
            (str_store_party_name, s44, ":center_no"),
            (assign, reg44, ":dividend"),
            (display_message, "@{s44} 的入股分红 {reg44} 第纳尔已经进了你的口袋。", 0xFFCC66),
+         (try_end),
+         # v1.0 资本家 3.0 第三批: 领主入股的一成 (Slot 969)。
+         # 先清掉失效的股份: 领主不在了 / 不再是王国领主 / 自己成了这座城的封主 -> 股份作废, 钱留在金库 (照商队股份的先例)。
+         # 有效时按同样的算法分红: 本周入账的一成, 单次不超金库 1/4, 从金库进领主财产 (af14_lord_wealth)。
+         # 领主的国家和这座城的国家在打仗时不分红, 钱留在金库。
+         (try_begin),
+           (party_get_slot, ":npc_inv", ":center_no", slot_af40_npc_investor),
+           (gt, ":npc_inv", 0),
+           (try_begin),
+             (this_or_next|neg|is_between, ":npc_inv", active_npcs_begin, active_npcs_end),
+             (this_or_next|neg|troop_slot_eq, ":npc_inv", slot_troop_occupation, slto_kingdom_hero),
+             (party_slot_eq, ":center_no", slot_town_lord, ":npc_inv"),
+             (party_set_slot, ":center_no", slot_af40_npc_investor, 0),
+           (else_try),
+             (store_troop_faction, ":inv_fac", ":npc_inv"),
+             (store_faction_of_party, ":town_fac", ":center_no"),
+             (store_relation, ":inv_rel", ":inv_fac", ":town_fac"),
+             (ge, ":inv_rel", 0),
+             (store_div, ":npc_div", ":added_wealth", 10),
+             (store_div, ":cap", ":cur_wealth", 4),
+             (val_min, ":npc_div", ":cap"),
+             (gt, ":npc_div", 0),
+             (val_sub, ":cur_wealth", ":npc_div"),
+             (call_script, "script_af14_lord_wealth", ":npc_inv", ":npc_div", 0),
+           (try_end),
          (try_end),
          (party_set_slot, ":center_no", slot_town_wealth, ":cur_wealth"),
        (try_end),
@@ -4377,5 +4419,10 @@ simple_triggers = [
   (24*7, [
     (call_script, "script_af33_settle_pretender"),
     (call_script, "script_af33_intel_weekly"),
+  ]),
+
+  # v1.0 资本家 3.0 第三批: 有钱的领主也会入股城镇, 每周最多一笔。
+  (24*7, [
+    (call_script, "script_af40_npc_invest"),
   ]),
 ]

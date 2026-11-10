@@ -105,6 +105,35 @@ ALLOWED_DIALOG_CHANGES |= {
     'dlga_lord_talk:lord_af27_bounty',
     'dlga_lord_talk:lord_af27_inform',
 }
+# 试玩包十三反馈：(1) FewerBandits v7.0–7.3 的四个宫廷问话原行加 (eq,1,0) 藏起，
+# 复制到二级对话 lord_talk_court（新 ID dlga_lord_talk_court:…，追加在末尾）；
+# (2) 原版兜底“Surrender or die”／“Hello”两行跳过酒馆老板和村长，让末尾的
+# B-2/B-3/B-5 专属问候接住（否则他们会喊“投降还是死”）。
+ALLOWED_DIALOG_CHANGES |= {
+    'dlga_lord_talk:fb7_memory_answer',
+    'dlga_lord_talk:fb71_compact_answer',
+    'dlga_lord_talk:fb72_claim_answer',
+    'dlga_lord_talk:fb73_private_entry',
+    'dlga_start:battle_reason_stated.1',
+    'dlga_start:free',
+}
+# 资本家 3.0 第二批 (以税抵债): 「谈钱的事。」入口条件加一支 (lord_af38_taxdebt)，
+# 领主欠账 ≥ 3000 且财产不够还、名下有可抵账的城镇时入口出现。
+# 这一行在 v0.8 基线之后，verify 的逐行比对覆盖不到；照第五批的先例备案留痕。
+ALLOWED_DIALOG_CHANGES |= {
+    'dlga_lord_talk:lord_talk_money',
+}
+# 资本家 3.0 第三批 (领主入股): 镇长求投资的入股选项改按“一座城对外最多卖三成”判断
+# (af40_share_room), 领主先占的一成也算在内。该行在 v0.8 基线之后, 备案留痕。
+ALLOWED_DIALOG_CHANGES |= {
+    'dlga_mayor_af33_beg_choose:mayor_af33_beg_done',
+}
+# 开场白文案接入 (Fable af39): 存变量行调 af39_lord_remark / af39_town_remark，
+# 镇长通用问候加 (neq, "$g_comment_found", 2) 后 ID 顺延一格 (mayor_begin.1)。
+ALLOWED_DIALOG_CHANGES |= {
+    'dlga_start:close_window',
+    'dlga_start:mayor_begin.1',
+}
 _old=(base/'compiled/conversation.txt').read_text('utf-8').split('\n')
 _new=(data/'conversation.txt').read_text('utf-8').split('\n')
 if _old and _old[-1]=='': _old=_old[:-1]

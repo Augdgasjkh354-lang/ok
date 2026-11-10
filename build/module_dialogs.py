@@ -148,6 +148,22 @@ dialogs = [
                        (call_script, "script_get_relevant_comment_to_s42"),
                        (assign, "$g_comment_found", reg0),
                      (try_end),
+                     # 开场白文案接入：原版没找到领主评论时，按玩家和他之间的事说一句（s42）。
+                     # $g_comment_found：1＝领主开场白（走原版 lord_start 的 {s42} 行），2＝酒馆老板／镇长／村长开场白。
+                     (try_begin),
+                       (eq, "$g_comment_found", 0),
+                       (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
+                       (call_script, "script_af39_lord_remark", "$g_talk_troop"),
+                       (eq, reg0, 1),
+                       (assign, "$g_comment_found", 1),
+                       (assign, "$log_comment_relation_change", 0),
+                       (assign, "$g_rejoinder_to_last_comment", 0),
+                     (else_try),
+                       (eq, "$g_comment_found", 0),
+                       (call_script, "script_af39_town_remark", "$g_talk_troop"),
+                       (eq, reg0, 1),
+                       (assign, "$g_comment_found", 2),
+                     (try_end),
 
                      (troop_get_type, reg65, "$g_talk_troop"),
                      (try_begin),
@@ -19811,7 +19827,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
                     (call_script, "script_af20_fame_tier", ":fame"),
                     (assign, ":tier", reg0),
                     (le, ":renown", 300),
-                    (lt, ":tier", 2)],  # v1.0 NPC对白 B-5: 声望>300 或威名>=2 档时不走这句
+                    (lt, ":tier", 2), (neq, "$g_comment_found", 2)],  # v1.0 NPC对白 B-5: 声望>300 或威名>=2 档时不走这句
    "Good day dear {sir/madam}. How can I help you?", "tavernkeeper_talk",
    [
 #    (store_encountered_party,reg(2)),
@@ -21975,7 +21991,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
                      (str_store_party_name, s9, "$current_town")],
    "Hello stranger, you seem to be new to {s9}. I am the guild master of the town.", "mayor_talk",[]],
   
-  [anyone ,"start", [(is_between,"$g_talk_troop",mayors_begin,mayors_end)],
+  [anyone ,"start", [(is_between,"$g_talk_troop",mayors_begin,mayors_end), (neq, "$g_comment_found", 2)],
    "Good day, {playername}.", "mayor_begin",
    [
      #Delete last offered quest if peace is formed.
@@ -23619,26 +23635,26 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   [anyone,"start", [(is_between,"$g_talk_troop", village_elders_begin, village_elders_end),(eq,"$g_talk_troop_met",0),
                     (str_store_party_name, s9, "$current_town"),
                     (call_script, "script_af25_village_looted_recently", "$current_town"), (eq, reg0, 0),
-                    (call_script, "script_af20_fame_kind"), (neq, reg0, 1)],  # v1.0 NPC对白 B-3/B-2: 被劫过或仁名时不走这句
+                    (call_script, "script_af20_fame_kind"), (neq, reg0, 1), (neq, "$g_comment_found", 2)],  # v1.0 NPC对白 B-3/B-2: 被劫过或仁名时不走这句
    "Good day, {sir/madam}, and welcome to {s9}. I am the elder of this village.", "village_elder_talk",[]],
 
   [anyone,"start", [(is_between,"$g_talk_troop", village_elders_begin, village_elders_end),(eq,"$g_talk_troop_met",0),
                     (str_store_party_name, s9, "$current_town"),
                     (party_slot_eq, "$current_town", slot_town_lord, "trp_player"),
                     (call_script, "script_af25_village_looted_recently", "$current_town"), (eq, reg0, 0),
-                    (call_script, "script_af20_fame_kind"), (neq, reg0, 1)],  # v1.0 NPC对白 B-3/B-2: 被劫过或仁名时不走这句
+                    (call_script, "script_af20_fame_kind"), (neq, reg0, 1), (neq, "$g_comment_found", 2)],  # v1.0 NPC对白 B-3/B-2: 被劫过或仁名时不走这句
    "Welcome to {s9}, my {lord/lady}. We were rejoiced by the news that you are the new {lord/lady} of our humble village.\
  I am the village elder and I will be honoured to serve you in any way I can.", "village_elder_talk",[]],
   
   [anyone ,"start", [(is_between,"$g_talk_troop",village_elders_begin,village_elders_end),
                      (party_slot_eq, "$current_town", slot_town_lord, "trp_player"),
                      (call_script, "script_af25_village_looted_recently", "$current_town"), (eq, reg0, 0),
-                     (call_script, "script_af20_fame_kind"), (neq, reg0, 1)],  # v1.0 NPC对白 B-3/B-2: 被劫过或仁名时不走这句
+                     (call_script, "script_af20_fame_kind"), (neq, reg0, 1), (neq, "$g_comment_found", 2)],  # v1.0 NPC对白 B-3/B-2: 被劫过或仁名时不走这句
    "{My lord/My lady}, you honour our humble village with your presence.", "village_elder_talk",[]],
 
   [anyone ,"start", [(is_between,"$g_talk_troop",village_elders_begin,village_elders_end),
                     (call_script, "script_af25_village_looted_recently", "$current_town"), (eq, reg0, 0),
-                    (call_script, "script_af20_fame_kind"), (neq, reg0, 1)],  # v1.0 NPC对白 B-3/B-2: 被劫过或仁名时不走这句
+                    (call_script, "script_af20_fame_kind"), (neq, reg0, 1), (neq, "$g_comment_found", 2)],  # v1.0 NPC对白 B-3/B-2: 被劫过或仁名时不走这句
    "Good day, {sir/madam}.", "village_elder_talk",[]],
 
   [anyone ,"village_elder_pretalk", [],
@@ -25869,10 +25885,18 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   #[  
   #]],
 
-  [anyone,"start", [], "Surrender or die. Make your choice", "battle_reason_stated",[]],
+  # 试玩包十三 bug：B-2/B-3/B-5 的村长、酒馆老板问候追加在文件末尾，排在这句兜底之后；
+  # 原版问候让位后，他们会掉进这里喊“投降还是死”。兜底行跳过这两类人，让末尾的专属问候接住。
+  [anyone,"start", [(neg|is_between, "$g_talk_troop", tavernkeepers_begin, tavernkeepers_end),
+                    (neg|is_between, "$g_talk_troop", village_elders_begin, village_elders_end),
+                    (neg|is_between, "$g_talk_troop", mayors_begin, mayors_end)],
+   "Surrender or die. Make your choice", "battle_reason_stated",[]],
   [anyone|plyr,"battle_reason_stated", [], "I am not afraid of you. I will fight.", "close_window",[[encounter_attack]]],
 
-  [anyone,"start", [], "Hello. What can I do for you?", "free",[]],
+  [anyone,"start", [(neg|is_between, "$g_talk_troop", tavernkeepers_begin, tavernkeepers_end),
+                    (neg|is_between, "$g_talk_troop", village_elders_begin, village_elders_end),
+                    (neg|is_between, "$g_talk_troop", mayors_begin, mayors_end)],
+   "Hello. What can I do for you?", "free",[]],
   [anyone|plyr,"free", [[neg|in_meta_mission]], "Tell me about yourself", "view_char_requested",[]],
   [anyone,"view_char_requested", [], "Very well, listen to this...", "view_char",[[change_screen_view_character]]],
   [anyone,"view_char", [], "Anything else?", "free",[]],
@@ -26336,6 +26360,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
 
   # FewerBandits v7.0: inspect a lord's persistent relationship history.
   [anyone|plyr, "lord_talk", [
+    (eq, 1, 0),  # 试玩包十三反馈：搬进“聊聊宫廷里的事”二级对话（原行留位不删，ID 不动）
     (is_between, "$g_talk_troop", kings_begin, lords_end),
   ], "What do you remember of our past dealings?", "fb7_memory_answer", [
     (troop_get_slot, reg51, "$g_talk_troop", slot_fb7_mercy_count),
@@ -26354,6 +26379,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
 
   # FewerBandits v7.1: player can ask lords about their private alliances.
   [anyone|plyr, "lord_talk", [
+    (eq, 1, 0),  # 试玩包十三反馈：搬进“聊聊宫廷里的事”二级对话（原行留位不删，ID 不动）
     (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
     (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
   ], "Do you have secret alliances at court?", "fb71_compact_answer", [
@@ -26384,6 +26410,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
 
   # v7.2: the player can ask a lord about long-term land claims.
   [anyone|plyr, "lord_talk", [
+    (eq, 1, 0),  # 试玩包十三反馈：搬进“聊聊宫廷里的事”二级对话（原行留位不删，ID 不动）
     (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
     (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
   ], "Which fief do you covet, and who has your alliance's support?", "fb72_claim_answer", [
@@ -26425,6 +26452,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
 
   # v7.3: private politics / one-time paid support / reciprocal oaths.
   [anyone|plyr, "lord_talk", [
+    (eq, 1, 0),  # 试玩包十三反馈：搬进“聊聊宫廷里的事”二级对话（原行留位不删，ID 不动）
     (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
     (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
   ], "Let us discuss our political interests in private.", "fb73_private_entry", [
@@ -26603,7 +26631,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   # v1.0 NPC对白 B-3: 60 天内被玩家劫掠过的村子, 村长认出玩家 (新行追加在文件末尾; 旧 4 句已加互斥条件, 本行才轮得到)。
   [anyone,"start", [(is_between,"$g_talk_troop",village_elders_begin,village_elders_end),
                     (call_script, "script_af25_village_looted_recently", "$current_town"),
-                    (eq, reg0, 1)],
+                    (eq, reg0, 1), (neq, "$g_comment_found", 2)],
    "你还敢回来？上次你抢走的粮食，村里到现在还没缓过来。", "village_elder_talk",[]],
 
   # v1.0 NPC对白 B-1: 领主初见按威名档位打招呼 (只初见、只友好派系; 档位只看 Slot 875 原始值)。
@@ -26650,7 +26678,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   # v1.0 NPC对白 B-2: 村长对仁名玩家的招呼 (被劫过的村子走 B-3 行, 本行只在未被劫时轮到)。
   [anyone,"start", [(is_between,"$g_talk_troop",village_elders_begin,village_elders_end),
                     (call_script, "script_af20_fame_kind"),
-                    (eq, reg0, 1)],
+                    (eq, reg0, 1), (neq, "$g_comment_found", 2)],
    "您是行善的人，村里人都记着。", "village_elder_talk",[]],
 
   # v1.0 NPC对白 B-5: 酒馆老板对声望>300 或威名>=2 档的玩家。
@@ -26660,7 +26688,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
                     (call_script, "script_af20_fame_tier", ":fame"),
                     (assign, ":tier", reg0),
                     (this_or_next|gt, ":renown", 300),
-                    (ge, ":tier", 2)],
+                    (ge, ":tier", 2), (neq, "$g_comment_found", 2)],
    "您来了，大人。楼上雅间还给您留着。", "tavernkeeper_talk",[]],
 
   # v1.0 NPC对白 B-7: 贵妇求婚线补一档凶名拒绝 (道德派低荣誉行已排除凶名; 本行是兜底拒绝, 其余拒绝理由仍优先)。
@@ -27293,7 +27321,9 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
     (is_between, "$g_encountered_party", towns_begin, towns_end),
     (neg|party_slot_eq, "$g_encountered_party", slot_town_lord, "trp_player"),
     (party_slot_ge, "$g_encountered_party", slot_town_lord, 1),
-    (neg|party_slot_ge, "$g_encountered_party", slot_af30_town_shares, 30),
+    # 资本家 3.0 第三批: 一座城对外最多卖三成, 领主先占的一成也算在内
+    (call_script, "script_af40_share_room", "$g_encountered_party"),
+    (ge, reg0, 10),
     (store_troop_gold, ":gold", "trp_player"),
     (ge, ":gold", 10000),
   ], "入股本镇, 投 10000 第纳尔 (10% 股份)。", "mayor_af33_beg_done",[
@@ -27763,6 +27793,11 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
       (store_troop_gold, ":gold", "trp_player"),
       (ge, ":gold", 5000),
       (assign, ":show", 1),
+      (else_try),
+      # 你手头紧，就别硬撑了——拿城里的税抵账吧。(lord_af38_taxdebt)
+      (call_script, "script_af38_taxdebt_town", "$g_talk_troop"),
+      (gt, reg0, 0),
+      (assign, ":show", 1),
       (try_end),
       (eq, ":show", 1),
   ], "谈钱的事。", "lord_talk_money", []],
@@ -27900,4 +27935,236 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
     (display_message, "@你放弃了对{s48}的资助，{reg41} 第纳尔打了水漂。往后你可以再资助别人。", 0xFF6666),
   ]],
   [anyone,"af33_pretender_abandoned_supp", [], "明白了。这事就此了结——你资助的钱不会退回来，但你随时可以资助别人。", "supported_pretender_pretalk",[]],
+  # 试玩包十三反馈：FewerBandits v7.0–7.3 的四个宫廷问话（恩怨／盟约／封地／密谈）
+  # 原先摆在跟领主说话的第一层，几乎用不上又占地方，挪进二级对话“聊聊宫廷里的事。”。
+  # 原行加 (eq, 1, 0) 藏起来（ID、顺序不动），这里按原样复制一份，只改状态和中文文本；
+  # 条件、下一状态、后果一字不动，回答仍回 lord_pretalk。
+  # 入口条件＝四个选项条件的 OR。
+  [anyone|plyr, "lord_talk", [
+      (assign, ":show", 0),
+      (try_begin),
+        (is_between, "$g_talk_troop", kings_begin, lords_end),
+        (assign, ":show", 1),
+      (else_try),
+        (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
+        (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
+        (assign, ":show", 1),
+      (try_end),
+      (eq, ":show", 1),
+  ], "聊聊宫廷里的事。", "lord_talk_court", []],
+  [anyone, "lord_talk_court", [], "宫廷里的事？你想打听什么？", "lord_talk_court", []],
+  [anyone|plyr, "lord_talk_court", [
+    (is_between, "$g_talk_troop", kings_begin, lords_end),
+  ], "你还记得我们过去的恩怨吗？", "fb7_memory_answer", [
+    (troop_get_slot, reg51, "$g_talk_troop", slot_fb7_mercy_count),
+    (troop_get_slot, reg52, "$g_talk_troop", slot_fb7_imprisonment_count),
+    (troop_get_slot, reg53, "$g_talk_troop", slot_fb7_favor),
+    (troop_get_slot, reg54, "$g_talk_troop", slot_fb7_grudge),
+    (troop_get_slot, reg55, "$g_talk_troop", slot_fb7_family_grudge),
+  ]],
+  [anyone|plyr, "lord_talk_court", [
+    (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
+    (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
+  ], "我听说贵族之间常有秘密盟约。你参与其中吗？", "fb71_compact_answer", [
+    (call_script, "script_troop_get_relation_with_troop", "trp_player", "$g_talk_troop"),
+    (assign, reg60, reg0),
+    (troop_get_slot, reg61, "$g_talk_troop", slot_fb7_favor),
+    (troop_get_slot, "$g_fb71_talk_anchor", "$g_talk_troop", slot_fb71_cabal_leader),
+    (assign, reg62, 0),
+    (assign, reg63, 0),
+    (try_begin),
+      (gt, "$g_fb71_talk_anchor", 0),
+      (str_store_troop_name, s61, "$g_fb71_talk_anchor"),
+      (troop_get_slot, reg62, "$g_talk_troop", slot_fb71_oath_strength),
+      (troop_get_slot, reg63, "$g_talk_troop", slot_fb71_fief_grievance),
+    (try_end),
+  ]],
+  [anyone|plyr, "lord_talk_court", [
+    (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
+    (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
+  ], "你觊觎哪块封地？你的盟友又支持谁？", "fb72_claim_answer", [
+    (call_script, "script_troop_get_relation_with_troop", "trp_player", "$g_talk_troop"),
+    (assign, reg60, reg0),
+    (troop_get_slot, "$g_fb72_talk_target", "$g_talk_troop", slot_fb72_desired_center),
+    (troop_get_slot, reg61, "$g_talk_troop", slot_fb72_ambition),
+    (troop_get_slot, reg62, "$g_talk_troop", slot_fb71_fief_grievance),
+    (assign, "$g_fb72_talk_nominee", -1),
+    (store_faction_of_troop, ":faction", "$g_talk_troop"),
+    (faction_get_slot, ":issue", ":faction", slot_faction_political_issue),
+    (try_begin),
+      (is_between, ":issue", centers_begin, centers_end),
+      (call_script, "script_fb72_choose_caucus_nominee", "$g_talk_troop", ":issue"),
+      (assign, "$g_fb72_talk_nominee", reg0),
+    (try_end),
+    (try_begin),
+      (is_between, "$g_fb72_talk_target", centers_begin, centers_end),
+      (str_store_party_name, s60, "$g_fb72_talk_target"),
+    (try_end),
+    (try_begin),
+      (is_between, "$g_fb72_talk_nominee", active_npcs_begin, active_npcs_end),
+      (str_store_troop_name, s61, "$g_fb72_talk_nominee"),
+    (try_end),
+  ]],
+  [anyone|plyr, "lord_talk_court", [
+    (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
+    (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
+  ], "我想和你私下谈谈王国中的政治交易。", "fb73_private_entry", [
+    (store_faction_of_troop, ":faction", "$g_talk_troop"),
+    (faction_get_slot, "$g_fb73_private_issue", ":faction", slot_faction_political_issue),
+    (call_script, "script_fb73_vote_price", "$g_talk_troop"),
+    (assign, "$g_fb73_private_price", reg0),
+    (assign, reg40, reg0),
+    (call_script, "script_fb73_get_credit", "trp_player"),
+    (assign, reg41, reg0),
+    (call_script, "script_fb73_get_credit", "$g_talk_troop"),
+    (assign, reg42, reg0),
+    (troop_get_slot, reg43, "trp_player", slot_fb73_breaches),
+    (call_script, "script_fb74_find_rival", "$g_talk_troop"),
+    (assign, "$g_fb74_flip_target", reg0),
+    (assign, "$g_fb74_flip_price", 0),
+    (try_begin),
+      (gt, "$g_fb74_flip_target", 0),
+      (call_script, "script_fb74_flip_price", "$g_talk_troop"),
+      (assign, "$g_fb74_flip_price", reg0),
+      (assign, reg57, reg0),
+      (str_store_troop_name, s54, "$g_fb74_flip_target"),
+    (try_end),
+  ]],
+  # v1.0 资本家 3.0 第一批 (条目: 作坊裁员): 工匠处裁工人, 每人遣散费 20 第纳尔
+  # (一周工资), 玩家付给本镇金库 slot_town_wealth; 三档: 裁 1 / 裁 5 / 全部裁掉。
+  # 先查钱再动手: 条件里 store_troop_gold 查金币, 不够那档不出现; 扣钱和改人数都在后果里。
+  # 提示读 reg42 (本次遣散费) 和 reg41 (裁后工人数), 后果里先赋值再 display_message。
+  [anyone|plyr,"master_craftsman_talk", [
+    (party_slot_ge, "$g_encountered_party", slot_center_player_enterprise, 1),
+    (party_slot_ge, "$g_encountered_party", slot_af31_workers, 1),
+  ], "裁工人。", "craftsman_af37_fire",[]],
+  [anyone,"craftsman_af37_fire", [
+    (party_get_slot, reg41, "$g_encountered_party", slot_af31_workers),
+  ], "裁人？行吧，不过按规矩每人得给一周工钱当遣散费，20 第纳尔一个。如今作坊里有 {reg41} 个工人。你想裁几个？", "craftsman_af37_fire_choose",[]],
+  [anyone|plyr,"craftsman_af37_fire_choose", [
+    (party_slot_ge, "$g_encountered_party", slot_af31_workers, 1),
+    (store_troop_gold, ":gold", "trp_player"),
+    (ge, ":gold", 20),
+  ], "裁 1 个，付 20 第纳尔遣散费。", "craftsman_af37_fire_done",[
+    (assign, reg42, 20),
+    (troop_remove_gold, "trp_player", 20),
+    (party_get_slot, ":treasury", "$g_encountered_party", slot_town_wealth),
+    (val_add, ":treasury", 20),
+    (party_set_slot, "$g_encountered_party", slot_town_wealth, ":treasury"),
+    (party_get_slot, ":workers", "$g_encountered_party", slot_af31_workers),
+    (val_sub, ":workers", 1),
+    (party_set_slot, "$g_encountered_party", slot_af31_workers, ":workers"),
+    (assign, reg41, ":workers"),
+    (display_message, "@你付了 {reg42} 第纳尔遣散费，如今这家作坊有 {reg41} 个工人。", 0x66FF66),
+  ]],
+  [anyone|plyr,"craftsman_af37_fire_choose", [
+    (party_slot_ge, "$g_encountered_party", slot_af31_workers, 5),
+    (store_troop_gold, ":gold", "trp_player"),
+    (ge, ":gold", 100),
+  ], "裁 5 个，付 100 第纳尔遣散费。", "craftsman_af37_fire_done",[
+    (assign, reg42, 100),
+    (troop_remove_gold, "trp_player", 100),
+    (party_get_slot, ":treasury", "$g_encountered_party", slot_town_wealth),
+    (val_add, ":treasury", 100),
+    (party_set_slot, "$g_encountered_party", slot_town_wealth, ":treasury"),
+    (party_get_slot, ":workers", "$g_encountered_party", slot_af31_workers),
+    (val_sub, ":workers", 5),
+    (party_set_slot, "$g_encountered_party", slot_af31_workers, ":workers"),
+    (assign, reg41, ":workers"),
+    (display_message, "@你付了 {reg42} 第纳尔遣散费，如今这家作坊有 {reg41} 个工人。", 0x66FF66),
+  ]],
+  [anyone|plyr,"craftsman_af37_fire_choose", [
+    (party_slot_ge, "$g_encountered_party", slot_af31_workers, 1),
+    (party_get_slot, ":workers", "$g_encountered_party", slot_af31_workers),
+    (store_mul, reg42, ":workers", 20),
+    (store_troop_gold, ":gold", "trp_player"),
+    (ge, ":gold", reg42),
+  ], "全部裁掉，付 {reg42} 第纳尔遣散费。", "craftsman_af37_fire_done",[
+    (party_get_slot, ":workers", "$g_encountered_party", slot_af31_workers),
+    (store_mul, reg42, ":workers", 20),
+    (troop_remove_gold, "trp_player", reg42),
+    (party_get_slot, ":treasury", "$g_encountered_party", slot_town_wealth),
+    (val_add, ":treasury", reg42),
+    (party_set_slot, "$g_encountered_party", slot_town_wealth, ":treasury"),
+    (party_set_slot, "$g_encountered_party", slot_af31_workers, 0),
+    (assign, reg41, 0),
+    (display_message, "@你付了 {reg42} 第纳尔遣散费，如今这家作坊有 {reg41} 个工人。", 0x66FF66),
+  ]],
+  [anyone|plyr,"craftsman_af37_fire_choose", [], "算了，先不裁。", "master_craftsman_pretalk",[]],
+  [anyone,"craftsman_af37_fire_done", [], "人我这就打发走。作坊里清静了，货也会出得慢些。", "master_craftsman_pretalk",[]],
+  [anyone|plyr, "lord_talk_court", [], "还是说点别的吧。", "lord_talk", []],
+  [anyone|plyr,"lord_talk_money", [
+    (call_script, "script_af38_taxdebt_town", "$g_talk_troop"),
+    (gt, reg0, 0),
+  ], "你手头紧，就别硬撑了——拿城里的税抵账吧。", "lord_af38_taxdebt", []],
+  [anyone,"lord_af38_taxdebt", [
+    (call_script, "script_af38_taxdebt_town", "$g_talk_troop"),
+    (assign, ":town", reg0),
+    (assign, ":offset", reg1),
+    (troop_get_slot, ":owed", "$g_talk_troop", slot_af19_lord_owes_player),
+    (store_sub, ":left", ":owed", ":offset"),
+    (str_store_party_name, s4, ":town"),
+    (assign, reg41, ":offset"),
+    (assign, reg42, ":left"),
+    (gt, ":left", 0),
+  ], "……也只能这样了。{s4}往后四周的租税归你收，抵掉 {reg41} 第纳尔。剩下 {reg42} 照旧记着。", "lord_af38_taxdebt_choose", []],
+  [anyone,"lord_af38_taxdebt", [
+    (call_script, "script_af38_taxdebt_town", "$g_talk_troop"),
+    (assign, ":town", reg0),
+    (assign, ":offset", reg1),
+    (troop_get_slot, ":owed", "$g_talk_troop", slot_af19_lord_owes_player),
+    (store_sub, ":left", ":owed", ":offset"),
+    (str_store_party_name, s4, ":town"),
+    (assign, reg41, ":offset"),
+    (assign, reg42, ":left"),
+  ], "……也只能这样了。{s4}往后四周的租税归你收，这笔账就算两清了。", "lord_af38_taxdebt_choose", []],
+  [anyone|plyr,"lord_af38_taxdebt_choose", [
+    (call_script, "script_af38_taxdebt_town", "$g_talk_troop"),
+    (gt, reg0, 0),
+  ], "就这么办。", "lord_af38_taxdebt_done", [
+    (call_script, "script_af38_taxdebt_town", "$g_talk_troop"),
+    (assign, ":town", reg0),
+    (assign, ":offset", reg1),
+    (try_begin),
+      (gt, ":town", 0),
+      (store_current_day, ":today"),
+      (val_add, ":today", 28),
+      (party_set_slot, ":town", slot_af30_tax_farm_day, ":today"),
+      (troop_get_slot, ":owed", "$g_talk_troop", slot_af19_lord_owes_player),
+      (val_sub, ":owed", ":offset"),
+      (val_max, ":owed", 0),
+      (troop_set_slot, "$g_talk_troop", slot_af19_lord_owes_player, ":owed"),
+      (call_script, "script_change_player_relation_with_troop", "$g_talk_troop", 2),
+      (str_store_party_name, s4, ":town"),
+      (assign, reg41, ":offset"),
+      (display_message, "@你接下了 {s4} 四周的包税权，抵掉 {reg41} 第纳尔欠账。领主到城里收租时，租税归你。", 0x66FF66),
+    (try_end),
+  ]],
+  [anyone|plyr,"lord_af38_taxdebt_choose", [], "算了，我再等等。", "lord_pretalk", []],
+  [anyone,"lord_af38_taxdebt_done", [], "我这就给城里的管事写信。这笔账，总算轻了些。", "lord_pretalk", []],
+  # 开场白文案接入：酒馆老板有开场白时说这句（s42 由存变量那行的 af39_town_remark 写好）。
+  [anyone ,"start", [(is_between, "$g_talk_troop", tavernkeepers_begin, tavernkeepers_end),
+                     (eq, "$g_comment_found", 2)],
+   "{s42}", "tavernkeeper_talk", [(assign, "$g_comment_found", 0)]],
+  # 开场白文案接入：村长有开场白时说这句（s42 由存变量那行的 af39_town_remark 写好）。
+  [anyone ,"start", [(is_between, "$g_talk_troop", village_elders_begin, village_elders_end),
+                     (eq, "$g_comment_found", 2)],
+   "{s42}", "village_elder_talk", [(assign, "$g_comment_found", 0)]],
+  # 开场白文案接入：镇长有开场白时说这句（s42 由存变量那行的 af39_town_remark 写好）；下一状态和后果照抄通用问候。
+  [anyone ,"start", [(is_between, "$g_talk_troop", mayors_begin, mayors_end),
+                     (eq, "$g_comment_found", 2)],
+   "{s42}", "mayor_begin",
+   [
+     #Delete last offered quest if peace is formed.
+     (try_begin),
+       (eq, "$merchant_offered_quest", "qst_persuade_lords_to_make_peace"),
+       (party_get_slot, ":target_faction", "qst_persuade_lords_to_make_peace", slot_quest_target_faction),
+       (party_get_slot, ":object_faction", "qst_persuade_lords_to_make_peace", slot_quest_object_faction),
+       (store_relation, ":reln", ":target_faction", ":object_faction"),
+       (ge, ":reln", 0),
+       (assign, "$merchant_quest_last_offerer", -1),
+       (assign, "$merchant_offered_quest", -1),
+     (try_end),
+     (assign, "$g_comment_found", 0),
+     ]],
 ]

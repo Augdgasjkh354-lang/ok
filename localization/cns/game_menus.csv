@@ -143,6 +143,7 @@ mno_af08_desk_contract|查 看 军 粮 委 托
 mno_af08_desk_gang|查 看 地 方 匪 帮 与 黑 市 
 mno_af08_desk_ledger|查 看 秘 密 军 粮 案 卷 
 mno_af08_desk_court|查 看 宫 廷 政 治 情 报 簿 
+mno_af08_desk_capital|查 看 商 号 总 账 
 mno_af08_desk_back|返 回 营 地 
 menu_af08_town_rumor|城 中 风 声 ^^{s40}^^传 闻 只 说 明 公 开 的 地 方 状 况 ； 人 物 身 份 和 幕 后 阴 谋 需 要 调 查 确 认 。 
 mno_af08_town_rumor_back|返 回 城 镇 
@@ -227,10 +228,11 @@ mno_af33_intel_renew|续 一 个 月 （ 500 第 纳 尔 ）
 mno_af33_intel_upgrade|升 一 级 （ 500 第 纳 尔 ） 
 mno_af33_intel_brief|要 一 份 最 近 的 简 报 
 mno_af33_intel_back|算 了 ， 先 不 打 点 了 
-menu_af34_trade|经 商 赚 钱 — — 入 股 本 镇 、 开 钱 庄 、 组 建 商 队 ， 都 在 这 里 打 理 。 
+menu_af34_trade|经 商 赚 钱 — — 入 股 本 镇 、 开 钱 庄 、 组 建 商 队 ， 都 在 这 里 打 理 。 {s40}
 mno_af26_found_caravan|出 资 组 建 一 支 商 队 （ 3000 第 纳 尔 ， 名 下 已 有 {reg0} 支 ， 上 限 36 支 ） 
 mno_af26_caravan_collect|结 算 名 下 商 队 （ 钱 箱 超 600 的 部 分 归 你 ） 
-mno_af30_town_shares_entry|入 股 本 镇 （ 10000 第 纳 尔 ， 10% 股 份 ， 已 有 {reg41}%） 
+mno_af30_town_shares_entry|入 股 本 镇 （ 10000 第 纳 尔 ， 10% 股 份 ， 已 有 {reg41}%， 还 能 买 {reg43}%） 
+mno_af37_town_shares_sell|卖 回 一 成 股 份 给 本 镇 （ 眼 下 金 库 出 得 起 {reg41} 第 纳 尔 ， 已 有 {reg42}%） 
 mno_af31_bank_open_entry|开 钱 庄 （ 5000 第 纳 尔 ， 一 城 只 能 开 一 家 ） 
 mno_af31_bank_entry|去 钱 庄 看 看 （ 未 收 回 本 金 {reg41} 第 纳 尔 ） 
 mno_af34_trade_back|返 回 城 镇 
@@ -296,3 +298,5 @@ mno_af01_village_status|查 看 地 方 战 乱 与 援 助
 mno_af12_case_entry|有 村 民 请 你 主 持 公 道 
 mno_af10_village_word|和 村 长 聊 聊 附 近 的 动 静 
 mno_af36_village_affairs_back|返 回 村 庄 
+menu_af37_ledger|{s40}
+mno_af37_ledger_back|返 回 烽 烟 案 头 

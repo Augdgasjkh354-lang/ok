@@ -846,5 +846,13 @@ script_af33_resolve_assassin = 844
 script_af33_intel_buy = 845
 script_af33_intel_brief = 846
 script_af33_intel_weekly = 847
+script_af37_ledger = 848
+script_af38_taxdebt_town = 849
+script_af40_share_room = 850
+script_af40_npc_invest = 851
+script_af41_trade_gap = 852
+script_af39_lord_remark = 853
+script_af39_town_remark = 854
+script_af39_gang_remark = 855
 
 

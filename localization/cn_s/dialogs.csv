@@ -2,20 +2,16 @@
 dlga_village_elder_talk:village_elder_donate|我 想 给 村 子 捐 点 钱 （ 500 第 纳 尔 ） 。 
 dlga_village_elder_donate:village_elder_pretalk|多 谢 您 的 慷 慨 ， {先 生 /夫 人 }！ 这 500 第 纳 尔 一 定 会 用 在 村 子 最 需 要 的 地 方 ， 您 是 我 们 永 远 的 朋 友 。 
 dlga_village_elder_recruit_start:village_elder_recruit_decision|我 想 如 果 你 能 为 {reg7?他 们 每 个 人 的 装 备 :他 的 装 备 }付 {reg6}第 纳 尔 的 话 ， 将 会 有 {reg5}个 人 跳 出 来 争 取 这 个 机 会 。 这 个 中 你 的 意 吧 ？ 
-dlga_lord_talk:fb7_memory_answer|你 还 记 得 我 们 过 去 的 恩 怨 吗 ？ 
 dlga_fb7_memory_answer:lord_pretalk|你 放 走 过 我 {reg51}次 ， 也 囚 禁 过 我 {reg52}次 。 我 对 你 的 仇 怨 有 {reg54}之 深 ， 家 族 之 恨 还 有 {reg55}。 这 笔 账 ， 我 不 会 忘 。 
 dlga_fb7_memory_answer:lord_pretalk.1|你 放 走 过 我 {reg51}次 、 囚 禁 我 {reg52}次 。 我 欠 你 的 恩 情 是 {reg53}， 旧 怨 是 {reg54}。 你 的 仁 慈 ， 我 记 得 。 
 dlga_fb7_memory_answer:lord_pretalk.2|我 记 得 你 放 走 我 {reg51}次 ， 囚 禁 我 {reg52}次 。 恩 情 {reg53}， 私 怨 {reg54}， 家 族 之 恨 {reg55}。 
-dlga_lord_talk:fb71_compact_answer|我 听 说 贵 族 之 间 常 有 秘 密 盟 约 。 你 参 与 其 中 吗 ？ 
 dlga_fb71_compact_answer:lord_pretalk|宫 廷 里 流 言 四 起 。 至 于 谁 与 谁 私 下 结 盟 ， 我 无 可 奉 告 。 
 dlga_fb71_compact_answer:lord_pretalk.1|我 与 {s61}订 有 盟 约 。 盟 约 忠 诚 度 为 {reg62}， 对 封 地 分 配 的 不 满 为 {reg63}。 盟 友 遇 险 时 ， 我 自 会 伸 出 援 手 。 
 dlga_fb71_compact_answer:lord_pretalk.2|目 前 我 没 有 加 入 任 何 秘 密 派 系 。 贵 族 之 间 的 关 系 总 在 变 化 。 
-dlga_lord_talk:fb72_claim_answer|你 觊 觎 哪 块 封 地 ？ 你 的 盟 友 又 支 持 谁 ？ 
 dlga_fb72_claim_answer:lord_pretalk|我 不 会 向 外 人 透 露 我 的 封 地 野 心 和 宫 廷 谋 划 。 
 dlga_fb72_claim_answer:lord_pretalk.1|我 想 得 到 {s60}。 我 的 封 地 野 心 为 {reg61}， 对 过 往 分 封 的 不 满 为 {reg62}。 目 前 的 封 赏 争 夺 中 ， 我 的 派 系 支 持 {s61}。 
 dlga_fb72_claim_answer:lord_pretalk.2|我 想 得 到 {s60}。 我 的 封 地 野 心 为 {reg61}， 对 过 往 分 封 的 不 满 为 {reg62}。 目 前 我 们 没 有 共 同 推 举 的 候 选 人 。 
 dlga_fb72_claim_answer:lord_pretalk.3|我 暂 时 没 有 锁 定 具 体 的 封 地 目 标 。 我 的 野 心 为 {reg61}， 对 分 封 的 不 满 为 {reg62}。 
-dlga_lord_talk:fb73_private_entry|我 想 和 你 私 下 谈 谈 王 国 中 的 政 治 交 易 。 
 dlga_fb73_private_entry:fb73_private_options|这 里 没 有 旁 人 。 你 的 政 治 信 用 为 {reg41}， 我 的 信 用 为 {reg42}。 说 说 你 的 提 议 吧 。 
 dlga_fb73_private_options:fb73_bribe_result|我 愿 付 出 {reg40}第 纳 尔 ， 换 取 你 在 本 次 封 地 议 事 中 支 持 我 。 
 dlga_fb73_bribe_result:lord_pretalk|成 交 。 本 次 封 地 投 票 我 会 支 持 你 。 我 清 楚 背 信 的 代 价 。 
@@ -163,3 +159,23 @@ dlga_pretender_start:af33_pretender_abandoned|放 弃 对 {s48}的 资 助 — �
 dlga_af33_pretender_abandoned:pretender_start|明 白 了 。 这 事 就 此 了 结 — — 你 资 助 的 钱 不 会 退 回 来 ， 但 你 随 时 可 以 资 助 别 人 。 
 dlga_supported_pretender_talk:af33_pretender_abandoned_supp|放 弃 对 {s48}的 资 助 — — 那 笔 钱 就 当 打 水 漂 了 。 
 dlga_af33_pretender_abandoned_supp:supported_pretender_pretalk|明 白 了 。 这 事 就 此 了 结 — — 你 资 助 的 钱 不 会 退 回 来 ， 但 你 随 时 可 以 资 助 别 人 。 
+dlga_lord_talk:lord_talk_court|聊 聊 宫 廷 里 的 事 。 
+dlga_lord_talk_court:lord_talk_court|宫 廷 里 的 事 ？ 你 想 打 听 什 么 ？ 
+dlga_lord_talk_court:fb7_memory_answer|你 还 记 得 我 们 过 去 的 恩 怨 吗 ？ 
+dlga_lord_talk_court:fb71_compact_answer|我 听 说 贵 族 之 间 常 有 秘 密 盟 约 。 你 参 与 其 中 吗 ？ 
+dlga_lord_talk_court:fb72_claim_answer|你 觊 觎 哪 块 封 地 ？ 你 的 盟 友 又 支 持 谁 ？ 
+dlga_lord_talk_court:fb73_private_entry|我 想 和 你 私 下 谈 谈 王 国 中 的 政 治 交 易 。 
+dlga_master_craftsman_talk:craftsman_af37_fire|裁 工 人 。 
+dlga_craftsman_af37_fire:craftsman_af37_fire_choose|裁 人 ？ 行 吧 ， 不 过 按 规 矩 每 人 得 给 一 周 工 钱 当 遣 散 费 ， 20 第 纳 尔 一 个 。 如 今 作 坊 里 有 {reg41} 个 工 人 。 你 想 裁 几 个 ？ 
+dlga_craftsman_af37_fire_choose:craftsman_af37_fire_done|裁 1 个 ， 付 20 第 纳 尔 遣 散 费 。 
+dlga_craftsman_af37_fire_choose:craftsman_af37_fire_done.1|裁 5 个 ， 付 100 第 纳 尔 遣 散 费 。 
+dlga_craftsman_af37_fire_choose:craftsman_af37_fire_done.2|全 部 裁 掉 ， 付 {reg42} 第 纳 尔 遣 散 费 。 
+dlga_craftsman_af37_fire_choose:master_craftsman_pretalk|算 了 ， 先 不 裁 。 
+dlga_craftsman_af37_fire_done:master_craftsman_pretalk|人 我 这 就 打 发 走 。 作 坊 里 清 静 了 ， 货 也 会 出 得 慢 些 。 
+dlga_lord_talk_court:lord_talk|还 是 说 点 别 的 吧 。 
+dlga_lord_talk_money:lord_af38_taxdebt|你 手 头 紧 ， 就 别 硬 撑 了 — — 拿 城 里 的 税 抵 账 吧 。 
+dlga_lord_af38_taxdebt:lord_af38_taxdebt_choose|… … 也 只 能 这 样 了 。 {s4}往 后 四 周 的 租 税 归 你 收 ， 抵 掉 {reg41} 第 纳 尔 。 剩 下 {reg42} 照 旧 记 着 。 
+dlga_lord_af38_taxdebt:lord_af38_taxdebt_choose.1|… … 也 只 能 这 样 了 。 {s4}往 后 四 周 的 租 税 归 你 收 ， 这 笔 账 就 算 两 清 了 。 
+dlga_lord_af38_taxdebt_choose:lord_af38_taxdebt_done|就 这 么 办 。 
+dlga_lord_af38_taxdebt_choose:lord_pretalk|算 了 ， 我 再 等 等 。 
+dlga_lord_af38_taxdebt_done:lord_pretalk|我 这 就 给 城 里 的 管 事 写 信 。 这 笔 账 ， 总 算 轻 了 些 。 
