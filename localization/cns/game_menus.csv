@@ -95,32 +95,15 @@ mno_af03_debug_back|返 回 作 弊 菜 单
 menu_af04_gang|{s13}他 们 在 {s11}一 带 活 动 ， 专 长 是 {s12}。 
 mno_af04_pay_treaty|付 {reg42} 第 纳 尔 ， 签 11 天 互 不 侵 扰 的 协 议 
 mno_af04_join|交 500 第 纳 尔 投 名 状 ， 入 伙 
-mno_af04_hire_raid|花 850 第 纳 尔 ， 请 他 们 袭 扰 一 支 敌 国 军 粮 队 
-mno_af33_hire_caravan_raid|花 850 第 纳 尔 ， 请 他 们 去 劫 一 支 王 国 商 队 
-mno_af04_buy_grain|从 盐 鸦 商 路 黑 市 买 两 袋 谷 物 （ 360 第 纳 尔 ） 
-mno_af04_hire_men|从 灰 狼 团 招 {reg45} 名 散 兵 （ {reg44} 第 纳 尔 ） 
-mno_af04_invest_200|给 这 伙 匪 帮 注 资 200 第 纳 尔 
-mno_af04_invest_500|给 这 伙 匪 帮 注 资 500 第 纳 尔 
-mno_af04_invest_1000|给 这 伙 匪 帮 注 资 1000 第 纳 尔 
-mno_af33_invest_gang|投 2000 第 纳 尔 入 股 这 伙 人 ， 往 后 他 们 抢 到 钱 分 你 两 成 
-mno_af33_invest_status|问 问 投 的 那 2000 第 纳 尔 怎 么 样 了 
+mno_af35_gang_hire_entry|雇 他 们 办 事 
+mno_af35_gang_invest_entry|注 资 ／ 入 股 
 mno_af04_amnesty|花 1200 第 纳 尔 赦 免 他 们 ， 收 6 个 人 进 队 伍 
 mno_af27_warn|向 他 们 通 风 报 信 ： 有 领 主 正 带 兵 来 剿 你 们 
 mno_af04_attack|剿 灭 这 伙 匪 帮 
 mno_af04_leave|离 开 此 地 
 menu_af04_network|地 方 匪 帮 与 黑 市 情 报 ^^黑 松 帮 · 铁 鬃 ： 交 情 是 {s20}^灰 狼 团 · 裂 旗 ： 交 情 是 {s21}^盐 鸦 商 路 · 盐 鸦 ： 交 情 是 {s22}^怒 海 帮 · 铁 鬃 ： 交 情 是 {s27}^断 峰 帮 · 裂 旗 ： 交 情 是 {s28}^黄 沙 帮 · 盐 鸦 ： 交 情 是 {s29}
-mno_af23_back_gang_1|资 助 黑 松 帮 一 笔 钱 （ 500 第 纳 尔 ） 
-mno_af23_back_gang_2|资 助 灰 狼 团 一 笔 钱 （ 500 第 纳 尔 ） 
-mno_af23_back_gang_3|资 助 盐 鸦 商 路 一 笔 钱 （ 500 第 纳 尔 ） 
-mno_af23_back_gang_4|资 助 怒 海 帮 一 笔 钱 （ 500 第 纳 尔 ） 
-mno_af23_back_gang_5|资 助 断 峰 帮 一 笔 钱 （ 500 第 纳 尔 ） 
-mno_af23_back_gang_6|资 助 黄 沙 帮 一 笔 钱 （ 500 第 纳 尔 ） 
-mno_af23_provoke_gang_1|花 400 第 纳 尔 ， 挑 拨 黑 松 帮 去 跟 其 他 匪 帮 火 并 
-mno_af23_provoke_gang_2|花 400 第 纳 尔 ， 挑 拨 灰 狼 团 去 跟 其 他 匪 帮 火 并 
-mno_af23_provoke_gang_3|花 400 第 纳 尔 ， 挑 拨 盐 鸦 商 路 去 跟 其 他 匪 帮 火 并 
-mno_af23_provoke_gang_4|花 400 第 纳 尔 ， 挑 拨 怒 海 帮 去 跟 其 他 匪 帮 火 并 
-mno_af23_provoke_gang_5|花 400 第 纳 尔 ， 挑 拨 断 峰 帮 去 跟 其 他 匪 帮 火 并 
-mno_af23_provoke_gang_6|花 400 第 纳 尔 ， 挑 拨 黄 沙 帮 去 跟 其 他 匪 帮 火 并 
+mno_af35_network_fund_entry|资 助 一 伙 
+mno_af35_network_provoke_entry|挑 拨 火 并 
 mno_af04_network_back|返 回 营 地 
 menu_af04_debug|v0.4 土 匪 江 湖 测 试 ^^可 以 尝 试 生 成 三 支 独 立 匪 帮 ， 手 动 推 进 一 次 每 日 匪 帮 逻 辑 。 战 乱 不 足 35 时 也 会 在 战 乱 最 高 的 村 庄 强 制 生 成 （ 保 底 ） 。 
 mno_af04_debug_spawn_black|尝 试 生 成 黑 松 帮 
@@ -207,22 +190,15 @@ mno_af26_hold_just_occupy|只 占 下 它 ， 不 称 王 ， 当 个 地 方 �
 menu_af28_contact|角 落 里 那 人 朝 你 点 了 点 头 ， 他 是 {s10}的 接 头 人 。 ^他 们 在 {s11}一 带 活 动 ， 专 长 是 {s12}。 ^这 里 是 {s14}的 地 盘 ， 接 头 人 只 跟 熟 面 孔 打 交 道 。 
 mno_af28_pay_treaty|付 {reg42} 第 纳 尔 ， 签 11 天 互 不 侵 扰 的 协 议 
 mno_af28_join|交 500 第 纳 尔 投 名 状 ， 入 伙 
-mno_af28_hire_raid|花 850 第 纳 尔 ， 请 他 们 袭 扰 一 支 敌 国 军 粮 队 
-mno_af28_buy_grain|从 盐 鸦 商 路 黑 市 买 两 袋 谷 物 （ 360 第 纳 尔 ） 
-mno_af28_hire_men|从 灰 狼 团 招 {reg45} 名 散 兵 （ {reg44} 第 纳 尔 ） 
-mno_af28_invest_200|给 这 伙 匪 帮 注 资 200 第 纳 尔 
-mno_af28_invest_500|给 这 伙 匪 帮 注 资 500 第 纳 尔 
-mno_af28_invest_1000|给 这 伙 匪 帮 注 资 1000 第 纳 尔 
+mno_af35_contact_hire_entry|雇 他 们 办 事 
+mno_af35_contact_invest_entry|给 这 伙 匪 帮 注 资 
 mno_af28_amnesty|花 1200 第 纳 尔 赦 免 他 们 ， 收 6 个 人 进 队 伍 
 mno_af28_warn|向 他 们 通 风 报 信 ： 有 领 主 正 带 兵 来 剿 你 们 
-mno_af28_quest_q1_accept|接 一 单 劫 军 粮 队 的 活 
+mno_af35_contact_quest_entry|接 一 单 活 
 mno_af28_quest_q1_settle|回 来 交 差 ： 军 粮 队 已 经 劫 了 
-mno_af28_quest_q3_accept|接 一 单 送 信 的 活 
 mno_af28_quest_q3_deliver|把 信 交 给 {s4}的 接 头 人 
 mno_af28_quest_abandon|这 单 不 干 了 
-mno_af28_quest_q2_accept|接 一 单 护 送 走 私 货 的 活 
 mno_af28_quest_q2_settle|回 来 交 差 ： 走 私 货 已 经 送 到 了 
-mno_af28_quest_q4_accept|接 一 单 劫 村 子 的 活 
 mno_af28_quest_q4_settle|回 来 交 差 ： 那 座 村 子 已 经 劫 了 
 mno_af28_leave|离 开 
 menu_af31_bank|钱 庄 — — {s10}。 ^借 出 去 的 钱 每 周 生 1% 的 息 , 从 本 城 金 库 出 ; 本 金 也 可 以 在 这 里 收 回 , 一 次 最 多 拿 金 库 的 四 分 之 一 。 
@@ -271,3 +247,48 @@ mno_af33_rent_entry|租 地 方 放 兵 （ 每 月 500 第 纳 尔 ）
 mno_af33_renew_entry|续 租 驻 兵 处 （ 500 第 纳 尔 ， 还 剩 {reg41} 天 ） 
 mno_af33_swap_entry|与 城 外 驻 留 的 兵 换 兵 
 mno_af34_garrison_back|返 回 城 镇 
+menu_af35_contact_invest|给 这 伙 匪 帮 注 资 — — 200、 500、 1000 第 纳 尔 三 档 ， 钱 进 他 们 的 钱 袋 。 
+mno_af28_invest_200|给 这 伙 匪 帮 注 资 200 第 纳 尔 
+mno_af28_invest_500|给 这 伙 匪 帮 注 资 500 第 纳 尔 
+mno_af28_invest_1000|给 这 伙 匪 帮 注 资 1000 第 纳 尔 
+mno_af35_contact_invest_back|返 回 
+menu_af35_contact_quest|接 一 单 活 — — 劫 军 粮 队 、 送 信 、 护 送 走 私 货 、 劫 村 子 ， 四 种 活 都 在 这 里 接 。 
+mno_af28_quest_q1_accept|接 一 单 劫 军 粮 队 的 活 
+mno_af28_quest_q3_accept|接 一 单 送 信 的 活 
+mno_af28_quest_q2_accept|接 一 单 护 送 走 私 货 的 活 
+mno_af28_quest_q4_accept|接 一 单 劫 村 子 的 活 
+mno_af35_contact_quest_back|返 回 
+menu_af35_contact_hire|雇 他 们 办 事 — — 袭 扰 敌 国 军 粮 队 、 黑 市 买 粮 、 招 散 兵 ， 花 钱 请 他 们 出 手 。 
+mno_af28_hire_raid|花 850 第 纳 尔 ， 请 他 们 袭 扰 一 支 敌 国 军 粮 队 
+mno_af28_buy_grain|从 盐 鸦 商 路 黑 市 买 两 袋 谷 物 （ 360 第 纳 尔 ） 
+mno_af28_hire_men|从 灰 狼 团 招 {reg45} 名 散 兵 （ {reg44} 第 纳 尔 ） 
+mno_af35_contact_hire_back|返 回 
+menu_af35_gang_invest|注 资 ／ 入 股 — — 注 资 200、 500、 1000 第 纳 尔 ， 或 投 2000 入 股 ， 往 后 他 们 抢 到 钱 分 你 两 成 。 
+mno_af04_invest_200|给 这 伙 匪 帮 注 资 200 第 纳 尔 
+mno_af04_invest_500|给 这 伙 匪 帮 注 资 500 第 纳 尔 
+mno_af04_invest_1000|给 这 伙 匪 帮 注 资 1000 第 纳 尔 
+mno_af33_invest_gang|投 2000 第 纳 尔 入 股 这 伙 人 ， 往 后 他 们 抢 到 钱 分 你 两 成 
+mno_af33_invest_status|问 问 投 的 那 2000 第 纳 尔 怎 么 样 了 
+mno_af35_gang_invest_back|返 回 
+menu_af35_gang_hire|雇 他 们 办 事 — — 袭 扰 敌 国 军 粮 队 、 劫 王 国 商 队 、 黑 市 买 粮 、 招 散 兵 ， 花 钱 请 他 们 出 手 。 
+mno_af04_hire_raid|花 850 第 纳 尔 ， 请 他 们 袭 扰 一 支 敌 国 军 粮 队 
+mno_af33_hire_caravan_raid|花 850 第 纳 尔 ， 请 他 们 去 劫 一 支 王 国 商 队 
+mno_af04_buy_grain|从 盐 鸦 商 路 黑 市 买 两 袋 谷 物 （ 360 第 纳 尔 ） 
+mno_af04_hire_men|从 灰 狼 团 招 {reg45} 名 散 兵 （ {reg44} 第 纳 尔 ） 
+mno_af35_gang_hire_back|返 回 
+menu_af35_network_fund|资 助 一 伙 — — 六 帮 里 挑 一 家 ， 资 助 500 第 纳 尔 。 
+mno_af23_back_gang_1|资 助 黑 松 帮 一 笔 钱 （ 500 第 纳 尔 ） 
+mno_af23_back_gang_2|资 助 灰 狼 团 一 笔 钱 （ 500 第 纳 尔 ） 
+mno_af23_back_gang_3|资 助 盐 鸦 商 路 一 笔 钱 （ 500 第 纳 尔 ） 
+mno_af23_back_gang_4|资 助 怒 海 帮 一 笔 钱 （ 500 第 纳 尔 ） 
+mno_af23_back_gang_5|资 助 断 峰 帮 一 笔 钱 （ 500 第 纳 尔 ） 
+mno_af23_back_gang_6|资 助 黄 沙 帮 一 笔 钱 （ 500 第 纳 尔 ） 
+mno_af35_network_fund_back|返 回 
+menu_af35_network_provoke|挑 拨 火 并 — — 六 帮 里 挑 一 家 ， 花 400 第 纳 尔 挑 拨 他 们 去 跟 其 他 匪 帮 火 并 。 
+mno_af23_provoke_gang_1|花 400 第 纳 尔 ， 挑 拨 黑 松 帮 去 跟 其 他 匪 帮 火 并 
+mno_af23_provoke_gang_2|花 400 第 纳 尔 ， 挑 拨 灰 狼 团 去 跟 其 他 匪 帮 火 并 
+mno_af23_provoke_gang_3|花 400 第 纳 尔 ， 挑 拨 盐 鸦 商 路 去 跟 其 他 匪 帮 火 并 
+mno_af23_provoke_gang_4|花 400 第 纳 尔 ， 挑 拨 怒 海 帮 去 跟 其 他 匪 帮 火 并 
+mno_af23_provoke_gang_5|花 400 第 纳 尔 ， 挑 拨 断 峰 帮 去 跟 其 他 匪 帮 火 并 
+mno_af23_provoke_gang_6|花 400 第 纳 尔 ， 挑 拨 黄 沙 帮 去 跟 其 他 匪 帮 火 并 
+mno_af35_network_provoke_back|返 回 
