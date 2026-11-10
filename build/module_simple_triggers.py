@@ -4414,4 +4414,31 @@ simple_triggers = [
   (24*7, [
     (call_script, "script_af40_npc_invest"),
   ]),
+
+  # v1.0 同伴第一批 B: 回乡不止一次。原版第一次回乡的话照旧 (home_speech_delivered = 0 时
+  # 由原版触发器说); 说过以后, 每 30 天最多一次, 按故乡现在的样子说一句, 地图弹窗显示。
+  (6, [
+    (eq, "$g_player_is_captive", 0),
+    (eq, "$g_infinite_camping", 0),
+    (store_current_day, ":today"),
+    (assign, ":done", 0),
+    (try_for_range, ":npc", companions_begin, companions_end),
+      (eq, ":done", 0),
+      (main_party_has_troop, ":npc"),
+      (troop_slot_eq, ":npc", slot_troop_home_speech_delivered, 1),
+      (troop_get_slot, ":home", ":npc", slot_troop_home),
+      (is_between, ":home", centers_begin, centers_end),
+      (store_distance_to_party_from_party, ":dist", ":home", "p_main_party"),
+      (lt, ":dist", 7),
+      (troop_get_slot, ":next", ":npc", slot_af44_home_remark_day),
+      (le, ":next", ":today"),
+      (call_script, "script_af44_home_remark", ":npc"),
+      (eq, reg0, 1),
+      (store_add, ":next", ":today", 30),
+      (troop_set_slot, ":npc", slot_af44_home_remark_day, ":next"),
+      (str_store_troop_name, s43, ":npc"),
+      (dialog_box, "@{s42}", "@{s43}"),
+      (assign, ":done", 1),
+    (try_end),
+  ]),
 ]
