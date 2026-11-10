@@ -123,6 +123,11 @@ ALLOWED_DIALOG_CHANGES |= {
 ALLOWED_DIALOG_CHANGES |= {
     'dlga_lord_talk:lord_talk_money',
 }
+# 资本家 3.0 第三批 (领主入股): 镇长求投资的入股选项改按“一座城对外最多卖三成”判断
+# (af40_share_room), 领主先占的一成也算在内。该行在 v0.8 基线之后, 备案留痕。
+ALLOWED_DIALOG_CHANGES |= {
+    'dlga_mayor_af33_beg_choose:mayor_af33_beg_done',
+}
 _old=(base/'compiled/conversation.txt').read_text('utf-8').split('\n')
 _new=(data/'conversation.txt').read_text('utf-8').split('\n')
 if _old and _old[-1]=='': _old=_old[:-1]

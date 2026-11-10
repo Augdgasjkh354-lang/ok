@@ -27303,7 +27303,9 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
     (is_between, "$g_encountered_party", towns_begin, towns_end),
     (neg|party_slot_eq, "$g_encountered_party", slot_town_lord, "trp_player"),
     (party_slot_ge, "$g_encountered_party", slot_town_lord, 1),
-    (neg|party_slot_ge, "$g_encountered_party", slot_af30_town_shares, 30),
+    # 资本家 3.0 第三批: 一座城对外最多卖三成, 领主先占的一成也算在内
+    (call_script, "script_af40_share_room", "$g_encountered_party"),
+    (ge, reg0, 10),
     (store_troop_gold, ":gold", "trp_player"),
     (ge, ":gold", 10000),
   ], "入股本镇, 投 10000 第纳尔 (10% 股份)。", "mayor_af33_beg_done",[
