@@ -60135,6 +60135,32 @@ scripts = [
     (try_end),
     (assign, reg0, ":done"),
   ]),
+
+  # 一键收取全部玩家商队收益。参数：0=只算不收（供菜单条件用），1=真的收。reg0=钱数，reg1=收了几支商队（钱箱超 600 的才算）。
+  ("af26_collect_all_caravans", [
+    (store_script_param, ":do_collect", 1),
+    (assign, ":total", 0),
+    (assign, ":count", 0),
+    (try_for_parties, ":party"),
+      (party_is_active, ":party"),
+      (party_slot_eq, ":party", slot_party_type, spt_kingdom_caravan),
+      (store_faction_of_party, ":fac", ":party"),
+      (eq, ":fac", "fac_player_supporters_faction"),
+      (party_get_slot, ":purse", ":party", slot_af18_caravan_purse),
+      (store_sub, ":take", ":purse", af18_caravan_capital),
+      (gt, ":take", 0),
+      (try_begin),
+        (eq, ":do_collect", 1),
+        (val_sub, ":purse", ":take"),
+        (party_set_slot, ":party", slot_af18_caravan_purse, ":purse"),
+        (troop_add_gold, "trp_player", ":take"),
+      (try_end),
+      (val_add, ":total", ":take"),
+      (val_add, ":count", 1),
+    (try_end),
+    (assign, reg0, ":total"),
+    (assign, reg1, ":count"),
+  ]),
 ]
 
 
