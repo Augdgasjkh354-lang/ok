@@ -4159,7 +4159,7 @@ simple_triggers = [
     (display_message, "@{s4}派人送来了{reg5}第纳尔，说是给老朋友的一点心意。"),
   ]),
 
-  # v1.0 领主关系与独立玩法·第二波 L1: 借兵逾期每天 -2 好感；逾期 7 天以上强制归还（战死另按每人 -1 算）。
+  # v1.0 领主关系与独立玩法·第二波 L1: 借兵逾期每天 -2 好感；超过 7 天按同兵种人数强制归还（缺员每人 -1）。
   (24, [
     (party_get_slot, ":deadline", "p_main_party", slot_af26_borrow_day),
     (gt, ":deadline", 0),
@@ -4168,14 +4168,14 @@ simple_triggers = [
     (gt, ":overdue", 0),
     (try_begin),
       (gt, ":overdue", 7),
-      (call_script, "script_af26_borrow_return"),
+      (call_script, "script_af26_borrow_return", 1),
       (try_begin),
         (eq, reg0, 1),
         (try_begin),
           (gt, reg1, 0),
-          (display_message, "@借来的兵到期七天未还，已经自行回去了，战死 {reg1} 人。"),
+          (display_message, "@借兵逾期超过七天，已按同兵种交还 {reg4} 人，缺员 {reg1} 人，借兵账已结清。"),
         (else_try),
-          (display_message, "@借来的兵到期七天未还，已经自行回去了。"),
+          (display_message, "@借兵逾期超过七天，已按同兵种交还 {reg4} 人，借兵账已结清。"),
         (try_end),
       (try_end),
     (else_try),
@@ -4333,7 +4333,12 @@ simple_triggers = [
           (party_set_slot, ":center2", slot_af33_garrison_rent_day, 0),
         (else_try),
           (party_get_slot, ":rent2", ":center2", slot_af33_garrison_rent_day),
-          (gt, ":rent2", 0),
+          # Ownership can change after rent was waived. A zero expiry in a
+          # non-player town must restart the normal pay-or-disband path.
+          (try_begin),
+            (eq, ":rent2", 0),
+            (assign, ":rent2", ":today"),
+          (try_end),
           (ge, ":today", ":rent2"),
           (try_begin),
             (store_troop_gold, ":gold2", "trp_player"),

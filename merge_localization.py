@@ -17,7 +17,8 @@ import argparse, shutil, sys
 from pathlib import Path
 
 OWNED_PREFIXES = ('menu_af', 'mno_af', 'trp_af', 'pt_af',
-                  'menu_fb', 'mno_fb', 'trp_fb', 'pt_fb', 'qstr_æ')
+                  'menu_fb', 'mno_fb', 'trp_fb', 'pt_fb', 'qstr_æ',
+                  'dlga_lord_af26_borrow:')  # refresh the mod's changed loan terms
 MERGE_SUFFIX = '.merge.csv'
 
 

@@ -8,7 +8,7 @@ param(
 $ErrorActionPreference = 'Stop'
 
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
-$ownedPrefixes = @('menu_af', 'mno_af', 'trp_af', 'pt_af', 'menu_fb', 'mno_fb', 'trp_fb', 'pt_fb', ('qstr_' + [char]0xE6))
+$ownedPrefixes = @('menu_af', 'mno_af', 'trp_af', 'pt_af', 'menu_fb', 'mno_fb', 'trp_fb', 'pt_fb', 'dlga_lord_af26_borrow:', ('qstr_' + [char]0xE6))
 $strictUtf8 = New-Object System.Text.UTF8Encoding($false, $true)
 $bomUtf8 = New-Object System.Text.UTF8Encoding($true)
 

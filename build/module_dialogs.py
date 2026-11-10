@@ -26748,6 +26748,11 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
     (party_count_members_of_type, ":have", ":party", ":troop"),
     (store_random_in_range, ":n", 10, 21),
     (val_min, ":n", ":have"),
+    (call_script, "script_game_get_party_companion_limit"),
+    (assign, ":limit", reg0),
+    (store_party_size_wo_prisoners, ":size", "p_main_party"),
+    (store_sub, ":space", ":limit", ":size"),
+    (val_min, ":n", ":space"),
     (party_remove_members, ":party", ":troop", ":n"),
     (party_count_members_of_type, ":pre", "p_main_party", ":troop"),
     (party_add_members, "p_main_party", ":troop", ":n"),
@@ -26759,26 +26764,20 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
     (party_set_slot, "p_main_party", slot_af26_borrow_pre_count, ":pre"),
     (assign, reg10, ":n"),
   ]],
-  [anyone, "lord_af26_borrow", [], "好，借你 {reg10} 个人，14 天后还我，少一个都不行。", "lord_talk", []],
+  [anyone, "lord_af26_borrow", [], "好，借你 {reg10} 个人，14 天后按同兵种人数归还。调走或升了级的兵，要先补齐同兵种再还；缺一个扣一点好感。逾期每天扣两点，超过七天就从你的队伍里按同兵种人数收回，缺员另外算。", "lord_talk", []],
 
-  # v1.0 领主关系与独立玩法·第二波 L1: 向借主领主归还借兵（只对借主出现）。
+  # 先报价并确认，再按同兵种人数结清；不再用借前快照推断谁战死。
   [anyone|plyr, "lord_talk", [
     (party_slot_ge, "p_main_party", slot_af26_borrow_day, 1),
     (party_get_slot, ":lender", "p_main_party", slot_af26_borrow_lender),
     (eq, ":lender", "$g_talk_troop"),
-  ], "把借的兵还你。", "lord_af26_return", [
-    (call_script, "script_af26_borrow_return"),
-    (try_begin),
-      (eq, reg0, 1),
-      (str_store_string, s40, "@人还回来了。"),
-      (try_begin), (gt, reg1, 0), (str_store_string, s40, "@{s40}战死 {reg1} 人。"), (try_end),
-      (try_begin), (gt, reg2, 0), (str_store_string, s40, "@{s40}晚了 {reg2} 天。"), (try_end),
-      (try_begin), (lt, reg3, 0), (str_store_string, s40, "@{s40}好感 {reg3}。"), (try_end),
-    (else_try),
-      (str_store_string, s40, "@这事不对，你没向我借过兵。"),
-    (try_end),
-  ]],
-  [anyone, "lord_af26_return", [], "{s40}", "lord_talk", []],
+  ], "把借的兵还你。", "lord_af26_return", []],
+  # 旧行保留为无有效借兵时的回应；有效预览行追加到文件末尾，
+  # 原有对话状态的首次出现顺序保持不动。
+  [anyone, "lord_af26_return", [
+    (call_script, "script_af26_borrow_return", 0),
+    (eq, reg0, 0),
+  ], "眼下没有能结清的借兵记录。", "lord_talk", []],
 
   # v1.0 领主关系与独立玩法·第二波 L3: 好感 ≥ 40，领主所在阵营正在办宴会时受邀赴宴（只对非本阵营的外人出现）。
   # 邀请本身给好感 +2、声望 +1；赴宴靠原版 $g_player_eligible_feast_center_no 进场，同一场宴会只能受邀一次。
@@ -27182,7 +27181,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
     (store_current_day, ":day"),
     (troop_set_slot, "$g_talk_troop", slot_af29_loan_day, ":day"),
   ]],
-  [anyone|plyr,"lord_af29_lend_choose", [], "算了, 当我没说。", "lord_talk",[]],
+  [anyone|plyr,"lord_af29_lend_choose", [], "算了, 当我没说。", "lord_pretalk",[]],
   [anyone,"lord_af29_lend_done", [], "多谢了。这钱我会连本带息还你, 下回见面就结清。", "lord_talk",[]],
 
   # v1.0 资本家第三批 (条目 6): 工匠处雇工人, 每家作坊最多 10 人, 每人每周工资 20 (从每周结算里扣),
@@ -27553,7 +27552,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
     (val_add, ":day", 30),
     (troop_set_slot, "$g_talk_troop", slot_af33_warloan_due_day, ":day"),
   ]],
-  [anyone|plyr,"af33_warloan_choose", [], "算了，当我没说。", "lord_talk",[]],
+  [anyone|plyr,"af33_warloan_choose", [], "算了，当我没说。", "lord_pretalk",[]],
   [anyone,"af33_warloan_done", [], "多谢。这钱我会拿去雇兵，30 天后连本带息还你。", "lord_talk",[]],
 
   # v1.0 资本家 2.0 第三批 (条目 7b): 出钱买和平, I4 外交掮客的反向。
@@ -27595,7 +27594,9 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   # 钱只能让他多雇些兵, 打赢打输还得看战场, 不包赢 (叛乱成败由原版任务链
   # 驱动, module_quests 不编译, 改不了)。
   [anyone|plyr,"pretender_start", [
-    (neg|faction_slot_eq, "$g_talk_troop_faction", slot_faction_leader, "$g_talk_troop"),
+    (troop_get_slot, ":orig", "$g_talk_troop", slot_troop_original_faction),
+    (is_between, ":orig", npc_kingdoms_begin, npc_kingdoms_end),
+    (neg|faction_slot_eq, ":orig", slot_faction_leader, "$g_talk_troop"),
     (party_slot_ge, "p_main_party", slot_af33_pretender_funded_amount, 0),
     (this_or_next|party_slot_eq, "p_main_party", slot_af33_funded_pretender, 0),
     (party_slot_eq, "p_main_party", slot_af33_funded_pretender, "$g_talk_troop"),
@@ -27605,7 +27606,9 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
     (call_script, "script_af33_fund_pretender", "$g_talk_troop", 5000),
   ]],
   [anyone|plyr,"pretender_start", [
-    (neg|faction_slot_eq, "$g_talk_troop_faction", slot_faction_leader, "$g_talk_troop"),
+    (troop_get_slot, ":orig", "$g_talk_troop", slot_troop_original_faction),
+    (is_between, ":orig", npc_kingdoms_begin, npc_kingdoms_end),
+    (neg|faction_slot_eq, ":orig", slot_faction_leader, "$g_talk_troop"),
     (party_slot_ge, "p_main_party", slot_af33_pretender_funded_amount, 0),
     (this_or_next|party_slot_eq, "p_main_party", slot_af33_funded_pretender, 0),
     (party_slot_eq, "p_main_party", slot_af33_funded_pretender, "$g_talk_troop"),
@@ -27618,7 +27621,9 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   # v1.0 资本家 2.0 第四批 (条目 9): 已投效称王者之后再资助, 与 pretender_start
   # 的两项同款 (回话回到 supported_pretender_pretalk, 不是 pretender_start)。
   [anyone|plyr,"supported_pretender_talk", [
-    (neg|faction_slot_eq, "$g_talk_troop_faction", slot_faction_leader, "$g_talk_troop"),
+    (troop_get_slot, ":orig", "$g_talk_troop", slot_troop_original_faction),
+    (is_between, ":orig", npc_kingdoms_begin, npc_kingdoms_end),
+    (neg|faction_slot_eq, ":orig", slot_faction_leader, "$g_talk_troop"),
     (party_slot_ge, "p_main_party", slot_af33_pretender_funded_amount, 0),
     (this_or_next|party_slot_eq, "p_main_party", slot_af33_funded_pretender, 0),
     (party_slot_eq, "p_main_party", slot_af33_funded_pretender, "$g_talk_troop"),
@@ -27628,7 +27633,9 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
     (call_script, "script_af33_fund_pretender", "$g_talk_troop", 5000),
   ]],
   [anyone|plyr,"supported_pretender_talk", [
-    (neg|faction_slot_eq, "$g_talk_troop_faction", slot_faction_leader, "$g_talk_troop"),
+    (troop_get_slot, ":orig", "$g_talk_troop", slot_troop_original_faction),
+    (is_between, ":orig", npc_kingdoms_begin, npc_kingdoms_end),
+    (neg|faction_slot_eq, ":orig", slot_faction_leader, "$g_talk_troop"),
     (party_slot_ge, "p_main_party", slot_af33_pretender_funded_amount, 0),
     (this_or_next|party_slot_eq, "p_main_party", slot_af33_funded_pretender, 0),
     (party_slot_eq, "p_main_party", slot_af33_funded_pretender, "$g_talk_troop"),
@@ -27860,10 +27867,9 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   [anyone, "lord_talk_money", [], "钱的事？说来听听。", "lord_talk_money", []],
   # 菜单摩擦点第五批：谈帮派的回应，下一状态与本状态相同，让帮组选项接着列出来。
   [anyone, "lord_talk_gang", [], "帮派的事？你说。", "lord_talk_gang", []],
-  # 菜单摩擦点第五批：从钱组返回 lord_talk 顶层。
-  [anyone|plyr, "lord_talk_money", [], "还是说点别的吧。", "lord_talk", []],
-  # 菜单摩擦点第五批：从帮组返回 lord_talk 顶层。
-  [anyone|plyr, "lord_talk_gang", [], "还是说点别的吧。", "lord_talk", []],
+  # 玩家返回先经过 NPC 的 lord_pretalk 回应，再列出 lord_talk 的玩家选项。
+  [anyone|plyr, "lord_talk_money", [], "还是说点别的吧。", "lord_pretalk", []],
+  [anyone|plyr, "lord_talk_gang", [], "还是说点别的吧。", "lord_pretalk", []],
   # 审计 13 F-04 修复 (方案 B, 玩家 2026-11-10 拍板): 资助的称王者消失
   # (派系灭了人可能消失, 原版领主不死) 时结算脚本两支都不触发, 963/964
   # 永久挂起、玩家再也资助不了别人。加“放弃资助”选项: 玩家主动放弃,
@@ -27900,4 +27906,30 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
     (display_message, "@你放弃了对{s48}的资助，{reg41} 第纳尔打了水漂。往后你可以再资助别人。", 0xFF6666),
   ]],
   [anyone,"af33_pretender_abandoned_supp", [], "明白了。这事就此了结——你资助的钱不会退回来，但你随时可以资助别人。", "supported_pretender_pretalk",[]],
+
+  # 借兵确认行只追加，保留旧对话行和状态顺序。
+  [anyone, "lord_af26_return", [
+    (call_script, "script_af26_borrow_return", 0),
+    (eq, reg0, 1),
+    (str_store_troop_name_plural, s41, reg5),
+    (assign, reg10, reg6),
+    (assign, reg11, reg4),
+    (assign, reg12, reg1),
+    (assign, reg13, reg3),
+  ], "你借了 {reg10} 名{s41}，本队现在能交还 {reg11} 人，还缺 {reg12} 人。按同兵种人数结清，缺员好感 {reg13}；调走或升级的人可以补齐后再还。你要现在结清吗？", "lord_af26_return_choose", []],
+  [anyone, "lord_af26_return", [], "眼下没有能结清的借兵记录。", "lord_talk", []],
+  [anyone|plyr, "lord_af26_return_choose", [], "按刚才说的人数交还，缺员一并结清。", "lord_af26_return_done", [
+    (call_script, "script_af26_borrow_return", 1),
+    (try_begin),
+      (eq, reg0, 1),
+      (str_store_string, s40, "@已交还 {reg4} 人，借兵账结清了。"),
+      (try_begin), (gt, reg1, 0), (str_store_string, s40, "@{s40}缺员 {reg1} 人。"), (try_end),
+      (try_begin), (gt, reg2, 0), (str_store_string, s40, "@{s40}晚了 {reg2} 天。"), (try_end),
+      (try_begin), (lt, reg3, 0), (str_store_string, s40, "@{s40}好感 {reg3}。"), (try_end),
+    (else_try),
+      (str_store_string, s40, "@眼下没有能结清的借兵记录。"),
+    (try_end),
+  ]],
+  [anyone|plyr, "lord_af26_return_choose", [], "先不结清，我去把人补齐。", "lord_pretalk", []],
+  [anyone, "lord_af26_return_done", [], "{s40}", "lord_talk", []],
 ]

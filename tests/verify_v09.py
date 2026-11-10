@@ -105,6 +105,22 @@ ALLOWED_DIALOG_CHANGES |= {
     'dlga_lord_talk:lord_af27_bounty',
     'dlga_lord_talk:lord_af27_inform',
 }
+# 2026-11-10 审计后续：只登记本轮有意修改的既有对话 ID；
+# 不放宽下面的历史前缀、兵种、变量或编译结果检查。
+ALLOWED_DIALOG_CHANGES |= {
+    'dlga_lord_af29_lend_choose:lord_talk',
+    'dlga_af33_warloan_choose:lord_talk',
+    'dlga_lord_talk_money:lord_talk',
+    'dlga_lord_talk_gang:lord_talk',
+    'dlga_lord_talk:lord_af26_borrow',
+    'dlga_lord_af26_borrow:lord_talk',
+    'dlga_lord_talk:lord_af26_return',
+    'dlga_lord_af26_return:lord_talk',
+    'dlga_pretender_start:af33_pretender_funded',
+    'dlga_pretender_start:af33_pretender_funded.1',
+    'dlga_supported_pretender_talk:af33_pretender_funded_supp',
+    'dlga_supported_pretender_talk:af33_pretender_funded_supp.1',
+}
 _old=(base/'compiled/conversation.txt').read_text('utf-8').split('\n')
 _new=(data/'conversation.txt').read_text('utf-8').split('\n')
 if _old and _old[-1]=='': _old=_old[:-1]

@@ -10358,13 +10358,12 @@ game_menus = [
          (ge, ":gold", 500),
          (assign, ":show", 1),
        (else_try),
-         # 续租驻兵处（原条件去掉纯算数的 store_sub reg41／val_max 两行）
+         # 续租驻兵处（排除自有城镇；失去所有权后的零到期日也允许手动续租）
          (is_between, "$current_town", towns_begin, towns_end),
+         (neg|party_slot_eq, "$current_town", slot_town_lord, "trp_player"),
          (party_get_slot, ":g", "$current_town", slot_af33_garrison_party),
          (gt, ":g", 0),
          (party_is_active, ":g"),
-         (party_get_slot, ":due", "$current_town", slot_af33_garrison_rent_day),
-         (gt, ":due", 0),
          (store_troop_gold, ":gold", "trp_player"),
          (ge, ":gold", 500),
          (assign, ":show", 1),
@@ -11646,6 +11645,7 @@ game_menus = [
     [
       ("assess_prices",
        [
+         (party_slot_ge, "$current_town", slot_town_merchant, 1),
          (store_faction_of_party, ":current_town_faction", "$current_town"),
          (store_relation, ":reln", ":current_town_faction", "fac_player_supporters_faction"),
          (ge, ":reln", 0),
@@ -11751,12 +11751,19 @@ game_menus = [
 
      (assign, ":org_encountered_party", "$g_encountered_party"),
 
+     # A killed merchant is stored as -1. Guard before any inventory read,
+     # including direct/post-rest entry into this assessment menu.
+     (party_get_slot, ":cur_merchant", ":org_encountered_party", slot_town_merchant),
+     (try_begin),
+       (neg|is_between, ":cur_merchant", goods_merchants_begin, goods_merchants_end),
+       (assign, ":max_iteration", 0),
+     (try_end),
+
      (try_for_range, ":unused", 0, ":max_iteration"),
        (store_random_in_range, ":random_trade_good", trade_goods_begin, trade_goods_end),
 
        (store_random_in_range, ":random_town", towns_begin, towns_end),
 
-       (party_get_slot, ":cur_merchant", ":org_encountered_party", slot_town_merchant),       
            (assign, ":num_items_in_town_inventory", 0),
        (try_for_range, ":i_slot", num_equipment_kinds, max_inventory_items + num_equipment_kinds),
          (troop_get_inventory_slot, ":slot_item", ":cur_merchant", ":i_slot"),
@@ -17236,11 +17243,11 @@ game_menus = [
        (jump_to_menu, "mnu_town")]),
      ("af33_renew_entry",
       [(is_between, "$current_town", towns_begin, towns_end),
+       (neg|party_slot_eq, "$current_town", slot_town_lord, "trp_player"),
        (party_get_slot, ":g", "$current_town", slot_af33_garrison_party),
        (gt, ":g", 0),
        (party_is_active, ":g"),
        (party_get_slot, ":due", "$current_town", slot_af33_garrison_rent_day),
-       (gt, ":due", 0),
        (store_current_day, ":today"),
        (store_sub, reg41, ":due", ":today"),
        (val_max, reg41, 0),

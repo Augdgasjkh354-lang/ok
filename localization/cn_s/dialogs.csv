@@ -54,7 +54,7 @@ dlga_lord_talk:lord_af26_intro|请 你 引 荐 我 去 见 国 王 ， 我 想 �
 dlga_lord_af26_intro:lord_talk|好 ， 我 这 就 修 书 一 封 。 你 拿 着 我 的 信 去 见 {s4}， 他 会 接 见 你 的 。 
 dlga_fb73_private_options:fb73_bribe_result.1|你 我 交 情 深 厚 ， 这 次 评 议 请 你 直 接 支 持 我 ， 不 用 谈 钱 。 
 dlga_lord_talk:lord_af26_borrow|向 你 借 一 队 人 手 ， 14 天 后 归 还 。 
-dlga_lord_af26_borrow:lord_talk|好 ， 借 你 {reg10} 个 人 ， 14 天 后 还 我 ， 少 一 个 都 不 行 。 
+dlga_lord_af26_borrow:lord_talk|好 ， 借 你 {reg10} 个 人 ， 14 天 后 按 同 兵 种 人 数 归 还 。 调 走 或 升 了 级 的 兵 ， 要 先 补 齐 同 兵 种 再 还 ； 缺 一 个 扣 一 点 好 感 。 逾 期 每 天 扣 两 点 ， 超 过 七 天 就 从 你 的 队 伍 里 按 同 兵 种 人 数 收 回 ， 缺 员 另 外 算 。 
 dlga_lord_talk:lord_af26_return|把 借 的 兵 还 你 。 
 dlga_lord_talk:lord_af26_feast|听 说 你 们 在 办 宴 会 ， 带 我 一 个 ？ 
 dlga_lord_af26_feast:lord_talk|好 ， 宴 会 就 在 {s4}， 你 来 ， 我 在 门 口 等 你 。 
@@ -88,7 +88,7 @@ dlga_lord_af29_lend:lord_af29_lend_choose|哦 ？ 你 肯 借 钱 给 我 ？ �
 dlga_lord_af29_lend_choose:lord_af29_lend_done|借 你 1000 第 纳 尔 。 
 dlga_lord_af29_lend_choose:lord_af29_lend_done.1|借 你 3000 第 纳 尔 。 
 dlga_lord_af29_lend_choose:lord_af29_lend_done.2|借 你 5000 第 纳 尔 。 
-dlga_lord_af29_lend_choose:lord_talk|算 了 , 当 我 没 说 。 
+dlga_lord_af29_lend_choose:lord_pretalk|算 了 , 当 我 没 说 。 
 dlga_lord_af29_lend_done:lord_talk|多 谢 了 。 这 钱 我 会 连 本 带 息 还 你 , 下 回 见 面 就 结 清 。 
 dlga_master_craftsman_talk:craftsman_af31_hire|雇 工 人 。 
 dlga_craftsman_af31_hire:craftsman_af31_hire_choose|雇 一 个 工 人 , 每 周 多 20 第 纳 尔 工 资 , 不 过 产 量 也 能 涨 一 成 。 如 今 作 坊 里 有 {reg41} 个 工 人 , 最 多 能 雇 10 个 。 你 想 雇 几 个 ？ 
@@ -135,7 +135,7 @@ dlga_af33_warloan:af33_warloan_choose|你 肯 借 钱 给 我 打 仗 ？ 说 �
 dlga_af33_warloan_choose:af33_warloan_done|借 你 1000 第 纳 尔 ， 30 天 后 还 1080。 
 dlga_af33_warloan_choose:af33_warloan_done.1|借 你 3000 第 纳 尔 ， 30 天 后 还 3240。 
 dlga_af33_warloan_choose:af33_warloan_done.2|借 你 5000 第 纳 尔 ， 30 天 后 还 5400。 
-dlga_af33_warloan_choose:lord_talk|算 了 ， 当 我 没 说 。 
+dlga_af33_warloan_choose:lord_pretalk|算 了 ， 当 我 没 说 。 
 dlga_af33_warloan_done:lord_talk|多 谢 。 这 钱 我 会 拿 去 雇 兵 ， 30 天 后 连 本 带 息 还 你 。 
 dlga_lord_talk_money:af33_buy_peace|陛 下 ， 我 出 5000 第 纳 尔 ， 替 你 向 {s4}买 个 停 战 。 
 dlga_af33_buy_peace:lord_talk|谈 成 了 。 {s4}与 {s5}已 经 停 战 ， 四 十 天 内 不 再 开 战 。 你 替 我 国 出 的 这 5000 第 纳 尔 赔 款 ， 对 方 国 王 已 经 收 下 了 。 这 份 情 ， 两 国 都 记 下 了 。 
@@ -157,9 +157,12 @@ dlga_lord_talk:lord_talk_money|谈 钱 的 事 。
 dlga_lord_talk:lord_talk_gang|谈 帮 派 的 事 。 
 dlga_lord_talk_money:lord_talk_money|钱 的 事 ？ 说 来 听 听 。 
 dlga_lord_talk_gang:lord_talk_gang|帮 派 的 事 ？ 你 说 。 
-dlga_lord_talk_money:lord_talk|还 是 说 点 别 的 吧 。 
-dlga_lord_talk_gang:lord_talk|还 是 说 点 别 的 吧 。 
+dlga_lord_talk_money:lord_pretalk|还 是 说 点 别 的 吧 。 
+dlga_lord_talk_gang:lord_pretalk|还 是 说 点 别 的 吧 。 
 dlga_pretender_start:af33_pretender_abandoned|放 弃 对 {s48}的 资 助 — — 那 笔 钱 就 当 打 水 漂 了 。 
 dlga_af33_pretender_abandoned:pretender_start|明 白 了 。 这 事 就 此 了 结 — — 你 资 助 的 钱 不 会 退 回 来 ， 但 你 随 时 可 以 资 助 别 人 。 
 dlga_supported_pretender_talk:af33_pretender_abandoned_supp|放 弃 对 {s48}的 资 助 — — 那 笔 钱 就 当 打 水 漂 了 。 
 dlga_af33_pretender_abandoned_supp:supported_pretender_pretalk|明 白 了 。 这 事 就 此 了 结 — — 你 资 助 的 钱 不 会 退 回 来 ， 但 你 随 时 可 以 资 助 别 人 。 
+dlga_lord_af26_return:lord_af26_return_choose|你 借 了 {reg10} 名 {s41}， 本 队 现 在 能 交 还 {reg11} 人 ， 还 缺 {reg12} 人 。 按 同 兵 种 人 数 结 清 ， 缺 员 好 感 {reg13}； 调 走 或 升 级 的 人 可 以 补 齐 后 再 还 。 你 要 现 在 结 清 吗 ？ 
+dlga_lord_af26_return_choose:lord_af26_return_done|按 刚 才 说 的 人 数 交 还 ， 缺 员 一 并 结 清 。 
+dlga_lord_af26_return_choose:lord_pretalk|先 不 结 清 ， 我 去 把 人 补 齐 。 
