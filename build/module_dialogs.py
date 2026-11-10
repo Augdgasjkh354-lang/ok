@@ -26843,7 +26843,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   [anyone, "lord_af26_sanctuary", [], "好，你躲到我这里来，七天之内仇家不会再追你。交战阵营里与我交情深厚的城堡，你也可以进。", "lord_talk", []],
 
   # v1.0 领主关系与独立玩法·第三波 I3 私掠证（向国王买 3000，有效期 30 天；只对发证国之敌的商队有效）。
-  [anyone|plyr, "lord_talk", [(faction_slot_eq, "$g_talk_troop_faction", slot_faction_leader, "$g_talk_troop"),
+  [anyone|plyr, "lord_talk_money", [(faction_slot_eq, "$g_talk_troop_faction", slot_faction_leader, "$g_talk_troop"),
                               (call_script, "script_troop_get_relation_with_troop", "trp_player", "$g_talk_troop"),
                               (ge, reg0, 0),
                               (store_troop_gold, ":gold", "trp_player"),
@@ -26900,7 +26900,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   [anyone, "merchant_af26_collect", [], "结算好了，共 {reg10} 第纳尔，钱箱里留了六百作周转。", "merchant_talk", []],
 
   # v1.0 领主与匪帮 L3: 已查实领主养匪/密谋后，问领主要 400 封口费（af19_lord_pays，付不起记欠账）。
-  [anyone|plyr, "lord_talk", [
+  [anyone|plyr, "lord_talk_gang", [
     (this_or_next|eq, "$player_has_homage", 1),
     (eq, "$players_kingdom", "fac_player_supporters_faction"),
     (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
@@ -26928,7 +26928,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   [anyone, "lord_af27_hush", [], "拿去，400 第纳尔，这事到此为止，别再提了。", "lord_talk", []],
 
   # v1.0 领主与匪帮 L6: 玩家牵线，弱帮投靠本地领主（帮 <15 人、信任 ≥30、领主好感 ≥10）。
-  [anyone|plyr, "lord_talk", [
+  [anyone|plyr, "lord_talk_gang", [
     (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
     (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
     (call_script, "script_troop_get_relation_with_troop", "trp_player", "$g_talk_troop"),
@@ -26998,7 +26998,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   [anyone, "lord_af27_submit", [], "{s40}", "lord_talk", []],
 
   # v1.0 领主与匪帮 L7: 问领主悬赏的是哪支帮（赏金 800，剿匪后自动兑现）。
-  [anyone|plyr, "lord_talk", [
+  [anyone|plyr, "lord_talk_gang", [
     (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
     (troop_get_slot, ":bounty", "$g_talk_troop", slot_af27_bounty_kind),
     (is_between, ":bounty", 1, 7),
@@ -27012,7 +27012,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   [anyone, "lord_af27_bounty", [], "不错，{s4}那帮人闹得太凶，谁剿了他们，我出 800 第纳尔。", "lord_talk", []],
 
   # v1.0 领主与匪帮 L8: 向领主告密帮的位置，领主立即按 L1 机制追打。
-  [anyone|plyr, "lord_talk", [
+  [anyone|plyr, "lord_talk_gang", [
     (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
     (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
     (assign, ":found", 0),
@@ -27131,7 +27131,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
 
   # v1.0 资本家第一批 (条目 3): 好感 >= 10 的领主可以借钱, 1000/3000/5000 三档, 1%/周息, 见面时走 af19 收债。
   # 只借给财产 >= 本金的领主 (借出时查领主财产); 同一领主未还清时不能再借。
-  [anyone|plyr,"lord_talk", [
+  [anyone|plyr,"lord_talk_money", [
     (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
     (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
     (troop_slot_eq, "$g_talk_troop", slot_troop_prisoner_of_party, -1),
@@ -27352,7 +27352,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   # 村庄 10000。钱进国王财产 (af14), 调 give_center_to_lord 过户, 玩家成该城
   # 领主 (封地数 +1, 吃原版封地税效递减)。资助过本国打仗 (954 == 玩家阵营)
   # 时引言里优先卖给你——这是 3b“战后分一杯羹”的口子, 不另开 Slot。
-  [anyone|plyr,"lord_talk", [
+  [anyone|plyr,"lord_talk_money", [
     (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
     (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
     (troop_slot_eq, "$g_talk_troop", slot_troop_prisoner_of_party, -1),
@@ -27436,7 +27436,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   # 资助过本国 (954 == 玩家阵营) 时, 买城对话里国王会优先卖给你 (见买城引言);
   # 资助外国没有买城口子 (外国城本来就不能买), 只拿好感与雇兵预算。
   # 诚实性: 钱只进国王财产、提高雇兵预算, 不承诺多一支军队、不承诺打赢。
-  [anyone|plyr,"lord_talk", [
+  [anyone|plyr,"lord_talk_money", [
     (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
     (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
     (troop_slot_eq, "$g_talk_troop", slot_troop_prisoner_of_party, -1),
@@ -27504,7 +27504,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   # 本来就是手头紧的那个, 设了门槛就借不出去; 代价是还钱看他以后的光景, 逾期
   # 未还的部分由 af19_lord_pays 记进 874 欠账 (见 af33_settle_warloans)。
   # 条件: 好感 ≥10 (同普通放贷)、对方阵营正在打仗、同一领主没有未还的战争贷款。
-  [anyone|plyr,"lord_talk", [
+  [anyone|plyr,"lord_talk_money", [
     (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
     (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
     (troop_slot_eq, "$g_talk_troop", slot_troop_prisoner_of_party, -1),
@@ -27560,7 +27560,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   # 比本国多): 赔款 5000 进强势方国王财产 (af14), 两国调同一套停战执行器
   # diplomacy_start_peace_between_kingdoms。买和平是自愿出价, 不是欠账,
   # 不走 af19、不记欠账。关系: 被救的国王 +3、收赔款的国王 +2。
-  [anyone|plyr,"lord_talk", [
+  [anyone|plyr,"lord_talk_money", [
     (faction_slot_eq, "$g_talk_troop_faction", slot_faction_leader, "$g_talk_troop"),
     (troop_get_slot, ":renown", "trp_player", slot_troop_renown),
     (ge, ":renown", 200),
@@ -27673,4 +27673,193 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   [anyone|plyr,"af33_assassin_confirm_2", [], "算了。", "tavernkeeper_pretalk",[]],
   [anyone,"af33_assassin_done", [], "好，钱我收了。刺客明天动手，你等消息就是。记住，这事跟我没关系。", "tavernkeeper_pretalk",[]],
 
+
+  # 菜单摩擦点第五批 lord_talk 两轮：入口“谈钱的事。”，条件＝钱组 6 个选项
+  # 条件的 OR（try_begin 分支写法）。组内一个都不满足时入口不出现。
+  # 入口条件只读不写：各支只调只读脚本（见文件头注释），不写任何持久状态。
+  [anyone|plyr, "lord_talk", [
+      (assign, ":show", 0),
+      (try_begin),
+      # 借钱给你, 拿去周转。(lord_af29_lend)
+      (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
+      (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
+      (troop_slot_eq, "$g_talk_troop", slot_troop_prisoner_of_party, -1),
+      (troop_slot_eq, "$g_talk_troop", slot_af29_loan_principal, 0),
+      (call_script, "script_troop_get_relation_with_troop", "trp_player", "$g_talk_troop"),
+      (ge, reg0, 10),
+      (store_troop_gold, ":gold", "trp_player"),
+      (ge, ":gold", 1000),
+      (troop_get_slot, ":wealth", "$g_talk_troop", slot_troop_wealth),
+      (ge, ":wealth", 1000),
+      (assign, ":show", 1),
+      (else_try),
+      # 陛下，我想买一封私掠证，奉旨劫掠贵国之敌的商队。(lord_af26_letter)
+      (faction_slot_eq, "$g_talk_troop_faction", slot_faction_leader, "$g_talk_troop"),
+                                    (call_script, "script_troop_get_relation_with_troop", "trp_player", "$g_talk_troop"),
+                                    (ge, reg0, 0),
+                                    (store_troop_gold, ":gold", "trp_player"),
+                                    (ge, ":gold", 3000),
+                                    (party_get_slot, ":day", "p_main_party", slot_af26_letter_day),
+                                    (store_current_day, ":today"),
+                                    (le, ":day", ":today"),
+      (assign, ":show", 1),
+      (else_try),
+      # 我想买下这座城——出个价吧。(af33_buy_center_intro)
+      (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
+      (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
+      (troop_slot_eq, "$g_talk_troop", slot_troop_prisoner_of_party, -1),
+      (is_between, "$players_kingdom", npc_kingdoms_begin, npc_kingdoms_end),
+      (faction_get_slot, ":leader", "$players_kingdom", slot_faction_leader),
+      (eq, ":leader", "$g_talk_troop"),
+      (eq, "$player_has_homage", 1),
+      (call_script, "script_troop_get_relation_with_troop", "trp_player", "$g_talk_troop"),
+      (ge, reg0, 20),
+      (troop_get_slot, ":wealth", "$g_talk_troop", slot_troop_wealth),
+      (lt, ":wealth", 5000),
+      (store_troop_gold, ":gold", "trp_player"),
+      (ge, ":gold", 10000),
+      (call_script, "script_af33_king_selling", "$g_talk_troop"),
+      (eq, reg0, 1),
+      (assign, ":show", 1),
+      (else_try),
+      # 我想资助贵国打仗——出一笔钱。(af33_fund_war)
+      (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
+      (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
+      (troop_slot_eq, "$g_talk_troop", slot_troop_prisoner_of_party, -1),
+      (store_faction_of_troop, ":fac", "$g_talk_troop"),
+      (is_between, ":fac", npc_kingdoms_begin, npc_kingdoms_end),
+      (faction_get_slot, ":leader", ":fac", slot_faction_leader),
+      (eq, ":leader", "$g_talk_troop"),
+      (call_script, "script_af33_faction_at_war", ":fac"),
+      (eq, reg0, 1),
+      (store_troop_gold, ":gold", "trp_player"),
+      (ge, ":gold", 5000),
+      (assign, ":show", 1),
+      (else_try),
+      # 借钱给你打仗——这笔钱专款专用。(af33_warloan)
+      (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
+      (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
+      (troop_slot_eq, "$g_talk_troop", slot_troop_prisoner_of_party, -1),
+      (troop_slot_eq, "$g_talk_troop", slot_af33_warloan_principal, 0),
+      (call_script, "script_troop_get_relation_with_troop", "trp_player", "$g_talk_troop"),
+      (ge, reg0, 10),
+      (store_faction_of_troop, ":fac", "$g_talk_troop"),
+      (call_script, "script_af33_faction_at_war", ":fac"),
+      (eq, reg0, 1),
+      (store_troop_gold, ":gold", "trp_player"),
+      (ge, ":gold", 1000),
+      (assign, ":show", 1),
+      (else_try),
+      # 陛下，我出 5000 第纳尔，替你向{s4}买个停战。(af33_buy_peace)
+      (faction_slot_eq, "$g_talk_troop_faction", slot_faction_leader, "$g_talk_troop"),
+      (troop_get_slot, ":renown", "trp_player", slot_troop_renown),
+      (ge, ":renown", 200),
+      (call_script, "script_troop_get_relation_with_troop", "trp_player", "$g_talk_troop"),
+      (ge, reg0, 20),
+      (call_script, "script_af33_buy_peace_target"),
+      (eq, reg0, 1),
+      (store_troop_gold, ":gold", "trp_player"),
+      (ge, ":gold", 5000),
+      (assign, ":show", 1),
+      (try_end),
+      (eq, ":show", 1),
+  ], "谈钱的事。", "lord_talk_money", []],
+  # 菜单摩擦点第五批 lord_talk 两轮：入口“谈帮派的事。”，条件＝帮组 4 个选项
+  # 条件的 OR（try_begin 分支写法）。组内一个都不满足时入口不出现。
+  [anyone|plyr, "lord_talk", [
+      (assign, ":show", 0),
+      (try_begin),
+      # 听说你和匪帮有来往，给我 400 第纳尔，这事我就不往上报了。(lord_af27_hush)
+      (this_or_next|eq, "$player_has_homage", 1),
+      (eq, "$players_kingdom", "fac_player_supporters_faction"),
+      (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
+      (troop_get_slot, ":known", "$g_talk_troop", slot_af05_known_token),
+      (troop_get_slot, ":hit", "$g_talk_troop", slot_af05_last_hit_token),
+      (gt, ":hit", 0),
+      (eq, ":known", ":hit"),
+      (troop_get_slot, ":resolved", "$g_talk_troop", slot_af05_resolved_token),
+      (lt, ":resolved", ":hit"),
+      (store_current_day, ":day"),
+      (store_sub, ":age", ":day", ":hit"),
+      (val_add, ":age", 1),
+      (is_between, ":age", 0, 15),
+      (troop_get_slot, ":intel", "$g_talk_troop", slot_fb74_intel_strength),
+      (ge, ":intel", 25),
+      (assign, ":show", 1),
+      (else_try),
+      # 我认识一支弱帮，想让他们投靠你。(lord_af27_submit)
+      (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
+      (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
+      (call_script, "script_troop_get_relation_with_troop", "trp_player", "$g_talk_troop"),
+      (ge, reg0, 10),
+      (assign, ":found", 0),
+      (try_for_range, ":kind", 1, 7),
+        (eq, ":found", 0),
+        (call_script, "script_af23_gang_live_party", ":kind"),
+        (gt, reg0, 0),
+        (assign, ":gang", reg0),
+        (store_party_size_wo_prisoners, ":size", ":gang"),
+        (lt, ":size", 15),
+        (party_get_slot, ":home", ":gang", slot_af04_home),
+        (is_between, ":home", villages_begin, villages_end),
+        (party_get_slot, ":town", ":home", slot_village_market_town),
+        (is_between, ":town", towns_begin, towns_end),
+        (party_get_slot, ":home_lord", ":town", slot_town_lord),
+        (eq, ":home_lord", "$g_talk_troop"),
+        (call_script, "script_af04_main_slot", slot_af04_relation_start, ":kind"),
+        (party_get_slot, ":trust", "p_main_party", reg0),
+        (ge, ":trust", 30),
+        (assign, ":found", ":kind"),
+      (try_end),
+      (gt, ":found", 0),
+      (assign, ":show", 1),
+      (else_try),
+      # 听说你在悬赏剿匪？(lord_af27_bounty)
+      (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
+      (troop_get_slot, ":bounty", "$g_talk_troop", slot_af27_bounty_kind),
+      (is_between, ":bounty", 1, 7),
+      (call_script, "script_af23_gang_live_party", ":bounty"),
+      (gt, reg0, 0),
+      (assign, ":show", 1),
+      (else_try),
+      # 我知道一支匪帮的下落，你派人去剿了吧。(lord_af27_inform)
+      (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
+      (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
+      (assign, ":found", 0),
+      (try_for_range, ":kind", 1, 7),
+        (eq, ":found", 0),
+        (call_script, "script_af23_gang_live_party", ":kind"),
+        (gt, reg0, 0),
+        (assign, ":gang", reg0),
+        (store_party_size_wo_prisoners, ":size", ":gang"),
+        (party_get_slot, ":home", ":gang", slot_af04_home),
+        (is_between, ":home", villages_begin, villages_end),
+        (party_get_slot, ":unrest", ":home", slot_af01_unrest),
+        (this_or_next|ge, ":size", 20),
+        (ge, ":unrest", 70),
+        (party_get_slot, ":town", ":home", slot_village_market_town),
+        (is_between, ":town", towns_begin, towns_end),
+        (party_get_slot, ":home_lord", ":town", slot_town_lord),
+        (eq, ":home_lord", "$g_talk_troop"),
+        (store_current_day, ":day"),
+        (val_add, ":day", 1),
+        (troop_get_slot, ":last", "$g_talk_troop", slot_af27_hunt_day),
+        (store_sub, ":elapsed", ":day", ":last"),
+        (this_or_next|eq, ":last", 0),
+        (ge, ":elapsed", 14),
+        (assign, ":found", ":kind"),
+      (try_end),
+      (gt, ":found", 0),
+      (assign, ":show", 1),
+      (try_end),
+      (eq, ":show", 1),
+  ], "谈帮派的事。", "lord_talk_gang", []],
+  # 菜单摩擦点第五批：谈钱的回应，下一状态与本状态相同，让钱组选项接着列出来。
+  [anyone, "lord_talk_money", [], "钱的事？说来听听。", "lord_talk_money", []],
+  # 菜单摩擦点第五批：谈帮派的回应，下一状态与本状态相同，让帮组选项接着列出来。
+  [anyone, "lord_talk_gang", [], "帮派的事？你说。", "lord_talk_gang", []],
+  # 菜单摩擦点第五批：从钱组返回 lord_talk 顶层。
+  [anyone|plyr, "lord_talk_money", [], "还是说点别的吧。", "lord_talk", []],
+  # 菜单摩擦点第五批：从帮组返回 lord_talk 顶层。
+  [anyone|plyr, "lord_talk_gang", [], "还是说点别的吧。", "lord_talk", []],
 ]

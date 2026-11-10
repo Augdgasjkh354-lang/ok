@@ -1416,3 +1416,5 @@ af33_assassin_choose
 af33_assassin_confirm
 af33_assassin_confirm_2
 af33_assassin_done
+lord_talk_money
+lord_talk_gang

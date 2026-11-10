@@ -83,6 +83,28 @@ ALLOWED_DIALOG_CHANGES|={
 }
 # v1.0 NPC对白 B-0: append-only. Old dialogue IDs must appear in order at the
 # head of the new file; new rows may only be appended at the end.
+# 菜单摩擦点第五批 lord_talk 两轮：10 个玩家选项从 lord_talk 搬去新状态
+# lord_talk_money / lord_talk_gang，只改状态字段，条件/文本/下一状态/后果
+# 一字不动；改状态字段会改对话 ID（dlga_<from>:<to>），旧 ID 在此备案。
+# 新 ID 是 dlga_lord_talk_money:lord_af29_lend、dlga_lord_talk_money:lord_af26_letter、
+# dlga_lord_talk_money:af33_buy_center_intro、dlga_lord_talk_money:af33_fund_war、
+# dlga_lord_talk_money:af33_warloan、dlga_lord_talk_money:af33_buy_peace、
+# dlga_lord_talk_gang:lord_af27_hush、dlga_lord_talk_gang:lord_af27_submit、
+# dlga_lord_talk_gang:lord_af27_bounty、dlga_lord_talk_gang:lord_af27_inform。
+# 注：下面的对话比对只覆盖 v0.8 基线范围（2815 行），这 10 行都在基线之后，
+# 搬动本身不触发比对；此处备案是为改动留痕。
+ALLOWED_DIALOG_CHANGES |= {
+    'dlga_lord_talk:lord_af29_lend',
+    'dlga_lord_talk:lord_af26_letter',
+    'dlga_lord_talk:af33_buy_center_intro',
+    'dlga_lord_talk:af33_fund_war',
+    'dlga_lord_talk:af33_warloan',
+    'dlga_lord_talk:af33_buy_peace',
+    'dlga_lord_talk:lord_af27_hush',
+    'dlga_lord_talk:lord_af27_submit',
+    'dlga_lord_talk:lord_af27_bounty',
+    'dlga_lord_talk:lord_af27_inform',
+}
 _old=(base/'compiled/conversation.txt').read_text('utf-8').split('\n')
 _new=(data/'conversation.txt').read_text('utf-8').split('\n')
 if _old and _old[-1]=='': _old=_old[:-1]
