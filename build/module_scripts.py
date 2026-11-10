@@ -62067,6 +62067,9 @@ scripts = [
       (store_current_day, ":day"),
       (store_add, ":idx", ":day", ":kind"),
       (store_mod, ":half", ":idx", 2),
+      # 审查修: :half 用了 :idx 的奇偶, 选句时再用 :idx 取模会让 2 句的组合永远选同一句;
+      # 除以 2 后, 同一模式下每轮换一句。
+      (val_div, ":idx", 2),
       # 信任 (交情句与 trust_* 场景共用)。
       (call_script, "script_af04_main_slot", slot_af04_relation_start, ":kind"),
       (party_get_slot, ":trust", "p_main_party", reg0),
