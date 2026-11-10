@@ -16924,6 +16924,7 @@ game_menus = [
            (assign, ":smuggler", reg0),
            (gt, ":smuggler", 0),
            (party_set_slot, ":smuggler", slot_af03_destination, ":town"),
+           (party_set_slot, ":smuggler", slot_af04_kind, ":kind"),
            (party_set_ai_behavior, ":smuggler", ai_bhvr_travel_to_party),
            (party_set_ai_object, ":smuggler", ":town"),
            (str_store_party_name, s10, ":gang"),
