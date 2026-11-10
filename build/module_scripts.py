@@ -59288,7 +59288,8 @@ scripts = [
   ]),
 
   ("af26_borrow_return", [
-    # v1.0 领主关系与独立玩法·第二波 L1: 借兵归还结算。活着的人划回领主部队（领主部队不在时只从玩家手里划走），
+    # v1.0 领主关系与独立玩法·第二波 L1: 借兵归还结算。只把借来的活兵划回领主部队（借前玩家已有的同型兵不扣，
+    # 借前数量记 Slot 967；领主部队不在时只从玩家手里划走），
     # 战死每人 -1 好感。逾期每天 -2 由每日触发器逐日扣，这里不重复算。reg0=1 已结算；reg1 战死数；reg2 逾期天数；reg3 本次好感变化。
     (assign, reg0, 0),
     (party_get_slot, ":deadline", "p_main_party", slot_af26_borrow_day),
@@ -59302,7 +59303,10 @@ scripts = [
       (is_between, ":lender", active_npcs_begin, active_npcs_end),
       (store_faction_of_troop, ":fac", ":lender"),
       (faction_get_slot, ":troop", ":fac", slot_faction_tier_2_troop),
-      (party_count_members_of_type, ":alive", "p_main_party", ":troop"),
+      (party_get_slot, ":pre", "p_main_party", slot_af26_borrow_pre_count),
+      (party_count_members_of_type, ":now", "p_main_party", ":troop"),
+      (store_sub, ":alive", ":now", ":pre"),
+      (val_max, ":alive", 0),
       (val_min, ":alive", ":borrowed"),
       (store_sub, ":dead", ":borrowed", ":alive"),
       (store_current_day, ":today"),
@@ -59320,6 +59324,7 @@ scripts = [
     (party_set_slot, "p_main_party", slot_af26_borrow_day, 0),
     (party_set_slot, "p_main_party", slot_af26_borrow_count, 0),
     (party_set_slot, "p_main_party", slot_af26_borrow_lender, 0),
+    (party_set_slot, "p_main_party", slot_af26_borrow_pre_count, 0),
     (assign, reg0, 1),
     (assign, reg1, ":dead"),
     (assign, reg2, ":overdue"),
