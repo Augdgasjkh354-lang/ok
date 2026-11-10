@@ -97,3 +97,10 @@ dlga_craftsman_af31_hire_choose:craftsman_af31_hire_done.1|雇 5 个 工 人 。
 dlga_craftsman_af31_hire_choose:craftsman_af31_hire_done.2|雇 满 10 人 。 
 dlga_craftsman_af31_hire_choose:master_craftsman_pretalk|算 了 , 先 不 雇 。 
 dlga_craftsman_af31_hire_done:master_craftsman_pretalk|好 , 人 手 这 就 安 排 上 。 作 坊 里 人 多 了 , 货 也 出 得 快 了 。 
+dlga_merchant_talk:caravan_af32_shares|入 股 这 支 商 队 。 
+dlga_caravan_af32_shares:caravan_af32_shares_choose|入 股 ？ 行 啊 , 你 出 钱 , 商 队 赚 钱 了 就 按 股 分 你 。 一 成 股 份 2000 第 纳 尔 , 最 多 买 到 三 成 。 如 今 你 在 这 支 商 队 里 已 经 占 了 {reg42} 成 。 丑 话 说 在 前 头 : 商 队 要 是 被 人 打 散 了 , 股 份 就 没 了 , 钱 也 不 退 。 
+dlga_caravan_af32_shares_choose:caravan_af32_shares_done|买 一 成 股 份 , 花 2000 第 纳 尔 。 
+dlga_caravan_af32_shares_choose:merchant_pretalk|算 了 , 先 不 买 。 
+dlga_caravan_af32_shares_done:merchant_pretalk|好 , 钱 收 下 了 。 商 队 跑 一 趟 赚 了 钱 , 就 有 你 一 份 。 
+dlga_mayor_talk:mayor_af32_guild|以 行 会 大 师 的 身 份 和 你 谈 谈 。 
+dlga_mayor_af32_guild:mayor_pretalk|原 来 是 行 会 大 师 大 人 ！ 全 卡 拉 迪 亚 的 作 坊 主 都 听 过 你 的 名 号 — — 你 名 下 已 有 {reg41} 家 作 坊 了 。 以 后 你 在 任 何 城 镇 建 作 坊 , 行 会 都 给 你 打 九 折 , 作 坊 每 周 的 利 也 多 算 你 半 成 。 

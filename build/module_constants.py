@@ -2156,3 +2156,4 @@ slot_af29_loan_day           = 946 # lord Troop Slot: day the loan was made (cap
 slot_af30_town_shares        = 947 # town: player-owned shares in percent, 10/20/30 (capital batch 2, item 4)
 slot_af31_workers            = 949 # town: hired workers in the player workshop, 0-10 (capital batch 3, item 6; 948 reserved for tax farming redesign)
 slot_af31_bank_principal     = 950 # town: bank outstanding principal + 1; 0 = no bank ever opened, 1 = bank open with nothing out (capital batch 3, item 7)
+slot_af32_caravan_shares     = 951 # caravan party: player-owned shares in percent, 10/20/30 (capital batch 4, item 8; caravan destroyed/disbanded = shares void, no refund)

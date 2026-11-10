@@ -25,7 +25,8 @@ ALLOWED_DIALOG_CHANGES={'dlga_village_elder_donate:village_elder_pretalk',  # v1
     'dlga_merchant_demand_toll:merchant_demand_toll_2', 'dlga_merchant_demand_toll:merchant_demand_toll_2.1',
     'dlga_merchant_demand_toll_accept:close_window',  # v1.0: tolls come out of the caravan's cash box
     'dlga_mayor_investment_possible:mayor_pretalk.2',  # v1.0 领主关系 L4: 领主好感 >= 20 时免除开企业门槛
-    'dlga_master_craftsman_auction_decide:master_craftsman_liquidation'}  # v1.0 资本家第一批: 卖掉作坊时扩建等级 (Slot 944) 清零
+    'dlga_master_craftsman_auction_decide:master_craftsman_liquidation',  # v1.0 资本家第一批: 卖掉作坊时扩建等级 (Slot 944) 清零
+    'dlga_investment_summary:mayor_investment_confirm'}  # v1.0 资本家第四批: 行会大师建作坊 9 折 (只改 $enterprise_cost, 文字不动)
 # v1.0: lords, kings and towns pay the player from their real money (af19_*).
 # v1.0 第六批（十）: arena prizes and ladies' quest rewards are paid from
 # real money too (town treasury / the lady's guardian).
