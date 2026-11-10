@@ -833,5 +833,10 @@ script_af33_center_price = 831
 script_af33_king_selling = 832
 script_af33_bribe_marshal_vote = 833
 script_af33_settle_warloans = 834
+script_af33_buy_peace_target = 835
+script_af33_gang_dividend = 836
+script_af33_find_caravan = 837
+script_af33_commission_caravan_raid = 838
+script_af33_gang_hit_caravan = 839
 
 

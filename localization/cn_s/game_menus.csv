@@ -109,11 +109,14 @@ menu_af04_gang|{s13}他 们 在 {s11}一 带 活 动 ， 专 长 是 {s12}。
 mno_af04_pay_treaty|付 {reg42} 第 纳 尔 ， 签 11 天 互 不 侵 扰 的 协 议 
 mno_af04_join|交 500 第 纳 尔 投 名 状 ， 入 伙 
 mno_af04_hire_raid|花 850 第 纳 尔 ， 请 他 们 袭 扰 一 支 敌 国 军 粮 队 
+mno_af33_hire_caravan_raid|花 850 第 纳 尔 ， 请 他 们 去 劫 一 支 王 国 商 队 
 mno_af04_buy_grain|从 盐 鸦 商 路 黑 市 买 两 袋 谷 物 （ 360 第 纳 尔 ） 
 mno_af04_hire_men|从 灰 狼 团 招 {reg45} 名 散 兵 （ {reg44} 第 纳 尔 ） 
 mno_af04_invest_200|给 这 伙 匪 帮 注 资 200 第 纳 尔 
 mno_af04_invest_500|给 这 伙 匪 帮 注 资 500 第 纳 尔 
 mno_af04_invest_1000|给 这 伙 匪 帮 注 资 1000 第 纳 尔 
+mno_af33_invest_gang|投 2000 第 纳 尔 入 股 这 伙 人 ， 往 后 他 们 抢 到 钱 分 你 两 成 
+mno_af33_invest_status|问 问 投 的 那 2000 第 纳 尔 怎 么 样 了 
 mno_af04_amnesty|花 1200 第 纳 尔 赦 免 他 们 ， 收 6 个 人 进 队 伍 
 mno_af27_warn|向 他 们 通 风 报 信 ： 有 领 主 正 带 兵 来 剿 你 们 
 mno_af04_attack|剿 灭 这 伙 匪 帮 
@@ -250,3 +253,11 @@ menu_af33_garrison|这 是 你 租 地 方 存 在 {s10} 城 外 的 兵 。 ^�
 mno_af33_garrison_swap|与 驻 留 的 兵 换 兵 
 mno_af33_garrison_disband|解 散 这 支 驻 留 部 队 （ 兵 散 了 ， 租 金 不 退 ） 
 mno_af33_garrison_leave|离 开 
+menu_af33_caravan_raid|花 850 第 纳 尔 ， 请 他 们 去 劫 一 支 王 国 商 队 。 劫 谁 的 ？ 挑 一 家 — — 商 队 是 人 家 的 命 脉 ， 抢 了 别 怪 我 没 提 醒 你 。 
+mno_af33_raid_kingdom_1|去 劫 {s41}的 商 队 
+mno_af33_raid_kingdom_2|去 劫 {s42}的 商 队 
+mno_af33_raid_kingdom_3|去 劫 {s43}的 商 队 
+mno_af33_raid_kingdom_4|去 劫 {s44}的 商 队 
+mno_af33_raid_kingdom_5|去 劫 {s45}的 商 队 
+mno_af33_raid_kingdom_6|去 劫 {s46}的 商 队 
+mno_af33_raid_back|算 了 ， 先 不 劫 了 

@@ -54410,6 +54410,15 @@ scripts = [
           (eq, ":joined", ":kind"),
           (party_set_slot, "p_main_party", slot_af23_joined_gang, 0),
         (try_end),
+        # v1.0 资本家 2.0 第三批 (8a): 投过钱的帮被打散, 投资作废、不退钱
+        # (照商队股份与扶持的先例; 钱袋上面已经清零, 这里只清分红资格,
+        # 否则重生的同种帮会接着给死掉的投资分红)。
+        (party_get_slot, ":invested", "p_main_party", slot_af33_gang_invest_kind),
+        (try_begin),
+          (eq, ":invested", ":kind"),
+          (party_set_slot, "p_main_party", slot_af33_gang_invest_kind, 0),
+          (party_set_slot, "p_main_party", slot_af33_gang_invest_amount, 0),
+        (try_end),
         # An existing leader was defeated by the world simulation: start a fresh 14-day cooldown.
         # v1.0 匪帮第一批 F3: 重生冷却 30 天 → 14 天。
         (try_begin),
@@ -54441,7 +54450,8 @@ scripts = [
           (gt, ":target", 0),
           (party_is_active, ":target"),
           (party_get_template_id, ":target_tpl", ":target"),
-          (eq, ":target_tpl", "pt_af03_supply_convoy"),
+          (this_or_next|eq, ":target_tpl", "pt_af03_supply_convoy"),
+          (eq, ":target_tpl", "pt_kingdom_caravan_party"),
           (lt, ":day", ":deadline"),
           (assign, ":has_order", 1),
         (try_end),
@@ -54459,7 +54469,12 @@ scripts = [
             (eq, ":sponsored_target", ":target"),
             (assign, ":hired", 2),
           (try_end),
-          (call_script, "script_af04_harass_convoy", ":gang", ":target", ":hired"),
+          (try_begin),
+            (eq, ":target_tpl", "pt_af03_supply_convoy"),
+            (call_script, "script_af04_harass_convoy", ":gang", ":target", ":hired"),
+          (else_try),
+            (call_script, "script_af33_gang_hit_caravan", ":gang", ":target"),
+          (try_end),
           (eq, reg0, 1),
           (party_set_slot, ":gang", slot_af04_order_target, 0),
           (party_set_slot, ":gang", slot_af04_order_deadline, 0),
@@ -57807,6 +57822,9 @@ scripts = [
         (call_script, "script_af04_main_slot", slot_af04_party_start, ":kind"),
         (party_slot_eq, "p_main_party", reg0, ":winner"),
         (call_script, "script_af15_gang_purse", ":kind", ":purse"),
+        # v1.0 资本家 2.0 第三批 (8a): 帮打赢商队抢到钱, 投过钱的玩家分 20%
+        # (af33_gang_dividend; 按抢到的全额算, L3 资助人的 30% 在后面另扣)。
+        (call_script, "script_af33_gang_dividend", ":kind", ":purse"),
         # v1.0 领主与匪帮 L3: 有资助人的帮打赢商队，30% 分给资助的领主。
         (call_script, "script_af27_find_sponsor", ":kind"),
         (try_begin),
@@ -59770,6 +59788,8 @@ scripts = [
       (try_begin),
         (gt, ":taken", 0),
         (call_script, "script_af15_gang_purse", ":kind", ":taken"),
+        # v1.0 资本家 2.0 第三批 (8a): 帮劫村抢到钱, 投过钱的玩家分 20%。
+        (call_script, "script_af33_gang_dividend", ":kind", ":taken"),
       (try_end),
       (party_set_slot, ":gang", slot_af04_last_strike, ":day"),
       (str_store_party_name, s57, ":target"),
@@ -60512,6 +60532,212 @@ scripts = [
         (display_message, "@{s48}的战争贷款到期了，一文没还，整笔 {reg41} 第纳尔记进了他的欠账。", 0xFF6666),
       (try_end),
     (try_end),
+  ]),
+
+  # ========== v1.0 资本家 2.0 第三批 (条目 7b+8a+8b) ==========
+  # af33_buy_peace_target: find a war the talked-to king is LOSING (his
+  # kingdom holds fewer centers than the enemy), so the player can buy
+  # peace for him. Mirrors af26_mediate_target, plus a center count:
+  # the enemy must hold MORE centers (the strong side -- the reparations
+  # go into ITS king's wealth). Output: reg0 = 1/0, reg1 = enemy faction,
+  # s4 = enemy faction name.
+  ("af33_buy_peace_target", [
+    (assign, reg0, 0),
+    (assign, ":kingdom_a", "$g_talk_troop_faction"),
+    (assign, ":own_centers", 0),
+    (try_for_range, ":center", centers_begin, centers_end),
+      (store_faction_of_party, ":cf", ":center"),
+      (eq, ":cf", ":kingdom_a"),
+      (val_add, ":own_centers", 1),
+    (try_end),
+    (try_for_range, ":kingdom_b", kingdoms_begin, kingdoms_end),
+      (eq, reg0, 0),
+      (neq, ":kingdom_b", ":kingdom_a"),
+      (store_relation, ":rel", ":kingdom_a", ":kingdom_b"),
+      (lt, ":rel", 0),
+      (faction_get_slot, ":king_b", ":kingdom_b", slot_faction_leader),
+      (is_between, ":king_b", active_npcs_begin, active_npcs_end),
+      (call_script, "script_troop_get_relation_with_troop", "trp_player", ":king_b"),
+      (assign, ":rel_b", reg0),
+      (ge, ":rel_b", 20),
+      (assign, ":enemy_centers", 0),
+      (try_for_range, ":center2", centers_begin, centers_end),
+        (store_faction_of_party, ":cf2", ":center2"),
+        (eq, ":cf2", ":kingdom_b"),
+        (val_add, ":enemy_centers", 1),
+      (try_end),
+      (gt, ":enemy_centers", ":own_centers"),
+      (assign, reg1, ":kingdom_b"),
+      (str_store_faction_name, s4, ":kingdom_b"),
+      (assign, reg0, 1),
+    (try_end),
+  ]),
+
+  # af33_gang_dividend: pay the player's 20% cut when a gang takes loot.
+  # Params: gang kind, loot amount. share = min(loot * 20%, purse balance);
+  # taken out of the gang purse on the spot, never booked as af19 debt
+  # (it is cash, not a loan). Called only at the three places a gang
+  # actually takes money from the world (see the file header: hooking it
+  # inside af15_gang_purse would also pay out on birth money, the player's
+  # own fees, sponsorships and feud transfers).
+  ("af33_gang_dividend", [
+    (store_script_param, ":kind", 1),
+    (store_script_param, ":loot", 2),
+    (try_begin),
+      (gt, ":loot", 0),
+      (party_get_slot, ":invested", "p_main_party", slot_af33_gang_invest_kind),
+      (eq, ":invested", ":kind"),
+      (store_mul, ":share", ":loot", 20),
+      (val_div, ":share", 100),
+      (gt, ":share", 0),
+      (try_begin),
+        (ge, ":kind", 4),
+        (store_add, ":slot", slot_af28_gang_purse_start, ":kind"),
+        (val_sub, ":slot", 4),
+      (else_try),
+        (store_add, ":slot", slot_af15_gang_purse_start, ":kind"),
+        (val_sub, ":slot", 1),
+      (try_end),
+      (party_get_slot, ":purse", "p_main_party", ":slot"),
+      (val_min, ":share", ":purse"),
+      (gt, ":share", 0),
+      (store_mul, ":neg", ":share", -1),
+      (call_script, "script_af15_gang_purse", ":kind", ":neg"),
+      (troop_add_gold, "trp_player", ":share"),
+      (assign, reg41, ":share"),
+      (call_script, "script_af10_gang_name_to_s44", ":kind"),
+      (str_store_string, s10, "@{s44}"),
+      (display_message, "@{s10}抢到了一笔钱，按说好的两成分了你 {reg41} 第纳尔。"),
+    (try_end),
+  ]),
+
+  # af33_find_caravan: nearest live kingdom caravan of a given faction.
+  # Params: gang party, faction, max distance. Output: reg0 = caravan
+  # party, or -1. Only pt_kingdom_caravan_party counts (the player's own
+  # caravans are fac_player_supporters_faction, never one of the six).
+  ("af33_find_caravan", [
+    (store_script_param, ":gang", 1),
+    (store_script_param, ":faction", 2),
+    (store_script_param, ":max_dist", 3),
+    (assign, ":best", -1),
+    (assign, ":best_dist", ":max_dist"),
+    (try_for_parties, ":caravan"),
+      (party_get_template_id, ":tpl", ":caravan"),
+      (eq, ":tpl", "pt_kingdom_caravan_party"),
+      (party_is_active, ":caravan"),
+      (store_faction_of_party, ":side", ":caravan"),
+      (eq, ":side", ":faction"),
+      (store_distance_to_party_from_party, ":distance", ":gang", ":caravan"),
+      (lt, ":distance", ":best_dist"),
+      (assign, ":best", ":caravan"),
+      (assign, ":best_dist", ":distance"),
+    (try_end),
+    (assign, reg0, ":best"),
+  ]),
+
+  # af33_commission_caravan_raid: hire a gang to rob a designated kingdom's
+  # caravan (8b). Params: gang party, target kingdom faction. Gates mirror
+  # af04_commission_raid (trust >= 8, 850, 7-day service cooldown SHARED
+  # with the convoy raid, no active order); the fee goes into the gang
+  # purse and the order runs on the existing daily-tick path
+  # (slot_af04_order_target + deadline, travel_to_party). Output: reg0 =
+  # 1 done / 0 not; reg1 = 1 no caravan of that kingdom in range.
+  ("af33_commission_caravan_raid", [
+    (store_script_param, ":gang", 1),
+    (store_script_param, ":faction", 2),
+    (assign, ":done", 0),
+    (party_get_slot, ":kind", ":gang", slot_af04_kind),
+    (call_script, "script_af04_main_slot", slot_af04_relation_start, ":kind"),
+    (party_get_slot, ":trust", "p_main_party", reg0),
+    (assign, ":max_dist", 55),
+    (try_begin),
+      (ge, ":trust", 80),
+      (assign, ":max_dist", 10000),
+    (try_end),
+    (call_script, "script_af04_main_slot", slot_af04_service_start, ":kind"),
+    (assign, ":service_slot", reg0),
+    (party_get_slot, ":last", "p_main_party", ":service_slot"),
+    (store_current_day, ":day"),
+    (val_add, ":day", 1),
+    (store_sub, ":elapsed", ":day", ":last"),
+    (party_get_slot, ":prior", ":gang", slot_af04_order_target),
+    (store_troop_gold, ":gold", "trp_player"),
+    (try_begin),
+      (ge, ":gold", 850),
+      (ge, ":trust", 8),
+      (ge, ":elapsed", 7),
+      (eq, ":prior", 0),
+      (call_script, "script_af33_find_caravan", ":gang", ":faction", ":max_dist"),
+      (assign, ":target", reg0),
+      (gt, ":target", 0),
+      (troop_remove_gold, "trp_player", 850),
+      (call_script, "script_af15_gang_purse", ":kind", 850),
+      (party_set_slot, "p_main_party", ":service_slot", ":day"),
+      (party_set_slot, ":gang", slot_af04_order_target, ":target"),
+      (store_add, ":deadline", ":day", 8),
+      (party_set_slot, ":gang", slot_af04_order_deadline, ":deadline"),
+      (party_set_ai_behavior, ":gang", ai_bhvr_travel_to_party),
+      (party_set_ai_object, ":gang", ":target"),
+      (assign, ":done", 1),
+    (try_end),
+    # v1.0 NPC对白 A-12: 失败只报真正的原因。reg1: 1 附近没有该国商队 / 0 其他。
+    (try_begin),
+      (eq, ":done", 0),
+      (call_script, "script_af33_find_caravan", ":gang", ":faction", ":max_dist"),
+      (try_begin),
+        (le, reg0, 0),
+        (assign, reg1, 1),
+      (else_try),
+        (assign, reg1, 0),
+      (try_end),
+    (try_end),
+    (assign, reg0, ":done"),
+  ]),
+
+  # af33_gang_hit_caravan: the gang catches the designated caravan and
+  # robs it. Modelled on af04_harass_convoy, but the loot is the caravan
+  # cash box (slot_af18_caravan_purse, working capital 600): guards -2..4
+  # (kind 1: 4, kind 3: 2, else 3, at least 1 left), half the cash box
+  # into the gang purse, dividend via af33_gang_dividend. The caravan is
+  # NOT destroyed -- it keeps travelling, lighter in guards and cash, and
+  # can be robbed again. Output: reg0 = 1 hit / 0 not (guards <= 1, retry
+  # until the deadline, same as harass_convoy).
+  ("af33_gang_hit_caravan", [
+    (store_script_param, ":gang", 1),
+    (store_script_param, ":caravan", 2),
+    (assign, ":hit", 0),
+    (store_current_day, ":day"),
+    (val_add, ":day", 1),
+    (party_get_slot, ":kind", ":gang", slot_af04_kind),
+    (party_count_members_of_type, ":guards", ":caravan", "trp_caravan_guard"),
+    (try_begin),
+      (gt, ":guards", 1),
+      (assign, ":damage", 3),
+      (try_begin), (eq, ":kind", 1), (assign, ":damage", 4),
+      (else_try), (eq, ":kind", 3), (assign, ":damage", 2), (try_end),
+      (store_sub, ":max_loss", ":guards", 1),
+      (val_min, ":damage", ":max_loss"),
+      (party_remove_members, ":caravan", "trp_caravan_guard", ":damage"),
+      (party_get_slot, ":purse", ":caravan", slot_af18_caravan_purse),
+      (val_max, ":purse", 0),
+      (store_div, ":take", ":purse", 2),
+      (try_begin),
+        (gt, ":take", 0),
+        (store_sub, ":new_purse", ":purse", ":take"),
+        (party_set_slot, ":caravan", slot_af18_caravan_purse, ":new_purse"),
+        (call_script, "script_af15_gang_purse", ":kind", ":take"),
+        (call_script, "script_af33_gang_dividend", ":kind", ":take"),
+      (try_end),
+      (party_set_slot, ":gang", slot_af04_last_strike, ":day"),
+      (assign, ":hit", 1),
+      (try_begin),
+        (store_distance_to_party_from_party, ":visible", ":gang", "p_main_party"),
+        (lt, ":visible", 14),
+        (str_store_party_name, s10, ":gang"),
+        (display_message, "@{s10}劫了附近的一支王国商队，护卫折了几人，钱箱也被抢走一半。"),
+      (try_end),
+    (try_end),
+    (assign, reg0, ":hit"),
   ]),
 ]
 
