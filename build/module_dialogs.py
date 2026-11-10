@@ -21366,6 +21366,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
 
   [anyone, "start", [
                      (eq, "$talk_context", tc_tavern_talk),
+                     (neg|is_between, "$g_talk_troop", tavernkeepers_begin, tavernkeepers_end),
                                          (neg|troop_is_hero, "$g_talk_troop"),
                      (neg|is_between, "$g_talk_troop", "trp_swadian_merchant", "trp_startup_merchants_end"),
                      (party_get_slot, ":mercenary_troop", "$g_encountered_party", slot_center_mercenary_troop_type),
