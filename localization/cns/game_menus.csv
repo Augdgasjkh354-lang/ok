@@ -189,7 +189,7 @@ menu_af28_contact|角 落 里 那 人 朝 你 点 了 点 头 ， 他 是 {s10}�
 mno_af28_pay_treaty|付 {reg42} 第 纳 尔 ， 签 11 天 互 不 侵 扰 的 协 议 
 mno_af28_join|交 500 第 纳 尔 投 名 状 ， 入 伙 
 mno_af35_contact_hire_entry|雇 他 们 办 事 
-mno_af35_contact_invest_entry|给 这 伙 匪 帮 注 资 
+mno_af35_contact_invest_entry|给 这 伙 匪 帮 注 资 ／ 入 股 
 mno_af28_amnesty|花 1200 第 纳 尔 赦 免 他 们 ， 收 6 个 人 进 队 伍 
 mno_af28_warn|向 他 们 通 风 报 信 ： 有 领 主 正 带 兵 来 剿 你 们 
 mno_af35_contact_quest_entry|接 一 单 活 
@@ -245,10 +245,11 @@ mno_af33_rent_entry|租 地 方 放 兵 （ 每 月 500 第 纳 尔 ）
 mno_af33_renew_entry|续 租 驻 兵 处 （ 500 第 纳 尔 ， 还 剩 {reg41} 天 ） 
 mno_af33_swap_entry|与 城 外 驻 留 的 兵 换 兵 
 mno_af34_garrison_back|返 回 城 镇 
-menu_af35_contact_invest|给 这 伙 匪 帮 注 资 — — 200、 500、 1000 第 纳 尔 三 档 ， 钱 进 他 们 的 钱 袋 。 
+menu_af35_contact_invest|给 这 伙 匪 帮 注 资 ／ 入 股 — — 注 资 200、 500、 1000 第 纳 尔 ， 或 投 2000 入 股 ， 往 后 他 们 抢 到 钱 分 你 两 成 。 
 mno_af28_invest_200|给 这 伙 匪 帮 注 资 200 第 纳 尔 
 mno_af28_invest_500|给 这 伙 匪 帮 注 资 500 第 纳 尔 
 mno_af28_invest_1000|给 这 伙 匪 帮 注 资 1000 第 纳 尔 
+mno_af28_invest_gang|投 2000 第 纳 尔 入 股 这 伙 人 ， 往 后 他 们 抢 到 钱 分 你 两 成 
 mno_af35_contact_invest_back|返 回 
 menu_af35_contact_quest|接 一 单 活 — — 劫 军 粮 队 、 送 信 、 护 送 走 私 货 、 劫 村 子 ， 四 种 活 都 在 这 里 接 。 
 mno_af28_quest_q1_accept|接 一 单 劫 军 粮 队 的 活 
