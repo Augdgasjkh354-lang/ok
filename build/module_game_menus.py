@@ -4958,7 +4958,11 @@ game_menus = [
           (else_try),            
             (try_begin), #my kingdom
               #(change_screen_return),              
-              (eq, "$g_next_menu", "mnu_castle_taken"),
+              # v1.0 领主关系第三波 I7 补丁: 独立玩家攻下城堡时 $g_next_menu 是 mnu_af26_hold_choice，
+              # 原先这里只认 mnu_castle_taken，hold_choice 会一路漏到底：total_victory 原地显示、
+              # 唯一的“继续”又是空后果，于是点“继续”退不出去、软锁。两值都放行，里面再分流。
+              (this_or_next|eq, "$g_next_menu", "mnu_castle_taken"),
+              (eq, "$g_next_menu", "mnu_af26_hold_choice"),
               
               (call_script, "script_add_log_entry", logent_castle_captured_by_player, "trp_player", "$g_encountered_party", -1, "$g_encountered_party_faction"),
               # v1.0: the treasury of the taken town.
@@ -4976,7 +4980,10 @@ game_menus = [
               (store_current_hours, ":hours"),
                           (faction_set_slot, "$players_kingdom", slot_faction_ai_last_decisive_event, ":hours"),
                           
-              (try_begin), #player took a walled center while he is a vassal of npc kingdom.
+              (try_begin), # v1.0 领主关系第三波 I7 补丁: 独立玩家先出选择菜单（称王／只占）。
+                (eq, "$g_next_menu", "mnu_af26_hold_choice"),
+                (jump_to_menu, "$g_next_menu"),
+              (else_try), #player took a walled center while he is a vassal of npc kingdom.
                 (is_between, "$players_kingdom", npc_kingdoms_begin, npc_kingdoms_end),
                 (jump_to_menu, "$g_next_menu"),
               (else_try), #player took a walled center while he is a vassal of rebels.
