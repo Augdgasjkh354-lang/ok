@@ -46,6 +46,7 @@ mno_af31_bank_entry|去 钱 庄 看 看 （ 未 收 回 本 金 {reg41} 第 纳 
 mno_af33_rent_entry|租 地 方 放 兵 （ 每 月 500 第 纳 尔 ） 
 mno_af33_renew_entry|续 租 驻 兵 处 （ 500 第 纳 尔 ， 还 剩 {reg41} 天 ） 
 mno_af33_swap_entry|与 城 外 驻 留 的 兵 换 兵 
+mno_af33_intel_entry|打 点 情 报 网 
 mno_af30_tax_farm_entry|买 下 本 镇 4 周 包 税 权 （ 5000 第 纳 尔 ） 
 menu_fb75_intel_book|宫 廷 政 治 情 报 簿 ^^政 治 信 用 ： {reg50}    政 治 嫌 疑 ： {reg51}/100    王 室 调 查 次 数 ： {reg52}^有 效 情 报 ： {reg53}条    有 人 欠 你 选 票 ： {reg54}笔    你 欠 人 的 选 票 ： {reg58}笔 ^^情 报 只 记 录 你 已 经 打 听 到 的 消 息 ； 过 期 线 索 会 自 动 从 本 页 隐 去 。 
 mno_fb75_book_clues|查 看 已 掌 握 的 政 治 线 索 
@@ -261,3 +262,8 @@ mno_af33_raid_kingdom_4|去 劫 {s44}的 商 队
 mno_af33_raid_kingdom_5|去 劫 {s45}的 商 队 
 mno_af33_raid_kingdom_6|去 劫 {s46}的 商 队 
 mno_af33_raid_back|算 了 ， 先 不 劫 了 
+menu_af33_intel|情 报 网 ： {s40}。 每 月 500 第 纳 尔 养 着 ， 每 周 给 你 一 份 附 近 动 静 的 简 报 — — 哪 支 帮 派 在 附 近 出 没 、 最 近 的 敌 军 在 哪 ； 级 别 高 了 还 报 战 事 和 围 城 。 跟 镇 上 的 案 卷 、 领 主 那 边 的 情 报 不 是 一 回 事 ： 那 边 是 查 案 ， 这 边 是 听 风 。 
+mno_af33_intel_renew|续 一 个 月 （ 500 第 纳 尔 ） 
+mno_af33_intel_upgrade|升 一 级 （ 500 第 纳 尔 ） 
+mno_af33_intel_brief|要 一 份 最 近 的 简 报 
+mno_af33_intel_back|算 了 ， 先 不 打 点 了 

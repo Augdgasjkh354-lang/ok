@@ -1409,3 +1409,10 @@ af33_warloan
 af33_warloan_choose
 af33_warloan_done
 af33_buy_peace
+af33_pretender_funded
+af33_pretender_funded_supp
+af33_assassin_pick
+af33_assassin_choose
+af33_assassin_confirm
+af33_assassin_confirm_2
+af33_assassin_done

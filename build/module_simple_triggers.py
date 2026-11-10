@@ -4364,4 +4364,18 @@ simple_triggers = [
   (24*7, [
     (call_script, "script_af33_settle_warloans"),
   ]),
+
+  # v1.0 资本家 2.0 第四批 (条目 10c): 刺客次日动手, 每天结算一单
+  # (Slot 965 > 0 是待动手的目标)。
+  (24, [
+    (call_script, "script_af33_resolve_assassin"),
+  ]),
+
+  # v1.0 资本家 2.0 第四批 (条目 9+10d): 每周结算资助的称王者 (登基返还
+  # 1.5 倍分期付、打输作废) 与情报网 (到期断网、没到期发每周简报)。
+  # 只发提示消息, 不动每周结算 (budget_report) 的结构。
+  (24*7, [
+    (call_script, "script_af33_settle_pretender"),
+    (call_script, "script_af33_intel_weekly"),
+  ]),
 ]

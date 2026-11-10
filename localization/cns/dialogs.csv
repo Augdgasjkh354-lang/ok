@@ -139,3 +139,17 @@ dlga_af33_warloan_choose:lord_talk|算 了 ， 当 我 没 说 。
 dlga_af33_warloan_done:lord_talk|多 谢 。 这 钱 我 会 拿 去 雇 兵 ， 30 天 后 连 本 带 息 还 你 。 
 dlga_lord_talk:af33_buy_peace|陛 下 ， 我 出 5000 第 纳 尔 ， 替 你 向 {s4}买 个 停 战 。 
 dlga_af33_buy_peace:lord_talk|谈 成 了 。 {s4}与 {s5}已 经 停 战 ， 四 十 天 内 不 再 开 战 。 你 替 我 国 出 的 这 5000 第 纳 尔 赔 款 ， 对 方 国 王 已 经 收 下 了 。 这 份 情 ， 两 国 都 记 下 了 。 
+dlga_pretender_start:af33_pretender_funded|我 资 助 你 5000 第 纳 尔 — — 先 说 好 ， 这 钱 是 让 你 多 雇 些 兵 的 ， 打 赢 打 输 还 得 看 战 场 ， 我 不 包 赢 。 
+dlga_pretender_start:af33_pretender_funded.1|我 资 助 你 10000 第 纳 尔 — — 先 说 好 ， 这 钱 是 让 你 多 雇 些 兵 的 ， 打 赢 打 输 还 得 看 战 场 ， 我 不 包 赢 。 
+dlga_af33_pretender_funded:pretender_start|好 ， 这 笔 钱 我 会 拿 去 雇 兵 、 置 办 军 械 。 你 一 共 资 助 了 我 {reg1} 第 纳 尔 。 我 若 登 基 ， 连 本 带 利 一 倍 半 还 你 — — 从 新 王 国 的 金 库 里 出 ， 一 次 最 多 拿 四 分 之 一 ， 分 几 周 还 清 ； 若 我 败 了 、 被 俘 了 ， 这 笔 钱 就 当 沉 了 。 打 仗 没 有 包 赢 的 ， 你 我 都 清 楚 。 
+dlga_supported_pretender_talk:af33_pretender_funded_supp|我 再 资 助 你 5000 第 纳 尔 — — 先 说 好 ， 这 钱 是 让 你 多 雇 些 兵 的 ， 打 赢 打 输 还 得 看 战 场 ， 我 不 包 赢 。 
+dlga_supported_pretender_talk:af33_pretender_funded_supp.1|我 再 资 助 你 10000 第 纳 尔 — — 先 说 好 ， 这 钱 是 让 你 多 雇 些 兵 的 ， 打 赢 打 输 还 得 看 战 场 ， 我 不 包 赢 。 
+dlga_af33_pretender_funded_supp:supported_pretender_pretalk|好 ， 这 笔 钱 我 会 拿 去 雇 兵 、 置 办 军 械 。 你 一 共 资 助 了 我 {reg1} 第 纳 尔 。 我 若 登 基 ， 连 本 带 利 一 倍 半 还 你 — — 从 新 王 国 的 金 库 里 出 ， 一 次 最 多 拿 四 分 之 一 ， 分 几 周 还 清 ； 若 我 败 了 、 被 俘 了 ， 这 笔 钱 就 当 沉 了 。 打 仗 没 有 包 赢 的 ， 你 我 都 清 楚 。 
+dlga_tavernkeeper_talk:af33_assassin_pick|我 想 雇 个 刺 客 ， 除 掉 一 个 碍 事 的 商 人 — — 见 不 得 光 的 那 种 。 
+dlga_af33_assassin_pick:af33_assassin_choose|哦 ？ 说 吧 ， 想 让 谁 从 市 集 上 消 失 。 2000 第 纳 尔 先 付 ， 刺 客 明 天 动 手 。 成 了 ， 人 就 没 了 ； 败 了 ， 钱 不 退 ； 走 漏 了 ， 荣 誉 和 那 城 领 主 的 关 系 都 得 赔 。 挑 一 个 吧 — — 
+dlga_af33_assassin_choose:af33_assassin_confirm|{s4}的 货 商 
+dlga_af33_assassin_choose:tavernkeeper_pretalk|算 了 。 
+dlga_af33_assassin_confirm:af33_assassin_confirm_2|就 是 {s4}的 货 商 ？ 2000 第 纳 尔 ， 刺 客 明 天 动 手 。 成 了 ， 他 从 市 集 上 消 失 — — 那 座 城 以 后 再 没 有 货 商 卖 货 ； 败 了 ， 钱 不 退 ； 走 漏 了 风 声 ， 荣 誉 和 那 城 领 主 的 关 系 都 得 赔 。 你 确 定 ？ 
+dlga_af33_assassin_confirm_2:af33_assassin_done|就 他 ， 动 手 。 
+dlga_af33_assassin_confirm_2:tavernkeeper_pretalk|算 了 。 
+dlga_af33_assassin_done:tavernkeeper_pretalk|好 ， 钱 我 收 了 。 刺 客 明 天 动 手 ， 你 等 消 息 就 是 。 记 住 ， 这 事 跟 我 没 关 系 。 
