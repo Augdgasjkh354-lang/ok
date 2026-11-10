@@ -860,5 +860,6 @@ script_af42_crown_cut_room = 858
 script_af43_rival_pretender = 859
 script_af43_press_king = 860
 script_af44_home_remark = 861
+script_af45_prosperity_bonus = 862
 
 

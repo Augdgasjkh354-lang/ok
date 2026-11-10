@@ -14824,6 +14824,12 @@ scripts = [
       #Richer towns have more people and consume more, but also produce more
       (try_begin),
         (party_get_slot, ":prosperity_plus_75", ":center_no", slot_town_prosperity),
+        (try_begin),  # v1.0 繁荣上限 200: 超出 100 的部分只算一半
+          (gt, ":prosperity_plus_75", 100),
+          (val_sub, ":prosperity_plus_75", 100),
+          (val_div, ":prosperity_plus_75", 2),
+          (val_add, ":prosperity_plus_75", 100),
+        (try_end),
         (val_add, ":prosperity_plus_75", 75),
         (val_mul, ":modified_production", ":prosperity_plus_75"),
         (val_div, ":modified_production", 125),
@@ -14934,6 +14940,12 @@ scripts = [
       (store_add, ":modified_consumption", ":consumer_consumption", ":raw_material_consumption"),
       (try_begin),
         (party_get_slot, ":prosperity_plus_75", ":center_no", slot_town_prosperity),
+        (try_begin),  # v1.0 繁荣上限 200: 超出 100 的部分只算一半
+          (gt, ":prosperity_plus_75", 100),
+          (val_sub, ":prosperity_plus_75", 100),
+          (val_div, ":prosperity_plus_75", 2),
+          (val_add, ":prosperity_plus_75", 100),
+        (try_end),
         (val_add, ":prosperity_plus_75", 75),
         (val_mul, ":modified_consumption", ":prosperity_plus_75"),
         (val_div, ":modified_consumption", 125),
@@ -15087,6 +15099,12 @@ scripts = [
       #Adding tariffs to the town
       (party_get_slot, ":accumulated_tariffs", ":center_no", slot_center_accumulated_tariffs),
       (party_get_slot, ":prosperity", ":center_no", slot_town_prosperity),
+      (try_begin),  # v1.0 繁荣上限 200: 超出 100 的部分只算一半
+        (gt, ":prosperity", 100),
+        (val_sub, ":prosperity", 100),
+        (val_div, ":prosperity", 2),
+        (val_add, ":prosperity", 100),
+      (try_end),
       
       (assign, ":tariffs_generated", ":total_change"),
       (val_mul, ":tariffs_generated", ":prosperity"),
@@ -22229,8 +22247,15 @@ scripts = [
       
       (try_begin),
         (party_get_slot, ":prosperity", ":village_no", slot_town_prosperity),
+        (try_begin),  # v1.0 繁荣上限 200: 超出 100 的部分只算一半
+          (gt, ":prosperity", 100),
+          (val_sub, ":prosperity", 100),
+          (val_div, ":prosperity", 2),
+          (val_add, ":prosperity", 100),
+        (try_end),
         (val_div, ":prosperity", 15), #up to 6
         (store_add, ":number_of_items_in_village", ":prosperity", 1),
+        (val_min, ":number_of_items_in_village", 9),
       (try_end),
       
       (try_for_range, ":cur_good", trade_goods_begin, trade_goods_end),
@@ -33839,6 +33864,12 @@ scripts = [
         (eq, ":prosperity", 3), #60..79
         (str_store_string, s50, "@Rich"),
       (else_try),
+        (ge, ":prosperity", 7), #140..200
+        (str_store_string, s50, "@富甲一方"),
+      (else_try),
+        (ge, ":prosperity", 5), #100..139
+        (str_store_string, s50, "@繁华"),
+      (else_try),
         (str_store_string, s50, "@Very Rich"), #80..99
       (try_end),
   ]),
@@ -34367,7 +34398,7 @@ scripts = [
       (store_script_param, ":difference", 2),
       (party_get_slot, ":old_prosperity", ":center_no", slot_town_prosperity),
       (store_add, ":new_prosperity", ":old_prosperity", ":difference"),
-      (val_clamp, ":new_prosperity", 0, 100),
+      (val_clamp, ":new_prosperity", 0, 201),
       (store_div, ":old_state", ":old_prosperity", 20),
       (store_div, ":new_state", ":new_prosperity", 20),
       
@@ -34446,6 +34477,10 @@ scripts = [
       
       (val_max, ":ideal", 0),
       
+      # v1.0 繁荣上限 200: 玩家的经营让理想繁荣度往上走 (af45_prosperity_bonus)。
+      (call_script, "script_af45_prosperity_bonus", ":center_no"),
+      (val_add, ":ideal", reg0),
+      (val_min, ":ideal", 200),
       (assign, reg0, ":ideal"),
   ]),
   
@@ -48574,6 +48609,7 @@ scripts = [
                     (try_end),
                     
                     (party_get_slot, ":town_prosperity", ":cur_center", slot_town_prosperity),
+                    (val_min, ":town_prosperity", 100),
                     (assign, ":number_of_items_in_town", 25),
                     
                     (try_begin), #1.0x - 2.0x (50 - 100 prosperity)
@@ -59065,6 +59101,12 @@ scripts = [
       (lt, ":gold", ":float"),
       (store_sub, ":short", ":float", ":gold"),
       (party_get_slot, ":prosperity", ":town", slot_town_prosperity),
+      (try_begin),  # v1.0 繁荣上限 200: 超出 100 的部分只算一半
+        (gt, ":prosperity", 100),
+        (val_sub, ":prosperity", 100),
+        (val_div, ":prosperity", 2),
+        (val_add, ":prosperity", 100),
+      (try_end),
       (store_mul, ":market", ":prosperity", 15),
       (val_add, ":market", 500),
       (val_mul, ":market", ":share"),
@@ -62452,6 +62494,57 @@ scripts = [
     (else_try),
       (assign, reg0, 0),
     (try_end),
+  ]),
+
+  # v1.0 繁荣上限 200: 经营加成 (af45_prosperity_bonus)。只读, 不写任何 Slot。
+  ("af45_prosperity_bonus", [
+    (store_script_param, ":center", 1),
+    (assign, ":bonus", 0),
+    (try_begin),
+      (is_between, ":center", towns_begin, towns_end),
+      (party_get_slot, ":v", ":center", slot_af29_expand_level),
+      (val_mul, ":v", 6),
+      (val_add, ":bonus", ":v"),
+      (party_get_slot, ":v", ":center", slot_af31_workers),
+      (val_add, ":bonus", ":v"),
+      (party_get_slot, ":v", ":center", slot_af30_town_shares),
+      (val_div, ":v", 2),
+      (val_add, ":bonus", ":v"),
+      (party_get_slot, ":v", ":center", slot_af40_npc_investor),
+      (try_begin),
+        (gt, ":v", 0),
+        (val_add, ":bonus", 5),
+      (try_end),
+      (party_get_slot, ":v", ":center", slot_af31_bank_principal),
+      (try_begin),
+        (gt, ":v", 0),
+        (val_add, ":bonus", 5),
+      (try_end),
+      (party_get_slot, ":v", ":center", slot_af41_last_trade_day),
+      (try_begin),
+        (gt, ":v", 0),
+        (store_current_day, ":today"),
+        (store_sub, ":gap", ":today", ":v"),
+        (val_add, ":gap", 1),
+        (le, ":gap", 14),
+        (val_add, ":bonus", 10),
+      (try_end),
+      (try_begin),
+        (party_slot_eq, ":center", slot_town_lord, "trp_player"),
+        (val_add, ":bonus", 10),
+      (try_end),
+    (else_try),
+      (is_between, ":center", villages_begin, villages_end),
+      (party_get_slot, ":v", ":center", slot_af33_village_invested),
+      (val_div, ":v", 500),
+      (val_min, ":v", 40),
+      (val_add, ":bonus", ":v"),
+      (try_begin),
+        (party_slot_eq, ":center", slot_town_lord, "trp_player"),
+        (val_add, ":bonus", 10),
+      (try_end),
+    (try_end),
+    (assign, reg0, ":bonus"),
   ]),
 ]
 

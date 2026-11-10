@@ -468,6 +468,12 @@ simple_triggers = [
          (party_slot_ge, ":center_no", slot_town_lord, 1), #center belongs to someone.
          (party_get_slot, ":cur_wealth", ":center_no", slot_town_wealth),
          (party_get_slot, ":prosperity", ":center_no", slot_town_prosperity),
+         (try_begin),  # v1.0 繁荣上限 200: 超出 100 的部分只算一半
+           (gt, ":prosperity", 100),
+           (val_sub, ":prosperity", 100),
+           (val_div, ":prosperity", 2),
+           (val_add, ":prosperity", 100),
+         (try_end),
          (store_mul, ":added_wealth", ":prosperity", 15),
          (val_add, ":added_wealth", 700),
          (try_begin),
@@ -632,8 +638,19 @@ simple_triggers = [
      #this is moved up from below , from a 24 x 15 slot to a 24 slot
      (try_for_range, ":center_no", centers_begin, centers_end),
        #(neg|is_between, ":center_no", castles_begin, castles_end),
+       # v1.0 繁荣上限 200: 有经营加成、又低于理想值的地方, 每周另外保底 +1。
+       (try_begin),
+         (call_script, "script_af45_prosperity_bonus", ":center_no"),
+         (gt, reg0, 0),
+         (call_script, "script_get_center_ideal_prosperity", ":center_no"),
+         (assign, ":af45_ideal", reg0),
+         (party_get_slot, ":af45_pros", ":center_no", slot_town_prosperity),
+         (lt, ":af45_pros", ":af45_ideal"),
+         (call_script, "script_change_center_prosperity", ":center_no", 1),
+         (val_add, "$newglob_total_prosperity_from_convergence", 1),
+       (try_end),
        (store_random_in_range, ":random", 0, 30),
-       (le, ":random", 10),
+       # v1.0 繁荣上限 200: 玩家嫌原版涨得太慢, 去掉 11/30 的门槛, 每周都往理想值靠 1 点。
            
        (call_script, "script_get_center_ideal_prosperity", ":center_no"),
        (assign, ":ideal_prosperity", reg0),
@@ -1597,6 +1614,12 @@ simple_triggers = [
           (try_end),
                 
           (party_get_slot, ":prosperity", ":center_no", slot_town_prosperity), #prosperty changes between 0..100     
+          (try_begin),  # v1.0 繁荣上限 200: 超出 100 的部分只算一半
+            (gt, ":prosperity", 100),
+            (val_sub, ":prosperity", 100),
+            (val_div, ":prosperity", 2),
+            (val_add, ":prosperity", 100),
+          (try_end),
           (store_add, ":multiplier", 20, ":prosperity"), #multiplier changes between 20..120
           (val_mul, ":cur_rents", ":multiplier"), 
           (val_div, ":cur_rents", 120),#Prosperity of 100 gives the default values
@@ -2157,6 +2180,12 @@ simple_triggers = [
              #Adding tariffs to the town
              (party_get_slot, ":accumulated_tariffs", ":cur_ai_object", slot_center_accumulated_tariffs),
              (party_get_slot, ":prosperity", ":cur_ai_object", slot_town_prosperity),
+             (try_begin),  # v1.0 繁荣上限 200: 超出 100 的部分只算一半
+               (gt, ":prosperity", 100),
+               (val_sub, ":prosperity", 100),
+               (val_div, ":prosperity", 2),
+               (val_add, ":prosperity", 100),
+             (try_end),
                          
                          (assign, ":tariffs_generated", ":total_change"),
                          (val_mul, ":tariffs_generated", ":prosperity"),
@@ -3549,6 +3578,12 @@ simple_triggers = [
          #Continue collecting taxes
          (assign, ":max_collected_tax", "$qst_collect_taxes_hourly_income"),
          (party_get_slot, ":prosperity", "$g_encountered_party", slot_town_prosperity),
+         (try_begin),  # v1.0 繁荣上限 200: 超出 100 的部分只算一半
+           (gt, ":prosperity", 100),
+           (val_sub, ":prosperity", 100),
+           (val_div, ":prosperity", 2),
+           (val_add, ":prosperity", 100),
+         (try_end),
          (store_add, ":multiplier", 30, ":prosperity"),
          (val_mul, ":max_collected_tax", ":multiplier"),
          (val_div, ":max_collected_tax", 80),#Prosperity of 50 gives the default values
@@ -4310,6 +4345,12 @@ simple_triggers = [
       (party_get_slot, ":inv", ":village", slot_af33_village_invested),
       (gt, ":inv", 0),
       (party_get_slot, ":pros2", ":village", slot_town_prosperity),
+      (try_begin),  # v1.0 繁荣上限 200: 超出 100 的部分只算一半
+        (gt, ":pros2", 100),
+        (val_sub, ":pros2", 100),
+        (val_div, ":pros2", 2),
+        (val_add, ":pros2", 100),
+      (try_end),
       (store_div, ":div", ":pros2", 2),
       (gt, ":div", 0),
       (store_sub, ":neg", 0, ":div"),

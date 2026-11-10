@@ -8739,6 +8739,12 @@ game_menus = [
                 
         (assign, ":money_gained", 50),
         (party_get_slot, ":prosperity", "$current_town", slot_town_prosperity),
+        (try_begin),  # v1.0 繁荣上限 200: 超出 100 的部分只算一半
+          (gt, ":prosperity", 100),
+          (val_sub, ":prosperity", 100),
+          (val_div, ":prosperity", 2),
+          (val_add, ":prosperity", 100),
+        (try_end),
         (store_mul, ":prosperity_of_village_mul_5", ":prosperity", 5),
         (val_add, ":money_gained", ":prosperity_of_village_mul_5"),
         (call_script, "script_af16_take_village_cash", "$current_town"),  # v1.0: the village's own cash
