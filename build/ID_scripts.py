@@ -866,5 +866,8 @@ script_af46_broker_vote = 864
 script_af46_broker_settle = 865
 script_af48_find_scandal = 866
 script_af48_court_expose = 867
+script_af47_poorest_village = 868
+script_af47_poorest_lord = 869
+script_af47_petition = 870
 
 

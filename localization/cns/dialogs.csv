@@ -212,3 +212,10 @@ dlga_lord_talk_court:af48_expose_reply|陛 下 ， 议 {s12}之 前 ， 有 件 
 dlga_af48_expose_reply:lord_talk_court|竟 有 此 事 ？ {s11}的 事 ， 我 会 查 清 楚 。 至 于 这 块 封 地 — — 支 持 {s11}的 人 里 ， 已 经 有 {reg41} 位 收 回 了 话 。 
 dlga_af48_expose_reply:lord_talk_court.1|竟 有 此 事 ？ {s11}的 事 ， 我 会 查 清 楚 。 不 过 替 {s11}说 话 的 人 ， 倒 是 一 个 也 没 走 。 
 dlga_af48_expose_reply:lord_talk_court.2|这 些 话 没 有 凭 据 ， 我 不 能 拿 到 宫 廷 上 去 说 。 
+dlga_lord_talk_court:af47_petition_reply|陛 下 ， {s11}的 百 姓 快 撑 不 下 去 了 ， 请 拨 些 钱 粮 。 
+dlga_lord_talk_court:af47_petition_reply.1|陛 下 ， {s11}那 边 快 发 不 出 军 饷 了 ， 请 拨 些 军 费 。 
+dlga_af47_petition_reply:lord_talk_court|好 。 从 内 库 拨 {reg41} 第 纳 尔 给 {s11}。 告 诉 他 们 ， 我 没 忘 了 他 们 。 
+dlga_af47_petition_reply:lord_talk_court.1|拨 {reg41} 第 纳 尔 过 去 。 仗 还 要 打 ， 兵 不 能 散 。 
+dlga_af47_petition_reply:lord_talk_court.2|内 库 里 也 没 几 个 钱 了 。 等 收 了 税 再 说 吧 。 
+dlga_af47_petition_reply:lord_talk_court.3|这 种 事 ， 自 有 管 事 的 人 操 心 。 你 先 管 好 自 己 的 兵 。 
+dlga_af47_petition_reply:lord_talk_court.4|这 种 事 ， 自 有 管 事 的 人 操 心 。 你 先 管 好 自 己 的 兵 。 
