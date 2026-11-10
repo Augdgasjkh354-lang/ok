@@ -40,6 +40,7 @@ mno_af17_sell_grain_entry|把 带 来 的 粮 食 卖 给 官 仓 （ 粮 仓 �
 mno_af10_town_word_entry|找 相 熟 的 粮 商 打 听 军 粮 车 
 mno_af06_recovery_entry|战 后 治 理 ： 查 看 城 池 恢 复 与 重 建 
 mno_af06_supply_entry|秘 密 运 粮 入 城 （ 4袋 谷 物 ， 增 加 约 两 天 粮 食 储 备 ） 
+mno_af30_town_shares_entry|入 股 本 镇 （ 10000 第 纳 尔 ， 10% 股 份 ， 已 有 {reg41}%） 
 menu_fb75_intel_book|宫 廷 政 治 情 报 簿 ^^政 治 信 用 ： {reg50}    政 治 嫌 疑 ： {reg51}/100    王 室 调 查 次 数 ： {reg52}^有 效 情 报 ： {reg53}条    有 人 欠 你 选 票 ： {reg54}笔    你 欠 人 的 选 票 ： {reg58}笔 ^^情 报 只 记 录 你 已 经 打 听 到 的 消 息 ； 过 期 线 索 会 自 动 从 本 页 隐 去 。 
 mno_fb75_book_clues|查 看 已 掌 握 的 政 治 线 索 
 mno_fb75_book_debts|查 看 欠 你 选 票 的 贵 族 

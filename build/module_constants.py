@@ -2153,3 +2153,4 @@ slot_af28_quest_kind         = 943 # p_main_party: gang quest issuer kind 1-6; 0
 slot_af29_expand_level       = 944 # town: workshop expansion level 0-3 (capital batch 1)
 slot_af29_loan_principal     = 945 # lord Troop Slot: outstanding loan balance owed to the player, incl. interest (capital batch 1)
 slot_af29_loan_day           = 946 # lord Troop Slot: day the loan was made (capital batch 1)
+slot_af30_town_shares        = 947 # town: player-owned shares in percent, 10/20/30 (capital batch 2, item 4)
