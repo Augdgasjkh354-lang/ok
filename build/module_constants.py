@@ -2150,3 +2150,6 @@ slot_af28_quest_target       = 940 # p_main_party: gang quest target party/town 
 slot_af28_quest_deadline     = 941 # p_main_party: gang quest deadline day+1 (batch 4)
 slot_af28_quest_reward       = 942 # p_main_party: gang quest reward denars (batch 4)
 slot_af28_quest_kind         = 943 # p_main_party: gang quest issuer kind 1-6; 0 = no quest (batch 4)
+slot_af29_expand_level       = 944 # town: workshop expansion level 0-3 (capital batch 1)
+slot_af29_loan_principal     = 945 # lord Troop Slot: outstanding loan balance owed to the player, incl. interest (capital batch 1)
+slot_af29_loan_day           = 946 # lord Troop Slot: day the loan was made (capital batch 1)
