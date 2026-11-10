@@ -24,6 +24,7 @@ ALLOWED_DIALOG_CHANGES={'dlga_village_elder_donate:village_elder_pretalk',  # v1
     'dlga_start:mercenary_after_recruited',  # 试玩包十一 bug 修复: 雇佣兵通用行只认酒馆语境, 会抢声望>300/威名>=2 档玩家的酒馆老板问候; 加酒馆老板互斥条件
     'dlga_start:mercenary_tavern_talk',  # 审计 13 修 2: 雇佣兵招募行同款问题, 也抢酒馆老板问候; 加酒馆老板互斥条件
     'dlga_lady_marriage_discussion:lady_proposal_refused.1',  # v1.0 NPC对白 B-7: 道德派低荣誉拒绝排除凶名
+    'dlga_lady_marriage_discussion:close_window',  # 审计 13 修 4: 接受行加凶名守卫 (neq, reg0, 2)，凶名玩家走 B-7 拒绝行
     'dlga_merchant_demand_toll:merchant_demand_toll_2', 'dlga_merchant_demand_toll:merchant_demand_toll_2.1',
     'dlga_merchant_demand_toll_accept:close_window',  # v1.0: tolls come out of the caravan's cash box
     'dlga_mayor_investment_possible:mayor_pretalk.2',  # v1.0 领主关系 L4: 领主好感 >= 20 时免除开企业门槛
