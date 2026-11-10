@@ -2154,3 +2154,5 @@ slot_af29_expand_level       = 944 # town: workshop expansion level 0-3 (capital
 slot_af29_loan_principal     = 945 # lord Troop Slot: outstanding loan balance owed to the player, incl. interest (capital batch 1)
 slot_af29_loan_day           = 946 # lord Troop Slot: day the loan was made (capital batch 1)
 slot_af30_town_shares        = 947 # town: player-owned shares in percent, 10/20/30 (capital batch 2, item 4)
+slot_af31_workers            = 949 # town: hired workers in the player workshop, 0-10 (capital batch 3, item 6; 948 reserved for tax farming redesign)
+slot_af31_bank_principal     = 950 # town: bank outstanding principal + 1; 0 = no bank ever opened, 1 = bank open with nothing out (capital batch 3, item 7)

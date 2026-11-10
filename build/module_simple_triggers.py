@@ -4199,4 +4199,29 @@ simple_triggers = [
       (troop_set_slot, ":lord", slot_af29_loan_principal, ":loan"),
     (try_end),
   ]),
+
+  # v1.0 资本家第三批 (条目 7): 钱庄利息, 每周按未收回本金的 1% 从城镇金库出 (照原版 Slot 21 的 101/100 的 1% 利率, 单利按周付, 不滚入本金)。
+  # Slot 950 存的是本金+1 (0 = 没开过钱庄, 1 = 开了但没有未收回的本金), 所以先减 1 才是本金。
+  # 单次不超金库 1/4 (照老规矩); 金库不够只给实数, 不记欠账 (利息不是欠账, 照 I2 悬赏的先例)。
+  # 不经过每周收入触发器的非玩家守卫: 玩家自己的城镇也照常付息, 所有城镇一视同仁。
+  (24*7, [
+    (try_for_range, ":center", towns_begin, towns_end),
+      (party_get_slot, ":stored", ":center", slot_af31_bank_principal),
+      (gt, ":stored", 1),
+      (store_sub, ":principal", ":stored", 1),
+      (store_div, ":interest", ":principal", 100),
+      (gt, ":interest", 0),
+      (party_get_slot, ":treasury", ":center", slot_town_wealth),
+      (gt, ":treasury", 0),
+      (store_div, ":cap", ":treasury", 4),
+      (val_min, ":interest", ":cap"),
+      (gt, ":interest", 0),
+      (val_sub, ":treasury", ":interest"),
+      (party_set_slot, ":center", slot_town_wealth, ":treasury"),
+      (troop_add_gold, "trp_player", ":interest"),
+      (str_store_party_name, s44, ":center"),
+      (assign, reg44, ":interest"),
+      (display_message, "@{s44} 的钱庄放贷利息 {reg44} 第纳尔进了你的口袋。", 0xFFCC66),
+    (try_end),
+  ]),
 ]

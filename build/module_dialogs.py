@@ -21938,6 +21938,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   (party_set_slot, "$g_encountered_party", slot_center_player_enterprise, 0),
   (party_set_slot, "$g_encountered_party", slot_center_player_enterprise_production_order, 0),
   (party_set_slot, "$g_encountered_party", slot_af29_expand_level, 0), # v1.0 资本家第一批: 卖掉作坊, 扩建等级清零, 重建不继承
+  (party_set_slot, "$g_encountered_party", slot_af31_workers, 0), # v1.0 资本家第三批: 卖掉作坊, 工人数清零, 重建不继承
   
   ]],
   
@@ -27169,5 +27170,46 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   ]],
   [anyone|plyr,"lord_af29_lend_choose", [], "算了, 当我没说。", "lord_talk",[]],
   [anyone,"lord_af29_lend_done", [], "多谢了。这钱我会连本带息还你, 下回见面就结清。", "lord_talk",[]],
+
+  # v1.0 资本家第三批 (条目 6): 工匠处雇工人, 每家作坊最多 10 人, 每人每周工资 20 (从每周结算里扣),
+  # 每人产量 +10% (乘在净利上, 见 budget_report)。雇人不花现钱, 只有每周工资。没有解雇口子:
+  # 雇了就一直领工资, 直到卖掉作坊清零 (见 liquidation 行), 重建不继承; 解雇待后续批次定。
+  [anyone|plyr,"master_craftsman_talk", [
+    (party_slot_ge, "$g_encountered_party", slot_center_player_enterprise, 1),
+    (neg|party_slot_ge, "$g_encountered_party", slot_af31_workers, 10),
+  ], "雇工人。", "craftsman_af31_hire",[]],
+  [anyone,"craftsman_af31_hire", [
+    (party_get_slot, reg41, "$g_encountered_party", slot_af31_workers),
+  ], "雇一个工人, 每周多 20 第纳尔工资, 不过产量也能涨一成。如今作坊里有 {reg41} 个工人, 最多能雇 10 个。你想雇几个？", "craftsman_af31_hire_choose",[]],
+  [anyone|plyr,"craftsman_af31_hire_choose", [
+    (neg|party_slot_ge, "$g_encountered_party", slot_af31_workers, 10),
+  ], "雇 1 个工人。", "craftsman_af31_hire_done",[
+    (party_get_slot, ":workers", "$g_encountered_party", slot_af31_workers),
+    (val_add, ":workers", 1),
+    (val_min, ":workers", 10),
+    (party_set_slot, "$g_encountered_party", slot_af31_workers, ":workers"),
+    (assign, reg41, ":workers"),
+    (display_message, "@如今这家作坊有 {reg41} 个工人, 每周工资从结算里扣。", 0x66FF66),
+  ]],
+  [anyone|plyr,"craftsman_af31_hire_choose", [
+    (party_get_slot, ":workers", "$g_encountered_party", slot_af31_workers),
+    (le, ":workers", 5),
+  ], "雇 5 个工人。", "craftsman_af31_hire_done",[
+    (party_get_slot, ":workers", "$g_encountered_party", slot_af31_workers),
+    (val_add, ":workers", 5),
+    (val_min, ":workers", 10),
+    (party_set_slot, "$g_encountered_party", slot_af31_workers, ":workers"),
+    (assign, reg41, ":workers"),
+    (display_message, "@如今这家作坊有 {reg41} 个工人, 每周工资从结算里扣。", 0x66FF66),
+  ]],
+  [anyone|plyr,"craftsman_af31_hire_choose", [
+    (neg|party_slot_ge, "$g_encountered_party", slot_af31_workers, 10),
+  ], "雇满 10 人。", "craftsman_af31_hire_done",[
+    (party_set_slot, "$g_encountered_party", slot_af31_workers, 10),
+    (assign, reg41, 10),
+    (display_message, "@如今这家作坊有 {reg41} 个工人, 每周工资从结算里扣。", 0x66FF66),
+  ]],
+  [anyone|plyr,"craftsman_af31_hire_choose", [], "算了, 先不雇。", "master_craftsman_pretalk",[]],
+  [anyone,"craftsman_af31_hire_done", [], "好, 人手这就安排上。作坊里人多了, 货也出得快了。", "master_craftsman_pretalk",[]],
 
 ]

@@ -249,3 +249,4 @@ menu_af21_crown_talk = 247
 menu_af26_bounty = 248
 menu_af26_hold_choice = 249
 menu_af28_contact = 250
+menu_af31_bank = 251
