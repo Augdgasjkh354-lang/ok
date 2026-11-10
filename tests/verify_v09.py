@@ -166,6 +166,30 @@ for required in ('slot_af09_refugee_thanked','slot_af09_deserter_thanked','slot_
                  '"af09_check_echo"','"af09_take_echo"','script_af01_change_unrest',
                  'slot_af09_aid_count','slot_af09_refugee_homecoming'):
     assert required in scripts
+# Regression guards: relation scripts may overwrite reg0 during diplomacy target scans.
+def _script_section(name):
+    marker = '  ("' + name + '", ['
+    start = scripts.index(marker)
+    end = scripts.index('\\n  ]),', start)
+    return scripts[start:end]
+
+for _name in ('af26_mediate_target', 'af33_buy_peace_target'):
+    _body = _script_section(_name)
+    assert '(assign, ":found", 0),' in _body, (_name, 'missing local state')
+    assert '(eq, ":found", 0),' in _body, (_name, 'wrong loop gate')
+    assert '(assign, ":found", 1),' in _body, (_name, 'wrong success state')
+    assert '(assign, reg0, ":found"),' in _body, (_name, 'missing final output')
+    assert '(eq, reg0, 0),' not in _body, (_name, 'reg0 clobber reintroduced')
+
+# Assassin-success removes the town goods merchant (slot_town_merchant = -1).
+# The trade assessment must test the merchant id before reading its inventory.
+_menus = (current/'module_game_menus.py').read_text('utf-8')
+_assessment = _menus[_menus.index('    "town_trade_assessment"'):]
+_merchant_slot = _assessment.index('(party_get_slot, ":cur_merchant", ":org_encountered_party", slot_town_merchant)')
+_merchant_guard = _assessment.index('(ge, ":cur_merchant", 0)', _merchant_slot)
+_merchant_read = _assessment.index('(troop_get_inventory_slot, ":slot_item", ":cur_merchant", ":i_slot")', _merchant_slot)
+assert _merchant_slot < _merchant_guard < _merchant_read, 'invalid goods merchant inventory access'
+
 print('VERIFY_V09_OK')
 print('Original scripts preserved:',len([x for x in (base/'ID_scripts.py').read_text('utf8').splitlines() if x.strip()]))
 print('New scripts:',len([x for x in (current/'ID_scripts.py').read_text('utf8').splitlines() if x.strip()])-len([x for x in (base/'ID_scripts.py').read_text('utf8').splitlines() if x.strip()]))
