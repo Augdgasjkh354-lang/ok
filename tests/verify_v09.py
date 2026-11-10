@@ -21,6 +21,7 @@ ALLOWED_DIALOG_CHANGES={'dlga_village_elder_donate:village_elder_pretalk',  # v1
     'dlga_start:village_elder_talk.2', 'dlga_start:village_elder_talk.3',
     'dlga_start:lord_meet_neutral',  # v1.0 NPC对白 B-1/B-2/B-6: 领主初见专属招呼, 通用句加互斥条件
     'dlga_start:tavernkeeper_talk',  # v1.0 NPC对白 B-5: 酒馆老板专属招呼, 通用句加互斥条件
+    'dlga_start:mercenary_after_recruited',  # 试玩包十一 bug 修复: 雇佣兵通用行只认酒馆语境, 会抢声望>300/威名>=2 档玩家的酒馆老板问候; 加酒馆老板互斥条件
     'dlga_lady_marriage_discussion:lady_proposal_refused.1',  # v1.0 NPC对白 B-7: 道德派低荣誉拒绝排除凶名
     'dlga_merchant_demand_toll:merchant_demand_toll_2', 'dlga_merchant_demand_toll:merchant_demand_toll_2.1',
     'dlga_merchant_demand_toll_accept:close_window',  # v1.0: tolls come out of the caravan's cash box
