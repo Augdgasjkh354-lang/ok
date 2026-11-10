@@ -2169,3 +2169,7 @@ slot_af33_town_begging       = 959 # town: begging-for-investment expiry day; 0 
 slot_af33_village_invested   = 960 # village: cumulative denars the player invested (capital 2.0 batch 1, item 7a)
 slot_af33_gang_invest_kind   = 961 # p_main_party: gang kind 1-6 the player invested in; 0 = none (capital 2.0 batch 3, item 8a)
 slot_af33_gang_invest_amount = 962 # p_main_party: denars invested in the gang in 961; cleared when that gang is wiped out (capital 2.0 batch 3, item 8a)
+slot_af33_funded_pretender   = 963 # p_main_party: pretender troop the player funded; 0 = none (capital 2.0 batch 4, item 9)
+slot_af33_funded_amount      = 964 # p_main_party: cumulative denars funded to the pretender in 963; >= 0 = funded, < 0 = refund due after his coronation (magnitude = 1.5x funded minus paid so far); 0 = none (capital 2.0 batch 4, item 9)
+slot_af33_assassin           = 965 # p_main_party: assassin hit state; > 0 = pending target goods-merchant troop, < 0 = cooldown until day -value (7 days after a hit resolves), 0 = free (capital 2.0 batch 4, item 10c)
+slot_af33_intel_net          = 966 # p_main_party: intel network = level (1-3) * 100000 + expiry day; 0 = no network (capital 2.0 batch 4, item 10d)

@@ -838,5 +838,13 @@ script_af33_gang_dividend = 836
 script_af33_find_caravan = 837
 script_af33_commission_caravan_raid = 838
 script_af33_gang_hit_caravan = 839
+script_af33_fund_pretender = 840
+script_af33_settle_pretender = 841
+script_af33_hire_assassin = 842
+script_af33_assassin_heat = 843
+script_af33_resolve_assassin = 844
+script_af33_intel_buy = 845
+script_af33_intel_brief = 846
+script_af33_intel_weekly = 847
 
 

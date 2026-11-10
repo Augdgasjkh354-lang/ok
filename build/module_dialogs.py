@@ -27585,4 +27585,89 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   ]],
   [anyone,"af33_buy_peace", [], "谈成了。{s4}与{s5}已经停战，四十天内不再开战。你替我国出的这 5000 第纳尔赔款，对方国王已经收下了。这份情，两国都记下了。", "lord_talk",[]],
 
+  # v1.0 资本家 2.0 第四批 (条目 9): 资助流亡称王者。钱进称王者财产 (雇兵
+  # 预算, 只补到 ideal_size), 好感 +5, 记 963/964。选项文字里先说清楚:
+  # 钱只能让他多雇些兵, 打赢打输还得看战场, 不包赢 (叛乱成败由原版任务链
+  # 驱动, module_quests 不编译, 改不了)。
+  [anyone|plyr,"pretender_start", [
+    (neg|faction_slot_eq, "$g_talk_troop_faction", slot_faction_leader, "$g_talk_troop"),
+    (party_slot_ge, "p_main_party", slot_af33_funded_amount, 0),
+    (this_or_next|party_slot_eq, "p_main_party", slot_af33_funded_pretender, 0),
+    (party_slot_eq, "p_main_party", slot_af33_funded_pretender, "$g_talk_troop"),
+    (store_troop_gold, ":gold", "trp_player"),
+    (ge, ":gold", 5000),
+  ], "我资助你 5000 第纳尔——先说好，这钱是让你多雇些兵的，打赢打输还得看战场，我不包赢。", "af33_pretender_funded",[
+    (call_script, "script_af33_fund_pretender", "$g_talk_troop", 5000),
+  ]],
+  [anyone|plyr,"pretender_start", [
+    (neg|faction_slot_eq, "$g_talk_troop_faction", slot_faction_leader, "$g_talk_troop"),
+    (party_slot_ge, "p_main_party", slot_af33_funded_amount, 0),
+    (this_or_next|party_slot_eq, "p_main_party", slot_af33_funded_pretender, 0),
+    (party_slot_eq, "p_main_party", slot_af33_funded_pretender, "$g_talk_troop"),
+    (store_troop_gold, ":gold", "trp_player"),
+    (ge, ":gold", 10000),
+  ], "我资助你 10000 第纳尔——先说好，这钱是让你多雇些兵的，打赢打输还得看战场，我不包赢。", "af33_pretender_funded",[
+    (call_script, "script_af33_fund_pretender", "$g_talk_troop", 10000),
+  ]],
+  [anyone,"af33_pretender_funded", [], "好，这笔钱我会拿去雇兵、置办军械。你一共资助了我 {reg1} 第纳尔。我若登基，连本带利一倍半还你——从新王国的金库里出，一次最多拿四分之一，分几周还清；若我败了、被俘了，这笔钱就当沉了。打仗没有包赢的，你我都清楚。", "pretender_start",[]],
+  # v1.0 资本家 2.0 第四批 (条目 9): 已投效称王者之后再资助, 与 pretender_start
+  # 的两项同款 (回话回到 supported_pretender_pretalk, 不是 pretender_start)。
+  [anyone|plyr,"supported_pretender_talk", [
+    (neg|faction_slot_eq, "$g_talk_troop_faction", slot_faction_leader, "$g_talk_troop"),
+    (party_slot_ge, "p_main_party", slot_af33_funded_amount, 0),
+    (this_or_next|party_slot_eq, "p_main_party", slot_af33_funded_pretender, 0),
+    (party_slot_eq, "p_main_party", slot_af33_funded_pretender, "$g_talk_troop"),
+    (store_troop_gold, ":gold", "trp_player"),
+    (ge, ":gold", 5000),
+  ], "我再资助你 5000 第纳尔——先说好，这钱是让你多雇些兵的，打赢打输还得看战场，我不包赢。", "af33_pretender_funded_supp",[
+    (call_script, "script_af33_fund_pretender", "$g_talk_troop", 5000),
+  ]],
+  [anyone|plyr,"supported_pretender_talk", [
+    (neg|faction_slot_eq, "$g_talk_troop_faction", slot_faction_leader, "$g_talk_troop"),
+    (party_slot_ge, "p_main_party", slot_af33_funded_amount, 0),
+    (this_or_next|party_slot_eq, "p_main_party", slot_af33_funded_pretender, 0),
+    (party_slot_eq, "p_main_party", slot_af33_funded_pretender, "$g_talk_troop"),
+    (store_troop_gold, ":gold", "trp_player"),
+    (ge, ":gold", 10000),
+  ], "我再资助你 10000 第纳尔——先说好，这钱是让你多雇些兵的，打赢打输还得看战场，我不包赢。", "af33_pretender_funded_supp",[
+    (call_script, "script_af33_fund_pretender", "$g_talk_troop", 10000),
+  ]],
+  [anyone,"af33_pretender_funded_supp", [], "好，这笔钱我会拿去雇兵、置办军械。你一共资助了我 {reg1} 第纳尔。我若登基，连本带利一倍半还你——从新王国的金库里出，一次最多拿四分之一，分几周还清；若我败了、被俘了，这笔钱就当沉了。打仗没有包赢的，你我都清楚。", "supported_pretender_pretalk",[]],
+  # v1.0 资本家 2.0 第四批 (条目 10c): 经酒馆老板雇刺客, 杀一座城的货商
+  # (只杀货商, 不杀领主)。2000 先付, 刺客次日动手 (Slot 965 记目标, 动手
+  # 后记 7 天冷却); 成功率 65%, 走漏了扣荣誉与关系; 目标用 repeat_for_troops
+  # 列出各城活着的货商, 目标暂存 $temp (现成的空闲全局变量, 不新开)。
+  [anyone|plyr,"tavernkeeper_talk", [
+    (party_get_slot, ":a", "p_main_party", slot_af33_assassin),
+    (le, ":a", 0),
+    (store_current_day, ":day"),
+    (store_mul, ":until", ":a", -1),
+    (ge, ":day", ":until"),
+    (store_troop_gold, ":gold", "trp_player"),
+    (ge, ":gold", 2000),
+  ], "我想雇个刺客，除掉一个碍事的商人——见不得光的那种。", "af33_assassin_pick",[]],
+  [anyone,"af33_assassin_pick", [], "哦？说吧，想让谁从市集上消失。2000 第纳尔先付，刺客明天动手。成了，人就没了；败了，钱不退；走漏了，荣誉和那城领主的关系都得赔。挑一个吧——", "af33_assassin_choose",[]],
+  [anyone|plyr|repeat_for_troops,"af33_assassin_choose", [
+    (store_repeat_object, ":merchant"),
+    (is_between, ":merchant", goods_merchants_begin, goods_merchants_end),
+    (store_sub, ":town", ":merchant", goods_merchants_begin),
+    (val_add, ":town", towns_begin),
+    (party_get_slot, ":cur", ":town", slot_town_merchant),
+    (eq, ":cur", ":merchant"),
+    (str_store_party_name, s4, ":town"),
+  ], "{s4}的货商", "af33_assassin_confirm",[
+    (store_repeat_object, "$temp"),
+  ]],
+  [anyone|plyr,"af33_assassin_choose", [], "算了。", "tavernkeeper_pretalk",[]],
+  [anyone,"af33_assassin_confirm", [
+    (store_sub, ":town", "$temp", goods_merchants_begin),
+    (val_add, ":town", towns_begin),
+    (str_store_party_name, s4, ":town"),
+  ], "就是{s4}的货商？2000 第纳尔，刺客明天动手。成了，他从市集上消失——那座城以后再没有货商卖货；败了，钱不退；走漏了风声，荣誉和那城领主的关系都得赔。你确定？", "af33_assassin_confirm_2",[]],
+  [anyone|plyr,"af33_assassin_confirm_2", [], "就他，动手。", "af33_assassin_done",[
+    (call_script, "script_af33_hire_assassin", "$temp"),
+  ]],
+  [anyone|plyr,"af33_assassin_confirm_2", [], "算了。", "tavernkeeper_pretalk",[]],
+  [anyone,"af33_assassin_done", [], "好，钱我收了。刺客明天动手，你等消息就是。记住，这事跟我没关系。", "tavernkeeper_pretalk",[]],
+
 ]
