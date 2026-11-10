@@ -28362,11 +28362,11 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
     (troop_get_slot, ":center", "$g_talk_troop", slot_fb72_desired_center),
     (is_between, ":center", centers_begin, centers_end),
     (str_store_party_name, s60, ":center"),
-  ], "{s60}是我们一起打下来的，陛下却只记得自己的人。", "af46_grieve", []],
+  ], "{s60}是我们一起打下来的，陛下却只记得自己的人。", "af46_grieve_opts", []],
   [anyone, "af46_grieve", [],
-    "这一回陛下的封赏，没有我的份。", "af46_grieve", []],
+    "这一回陛下的封赏，没有我的份。", "af46_grieve_opts", []],
   # 玩家的三个选项 (af46_grieve 状态下)。
-  [anyone|plyr, "af46_grieve", [
+  [anyone|plyr, "af46_grieve_opts", [
     (troop_slot_eq, "trp_player", slot_fb73_debt_to, 0),
   ], "下次评议，我站在你这边。", "af46_grieve_pledge", [
     (troop_set_slot, "trp_player", slot_fb73_debt_to, "$g_talk_troop"),
@@ -28377,7 +28377,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   ]],
   [anyone, "af46_grieve_pledge", [],
     "这话我记下了。到时候可别装没看见。", "lord_talk_court", []],
-  [anyone|plyr, "af46_grieve", [
+  [anyone|plyr, "af46_grieve_opts", [
     (store_troop_gold, ":gold", "trp_player"),
     (ge, ":gold", 1500),
   ], "我出 1500 第纳尔，帮你撑过这阵子。", "af46_grieve_gold", [
@@ -28392,6 +28392,6 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   ]],
   [anyone, "af46_grieve_gold", [],
     "……这份情我领了。", "lord_talk_court", []],
-  [anyone|plyr, "af46_grieve", [],
+  [anyone|plyr, "af46_grieve_opts", [],
     "这是陛下的决定，我不便多说。", "lord_talk_court", []],
 ]

@@ -201,10 +201,10 @@ dlga_af46_broker_result:fb73_private_options.1|好 吧 。 钱 我 收 下 ， �
 dlga_af46_broker_result:fb73_private_options.2|{s11}？ 我 宁 可 把 票 投 给 马 夫 。 
 dlga_af46_broker_result:fb73_private_options.3|这 事 我 得 自 己 掂 量 ， 你 就 别 替 人 操 心 了 。 
 dlga_lord_talk_court:af46_grieve|你 最 近 好 像 不 太 痛 快 。 
-dlga_af46_grieve:af46_grieve|{s60}是 我 们 一 起 打 下 来 的 ， 陛 下 却 只 记 得 自 己 的 人 。 
-dlga_af46_grieve:af46_grieve.1|这 一 回 陛 下 的 封 赏 ， 没 有 我 的 份 。 
-dlga_af46_grieve:af46_grieve_pledge|下 次 评 议 ， 我 站 在 你 这 边 。 
+dlga_af46_grieve:af46_grieve_opts|{s60}是 我 们 一 起 打 下 来 的 ， 陛 下 却 只 记 得 自 己 的 人 。 
+dlga_af46_grieve:af46_grieve_opts.1|这 一 回 陛 下 的 封 赏 ， 没 有 我 的 份 。 
+dlga_af46_grieve_opts:af46_grieve_pledge|下 次 评 议 ， 我 站 在 你 这 边 。 
 dlga_af46_grieve_pledge:lord_talk_court|这 话 我 记 下 了 。 到 时 候 可 别 装 没 看 见 。 
-dlga_af46_grieve:af46_grieve_gold|我 出 1500 第 纳 尔 ， 帮 你 撑 过 这 阵 子 。 
+dlga_af46_grieve_opts:af46_grieve_gold|我 出 1500 第 纳 尔 ， 帮 你 撑 过 这 阵 子 。 
 dlga_af46_grieve_gold:lord_talk_court|… … 这 份 情 我 领 了 。 
-dlga_af46_grieve:lord_talk_court|这 是 陛 下 的 决 定 ， 我 不 便 多 说 。 
+dlga_af46_grieve_opts:lord_talk_court|这 是 陛 下 的 决 定 ， 我 不 便 多 说 。 
