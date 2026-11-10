@@ -52131,6 +52131,18 @@ scripts = [
           (troop_add_gold, "trp_player", ":paid"),
           (call_script, "script_af14_lord_wealth", ":voter", 0, ":paid"),
         (try_end),
+        # v1.0 政治 2.0 第二批: 类型 5 方向相反——玩家是投票人, 钱从玩家退给对方
+        # (领主)。守约时 v7.3 已有: 信用 +4、对方↔玩家关系 +2; 类型 5 不产生人情债。
+        (try_begin),
+          (eq, ":kind", 5),
+          (eq, ":voter", "trp_player"),
+          (gt, ":paid", 0),
+          (gt, ":partner", 0),
+          (store_troop_gold, ":gold", "trp_player"),
+          (val_min, ":paid", ":gold"),
+          (troop_remove_gold, "trp_player", ":paid"),
+          (call_script, "script_af14_lord_wealth", ":partner", ":paid", 0),
+        (try_end),
       (try_end),
       (troop_set_slot, ":voter", slot_fb73_promise_candidate, 0),
       (troop_set_slot, ":voter", slot_fb73_promise_issue, 0),
@@ -52255,6 +52267,8 @@ scripts = [
         (troop_set_slot, ":candidate", slot_fb73_last_lobby_day, ":today"),
       (try_end),
     (try_end),
+    # v1.0 政治 2.0 第二批: 清理玩家挂着的过期承诺 (v7.3 只扫 NPC 领主, 不扫玩家)。
+    (call_script, "script_af51_expire_player_promise"),
   ]),
 
 
@@ -63378,6 +63392,139 @@ scripts = [
       (eq, ":other_granted", 1),
       (call_script, "script_troop_change_relation_with_troop", "trp_player", ":lord", -1),
     (try_end),
+  ]),
+
+  # v1.0 政治 2.0 第二批: 清理玩家挂着的过期承诺 (v7.3 遗留问题:
+  # fb73_daily_intrigue 只扫 NPC 领主, 不扫玩家)。无参数。议程撤销不是玩家的错, 不罚。
+  # 玩家 slot_fb73_promise_candidate ≠ 0, 且当前议题 ≠ 承诺的议题, 或议题时间 ≠ 承诺的
+  # 时间时: 类型 5 且 paid > 0 时把钱原路退给对方 (min(paid, 玩家金币)); 然后清空
+  # 玩家的 promise_candidate/issue/hour/partner/type/paid 六个 Slot。
+  ("af51_expire_player_promise", [
+    (troop_get_slot, ":candidate", "trp_player", slot_fb73_promise_candidate),
+    (try_begin),
+      (neq, ":candidate", 0),
+      (faction_get_slot, ":issue", "$players_kingdom", slot_faction_political_issue),
+      (faction_get_slot, ":hour", "$players_kingdom", slot_faction_political_issue_time),
+      (troop_get_slot, ":old_issue", "trp_player", slot_fb73_promise_issue),
+      (troop_get_slot, ":old_hour", "trp_player", slot_fb73_promise_hour),
+      (this_or_next|neq, ":old_issue", ":issue"),
+      (neq, ":old_hour", ":hour"),
+      (troop_get_slot, ":kind", "trp_player", slot_fb73_promise_type),
+      (troop_get_slot, ":paid", "trp_player", slot_fb73_paid),
+      (troop_get_slot, ":partner", "trp_player", slot_fb73_promise_partner),
+      (try_begin),
+        (eq, ":kind", 5),
+        (gt, ":paid", 0),
+        (gt, ":partner", 0),
+        (store_troop_gold, ":gold", "trp_player"),
+        (val_min, ":paid", ":gold"),
+        (troop_remove_gold, "trp_player", ":paid"),
+        (call_script, "script_af14_lord_wealth", ":partner", ":paid", 0),
+      (try_end),
+      (troop_set_slot, "trp_player", slot_fb73_promise_candidate, 0),
+      (troop_set_slot, "trp_player", slot_fb73_promise_issue, 0),
+      (troop_set_slot, "trp_player", slot_fb73_promise_hour, 0),
+      (troop_set_slot, "trp_player", slot_fb73_promise_partner, 0),
+      (troop_set_slot, "trp_player", slot_fb73_promise_type, 0),
+      (troop_set_slot, "trp_player", slot_fb73_paid, 0),
+    (try_end),
+  ]),
+
+  # v1.0 政治 2.0 第二批: 找来拉票的领主。只读。
+  # 参数 1: 0 = 触发器里找人 (要求冷却已过), 1 = 菜单里重找 (冷却写的是今天的也算,
+  # 因为触发器刚写过)。输出 reg0 = 来拉票的领主 (没有为 -1)。输出寄存器放最后。
+  ("af51_find_lobbyist", [
+    (store_script_param, ":from_menu", 1),
+    (assign, ":best", -1),
+    (assign, ":best_rel", -100),
+    # 玩家前提: 不满足直接返回 -1。
+    (try_begin),
+      (eq, "$player_has_homage", 1),
+      (is_between, "$players_kingdom", npc_kingdoms_begin, kingdoms_end),
+      (faction_get_slot, ":issue", "$players_kingdom", slot_faction_political_issue),
+      (is_between, ":issue", centers_begin, centers_end),
+      (troop_slot_eq, "trp_player", slot_troop_stance_on_faction_issue, -1),
+      (troop_slot_eq, "trp_player", slot_fb73_promise_candidate, 0),
+      (try_for_range, ":lord", active_npcs_begin, active_npcs_end),
+        (store_faction_of_troop, ":lf", ":lord"),
+        (eq, ":lf", "$players_kingdom"),
+        (troop_slot_eq, ":lord", slot_troop_occupation, slto_kingdom_hero),
+        (neg|faction_slot_eq, "$players_kingdom", slot_faction_leader, ":lord"),
+        (troop_slot_eq, ":lord", slot_troop_prisoner_of_party, -1),
+        (try_begin),
+          # 自己在争这块地: 自己的 stance = 自己, 或 slot_fb72_desired_center = 当前议题。
+          (this_or_next|troop_slot_eq, ":lord", slot_troop_stance_on_faction_issue, ":lord"),
+          (troop_slot_eq, ":lord", slot_fb72_desired_center, ":issue"),
+          (call_script, "script_troop_get_relation_with_troop", ":lord", "trp_player"),
+          (assign, ":rel", reg0),
+          (ge, ":rel", 10),
+          (troop_slot_eq, ":lord", slot_fb73_debt_to, 0),
+          (troop_get_slot, ":last", ":lord", slot_fb73_last_lobby_day),
+          (store_current_day, ":today"),
+          (store_sub, ":elapsed", ":today", ":last"),
+          # 5 天游说冷却: last = 0 或已过 ≥ 5 天; 菜单里重找时今天也算通过。
+          (this_or_next|eq, ":from_menu", 1),
+          (this_or_next|eq, ":last", 0),
+          (ge, ":elapsed", 5),
+          (try_begin),
+            (gt, ":rel", ":best_rel"),
+            (assign, ":best", ":lord"),
+            (assign, ":best_rel", ":rel"),
+          (try_end),
+        (try_end),
+      (try_end),
+    (try_end),
+    (assign, reg0, ":best"),
+  ]),
+
+  # v1.0 政治 2.0 第二批: 收钱投票的价钱。只读。
+  # 参数 1: 领主。输出 reg0 = min(1500, 领主财产 ÷ 4)。
+  ("af51_paid_vote_price", [
+    (store_script_param, ":lord", 1),
+    (troop_get_slot, ":wealth", ":lord", slot_troop_wealth),
+    (store_div, ":price", ":wealth", 4),
+    (val_min, ":price", 1500),
+    (assign, reg0, ":price"),
+  ]),
+
+  # v1.0 政治 2.0 第二批: 收钱投票, 成交。写状态。
+  # 参数 1: 领主 (菜单里用 af51_find_lobbyist(1) 拿到的)。
+  # 输出 reg0: 1 成交, 0 没成 (条件变了)。输出寄存器放最后。
+  ("af51_take_paid_vote", [
+    (store_script_param, ":lord", 1),
+    (assign, ":ok", 0),
+    # 重查 3.1 的玩家前提和「领主条件」里的同国、在争、没被俘。
+    (try_begin),
+      (eq, "$player_has_homage", 1),
+      (is_between, "$players_kingdom", npc_kingdoms_begin, kingdoms_end),
+      (faction_get_slot, ":issue", "$players_kingdom", slot_faction_political_issue),
+      (is_between, ":issue", centers_begin, centers_end),
+      (troop_slot_eq, "trp_player", slot_troop_stance_on_faction_issue, -1),
+      (troop_slot_eq, "trp_player", slot_fb73_promise_candidate, 0),
+      (store_faction_of_troop, ":lf", ":lord"),
+      (eq, ":lf", "$players_kingdom"),
+      (troop_slot_eq, ":lord", slot_troop_occupation, slto_kingdom_hero),
+      (neg|faction_slot_eq, "$players_kingdom", slot_faction_leader, ":lord"),
+      (troop_slot_eq, ":lord", slot_troop_prisoner_of_party, -1),
+      (try_begin),
+        (this_or_next|troop_slot_eq, ":lord", slot_troop_stance_on_faction_issue, ":lord"),
+        (troop_slot_eq, ":lord", slot_fb72_desired_center, ":issue"),
+        (call_script, "script_af51_paid_vote_price", ":lord"),
+        (assign, ":price", reg0),
+        (ge, ":price", 300),
+        # 成交: 领主财产 -价钱, 玩家金币 +价钱, 记承诺类型 5, 玩家 slot_fb73_paid = 价钱,
+        # 玩家 stance = 领主, 嫌疑玩家 +10、领主 +6 (照买票的量级)。
+        (call_script, "script_af14_lord_wealth", ":lord", 0, ":price"),
+        (troop_add_gold, "trp_player", ":price"),
+        (call_script, "script_fb73_record_promise", "trp_player", ":lord", ":issue", ":lord", 5),
+        (troop_set_slot, "trp_player", slot_fb73_paid, ":price"),
+        (troop_set_slot, "trp_player", slot_troop_stance_on_faction_issue, ":lord"),
+        (call_script, "script_fb74_add_heat", "trp_player", 10),
+        (call_script, "script_fb74_add_heat", ":lord", 6),
+        (assign, ":ok", 1),
+      (try_end),
+    (try_end),
+    (assign, reg0, ":ok"),
   ]),
 
 ]

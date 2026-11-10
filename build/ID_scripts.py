@@ -873,5 +873,9 @@ script_af49_is_player_king = 871
 script_af49_find_petitions = 872
 script_af49_grant = 873
 script_af49_refuse = 874
+script_af51_expire_player_promise = 875
+script_af51_find_lobbyist = 876
+script_af51_paid_vote_price = 877
+script_af51_take_paid_vote = 878
 
 

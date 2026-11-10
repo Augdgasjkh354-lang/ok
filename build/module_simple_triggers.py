@@ -4510,4 +4510,21 @@ simple_triggers = [
     (party_set_slot, "p_main_party", slot_af49_petition_day, ":next"),
     (jump_to_menu, "mnu_af49_petitions"),
   ]),
+
+  # v1.0 政治 2.0 第二批: 每周一位领主派信使来拉票。
+  # af51_expire_player_promise 放在最前面, 后面的条件不满足也照样跑。
+  # 冷却记在来拉票的领主身上 (5 天), 每周最多一位。
+  (24*7, [
+    (call_script, "script_af51_expire_player_promise"),
+    (store_current_day, ":today"),
+    # 别和借钱信使、封臣请愿同一周撞车: 借钱信使 3 天内来过就这周不来
+    (party_get_slot, ":loan", "p_main_party", slot_af33_loan_visit_day),
+    (store_sub, ":since_loan", ":today", ":loan"),
+    (this_or_next|eq, ":loan", 0),
+    (ge, ":since_loan", 3),
+    (call_script, "script_af51_find_lobbyist", 0),
+    (ge, reg0, 0),
+    (troop_set_slot, reg0, slot_fb73_last_lobby_day, ":today"),
+    (jump_to_menu, "mnu_af51_lobby"),
+  ]),
 ]

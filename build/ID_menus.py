@@ -268,3 +268,4 @@ menu_af36_village_affairs = 266
 menu_af37_ledger = 267
 menu_af46_agenda = 268
 menu_af49_petitions = 269
+menu_af51_lobby = 270

@@ -1928,7 +1928,7 @@ slot_fb73_promise_candidate      = 621 # current fief-vote candidate
 slot_fb73_promise_issue          = 622 # exact center identifier
 slot_fb73_promise_hour           = 623 # unique agenda starting hour
 slot_fb73_promise_partner        = 624 # person to whom voter made a promise
-slot_fb73_promise_type           = 625 # 1=AI barter, 2=player payment, 3=player reciprocity, 4=玩家替人说项
+slot_fb73_promise_type           = 625 # 1=AI barter, 2=player payment, 3=player reciprocity, 4=玩家替人说项, 5=玩家收钱投票
 slot_fb73_last_lobby_day         = 626 # throttle private influence
 slot_fb73_debt_to                = 627 # creditor for ONE later fief vote
 slot_fb73_debt_since_hour        = 628 # debt cannot mature in same agenda

@@ -309,3 +309,7 @@ mno_af49_grant_a|准 {s11}的 军 费 （ 2000） 。
 mno_af49_grant_b|准 {s12}的 赈 济 （ 1500） 。 
 mno_af49_grant_both|两 份 都 准 （ 3500） 。 
 mno_af49_refuse_both|都 驳 回 。 
+menu_af51_lobby|{s11}派 信 使 捎 话 来 ： 『 陛 下 在 议 {s12}的 归 属 。 我 想 要 这 块 地 ， 希 望 你 在 议 事 时 支 持 我 。 』 
+mno_af51_support|我 支 持 你 。 
+mno_af51_paid|这 一 票 不 白 给 ， {reg41} 第 纳 尔 。 
+mno_af51_think|这 事 我 还 得 想 想 。 
