@@ -57908,6 +57908,8 @@ scripts = [
   ]),
 
   # The cash a village has on hand (its elder's purse) goes to whoever sacks it.
+  # 2026-11-11 玩家定: 不再一次抢光, 每次只抢 1～3 点繁荣的钱 (1 点 ≈ 200 第纳尔, 照经济 1.0 村长
+  # 投钱换繁荣的价), 即 200～600, 不超过村长手里有的; 剩下的留在村里。
   ("af16_take_village_cash", [
     (store_script_param, ":village", 1),
     (assign, reg0, 0),
@@ -57916,6 +57918,9 @@ scripts = [
       (party_get_slot, ":elder", ":village", slot_town_elder),
       (gt, ":elder", 0),
       (store_troop_gold, ":cash", ":elder"),
+      (store_random_in_range, ":points", 1, 4),
+      (store_mul, ":cap", ":points", 200),
+      (val_min, ":cash", ":cap"),
       (gt, ":cash", 0),
       (troop_remove_gold, ":elder", ":cash"),
       (assign, reg0, ":cash"),
