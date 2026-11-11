@@ -4489,4 +4489,61 @@ simple_triggers = [
       (assign, ":done", 1),
     (try_end),
   ]),
+
+  # v1.0 政治 2.0 第一批: 每两周最多一次, 封臣来请愿 (你当国王后)。
+  # 照资本家 2.0 信使借钱那个触发器 (slot_af33_loan_visit_day 那段) 的写法。
+  # 冷却在信使来的时候就记下 (玩家怎么处理都算用掉这一次)。顶层这些条件不满足时
+  # 整个触发器本来就该跳过, 所以这里不用包 try_begin。
+  (24*7, [
+    (store_current_day, ":today"),
+    (party_get_slot, ":next", "p_main_party", slot_af49_petition_day),
+    (ge, ":today", ":next"),
+    # 别和信使借钱同一周撞车: 借钱信使 3 天内来过就这周不来
+    (party_get_slot, ":loan", "p_main_party", slot_af33_loan_visit_day),
+    (store_sub, ":since_loan", ":today", ":loan"),
+    (this_or_next|eq, ":loan", 0),
+    (ge, ":since_loan", 3),
+    (call_script, "script_af49_find_petitions"),
+    (this_or_next|ge, reg0, 0),
+    (ge, reg1, 0),
+    (store_add, ":next", ":today", 14),
+    (party_set_slot, "p_main_party", slot_af49_petition_day, ":next"),
+    (jump_to_menu, "mnu_af49_petitions"),
+  ]),
+
+  # v1.0 政治 2.0 第二批: 每周一位领主派信使来拉票。
+  # af51_expire_player_promise 放在最前面, 后面的条件不满足也照样跑。
+  # 冷却记在来拉票的领主身上 (5 天), 每周最多一位。
+  (24*7, [
+    (call_script, "script_af51_expire_player_promise"),
+    (store_current_day, ":today"),
+    # 别和借钱信使、封臣请愿同一周撞车: 借钱信使 3 天内来过就这周不来
+    (party_get_slot, ":loan", "p_main_party", slot_af33_loan_visit_day),
+    (store_sub, ":since_loan", ":today", ":loan"),
+    (this_or_next|eq, ":loan", 0),
+    (ge, ":since_loan", 3),
+    (call_script, "script_af51_find_lobbyist", 0),
+    (ge, reg0, 0),
+    (troop_set_slot, reg0, slot_fb73_last_lobby_day, ":today"),
+    (jump_to_menu, "mnu_af51_lobby"),
+  ]),
+
+  # v1.0 政治 3.0 第一批: 每 60 天最多一次, 贵族联合逼宫。
+  # 照资本家 2.0 信使借钱那个触发器。和借钱信使、政治 2.0 封臣请愿 (975) 同一周
+  # 撞车时: 照政治 2.0 第一批的做法, 借钱信使 3 天内来过就这周不来。
+  (24*7, [
+    (store_current_day, ":today"),
+    (party_get_slot, ":next", "p_main_party", slot_af50_crisis_day),
+    (ge, ":today", ":next"),
+    # 别和借钱信使、封臣请愿同一周撞车: 借钱信使 3 天内来过就这周不来
+    (party_get_slot, ":loan", "p_main_party", slot_af33_loan_visit_day),
+    (store_sub, ":since_loan", ":today", ":loan"),
+    (this_or_next|eq, ":loan", 0),
+    (ge, ":since_loan", 3),
+    (call_script, "script_af50_find_crisis"),
+    (ge, reg0, 0),
+    (store_add, ":next", ":today", 60),
+    (party_set_slot, "p_main_party", slot_af50_crisis_day, ":next"),
+    (jump_to_menu, "mnu_af50_crisis"),
+  ]),
 ]
