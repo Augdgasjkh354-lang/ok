@@ -916,5 +916,8 @@ script_af61_bribe_price = 914
 script_af62_special_party = 915
 script_af59_rebel_recruit = 916
 script_af59_pretender_home = 917
+script_af63_rebel_one = 918
+script_af63_free_faction = 919
+script_af63_king_sponsors = 920
 
 

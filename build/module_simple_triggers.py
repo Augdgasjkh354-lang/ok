@@ -4691,4 +4691,9 @@ simple_triggers = [
   (3, [
     (call_script, "script_af61_relief_watch"),
   ]),
+
+  # v1.0 称王者: 战时国王暗中资助敌国的称王者 (每周)。
+  (24*7, [
+    (call_script, "script_af63_king_sponsors"),
+  ]),
 ]

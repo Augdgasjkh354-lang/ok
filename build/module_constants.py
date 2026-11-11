@@ -2144,6 +2144,12 @@ slot_af61_relief_day      = 988  # p_main_party: while 987 > 0 the deadline day;
 slot_af61_relief_lord     = 989  # p_main_party: the lord who asked for relief (pays on success) (2026-11-11)
 slot_af61_bribe_day       = 990  # lord troop: day he may buy his way past the player again (day+7); 0 = any time (2026-11-11)
 slot_af59_pretender_home  = 991  # p_main_party: the hall (slot_troop_cur_center) the funded pretender left to lead the rebel band; restored when the band is gone (2026-11-11)
+# 称王者各记各的 (2026-11-11 玩家定: 玩家可同时资助多位, 战时国王也会资助)。以下都是称王者 Troop Slot。
+slot_af63_player_funds    = 992  # pretender troop: the player's funding (>0 in transit, <0 refund due after coronation, 0 none); replaces p_main_party 963/964
+slot_af63_band            = 993  # pretender troop: her rebel band party (0 none); replaces p_main_party 982
+slot_af63_next_day        = 994  # pretender troop: day she may raise a band again; replaces p_main_party 983
+slot_af63_home            = 995  # pretender troop: the hall she left to lead the band; replaces p_main_party 991
+slot_af63_king_sponsor    = 996  # pretender troop: the enemy king secretly funding her (0 none)
 slot_af26_license            = 902 # p_main_party: I1 mercenary license, 1 = licensed
 slot_af26_protect_day        = 903 # town: I5 next protection collection day+1; 0 = not protected
 slot_af26_sanctuary_day      = 904 # p_main_party: L5 sanctuary expiry (day+7); 0 = not in sanctuary
