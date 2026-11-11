@@ -238,6 +238,7 @@ mno_af30_town_shares_entry|入 股 本 镇 （ 10000 第 纳 尔 ， 10% 股 份
 mno_af37_town_shares_sell|卖 回 一 成 股 份 给 本 镇 （ 眼 下 金 库 出 得 起 {reg41} 第 纳 尔 ， 已 有 {reg42}%） 
 mno_af31_bank_open_entry|开 钱 庄 （ 5000 第 纳 尔 ， 一 城 只 能 开 一 家 ） 
 mno_af31_bank_entry|去 钱 庄 看 看 （ 未 收 回 本 金 {reg41} 第 纳 尔 ） 
+mno_af54_reinforce_entry|从 队 伍 里 拨 {reg41} 名 {s41}给 商 队 当 护 卫 
 mno_af54_market_entry|向 商 人 打 听 行 情 
 mno_af34_trade_back|返 回 城 镇 
 menu_af54_market|{s40}

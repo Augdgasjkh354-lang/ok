@@ -887,5 +887,7 @@ script_af53_treaty_target = 885
 script_af53_sign_treaty = 886
 script_af53_weekly_reparations = 887
 script_af54_market_text = 888
+script_af54_find_reinforce = 889
+script_af54_do_reinforce = 890
 
 
