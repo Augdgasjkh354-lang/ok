@@ -901,5 +901,7 @@ script_af57_buy_tax_farm = 899
 script_af57_daily_tax_mood = 900
 script_af58_purse = 901
 script_af58_purse_change = 902
+script_af59_rebel_daily = 903
+script_af59_rebel_pick_village = 904
 
 

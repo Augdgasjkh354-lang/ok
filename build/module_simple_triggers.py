@@ -4645,4 +4645,9 @@ simple_triggers = [
   (24, [
     (call_script, "script_af57_daily_tax_mood"),
   ]),
+
+  # v1.0 称王者的义军: 每天看一次 (拉兵、发饷、换地方、打散后的冷却)。
+  (24, [
+    (call_script, "script_af59_rebel_daily"),
+  ]),
 ]
