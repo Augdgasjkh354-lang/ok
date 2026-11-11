@@ -913,5 +913,6 @@ script_af61_broker_peace = 911
 script_af61_find_siege_call = 912
 script_af61_relief_watch = 913
 script_af61_bribe_price = 914
+script_af62_special_party = 915
 
 
