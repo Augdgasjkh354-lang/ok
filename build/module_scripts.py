@@ -14937,6 +14937,9 @@ scripts = [
         (val_div, ":raw_material_consumption", ":cur_center_price"),
       (try_end),
       
+      # v1.0 经济 2.0 第一批: 打仗的城镇多要些工具、皮具、铁 (af54_war_demand)。
+      (call_script, "script_af54_war_demand", ":center_no", ":cur_good"),
+      (val_add, ":consumer_consumption", reg0),
       (store_add, ":modified_consumption", ":consumer_consumption", ":raw_material_consumption"),
       (try_begin),
         (party_get_slot, ":prosperity_plus_75", ":center_no", slot_town_prosperity),
@@ -64265,6 +64268,88 @@ scripts = [
     (try_end),
   ]),
 
+  # v1.0 经济 2.0 第一批: 战时军需。center_get_consumption 每 72 小时调价时调用。
+  # 参数 1 据点, 参数 2 货物。输出 reg0 = 额外的消费量 (只加需求, 不生钱不生货):
+  # 城镇所属阵营正和任一活着的王国交战时, 工具 +3、皮具 +3、铁 +2; 其余为 0。
+  # 量级: 原版城镇需求工具 7、皮具 10, 调价每轮约按 (产-消)x2.5 走、每轮回归 4%,
+  # 长期约让当地价格高 15%～20%, 再经全图归一化。停战后不再加, 价格自己回落。
+  ("af54_war_demand", [
+    (store_script_param, ":center", 1),
+    (store_script_param, ":good", 2),
+    (assign, ":extra", 0),
+    (try_begin),
+      (is_between, ":center", towns_begin, towns_end),
+      (try_begin),
+        (eq, ":good", "itm_tools"),
+        (assign, ":extra", 3),
+      (else_try),
+        (eq, ":good", "itm_leatherwork"),
+        (assign, ":extra", 3),
+      (else_try),
+        (eq, ":good", "itm_iron"),
+        (assign, ":extra", 2),
+      (try_end),
+      (gt, ":extra", 0),
+      (store_faction_of_party, ":fac", ":center"),
+      (assign, ":at_war", 0),
+      (try_for_range, ":other", kingdoms_begin, kingdoms_end),
+        (eq, ":at_war", 0),
+        (neq, ":other", ":fac"),
+        (faction_slot_eq, ":other", slot_faction_state, sfs_active),
+        (store_relation, ":rel", ":fac", ":other"),
+        (lt, ":rel", 0),
+        (assign, ":at_war", 1),
+      (try_end),
+      (try_begin),
+        (eq, ":at_war", 0),
+        (assign, ":extra", 0),
+      (try_end),
+    (try_end),
+    (assign, reg0, ":extra"),
+  ]),
+
+  # v1.0 经济 2.0 第一批: 村庄产业开发 (Slot 979 项目、980 竣工日)。每天调用一次。
+  # 竣工日到了、村子没被劫 (svs_normal) 才完工; 被劫期间停工, 恢复后接着算。
+  # 完工改原版生产 Slot, 由原版 center_get_production 照常折成产量:
+  # 1 开垦农田 耕地 +2500 (谷物 +20); 2 增建磨坊 磨坊 +1 (面包 +20, 谷物需求 +20);
+  # 3 扩大牛群 牛 +15 (肉干 +7、牛肉 +3、皮 +2, 奶酪黄油按菜园再算)。
+  ("af54_finish_projects", [
+    (store_current_day, ":today"),
+    (try_for_range, ":village", villages_begin, villages_end),
+      (party_get_slot, ":kind", ":village", slot_af54_village_project),
+      (is_between, ":kind", 1, 4),
+      (party_get_slot, ":due", ":village", slot_af54_project_day),
+      (ge, ":today", ":due"),
+      (party_slot_eq, ":village", slot_village_state, svs_normal),
+      (try_begin),
+        (eq, ":kind", 1),
+        (party_get_slot, ":v", ":village", slot_center_acres_grain),
+        (val_add, ":v", 2500),
+        (party_set_slot, ":village", slot_center_acres_grain, ":v"),
+      (else_try),
+        (eq, ":kind", 2),
+        (party_get_slot, ":v", ":village", slot_center_mills),
+        (val_add, ":v", 1),
+        (party_set_slot, ":village", slot_center_mills, ":v"),
+      (else_try),
+        (party_get_slot, ":v", ":village", slot_center_head_cattle),
+        (val_add, ":v", 15),
+        (party_set_slot, ":village", slot_center_head_cattle, ":v"),
+      (try_end),
+      (store_add, ":done", ":kind", 10),
+      (party_set_slot, ":village", slot_af54_village_project, ":done"),
+      (party_set_slot, ":village", slot_af54_project_day, 0),
+      (str_store_party_name, s10, ":village"),
+      (try_begin),
+        (eq, ":kind", 1),
+        (display_message, "@{s10}新开的田地种上了麦子。", 0x66FF66),
+      (else_try),
+        (eq, ":kind", 2),
+        (display_message, "@{s10}的新磨坊转起来了。", 0x66FF66),
+      (else_try),
+        (display_message, "@{s10}新买的牛赶进了牛栏。", 0x66FF66),
+      (try_end),
+    (try_end),
+  ]),
+
 ]
-
-

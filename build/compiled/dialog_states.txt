@@ -1443,3 +1443,6 @@ af48_expose_reply
 af47_petition_reply
 af52_appeal_reply
 af53_treaty_reply
+village_af54_offer
+village_af54_choose
+village_af54_done

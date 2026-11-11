@@ -2131,6 +2131,8 @@ slot_af49_petition_day       = 975 # p_main_party: day the next vassal petition 
 slot_af50_crisis_day         = 976 # p_main_party: day the next noble ultimatum may arrive (day+60); 0 = never (politics 3.0 batch 1)
 slot_af53_reparation_to   = 977  # faction (debtor): creditor kingdom of a reparation treaty; 0 = none (politics 4.0 batch 1)
 slot_af53_reparation_left = 978  # faction (debtor): denars still owed under the treaty; 0 = none (politics 4.0 batch 1)
+slot_af54_village_project = 979  # village: industry project; 0 = none, 1/2/3 = building farmland/mill/cattle, 11/12/13 = finished (economy 2.0 batch 1)
+slot_af54_project_day     = 980  # village: day the project in 979 finishes while building; 0 otherwise (economy 2.0 batch 1)
 slot_af26_license            = 902 # p_main_party: I1 mercenary license, 1 = licensed
 slot_af26_protect_day        = 903 # town: I5 next protection collection day+1; 0 = not protected
 slot_af26_sanctuary_day      = 904 # p_main_party: L5 sanctuary expiry (day+7); 0 = not in sanctuary

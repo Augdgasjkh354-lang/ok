@@ -4551,4 +4551,9 @@ simple_triggers = [
   (24*7, [
     (call_script, "script_af53_weekly_reparations"),
   ]),
+
+  # v1.0 经济 2.0 第一批: 村庄产业每天看一次是否完工。
+  (24, [
+    (call_script, "script_af54_finish_projects"),
+  ]),
 ]

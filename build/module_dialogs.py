@@ -28572,4 +28572,50 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   ], "这事已经变了，再说吧。", "lord_talk_court", []],
   [anyone, "af53_treaty_reply", [
   ], "这事已经变了，再说吧。", "lord_talk_court", []],
+
+  # v1.0 经济 2.0 第一批: 村庄产业开发。村里没做过项目 (Slot 979 = 0)、没被劫、
+  # 玩家钱够最便宜的一项 (2500) 时, 村长对话里出现。钱进村长钱袋 (工钱料钱花在村里),
+  # 不计入村庄投资 960、不分红; 回报是这村的产量和附近的物价。七天后由每日触发器完工。
+  [anyone|plyr,"village_elder_talk", [
+    (party_slot_eq, "$current_town", slot_af54_village_project, 0),
+    (party_slot_eq, "$current_town", slot_village_state, svs_normal),
+    (store_troop_gold, ":gold", "trp_player"),
+    (ge, ":gold", 2500),
+  ], "我想出钱给村里添一样产业。", "village_af54_offer",[]],
+  [anyone,"village_af54_offer", [], "您肯出钱？能干的事倒是不少：往荒坡上开些田多种麦子，添一座磨坊，或者再买些牛。工钱料钱都花在村里人身上，七天上下就能弄好。您看做哪一样？", "village_af54_choose",[]],
+  [anyone|plyr,"village_af54_choose", [
+    (store_troop_gold, ":gold", "trp_player"),
+    (ge, ":gold", 2500),
+  ], "开垦农田 (2500 第纳尔)：多打些麦子。", "village_af54_done",[
+    (troop_remove_gold, "trp_player", 2500),
+    (call_script, "script_af13_village_purse", "$current_town", 2500),
+    (party_set_slot, "$current_town", slot_af54_village_project, 1),
+    (store_current_day, ":due"),
+    (val_add, ":due", 7),
+    (party_set_slot, "$current_town", slot_af54_project_day, ":due"),
+  ]],
+  [anyone|plyr,"village_af54_choose", [
+    (store_troop_gold, ":gold", "trp_player"),
+    (ge, ":gold", 3000),
+  ], "增建磨坊 (3000 第纳尔)：多出面包，也多吃进麦子。", "village_af54_done",[
+    (troop_remove_gold, "trp_player", 3000),
+    (call_script, "script_af13_village_purse", "$current_town", 3000),
+    (party_set_slot, "$current_town", slot_af54_village_project, 2),
+    (store_current_day, ":due"),
+    (val_add, ":due", 7),
+    (party_set_slot, "$current_town", slot_af54_project_day, ":due"),
+  ]],
+  [anyone|plyr,"village_af54_choose", [
+    (store_troop_gold, ":gold", "trp_player"),
+    (ge, ":gold", 2500),
+  ], "扩大牛群 (2500 第纳尔)：多出肉、奶酪和皮子。", "village_af54_done",[
+    (troop_remove_gold, "trp_player", 2500),
+    (call_script, "script_af13_village_purse", "$current_town", 2500),
+    (party_set_slot, "$current_town", slot_af54_village_project, 3),
+    (store_current_day, ":due"),
+    (val_add, ":due", 7),
+    (party_set_slot, "$current_town", slot_af54_project_day, ":due"),
+  ]],
+  [anyone|plyr,"village_af54_choose", [], "算了，先不弄。", "village_elder_pretalk",[]],
+  [anyone,"village_af54_done", [], "好，明天就叫人开工。弄好了，往后村里的出产就不一样了。", "village_elder_pretalk",[]],
 ]
