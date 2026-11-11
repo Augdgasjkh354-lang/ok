@@ -4610,21 +4610,22 @@ simple_triggers = [
   ]),
 
   # v1.0 经济1.0：村长把攒下的钱投进村子，每 200 第纳尔换 1 点繁荣（约 25 口人）。
-  # 村长身上留 500 周转，每周最多换 3 点；只在村子正常时投（被劫、洗劫、恢复中不投）；
+  # 2026-11-11 玩家定：改为每天一次，村长身上留 1000 周转，每天最多换 1 点（原为每周、留 500、最多 3 点）；
+  # 只在村子正常时投（被劫、洗劫、恢复中不投）；繁荣上限 260。
   # 钱花在开荒、盖屋、添农具上，从村长身上扣掉。繁荣涨了，产量和领主每周的租金都跟着涨（原版逻辑）。
-  (24*7, [
+  (24, [
     (try_for_range, ":village", villages_begin, villages_end),
       (party_slot_eq, ":village", slot_village_state, svs_normal),
       (party_get_slot, ":elder", ":village", slot_town_elder),
       (gt, ":elder", 0),
       (store_troop_gold, ":gold", ":elder"),
-      (val_sub, ":gold", 500),
+      (val_sub, ":gold", 1000),
       (gt, ":gold", 0),
       (store_div, ":points", ":gold", 200),
-      (val_min, ":points", 3),
+      (val_min, ":points", 1),
       (gt, ":points", 0),
       (party_get_slot, ":pros", ":village", slot_town_prosperity),
-      (lt, ":pros", 200),
+      (lt, ":pros", 260),
       (store_mul, ":cost", ":points", 200),
       (troop_remove_gold, ":elder", ":cost"),
       (call_script, "script_change_center_prosperity", ":village", ":points"),

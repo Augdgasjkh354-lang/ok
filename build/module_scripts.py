@@ -34463,7 +34463,7 @@ scripts = [
       (store_script_param, ":difference", 2),
       (party_get_slot, ":old_prosperity", ":center_no", slot_town_prosperity),
       (store_add, ":new_prosperity", ":old_prosperity", ":difference"),
-      (val_clamp, ":new_prosperity", 0, 201),
+      (val_clamp, ":new_prosperity", 0, 261),  # v1.0 玩家 2026-11-11 定: 繁荣上限 260 (原 200)
       (store_div, ":old_state", ":old_prosperity", 20),
       (store_div, ":new_state", ":new_prosperity", 20),
       
@@ -34545,7 +34545,7 @@ scripts = [
       # v1.0 繁荣上限 200: 玩家的经营让理想繁荣度往上走 (af45_prosperity_bonus)。
       (call_script, "script_af45_prosperity_bonus", ":center_no"),
       (val_add, ":ideal", reg0),
-      (val_min, ":ideal", 200),
+      (val_min, ":ideal", 260),  # 2026-11-11 上限 200 -> 260
       (assign, reg0, ":ideal"),
   ]),
   
@@ -53545,7 +53545,19 @@ scripts = [
           (store_distance_to_party_from_party, ":distance", ":group", ":dest"),
           (lt, ":distance", 3),
           (call_script, "script_af01_change_unrest", ":home", -4),
-          (call_script, "script_change_center_prosperity", ":dest", 1),
+          # 2026-11-11 玩家定: 城镇 1 点繁荣 ≈ 50 人。按进城人数 / 50 加繁荣, 余数按比例掷一次。
+          (party_get_num_companions, ":arrived", ":group"),
+          (store_div, ":gain", ":arrived", 50),
+          (store_mod, ":rest", ":arrived", 50),
+          (store_random_in_range, ":roll", 0, 50),
+          (try_begin),
+            (lt, ":roll", ":rest"),
+            (val_add, ":gain", 1),
+          (try_end),
+          (try_begin),
+            (gt, ":gain", 0),
+            (call_script, "script_change_center_prosperity", ":dest", ":gain"),
+          (try_end),
           # v1.0 数据联动⑧: 进城的流民要吃饭, 每人吃掉城里粮仓 100 (一趟农民进城补 1000)。
           (party_get_num_companions, ":mouths", ":group"),
           (store_mul, ":eat", ":mouths", 100),
