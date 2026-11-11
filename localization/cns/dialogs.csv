@@ -238,19 +238,14 @@ dlga_village_af55_done:village_elder_pretalk|钱 到 了 ， 人 手 也 齐 ，
 dlga_village_elder_talk:village_af55_repair_done|被 烧 的 磨 坊 ， 我 出 1500 第 纳 尔 修 起 来 。 
 dlga_village_elder_talk:village_af55_repair_done.1|被 赶 走 的 牛 ， 我 出 1250 第 纳 尔 再 补 上 。 
 dlga_village_af55_repair_done:village_elder_pretalk|多 谢 大 人 。 底 子 还 在 ， 三 天 就 能 弄 好 。 
-dlga_start:af62_rebel_talk|我 是 {s10}。 {s11}的 王 位 本 该 是 我 的 ， 这 些 弟 兄 跟 着 我 ， 就 是 要 把 它 拿 回 来 。 你 是 来 帮 我 的 ， 还 是 来 拦 我 的 ？ 
 dlga_af62_rebel_talk:af62_rebel_funder|你 们 的 军 饷 ， 是 我 出 的 。 好 好 打 。 
 dlga_af62_rebel_funder:close_window|是 你 ！ 弟 兄 们 有 饭 吃 、 有 刀 使 ， 全 靠 你 。 等 我 坐 上 王 位 ， 忘 不 了 你 的 恩 情 。 
 dlga_af62_rebel_talk:af62_rebel_disband|时 机 还 不 到 ， 先 把 人 散 了 ， 回 去 等 着 吧 。 
-dlga_af62_rebel_disband:close_window|… … 你 说 得 对 ， 硬 拼 只 会 白 白 送 命 。 我 先 遣 散 他 们 ， 回 去 等 你 的 消 息 。 
 dlga_af62_rebel_talk:af62_rebel_bye|路 过 而 已 ， 祝 你 们 好 运 。 
 dlga_af62_rebel_bye:close_window|那 就 别 挡 道 。 
 dlga_af62_rebel_talk:af62_rebel_fight|一 群 乱 党 ， 放 下 兵 器 ！ 
 dlga_af62_rebel_fight:close_window|那 就 手 底 下 见 真 章 ！ 
-dlga_start:close_window.44|就 是 你 烧 了 {s10}！ 乡 亲 们 ， 抄 家 伙 ！ 
-dlga_start:af62_militia_talk|我 们 是 {s10}的 人 。 {s11}抢 光 了 我 们 的 村 子 ， 我 们 要 讨 个 公 道 ！ 
 dlga_af62_militia_talk:af62_militia_bye|去 吧 ， 替 你 们 的 村 子 讨 回 来 。 
-dlga_af62_militia_bye:close_window|多 谢 ！ 
 dlga_af62_militia_talk:af62_militia_fight|一 群 乱 民 ， 都 给 我 散 了 ！ 
 dlga_af62_militia_fight:close_window|原 来 你 跟 他 们 是 一 伙 的 ！ 
 dlga_start:village_elder_talk.7|有 什 么 事 吗 ？ 

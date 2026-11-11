@@ -928,5 +928,8 @@ script_af66_week_count = 926
 script_af66_can_invest = 927
 script_af66_invest = 928
 script_af66_cattle_weekly = 929
+script_af67_pretender_line = 930
+script_af67_messenger_line = 931
+script_af67_militia_line = 932
 
 
