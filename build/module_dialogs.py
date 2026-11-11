@@ -28543,4 +28543,33 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   ], "这事不必再提。", "lord_talk_court", []],
   [anyone, "af52_appeal_reply", [
   ], "这事不必再提。", "lord_talk_court", []],
+
+  # v1.0 政治 4.0 第一批: 带赔款的停战条约。照 I4 的条件: 对方是本国或他国的国王、
+  # 玩家声望 slot_troop_renown ≥ 200、玩家与对方关系 ≥ 20、af53_treaty_target 找到弱国 B。
+  [anyone|plyr, "lord_talk_court", [
+    (faction_slot_eq, "$g_talk_troop_faction", slot_faction_leader, "$g_talk_troop"),
+    (troop_get_slot, ":renown", "trp_player", slot_troop_renown),
+    (ge, ":renown", 200),
+    (call_script, "script_troop_get_relation_with_troop", "trp_player", "$g_talk_troop"),
+    (ge, reg0, 20),
+    (call_script, "script_af53_treaty_target"),
+    (eq, reg0, 1),
+  ], "陛下，{s4}撑不住了。我去谈：停战，{s4}赔 6000 第纳尔，分四周付清。", "af53_treaty_reply", [
+    (call_script, "script_af53_treaty_target"),
+    (assign, ":kingdom_b", reg1),
+    (call_script, "script_af53_sign_treaty", "$g_talk_troop_faction", ":kingdom_b"),
+    (assign, "$temp", reg0),
+    (str_store_faction_name, s4, ":kingdom_b"),
+    (str_store_faction_name, s5, "$g_talk_troop_faction"),
+  ]],
+  # 国王对条约的回应 ($temp = 结果 1 签成/0 没签, s4 = 弱国 B、s5 = 强国 A)。都回 lord_talk_court。
+  # 回应状态里只有 NPC 行, 没有玩家选项, 不会自循环。
+  [anyone, "af53_treaty_reply", [
+    (eq, "$temp", 1),
+  ], "好。{s4}肯认这笔账，这仗就先停下。四周之内，一个子儿也不能少。", "lord_talk_court", []],
+  [anyone, "af53_treaty_reply", [
+    (eq, "$temp", 0),
+  ], "这事已经变了，再说吧。", "lord_talk_court", []],
+  [anyone, "af53_treaty_reply", [
+  ], "这事已经变了，再说吧。", "lord_talk_court", []],
 ]

@@ -4546,4 +4546,9 @@ simple_triggers = [
     (party_set_slot, "p_main_party", slot_af50_crisis_day, ":next"),
     (jump_to_menu, "mnu_af50_crisis"),
   ]),
+
+  # v1.0 政治 4.0 第一批: 每周赔款结算。
+  (24*7, [
+    (call_script, "script_af53_weekly_reparations"),
+  ]),
 ]

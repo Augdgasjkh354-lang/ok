@@ -224,3 +224,7 @@ dlga_af52_appeal_reply:lord_talk_court|… … 你 说 得 不 错 。 {s12}的 
 dlga_af52_appeal_reply:lord_talk_court.1|{s12}跟 了 我 多 少 年 ， 岂 是 丢 一 座 城 就 能 否 定 的 ？ 这 话 以 后 少 说 。 
 dlga_af52_appeal_reply:lord_talk_court.2|这 事 不 必 再 提 。 
 dlga_af52_appeal_reply:lord_talk_court.3|这 事 不 必 再 提 。 
+dlga_lord_talk_court:af53_treaty_reply|陛 下 ， {s4}撑 不 住 了 。 我 去 谈 ： 停 战 ， {s4}赔 6000 第 纳 尔 ， 分 四 周 付 清 。 
+dlga_af53_treaty_reply:lord_talk_court|好 。 {s4}肯 认 这 笔 账 ， 这 仗 就 先 停 下 。 四 周 之 内 ， 一 个 子 儿 也 不 能 少 。 
+dlga_af53_treaty_reply:lord_talk_court.1|这 事 已 经 变 了 ， 再 说 吧 。 
+dlga_af53_treaty_reply:lord_talk_court.2|这 事 已 经 变 了 ， 再 说 吧 。 

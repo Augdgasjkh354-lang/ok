@@ -883,5 +883,8 @@ script_af50_resolve = 881
 script_af52_lost_centers = 882
 script_af52_army_text = 883
 script_af52_appeal = 884
+script_af53_treaty_target = 885
+script_af53_sign_treaty = 886
+script_af53_weekly_reparations = 887
 
 

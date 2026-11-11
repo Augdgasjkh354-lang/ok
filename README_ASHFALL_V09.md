@@ -699,6 +699,29 @@ NPC 的话终于开始接上已有的数据，不再是同一句通用招呼。�
 
 `script_af13_village_purse` 负责进出村庄钱袋。`build_v09.py` 现在也会从源码编译对话（见 AGENTS.md「对话的编译方式」）；本次只有捐款那一句对话的逻辑改变了。顺带修复了 `module_dialogs.py` 中两处 Latin-1 双重编码造成的乱码中文（修复后的编译结果与旧版逐字节一致）。**待实机验收**。
 
+## v1.0 政治 4.0 第一批：带赔款的停战条约（新 Slot 977、978）
+
+玩家 2026-11-11 拍板：政治 4.0 只做赔款条约。现有的两种停战都是一次了结：I4 外交掮客（两国各付玩家 2000，`lord_af26_mediate`）、资本家 2.0 出钱买和平（玩家掏 5000，`af33_buy_peace`）。本批加第三种：**强国答应停战，弱国分期赔款**。赔款分四周付，付不起就违约，违约给对方留下宣战理由。
+
+- **停战本身不另造**：沿用原版 `diplomacy_start_peace_between_kingdoms`，它会设 40 天停战、交换俘虏、解除围城。
+- **违约的后果用原版的宣战理由（casus belli）**：原版劫掠、袭击商队时，会给被害国记 30 天的「宣战理由」（阵营 Slot `slot_faction_provocation_days_with_factions_begin` + 对方阵营 − `kingdoms_begin`），AI 决定宣战时会参考它。本批违约时照同一写法给收款国记 30 天，**不直接改两国关系、不直接宣战**（`set_relation` 设成负数就等于开战，绝对不要碰）。
+- **新 Slot（2 个，977、978，都是阵营 Slot，挂在欠款国身上）**：977 `slot_af53_reparation_to`：赔款的收款国（阵营号）；0 表示没有条约。978 `slot_af53_reparation_left`：还欠多少第纳尔；0 表示没有条约。已在 `AGENTS.md`、`CLAUDE.md` 登记，下一个可用 979。不新增全局变量、兵种、部队模板。旧存档里两个 Slot 都是 0，等于没有条约。
+- **找目标（`af53_treaty_target`，只读）**：无参数，读 `$g_talk_troop_faction`（对话中的国王的国家，记作 A）。输出（最后赋值）：`reg0` = 1 找到／0 没找到，`reg1` = 弱国 B，`s4` = B 的国名。照 `af33_buy_peace_target` 的写法，但**方向相反**：找与 A 交战、且 **B 的据点比 A 少**（A 是强势一方）的 B。另加条件：B 的国王是 NPC（`active_npcs_begin`～`active_npcs_end`）、玩家对 B 国王关系 ≥ 20；B 身上没有生效的条约（`slot_af53_reparation_left` = 0）；B 在 `npc_kingdoms_begin`～`kingdoms_end`（不对玩家自立的王国用）。多场战争时取扫描到的第一个（用 `(eq, reg0, 0)` 守循环，照原写法）。
+- **签约（`af53_sign_treaty`，写状态）**：参数 1：A（强国），参数 2：B（弱国）。输出 `reg0`：1 签成，0 没签（条件变了）。重查：两国仍在交战（`store_relation` < 0）；B 的 `slot_af53_reparation_left` = 0。签成：`diplomacy_start_peace_between_kingdoms`（A, B, 1）；B 的 `slot_af53_reparation_to` = A，`slot_af53_reparation_left` = 6000；`change_player_relation_with_troop`（A 国王, 3）、（B 国王, 1）。
+- **每周结算（`af53_weekly_reparations`，写状态）**：无参数。`try_for_range` `npc_kingdoms_begin`～`kingdoms_end`，对每个 B：`slot_af53_reparation_left` ≤ 0 → 跳过（这一国没有条约）。**这一条和下面每个分支都包在各自的 `try_begin` 里**，一国不满足不能把后面的国连带跳过。取 A = `slot_af53_reparation_to`；两国国王 `slot_faction_leader`。**作废**：A 或 B 已经不在（`slot_faction_state` ≠ `sfs_active`），或任一国王不是 NPC 领主，或两国又在交战（`store_relation` < 0）→ 两个 Slot 清零；两国中有一国是 `$players_kingdom` 时消息「{B}与{A}之间的赔款条约作废了。」**付款**：本周应付 = min(1500, 还欠)；实付 = min(应付, B 国王财产 ÷ 4)。`af14_lord_wealth`（B 国王, 0, 实付）、`af14_lord_wealth`（A 国王, 实付, 0）；还欠 −= 实付。**违约**（实付 < 应付）：`script_troop_change_relation_with_troop`（A 国王, B 国王, −5）；A 对 B 的宣战理由：`store_add, ":slot", B, slot_faction_provocation_days_with_factions_begin`、`val_sub, ":slot", kingdoms_begin`，`A` 的该 Slot 为 0 时设成 30（照原版 25383 行，不覆盖已有的）。消息「{B}没能按期付清赔款，{A}记下了这笔账。」（**所有国家都发**：违约是会引起战争的大事，玩家又是牵线人。）**付清**（还欠 = 0）：两个 Slot 清零；两国国王关系 +3；消息「{B}付清了给{A}的赔款。」其他情况：写回还欠的数。输出：无。消息里的国名用 `str_store_faction_name` 存 `s10`／`s11`，**在调完所有会改 `s` 寄存器的原版脚本之后**再存、再 `display_message`。
+- **对话（`module_dialogs.py` 末尾追加，`lord_talk_court` 下的玩家选项）**：条件（照 I4）：对方是本国或他国的**国王**（`faction_slot_eq, "$g_talk_troop_faction", slot_faction_leader, "$g_talk_troop"`）；玩家声望 `slot_troop_renown` ≥ 200；玩家与对方关系 ≥ 20；`af53_treaty_target` 的 `reg0` = 1。文字：「陛下，{s4}撑不住了。我去谈：停战，{s4}赔 6000 第纳尔，分四周付清。」后果：重新调 `af53_treaty_target` 拿 B，`af53_sign_treaty`（`$g_talk_troop_faction`, B），结果存 `$temp`；重存 `s4`（B）、`s5`（A）。去向 `af53_treaty_reply`。回应（都回 `lord_talk_court`）：`$temp` = 1：「好。{s4}肯认这笔账，这仗就先停下。四周之内，一个子儿也不能少。」其他：「这事已经变了，再说吧。」中性称呼，不用「他」。注意：`lord_talk_court` 只在跟领主／国王说话时进得去（第一层「聊聊宫廷里的事。」）；外国国王也能进，这是要的（你可以替外国国王去压它的敌人）。
+- **每周触发器（`build/module_simple_triggers.py` 末尾追加）**：`(24*7, [(call_script, "script_af53_weekly_reparations")])`。
+- **让玩家看得见（改 `af52_army_text`，政治 5.0 第一批的军务簿）**：在「你」那一块之前加一块（同样包在自己的 `try_begin` 里）：扫 `npc_kingdoms_begin`～`kingdoms_end`，凡是**欠款国或收款国是 `$players_kingdom`** 的条约，各写一行「{B}还欠{A} {n} 第纳尔赔款。」没有就不写。这是改已有脚本，只追加这一块，不动其他行。
+- **钱的流向**：欠款国国王财产 → 收款国国王财产（`af14_lord_wealth` 一减一加）。玩家一文不出、一文不拿（好处是两位国王的交情）。
+
+**待实机验收**：
+1. 声望 ≥ 200、跟交战两国国王都有交情时，强国国王那里有没有这个选项；弱国国王那里没有（方向对不对）。
+2. 签成后两国是否停战（地图上停止交战、40 天停战）。
+3. 之后每周：国王财产的变化、违约和付清的消息。可以用军务簿看「还欠多少」。
+4. 违约后，收款国有没有拿到宣战理由（原版王国页面会显示）；停战期过后会不会打回来。
+5. 中途两国又开战：条约作废的消息、军务簿里那行消失。
+6. 新中文有没有挤压重叠。
+
 ## v1.0 政治 5.0 第一批：本国军务簿、元帅问责（0 新 Slot）
 
 GPT 的政治 5.0《军功与军令》有四项，核对后只做两件：本国军务簿（只读页）和元帅问责（玩家申诉只抬争议度，撤换和重选全交给原版）。0 新 Slot。玩家 2026-11-11 定：交 Muse 开工（玩家在测试玩包十六，本批与政治 1.0～3.0 无依赖，可并行）。

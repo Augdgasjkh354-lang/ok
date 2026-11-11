@@ -63985,6 +63985,36 @@ scripts = [
         (str_store_string, s43, "@三十天内丢了 {reg41} 座城，最近一座是{s42}。"),
         (str_store_string, s40, "@{s40}^{s43}"),
       (try_end),
+      # --- 赔款条约 (只有本国是欠款国或收款国时才写) ---
+      # 政治 4.0 第一批: 扫 npc_kingdoms_begin～kingdoms_end, 凡是欠款国或收款国
+      # 是 $players_kingdom 的条约, 各写一行「{B}还欠{A} {n} 第纳尔赔款。」没有就不写。
+      # 同样包在自己的 try_begin 里, 不动其他行。
+      (try_begin),
+        (str_clear, s41),
+        (assign, ":tshown", 0),
+        (try_for_range, ":kingdom_b", npc_kingdoms_begin, kingdoms_end),
+          (faction_get_slot, ":left", ":kingdom_b", slot_af53_reparation_left),
+          (gt, ":left", 0),
+          (faction_get_slot, ":kingdom_a", ":kingdom_b", slot_af53_reparation_to),
+          (this_or_next|eq, ":kingdom_b", "$players_kingdom"),
+          (eq, ":kingdom_a", "$players_kingdom"),
+          (str_store_faction_name, s42, ":kingdom_b"),
+          (str_store_faction_name, s44, ":kingdom_a"),
+          (assign, reg41, ":left"),
+          (str_store_string, s43, "@{s42}还欠{s44} {reg41} 第纳尔赔款。"),
+          (try_begin),
+            (eq, ":tshown", 0),
+            (str_store_string, s41, "@{s43}"),
+            (assign, ":tshown", 1),
+          (else_try),
+            (str_store_string, s41, "@{s41}^{s43}"),
+          (try_end),
+        (try_end),
+        (try_begin),
+          (eq, ":tshown", 1),
+          (str_store_string, s40, "@{s40}^{s41}"),
+        (try_end),
+      (try_end),
       # --- 你 ---
       (try_begin),
         (assign, ":has_you", 0),
@@ -64080,6 +64110,159 @@ scripts = [
     (try_end),
     (assign, reg0, ":result"),
     (assign, reg1, ":increase"),
+  ]),
+
+  # v1.0 政治 4.0 第一批: 找一个可签赔款条约的战争对象。只读。
+  # 无参数, 读 $g_talk_troop_faction (对话中的国王的国家, 记作 A)。输出 (最后赋值):
+  # reg0 = 1 找到/0 没找到, reg1 = 弱国 B, s4 = B 的国名。
+  # 照 af33_buy_peace_target 的写法, 但方向相反: 找与 A 交战、且 B 的据点比 A 少
+  # (A 是强势一方) 的 B。多场战争时取扫描到的第一个 (用 (eq, reg0, 0) 守循环)。
+  ("af53_treaty_target", [
+    (assign, reg0, 0),
+    (assign, ":kingdom_a", "$g_talk_troop_faction"),
+    (assign, ":own_centers", 0),
+    (try_for_range, ":center", centers_begin, centers_end),
+      (store_faction_of_party, ":cf", ":center"),
+      (eq, ":cf", ":kingdom_a"),
+      (val_add, ":own_centers", 1),
+    (try_end),
+    (try_for_range, ":kingdom_b", kingdoms_begin, kingdoms_end),
+      (eq, reg0, 0),
+      (neq, ":kingdom_b", ":kingdom_a"),
+      (is_between, ":kingdom_b", npc_kingdoms_begin, kingdoms_end),
+      (store_relation, ":rel", ":kingdom_a", ":kingdom_b"),
+      (lt, ":rel", 0),
+      (faction_get_slot, ":king_b", ":kingdom_b", slot_faction_leader),
+      (is_between, ":king_b", active_npcs_begin, active_npcs_end),
+      (call_script, "script_troop_get_relation_with_troop", "trp_player", ":king_b"),
+      (assign, ":rel_b", reg0),
+      (ge, ":rel_b", 20),
+      (faction_slot_eq, ":kingdom_b", slot_af53_reparation_left, 0),
+      (assign, ":enemy_centers", 0),
+      (try_for_range, ":center2", centers_begin, centers_end),
+        (store_faction_of_party, ":cf2", ":center2"),
+        (eq, ":cf2", ":kingdom_b"),
+        (val_add, ":enemy_centers", 1),
+      (try_end),
+      (lt, ":enemy_centers", ":own_centers"),
+      (assign, reg1, ":kingdom_b"),
+      (str_store_faction_name, s4, ":kingdom_b"),
+      (assign, reg0, 1),
+    (try_end),
+  ]),
+
+  # v1.0 政治 4.0 第一批: 签赔款条约。写状态。
+  # 参数 1: A (强国), 参数 2: B (弱国)。输出 reg0: 1 签成, 0 没签 (条件变了)。
+  # 重查: 两国仍在交战 (store_relation < 0); B 的 slot_af53_reparation_left = 0。
+  # 签成: diplomacy_start_peace_between_kingdoms (A, B, 1); B 的
+  # slot_af53_reparation_to = A, slot_af53_reparation_left = 6000;
+  # change_player_relation_with_troop (A 国王, 3)、(B 国王, 1)。
+  ("af53_sign_treaty", [
+    (store_script_param, ":kingdom_a", 1),
+    (store_script_param, ":kingdom_b", 2),
+    (assign, reg0, 0),
+    (try_begin),
+      (store_relation, ":rel", ":kingdom_a", ":kingdom_b"),
+      (lt, ":rel", 0),
+      (faction_slot_eq, ":kingdom_b", slot_af53_reparation_left, 0),
+      (faction_get_slot, ":king_a", ":kingdom_a", slot_faction_leader),
+      (faction_get_slot, ":king_b", ":kingdom_b", slot_faction_leader),
+      (call_script, "script_diplomacy_start_peace_between_kingdoms", ":kingdom_a", ":kingdom_b", 1),
+      (faction_set_slot, ":kingdom_b", slot_af53_reparation_to, ":kingdom_a"),
+      (faction_set_slot, ":kingdom_b", slot_af53_reparation_left, 6000),
+      (call_script, "script_change_player_relation_with_troop", ":king_a", 3),
+      (call_script, "script_change_player_relation_with_troop", ":king_b", 1),
+      (assign, reg0, 1),
+    (try_end),
+  ]),
+
+  # v1.0 政治 4.0 第一批: 每周赔款结算。写状态。
+  # 无参数。try_for_range npc_kingdoms_begin～kingdoms_end, 对每个 B:
+  # slot_af53_reparation_left ≤ 0 → 跳过 (这一国没有条约)。这一条和下面每个分支
+  # 都包在各自的 try_begin 里, 一国不满足不能把后面的国连带跳过。
+  # 输出: 无。消息里的国名用 str_store_faction_name 存 s10/s11, 在调完所有会改
+  # s 寄存器的原版脚本之后再存、再 display_message。
+  # 绝对不调 set_relation: 违约只给原版的宣战理由 (casus belli), 不直接改两国关系、
+  # 不直接宣战。
+  ("af53_weekly_reparations", [
+    (try_for_range, ":kingdom_b", npc_kingdoms_begin, kingdoms_end),
+      # --- 这一国没有条约 → 跳过 ---
+      (try_begin),
+        (faction_get_slot, ":left", ":kingdom_b", slot_af53_reparation_left),
+        (gt, ":left", 0),
+        (faction_get_slot, ":kingdom_a", ":kingdom_b", slot_af53_reparation_to),
+        (faction_get_slot, ":king_a", ":kingdom_a", slot_faction_leader),
+        (faction_get_slot, ":king_b", ":kingdom_b", slot_faction_leader),
+        # --- 作废判定 ---
+        (assign, ":void", 0),
+        (try_begin),
+          (this_or_next|neg|faction_slot_eq, ":kingdom_a", slot_faction_state, sfs_active),
+          (neg|faction_slot_eq, ":kingdom_b", slot_faction_state, sfs_active),
+          (assign, ":void", 1),
+        (else_try),
+          (this_or_next|neg|is_between, ":king_a", active_npcs_begin, active_npcs_end),
+          (neg|is_between, ":king_b", active_npcs_begin, active_npcs_end),
+          (assign, ":void", 1),
+        (else_try),
+          (store_relation, ":rel", ":kingdom_a", ":kingdom_b"),
+          (lt, ":rel", 0),
+          (assign, ":void", 1),
+        (try_end),
+        (try_begin),
+          (eq, ":void", 1),
+          # 作废: 两个 Slot 清零; 两国中有一国是 $players_kingdom 时消息。
+          (faction_set_slot, ":kingdom_b", slot_af53_reparation_to, 0),
+          (faction_set_slot, ":kingdom_b", slot_af53_reparation_left, 0),
+          (try_begin),
+            (this_or_next|eq, ":kingdom_a", "$players_kingdom"),
+            (eq, ":kingdom_b", "$players_kingdom"),
+            (str_store_faction_name, s10, ":kingdom_b"),
+            (str_store_faction_name, s11, ":kingdom_a"),
+            (display_message, "@{s10}与{s11}之间的赔款条约作废了。"),
+          (try_end),
+        (else_try),
+          # --- 付款 ---
+          # 本周应付 = min(1500, 还欠); 实付 = min(应付, B 国王财产 ÷ 4)。
+          (assign, ":due", ":left"),
+          (val_min, ":due", 1500),
+          (troop_get_slot, ":wealth_b", ":king_b", slot_troop_wealth),
+          (val_div, ":wealth_b", 4),
+          (assign, ":actual", ":due"),
+          (val_min, ":actual", ":wealth_b"),
+          (call_script, "script_af14_lord_wealth", ":king_b", 0, ":actual"),
+          (call_script, "script_af14_lord_wealth", ":king_a", ":actual", 0),
+          (val_sub, ":left", ":actual"),
+          # --- 违约 (实付 < 应付) ---
+          (try_begin),
+            (lt, ":actual", ":due"),
+            (call_script, "script_troop_change_relation_with_troop", ":king_a", ":king_b", -5),
+            # A 对 B 的宣战理由: slot = B + provocation_begin − kingdoms_begin,
+            # 存 A 身上; 为 0 时设成 30 (照原版 25383 行, 不覆盖已有的)。
+            (store_add, ":slot", ":kingdom_b", slot_faction_provocation_days_with_factions_begin),
+            (val_sub, ":slot", kingdoms_begin),
+            (try_begin),
+              (faction_slot_eq, ":kingdom_a", ":slot", 0),
+              (faction_set_slot, ":kingdom_a", ":slot", 30),
+            (try_end),
+            (str_store_faction_name, s10, ":kingdom_b"),
+            (str_store_faction_name, s11, ":kingdom_a"),
+            (display_message, "@{s10}没能按期付清赔款，{s11}记下了这笔账。"),
+          (try_end),
+          # --- 付清 (还欠 = 0) / 否则写回还欠的数 ---
+          (try_begin),
+            (eq, ":left", 0),
+            (faction_set_slot, ":kingdom_b", slot_af53_reparation_to, 0),
+            (faction_set_slot, ":kingdom_b", slot_af53_reparation_left, 0),
+            (call_script, "script_troop_change_relation_with_troop", ":king_a", ":king_b", 3),
+            (str_store_faction_name, s10, ":kingdom_b"),
+            (str_store_faction_name, s11, ":kingdom_a"),
+            (display_message, "@{s10}付清了给{s11}的赔款。"),
+          (else_try),
+            (faction_set_slot, ":kingdom_b", slot_af53_reparation_left, ":left"),
+          (try_end),
+        (try_end),
+      (try_end),
+    (try_end),
   ]),
 
 ]
