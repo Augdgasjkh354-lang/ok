@@ -500,8 +500,15 @@ simple_triggers = [
          (try_end),
          (val_add, ":cur_wealth", ":added_wealth"),
          (call_script, "script_calculate_weekly_party_wage", ":center_no"),
-         (val_sub, ":cur_wealth", reg0),
-         (val_max, ":cur_wealth", 0),
+         # v1.0 数据联动⑦: 金库付不起的饷不再一笔勾销: 城主从自己财产补, 城主也付不起, 守军开小差 (af56_garrison_shortfall)。
+         (assign, ":af_wage", reg0),
+         (val_sub, ":cur_wealth", ":af_wage"),
+         (try_begin),
+           (lt, ":cur_wealth", 0),
+           (store_sub, ":af_short", 0, ":cur_wealth"),
+           (assign, ":cur_wealth", 0),
+           (call_script, "script_af56_garrison_shortfall", ":center_no", ":af_short", ":af_wage"),
+         (try_end),
          # v1.0 资本家第二批 (条目 4): 入股分红, 股份记镇 Slot 947 (百分比 10/20/30)。
          # 本触发器只给非玩家据点发收入 (上面两行守卫), 玩家自己的城镇本来就不吃这条, 不会重复发。
          # 分红 = 本周入账 :added_wealth 的股份比例, 单次不超金库 1/4; 金库不够只给实数, 不记欠账。
@@ -4598,5 +4605,10 @@ simple_triggers = [
   # v1.0 经济 2.0 第一批: 村庄产业每天看一次是否完工。
   (24, [
     (call_script, "script_af55_finish_projects"),
+  ]),
+
+  # v1.0 数据联动⑩: 穷领主向自己的村子加派。
+  (24*7, [
+    (call_script, "script_af56_lord_squeeze"),
   ]),
 ]

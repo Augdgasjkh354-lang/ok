@@ -895,5 +895,7 @@ script_af55_war_demand = 893
 script_af55_finish_projects = 894
 script_af55_pay_project = 895
 script_af55_on_looted = 896
+script_af56_garrison_shortfall = 897
+script_af56_lord_squeeze = 898
 
 
