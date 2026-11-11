@@ -28618,4 +28618,35 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   ]],
   [anyone|plyr,"village_af55_choose", [], "算了，先不弄。", "village_elder_pretalk",[]],
   [anyone,"village_af55_done", [], "好，明天就叫人开工。弄好了，往后村里的出产就不一样了。", "village_elder_pretalk",[]],
+
+  # v1.0 数据联动⑤: 劫掠毁掉的产业 (979 = 22 磨坊 / 23 牛群) 可以出钱修。修磨坊 1500、
+  # 补牛 1250 (原价一半: 磨坊的石头和水渠还在; 牛只补回被赶走的那部分), 钱照建造时一样分
+  # (af55_pay_project)。改回在建 (2/3), 三天后由每日触发器完工。
+  [anyone|plyr,"village_elder_talk", [
+    (party_slot_eq, "$current_town", slot_af55_village_project, 22),
+    (party_slot_eq, "$current_town", slot_village_state, svs_normal),
+    (store_troop_gold, ":gold", "trp_player"),
+    (ge, ":gold", 1500),
+  ], "被烧的磨坊，我出 1500 第纳尔修起来。", "village_af55_repair_done",[
+    (troop_remove_gold, "trp_player", 1500),
+    (call_script, "script_af55_pay_project", "$current_town", 1500),
+    (party_set_slot, "$current_town", slot_af55_village_project, 2),
+    (store_current_day, ":due"),
+    (val_add, ":due", 3),
+    (party_set_slot, "$current_town", slot_af55_project_day, ":due"),
+  ]],
+  [anyone|plyr,"village_elder_talk", [
+    (party_slot_eq, "$current_town", slot_af55_village_project, 23),
+    (party_slot_eq, "$current_town", slot_village_state, svs_normal),
+    (store_troop_gold, ":gold", "trp_player"),
+    (ge, ":gold", 1250),
+  ], "被赶走的牛，我出 1250 第纳尔再补上。", "village_af55_repair_done",[
+    (troop_remove_gold, "trp_player", 1250),
+    (call_script, "script_af55_pay_project", "$current_town", 1250),
+    (party_set_slot, "$current_town", slot_af55_village_project, 3),
+    (store_current_day, ":due"),
+    (val_add, ":due", 3),
+    (party_set_slot, "$current_town", slot_af55_project_day, ":due"),
+  ]],
+  [anyone,"village_af55_repair_done", [], "多谢大人。底子还在，三天就能弄好。", "village_elder_pretalk",[]],
 ]

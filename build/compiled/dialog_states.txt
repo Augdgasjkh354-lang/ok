@@ -1446,3 +1446,4 @@ af53_treaty_reply
 village_af55_offer
 village_af55_choose
 village_af55_done
+village_af55_repair_done

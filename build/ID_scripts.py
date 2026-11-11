@@ -894,5 +894,6 @@ script_af54_village_goods_value = 892
 script_af55_war_demand = 893
 script_af55_finish_projects = 894
 script_af55_pay_project = 895
+script_af55_on_looted = 896
 
 
