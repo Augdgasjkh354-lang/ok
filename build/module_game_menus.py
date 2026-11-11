@@ -16052,6 +16052,7 @@ game_menus = [
      ("af08_desk_ledger", [], "查看秘密军粮案卷", [(jump_to_menu, "mnu_af05_ledger")]),
      ("af08_desk_court", [], "查看宫廷政治情报簿", [(jump_to_menu, "mnu_fb75_intel_book")]),
      ("af08_desk_capital", [], "查看商号总账", [(jump_to_menu, "mnu_af37_ledger")]),
+     ("af08_desk_army", [], "查看本国军务", [(jump_to_menu, "mnu_af52_army")]),
      ("af08_desk_back", [], "返回营地", [(jump_to_menu, "mnu_camp")]),
    ]),
 
@@ -18341,5 +18342,13 @@ game_menus = [
    "none", [],
    [
      ("af50_result_continue", [], "继续赶路", [(change_screen_return)]),
+   ]),
+
+  # v1.0 政治 5.0 第一批: 本国军务簿。
+  ("af52_army", 0,
+   "{s40}",
+   "none", [(call_script, "script_af52_army_text")],
+   [
+     ("af52_army_back", [], "返回烽烟案头", [(jump_to_menu, "mnu_af08_desk")]),
    ]),
 ]

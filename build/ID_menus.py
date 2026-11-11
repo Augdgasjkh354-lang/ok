@@ -271,3 +271,4 @@ menu_af49_petitions = 269
 menu_af51_lobby = 270
 menu_af50_crisis = 271
 menu_af50_result = 272
+menu_af52_army = 273

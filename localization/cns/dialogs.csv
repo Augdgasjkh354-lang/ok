@@ -219,3 +219,8 @@ dlga_af47_petition_reply:lord_talk_court.1|拨 {reg41} 第 纳 尔 过 去 。 �
 dlga_af47_petition_reply:lord_talk_court.2|内 库 里 也 没 几 个 钱 了 。 等 收 了 税 再 说 吧 。 
 dlga_af47_petition_reply:lord_talk_court.3|这 种 事 ， 自 有 管 事 的 人 操 心 。 你 先 管 好 自 己 的 兵 。 
 dlga_af47_petition_reply:lord_talk_court.4|这 种 事 ， 自 有 管 事 的 人 操 心 。 你 先 管 好 自 己 的 兵 。 
+dlga_lord_talk_court:af52_appeal_reply|陛 下 ， {s11}丢 了 ， 元 帅 难 辞 其 咎 。 
+dlga_af52_appeal_reply:lord_talk_court|… … 你 说 得 不 错 。 {s12}的 事 ， 我 会 好 好 想 想 。 
+dlga_af52_appeal_reply:lord_talk_court.1|{s12}跟 了 我 多 少 年 ， 岂 是 丢 一 座 城 就 能 否 定 的 ？ 这 话 以 后 少 说 。 
+dlga_af52_appeal_reply:lord_talk_court.2|这 事 不 必 再 提 。 
+dlga_af52_appeal_reply:lord_talk_court.3|这 事 不 必 再 提 。 

@@ -28499,4 +28499,48 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   ], "这种事，自有管事的人操心。你先管好自己的兵。", "lord_talk_court", []],
   [anyone, "af47_petition_reply", [
   ], "这种事，自有管事的人操心。你先管好自己的兵。", "lord_talk_court", []],
+
+  # v1.0 政治 5.0 第一批: 元帅问责。对方是本国国王、$player_has_homage = 1、本国是正常王国、
+  # 元帅是 NPC 领主 (不是国王、不是玩家)、本国 30 天内丢了城、国王对玩家关系 ≥ 0、
+  # 元帅的曝光冷却已过 (30 天)。
+  [anyone|plyr, "lord_talk_court", [
+    (eq, "$player_has_homage", 1),
+    (is_between, "$players_kingdom", npc_kingdoms_begin, kingdoms_end),
+    (faction_get_slot, ":king", "$players_kingdom", slot_faction_leader),
+    (eq, "$g_talk_troop", ":king"),
+    (faction_get_slot, ":marshal", "$players_kingdom", slot_faction_marshall),
+    (is_between, ":marshal", active_npcs_begin, active_npcs_end),
+    (neq, ":marshal", ":king"),
+    (neq, ":marshal", "trp_player"),
+    (call_script, "script_af52_lost_centers", "$players_kingdom"),
+    (ge, reg0, 1),
+    (str_store_party_name, s11, reg1),
+    (call_script, "script_troop_get_relation_with_troop", "$g_talk_troop", "trp_player"),
+    (ge, reg0, 0),
+    (troop_get_slot, ":last", ":marshal", slot_fb74_last_exposure_day),
+    (store_current_day, ":today"),
+    (store_sub, ":elapsed", ":today", ":last"),
+    (this_or_next|eq, ":last", 0),
+    (ge, ":elapsed", 30),
+  ], "陛下，{s11}丢了，元帅难辞其咎。", "af52_appeal_reply", [
+    (call_script, "script_af52_appeal"),
+    (assign, "$temp", reg0),
+    (assign, reg41, reg1),
+    (faction_get_slot, ":marshal", "$players_kingdom", slot_faction_marshall),
+    (str_store_troop_name, s12, ":marshal"),
+  ]],
+  # 国王对问责的回应 ($temp = 结果 1 听进去了/2 护着元帅/0 没办成, reg41 = 涨幅,
+  # s12 = 元帅名)。都回 lord_talk_court。
+  # 回应状态里只有 NPC 行, 没有玩家选项, 不会自循环。
+  [anyone, "af52_appeal_reply", [
+    (eq, "$temp", 1),
+  ], "……你说得不错。{s12}的事，我会好好想想。", "lord_talk_court", []],
+  [anyone, "af52_appeal_reply", [
+    (eq, "$temp", 2),
+  ], "{s12}跟了我多少年，岂是丢一座城就能否定的？这话以后少说。", "lord_talk_court", []],
+  [anyone, "af52_appeal_reply", [
+    (eq, "$temp", 0),
+  ], "这事不必再提。", "lord_talk_court", []],
+  [anyone, "af52_appeal_reply", [
+  ], "这事不必再提。", "lord_talk_court", []],
 ]

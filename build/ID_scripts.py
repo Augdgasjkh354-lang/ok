@@ -880,5 +880,8 @@ script_af51_take_paid_vote = 878
 script_af50_is_malcontent = 879
 script_af50_find_crisis = 880
 script_af50_resolve = 881
+script_af52_lost_centers = 882
+script_af52_army_text = 883
+script_af52_appeal = 884
 
 

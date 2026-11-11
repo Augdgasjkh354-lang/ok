@@ -146,6 +146,7 @@ mno_af08_desk_gang|查 看 地 方 匪 帮 与 黑 市
 mno_af08_desk_ledger|查 看 秘 密 军 粮 案 卷 
 mno_af08_desk_court|查 看 宫 廷 政 治 情 报 簿 
 mno_af08_desk_capital|查 看 商 号 总 账 
+mno_af08_desk_army|查 看 本 国 军 务 
 mno_af08_desk_back|返 回 营 地 
 menu_af08_town_rumor|城 中 风 声 ^^{s40}^^传 闻 只 说 明 公 开 的 地 方 状 况 ； 人 物 身 份 和 幕 后 阴 谋 需 要 调 查 确 认 。 
 mno_af08_town_rumor_back|返 回 城 镇 
@@ -320,3 +321,5 @@ mno_af50_neutral|这 事 我 不 掺 和 。
 mno_af50_inform|（ 先 去 禀 告 陛 下 。 ） 
 menu_af50_result|{s40}
 mno_af50_result_continue|继 续 赶 路 
+menu_af52_army|{s40}
+mno_af52_army_back|返 回 烽 烟 案 头 
