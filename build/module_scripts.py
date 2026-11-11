@@ -64492,4 +64492,26 @@ scripts = [
     (try_end),
   ]),
 
+  # 经济1.0：一村一趟货按某城市价值多少钱。输入：村庄、城镇。输出 reg0=第纳尔。
+  ("af54_village_goods_value", [
+    (store_script_param, ":village", 1),
+    (store_script_param, ":town", 2),
+    (assign, ":total", 0),
+    (store_sub, ":off", slot_town_trade_good_prices_begin, trade_goods_begin),
+    (try_for_range, ":good", trade_goods_begin, trade_goods_end),
+      (call_script, "script_center_get_production", ":village", ":good"),
+      (gt, reg0, 0),
+      (assign, ":prod", reg0),
+      (store_item_value, ":value", ":good"),
+      (store_add, ":ps", ":good", ":off"),
+      (party_get_slot, ":price", ":town", ":ps"),
+      (store_mul, ":part", ":prod", ":value"),
+      (val_mul, ":part", ":price"),
+      (val_div, ":part", 1000),
+      (val_add, ":total", ":part"),
+    (try_end),
+    (val_div, ":total", 10),
+    (assign, reg0, ":total"),
+  ]),
+
 ]
