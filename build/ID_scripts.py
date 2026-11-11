@@ -919,5 +919,6 @@ script_af59_pretender_home = 917
 script_af63_rebel_one = 918
 script_af63_free_faction = 919
 script_af63_king_sponsors = 920
+script_af64_late_start = 921
 
 

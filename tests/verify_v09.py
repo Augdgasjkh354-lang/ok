@@ -34,6 +34,7 @@ ALLOWED_DIALOG_CHANGES={'dlga_village_elder_donate:village_elder_pretalk',  # v1
 # v1.0 第六批（十）: arena prizes and ladies' quest rewards are paid from
 # real money too (town treasury / the lady's guardian).
 ALLOWED_DIALOG_CHANGES|={
+    'dlga_start:threaten_1',  # v1.0 开场白保底: 「放下武器」兜底给末尾追加的开场白让开 (af64_late_start)
     'dlga_start:pretender_start', 'dlga_start:pretender_intro_1',  # v1.0 称王者带义军时走义军对话 (af62_special_party)
     'dlga_start:party_encounter_hostile_defender',  # v1.0 义军、民军: 通用开场白让开 (af62_special_party)
     'dlga_lord_propose_mercenary:lord_mercenary_service',  # v1.0 更聪明的领主和国王 C: 签约钱按国王吃紧程度 x1.5/x2
@@ -204,3 +205,22 @@ print('New scripts:',len([x for x in (current/'ID_scripts.py').read_text('utf8')
 print('New menus:',len([x for x in (current/'ID_menus.py').read_text('utf8').splitlines() if x.strip()])-len([x for x in (base/'ID_menus.py').read_text('utf8').splitlines() if x.strip()]))
 print('Translation entries:',{p.name:len(p.read_text('utf-8-sig').splitlines()) for p in (local/'cns').glob('*.csv')})
 print('Changed data:',[f.name for f in sorted(data.glob('*.txt')) if f.read_bytes()!=(base/'compiled'/f.name).read_bytes()])
+
+# v1.0 开场白可达性 (试玩包十九实测: 村长只剩「放下武器」)。原版按顺序挑台词, 同一状态里排在一句
+# 对谁都说、又没有条件的台词后面的 NPC 台词永远轮不到。原版自己有 9 处这种无害的重复, 只许更少不许更多,
+# 且 start 状态一句都不许有 (Mod 追加在末尾的开场白全靠这条)。
+def _unreachable(path):
+    rows=open(path,encoding='utf-8').read().split('\n')[2:]
+    first={};bad=[]
+    for l in rows:
+        t=l.split()
+        if len(t)<4: continue
+        id_,flags,st,nc=t[0],int(t[1]),t[2],int(t[3])
+        plyr=bool(flags&0x10000); generic=(flags&0xfff)==0xfff and not flags&0x20000
+        if st in first and not plyr: bad.append(id_)
+        if nc==0 and generic and st not in first: first[st]=id_
+    return bad
+_bad=_unreachable(root/'game-data/conversation.txt')
+assert not [b for b in _bad if b.startswith('dlga_start:')], ('unreachable start lines', [b for b in _bad if b.startswith('dlga_start:')])
+assert len(_bad)<=len(_unreachable(root/'baseline/v08/compiled/conversation.txt')), ('new unreachable dialogue lines', _bad)
+print('DIALOG_REACHABILITY_OK')

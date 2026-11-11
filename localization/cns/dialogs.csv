@@ -253,3 +253,6 @@ dlga_af62_militia_talk:af62_militia_bye|去 吧 ， 替 你 们 的 村 子 讨 
 dlga_af62_militia_bye:close_window|多 谢 ！ 
 dlga_af62_militia_talk:af62_militia_fight|一 群 乱 民 ， 都 给 我 散 了 ！ 
 dlga_af62_militia_fight:close_window|原 来 你 跟 他 们 是 一 伙 的 ！ 
+dlga_start:village_elder_talk.7|有 什 么 事 吗 ？ 
+dlga_start:mayor_begin.3|有 什 么 事 吗 ？ 
+dlga_start:tavernkeeper_talk.3|要 点 什 么 ？ 

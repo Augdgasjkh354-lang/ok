@@ -25897,14 +25897,14 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   [anyone,"start", [(neg|is_between, "$g_talk_troop", tavernkeepers_begin, tavernkeepers_end),
                     (neg|is_between, "$g_talk_troop", village_elders_begin, village_elders_end),
                     (neg|is_between, "$g_talk_troop", mayors_begin, mayors_end),
-                    (call_script, "script_af62_special_party"), (eq, reg0, 0)],
+                    (call_script, "script_af64_late_start"), (eq, reg0, 0)],
    "Surrender or die. Make your choice", "battle_reason_stated",[]],
   [anyone|plyr,"battle_reason_stated", [], "I am not afraid of you. I will fight.", "close_window",[[encounter_attack]]],
 
   [anyone,"start", [(neg|is_between, "$g_talk_troop", tavernkeepers_begin, tavernkeepers_end),
                     (neg|is_between, "$g_talk_troop", village_elders_begin, village_elders_end),
                     (neg|is_between, "$g_talk_troop", mayors_begin, mayors_end),
-                    (call_script, "script_af62_special_party"), (eq, reg0, 0)],
+                    (call_script, "script_af64_late_start"), (eq, reg0, 0)],
    "Hello. What can I do for you?", "free",[]],
   [anyone|plyr,"free", [[neg|in_meta_mission]], "Tell me about yourself", "view_char_requested",[]],
   [anyone,"view_char_requested", [], "Very well, listen to this...", "view_char",[[change_screen_view_character]]],
@@ -25912,7 +25912,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
 
   [anyone|plyr,"end", [], "[Done]", "close_window",[]],
   
-  [anyone|plyr,"start", [], "Drop your weapons and surrender if you want to live", "threaten_1",[]],
+  [anyone|plyr,"start", [(call_script, "script_af64_late_start"), (eq, reg0, 0)], "Drop your weapons and surrender if you want to live", "threaten_1",[]],
   [anyone,"threaten_1", [], "We will fight you first", "end",[[encounter_attack]]],
 
 #  [anyone|plyr,"free", [[partner_is_mercmaster]], "I need to hire some mercenaries.", "mercenaries_requested",[]],
@@ -28705,4 +28705,14 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
    "一群乱民，都给我散了！", "af62_militia_fight", []],
   [anyone,"af62_militia_fight", [],
    "原来你跟他们是一伙的！", "close_window", [[encounter_attack]]],
+
+  # v1.0 开场白保底 (2026-11-11 玩家实测十九: 村长只剩「放下武器」)。原版按顺序挑开场白, 挑中的第一句算数,
+  # 玩家台词也一样; 原版在村长／镇长／酒馆老板之后放了一句无条件的「放下武器投降」兜底, Mod 追加在文件末尾的
+  # 开场白都排在它后面。现在三句兜底遇到 af64_late_start 为 1 时让开, 这里再给每类人一句保底, 保证总能接上。
+  [anyone,"start", [(is_between, "$g_talk_troop", village_elders_begin, village_elders_end)],
+   "有什么事吗？", "village_elder_talk", [(assign, "$g_comment_found", 0)]],
+  [anyone,"start", [(is_between, "$g_talk_troop", mayors_begin, mayors_end)],
+   "有什么事吗？", "mayor_begin", [(assign, "$g_comment_found", 0)]],
+  [anyone,"start", [(is_between, "$g_talk_troop", tavernkeepers_begin, tavernkeepers_end)],
+   "要点什么？", "tavernkeeper_talk", [(assign, "$g_comment_found", 0)]],
 ]

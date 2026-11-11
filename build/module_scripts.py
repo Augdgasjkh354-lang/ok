@@ -65958,4 +65958,30 @@ scripts = [
       (try_end),
     (try_end),
   ]),
+
+  # v1.0 开场白保底: 这次对话该不该让原版三句兜底 (「要么投降要么去死」「你好」「放下武器」) 让开, 交给文件末尾
+  # 追加的开场白。输出 reg0 = 1 让开。让开的: 义军／民军 (af62)、村长／镇长／酒馆老板 (末尾有保底句)、
+  # 正好会走 NPC 对白 B-1/B-2/B-6 初见招呼的领主 (条件照抄那几句)。
+  ("af64_late_start", [
+    (assign, ":late", 0),
+    (try_begin),
+      (call_script, "script_af62_special_party"),
+      (eq, reg0, 1),
+      (assign, ":late", 1),
+    (else_try),
+      (this_or_next|is_between, "$g_talk_troop", village_elders_begin, village_elders_end),
+      (this_or_next|is_between, "$g_talk_troop", mayors_begin, mayors_end),
+      (is_between, "$g_talk_troop", tavernkeepers_begin, tavernkeepers_end),
+      (assign, ":late", 1),
+    (else_try),
+      (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
+      (eq, "$g_talk_troop_met", 0),
+      (ge, "$g_talk_troop_faction_relation", 0),
+      (le, "$talk_context", tc_siege_commander),
+      (call_script, "script_af25_lord_first_greeting"),
+      (is_between, reg0, 3, 8),
+      (assign, ":late", 1),
+    (try_end),
+    (assign, reg0, ":late"),
+  ]),
 ]
