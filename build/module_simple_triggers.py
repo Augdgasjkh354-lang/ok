@@ -4628,4 +4628,9 @@ simple_triggers = [
   (24*7, [
     (call_script, "script_af56_lord_squeeze"),
   ]),
+
+  # v1.0 包税四档: 每天按税率改城里人对玩家的好感。
+  (24, [
+    (call_script, "script_af57_daily_tax_mood"),
+  ]),
 ]

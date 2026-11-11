@@ -327,3 +327,9 @@ menu_af50_result|{s40}
 mno_af50_result_continue|继 续 赶 路 
 menu_af52_army|{s40}
 mno_af52_army_back|返 回 烽 烟 案 头 
+menu_af57_tax_level|包 下 本 镇 4 周 的 租 金 和 关 税 ， 5000 第 纳 尔 付 给 领 主 。 你 打 算 怎 么 收 ？ ^免 税 ： 你 一 文 不 收 ， 钱 留 在 城 里 ， 城 里 人 每 天 对 你 多 一 分 感 激 (好 感 +2／ 天 )。 ^低 税 ： 收 一 半 ， 另 一 半 留 在 城 里 (好 感 +1／ 天 )。 ^正 常 ： 照 领 主 平 常 的 数 收 。 ^重 税 ： 照 常 收 之 外 ， 再 从 城 镇 金 库 多 拿 一 半 (金 库 一 次 最 多 出 四 分 之 三 )， 城 里 人 会 恨 你 (好 感 − 1／ 天 )。 
+mno_af57_tax_free|免 税 
+mno_af57_tax_low|低 税 
+mno_af57_tax_normal|正 常 
+mno_af57_tax_heavy|重 税 
+mno_af57_tax_back|算 了 

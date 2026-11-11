@@ -897,5 +897,7 @@ script_af55_pay_project = 895
 script_af55_on_looted = 896
 script_af56_garrison_shortfall = 897
 script_af56_lord_squeeze = 898
+script_af57_buy_tax_farm = 899
+script_af57_daily_tax_mood = 900
 
 

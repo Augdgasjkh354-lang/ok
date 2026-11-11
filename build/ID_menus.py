@@ -273,3 +273,4 @@ menu_af51_lobby = 271
 menu_af50_crisis = 272
 menu_af50_result = 273
 menu_af52_army = 274
+menu_af57_tax_level = 275

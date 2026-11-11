@@ -28135,6 +28135,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
       (store_current_day, ":today"),
       (val_add, ":today", 28),
       (party_set_slot, ":town", slot_af30_tax_farm_day, ":today"),
+      (party_set_slot, ":town", slot_af57_tax_level, 0),  # v1.0 包税四档: 以税抵债按正常税率收
       (troop_get_slot, ":owed", "$g_talk_troop", slot_af19_lord_owes_player),
       (val_sub, ":owed", ":offset"),
       (val_max, ":owed", 0),
