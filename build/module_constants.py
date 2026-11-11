@@ -2136,6 +2136,8 @@ slot_af55_project_day     = 980  # village: day the project in 979 finishes whil
 slot_af57_tax_level       = 981  # town: tax-farm rate while 948 is running; 0 = normal (and old saves), 1 = no tax, 2 = low, 3 = heavy (2026-11-11)
 slot_af59_rebel_party     = 982  # p_main_party: the funded pretender's rebel band (party id); 0 = none. On the band party itself the same slot holds the pretender troop (marker, guards against reused party ids) (2026-11-11)
 slot_af59_rebel_next_day  = 983  # p_main_party: day a new rebel band may be raised after the last one was scattered (day+14); 0 = any time (2026-11-11)
+slot_af60_militia         = 984  # village: its avenging militia party (0 = none); on the militia party itself: the raider it hunts (2026-11-11)
+slot_af60_militia_size    = 985  # village: the militia's size when it set out; on the militia party itself: its home village (marker) (2026-11-11)
 slot_af26_license            = 902 # p_main_party: I1 mercenary license, 1 = licensed
 slot_af26_protect_day        = 903 # town: I5 next protection collection day+1; 0 = not protected
 slot_af26_sanctuary_day      = 904 # p_main_party: L5 sanctuary expiry (day+7); 0 = not in sanctuary

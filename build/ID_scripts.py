@@ -903,5 +903,8 @@ script_af58_purse = 901
 script_af58_purse_change = 902
 script_af59_rebel_daily = 903
 script_af59_rebel_pick_village = 904
+script_af60_village_rises = 905
+script_af60_militia_watch = 906
+script_af60_go_outlaw = 907
 
 

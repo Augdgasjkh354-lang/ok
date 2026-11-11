@@ -4650,4 +4650,9 @@ simple_triggers = [
   (24, [
     (call_script, "script_af59_rebel_daily"),
   ]),
+
+  # v1.0 民变: 每 3 小时看一次各村在外的民军 (追仇、落草)。
+  (3, [
+    (call_script, "script_af60_militia_watch"),
+  ]),
 ]
