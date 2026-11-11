@@ -2211,6 +2211,29 @@ simple_triggers = [
              (val_min, ":town_food_store", ":food_store_limit"),
              (party_set_slot, ":cur_ai_object", slot_party_food_store, ":town_food_store"),
 
+             # v1.0 经济1.0：农民卖货的货款。城镇金库付钱、村长收钱，数额相等；
+             # 金库一次最多出四分之一，村长手里已有 3000 以上就不再付（防村长钱袋无限膨胀）。
+             (party_get_slot, ":af_home", ":party_no", slot_party_home_center),
+             (try_begin),
+               (is_between, ":af_home", villages_begin, villages_end),
+               (party_get_slot, ":af_elder", ":af_home", slot_town_elder),
+               (gt, ":af_elder", 0),
+               (store_troop_gold, ":af_elder_gold", ":af_elder"),
+               (lt, ":af_elder_gold", 3000),
+               (party_get_slot, ":af_pros", ":af_home", slot_town_prosperity),
+               (val_clamp, ":af_pros", 0, 101),
+               (store_add, ":af_pay", ":af_pros", 40),
+               (party_get_slot, ":af_treasury", ":cur_ai_object", slot_town_wealth),
+               (gt, ":af_treasury", 0),
+               (store_div, ":af_cap", ":af_treasury", 4),
+               (val_min, ":af_pay", ":af_cap"),
+               (gt, ":af_pay", 0),
+               (call_script, "script_af13_village_purse", ":af_home", ":af_pay"),
+               (gt, reg0, 0),
+               (val_sub, ":af_treasury", reg0),
+               (party_set_slot, ":cur_ai_object", slot_town_wealth, ":af_treasury"),
+             (try_end),
+
              #Adding 1 to village prosperity
              (try_begin),
                (store_random_in_range, ":rand", 0, 100),
