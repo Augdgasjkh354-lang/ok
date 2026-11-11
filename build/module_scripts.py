@@ -22343,8 +22343,9 @@ scripts = [
         (party_set_extra_text, ":village_no", "@(Looted)"),
         
         (party_set_slot, ":village_no", slot_village_raided_by, -1),
-        (call_script, "script_change_center_prosperity", ":village_no", -60),
-        (val_add, "$newglob_total_prosperity_from_villageloot", -60),
+        # v1.0 玩家 2026-11-11 定: 原版劫空 -60 太狠 (繁荣 50 的村一劫归零, 约 1500 口人), 改 -20。
+        (call_script, "script_change_center_prosperity", ":village_no", -20),
+        (val_add, "$newglob_total_prosperity_from_villageloot", -20),
         
         (try_begin), #optional - lowers the relationship between a lord and his liege if his fief is looted
           (eq, 5, 0),
