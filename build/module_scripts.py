@@ -57551,6 +57551,8 @@ scripts = [
     (store_script_param, ":center", 1),
     (party_get_slot, ":total", ":center", slot_town_wealth),
     (val_max, ":total", 0),
+    (val_mul, ":total", 3),
+    (val_div, ":total", 4),  # 与 af14_pay_from_center 一致：金库只算四分之三
     (party_get_slot, ":lord", ":center", slot_town_lord),
     (try_begin),
       (is_between, ":lord", active_npcs_begin, active_npcs_end),
@@ -57580,8 +57582,10 @@ scripts = [
     (party_get_slot, ":have", ":center", slot_town_wealth),
     (try_begin),
       (gt, ":have", 0),
-      # v1.0 Codex 修复：金库一次最多出四分之一，剩下的走领主、国王、欠债链路，不把金库提空。
-      (store_div, ":cap", ":have", 4),
+      # v1.0 Codex 修复：金库一次最多出一部分，剩下的走领主、国王、欠债链路，不把金库提空。
+      # 2026-11-11 玩家定：城镇该付的钱，金库一次最多出四分之三（四分之一时现金根本兑不出来）。
+      (store_mul, ":cap", ":have", 3),
+      (val_div, ":cap", 4),
       (store_add, ":take", ":left", 0),
       (val_min, ":take", ":cap"),
       (val_sub, ":have", ":take"),
@@ -59472,7 +59476,8 @@ scripts = [
       (gt, ":count", 0),
       (store_mul, ":pay", ":count", 100),
       (party_get_slot, ":wealth", "$current_town", slot_town_wealth),
-      (store_div, ":cap", ":wealth", 4),
+      (store_mul, ":cap", ":wealth", 3),
+      (val_div, ":cap", 4),
       (val_min, ":pay", ":cap"),
       (gt, ":pay", 0),
       (val_sub, ":wealth", ":pay"),
@@ -59591,7 +59596,7 @@ scripts = [
   ]),
 
   ("af26_protect_collect", [
-    # v1.0 领主关系与独立玩法·第二波 I5: 收保护费。每周 300-800，从镇金库出，单次不超金库 1/4。
+    # v1.0 领主关系与独立玩法·第二波 I5: 收保护费。每周 300-800，从镇金库出，单次不超金库 3/4。
     # 附近 40 步内有活帮则停付并掉 2 点城镇好感，收取日顺延 1 天（明天再来）；金库空了也顺延 1 天。
     # 成功收钱则收取日顺延 7 天。reg0=收到的钱（0=没收到）；reg1 原因 0 成功／1 附近有帮／2 金库空了。参数 1: 城镇。
     (store_script_param, ":town", 1),
@@ -59619,7 +59624,8 @@ scripts = [
       (assign, reg1, 1),
     (else_try),
       (party_get_slot, ":wealth", ":town", slot_town_wealth),
-      (store_div, ":cap", ":wealth", 4),
+      (store_mul, ":cap", ":wealth", 3),
+      (val_div, ":cap", 4),
       (store_random_in_range, ":amount", 300, 801),
       (val_min, ":amount", ":cap"),
       (try_begin),
@@ -61008,7 +61014,7 @@ scripts = [
   # $supported_pretender, so this does not depend on it). On crowning, the
   # funded amount converts once to a refund due of 1.5x, stored NEGATIVE
   # (so later weeks know the conversion happened); each week pays
-  # min(remaining, 1/4 of the source) from the first town treasury of his
+  # min(remaining, 3/4 of the source) from the first town treasury of his
   # kingdom, falling back to 1/4 of his own wealth; shortfall is never
   # booked as debt, and an empty coffer pays 0 and retries next week.
   # Forfeit (only while 964 >= 0): the pretender is a prisoner, or his
@@ -61047,7 +61053,8 @@ scripts = [
         (try_begin),
           (gt, ":town", 0),
           (party_get_slot, ":treasury", ":town", slot_town_wealth),
-          (store_div, ":cap", ":treasury", 4),
+          (store_mul, ":cap", ":treasury", 3),
+          (val_div, ":cap", 4),
           (val_min, ":cap", ":due2"),
           (assign, ":pay", ":cap"),
           (gt, ":pay", 0),
@@ -61076,7 +61083,7 @@ scripts = [
             (party_set_slot, "p_main_party", slot_af33_funded_pretender, 0),
             (display_message, "@{s48}登基了，按说好的一倍半还你：这次给了 {reg41} 第纳尔，资助款已全部还清。", 0x66FF66),
           (else_try),
-            (display_message, "@{s48}登基了，按说好的一倍半还你：这次先给了 {reg41} 第纳尔，还剩 {reg42}，新王国库一次最多拿四分之一，下周再给。", 0x66FF66),
+            (display_message, "@{s48}登基了，按说好的一倍半还你：这次先给了 {reg41} 第纳尔，还剩 {reg42}，新王国库一次最多拿四分之三，下周再给。", 0x66FF66),
           (try_end),
         (else_try),
           (display_message, "@{s48}的新王国库眼下空空如也，这周还不上，下周再来要。", 0xFFCC66),

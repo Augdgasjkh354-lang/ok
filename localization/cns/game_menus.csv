@@ -201,10 +201,10 @@ mno_af28_quest_abandon|这 单 不 干 了
 mno_af28_quest_q2_settle|回 来 交 差 ： 走 私 货 已 经 送 到 了 
 mno_af28_quest_q4_settle|回 来 交 差 ： 那 座 村 子 已 经 劫 了 
 mno_af28_leave|离 开 
-menu_af31_bank|钱 庄 — — {s10}。 ^借 出 去 的 钱 每 周 生 1% 的 息 , 从 本 城 金 库 出 ; 本 金 也 可 以 在 这 里 收 回 , 一 次 最 多 拿 金 库 的 四 分 之 一 。 
+menu_af31_bank|钱 庄 — — {s10}。 ^借 出 去 的 钱 每 周 生 1% 的 息 , 从 本 城 金 库 出 , 金 库 不 够 由 城 主 、 国 王 补 , 再 不 够 就 滚 进 本 金 ; 本 金 也 可 以 在 这 里 收 回 , 金 库 一 次 最 多 出 四 分 之 三 , 不 够 的 由 城 主 、 国 王 补 。 
 mno_af31_bank_lend_1000|放 贷 给 本 城 商 人 ： 借 出 1000 第 纳 尔 
 mno_af31_bank_lend_3000|放 贷 给 本 城 商 人 ： 借 出 3000 第 纳 尔 
-mno_af31_bank_collect|收 回 本 金 {reg41} 第 纳 尔 （ 一 次 最 多 拿 金 库 的 四 分 之 一 ） 
+mno_af31_bank_collect|收 回 本 金 {reg41} 第 纳 尔 （ 金 库 出 四 分 之 三 以 内 ， 不 够 的 城 主 、 国 王 补 ） 
 mno_af31_bank_leave|离 开 钱 庄 
 menu_af33_loan_call|{s8}派 信 使 捎 话 来 , 请 你 去 见 他 一 面 。 ^{s9}
 mno_af33_loan_lord_500|借 他 500 第 纳 尔 。 

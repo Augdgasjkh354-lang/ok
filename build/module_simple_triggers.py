@@ -511,14 +511,15 @@ simple_triggers = [
          (try_end),
          # v1.0 资本家第二批 (条目 4): 入股分红, 股份记镇 Slot 947 (百分比 10/20/30)。
          # 本触发器只给非玩家据点发收入 (上面两行守卫), 玩家自己的城镇本来就不吃这条, 不会重复发。
-         # 分红 = 本周入账 :added_wealth 的股份比例, 单次不超金库 1/4; 金库不够只给实数, 不记欠账。
+         # 分红 = 本周入账 :added_wealth 的股份比例, 单次不超金库 3/4; 金库不够只给实数, 不记欠账。
          (try_begin),
            (party_get_slot, ":shares", ":center_no", slot_af30_town_shares),
            (gt, ":shares", 0),
            (store_mul, ":dividend", ":added_wealth", ":shares"),
            (val_div, ":dividend", 100),
            (gt, ":dividend", 0),
-           (store_div, ":cap", ":cur_wealth", 4),
+           (store_mul, ":cap", ":cur_wealth", 3),
+           (val_div, ":cap", 4),
            (val_min, ":dividend", ":cap"),
            (gt, ":dividend", 0),
            (val_sub, ":cur_wealth", ":dividend"),
@@ -545,7 +546,8 @@ simple_triggers = [
              (store_relation, ":inv_rel", ":inv_fac", ":town_fac"),
              (ge, ":inv_rel", 0),
              (store_div, ":npc_div", ":added_wealth", 10),
-             (store_div, ":cap", ":cur_wealth", 4),
+             (store_mul, ":cap", ":cur_wealth", 3),
+             (val_div, ":cap", 4),
              (val_min, ":npc_div", ":cap"),
              (gt, ":npc_div", 0),
              (val_sub, ":cur_wealth", ":npc_div"),
@@ -2230,7 +2232,8 @@ simple_triggers = [
                (assign, ":af_pay", reg0),
                (party_get_slot, ":af_treasury", ":cur_ai_object", slot_town_wealth),
                (gt, ":af_treasury", 0),
-               (store_div, ":af_cap", ":af_treasury", 2),
+               (store_mul, ":af_cap", ":af_treasury", 3),
+               (val_div, ":af_cap", 4),
                (val_min, ":af_pay", ":af_cap"),
                (gt, ":af_pay", 0),
                (call_script, "script_af13_village_purse", ":af_home", ":af_pay"),
@@ -4294,9 +4297,10 @@ simple_triggers = [
     (try_end),
   ]),
 
-  # v1.0 资本家第三批 (条目 7): 钱庄利息, 每周按未收回本金的 1% 从城镇金库出 (照原版 Slot 21 的 101/100 的 1% 利率, 单利按周付, 不滚入本金)。
+  # v1.0 资本家第三批 (条目 7): 钱庄利息, 每周按未收回本金的 1% 从城镇金库出 (照原版 Slot 21 的 101/100 的 1% 利率)。
+  # 2026-11-11 起付不出的利息滚入本金 (见下)。
   # Slot 950 存的是本金+1 (0 = 没开过钱庄, 1 = 开了但没有未收回的本金), 所以先减 1 才是本金。
-  # 单次不超金库 1/4 (照老规矩); 金库不够只给实数, 不记欠账 (利息不是欠账, 照 I2 悬赏的先例)。
+  # 付款走 af14_pay_from_center: 金库出四分之三以内, 不够的城主、国王补; 还付不出的滚入本金。
   # 不经过每周收入触发器的非玩家守卫: 玩家自己的城镇也照常付息, 所有城镇一视同仁。
   (24*7, [
     (try_for_range, ":center", towns_begin, towns_end),
@@ -4305,17 +4309,30 @@ simple_triggers = [
       (store_sub, ":principal", ":stored", 1),
       (store_div, ":interest", ":principal", 100),
       (gt, ":interest", 0),
-      (party_get_slot, ":treasury", ":center", slot_town_wealth),
-      (gt, ":treasury", 0),
-      (store_div, ":cap", ":treasury", 4),
-      (val_min, ":interest", ":cap"),
-      (gt, ":interest", 0),
-      (val_sub, ":treasury", ":interest"),
-      (party_set_slot, ":center", slot_town_wealth, ":treasury"),
-      (troop_add_gold, "trp_player", ":interest"),
+      # 2026-11-11 玩家定：金库出四分之三以内，不够的城主、国王补 (af14_pay_from_center)；
+      # 还付不出的利息滚进本金 (利滚利)，不再作废。
+      (call_script, "script_af14_pay_from_center", ":center", ":interest"),
+      (assign, ":paid", reg0),
+      (store_sub, ":unpaid", ":interest", ":paid"),
+      (try_begin),
+        (gt, ":unpaid", 0),
+        (val_add, ":stored", ":unpaid"),
+        (party_set_slot, ":center", slot_af31_bank_principal, ":stored"),
+      (try_end),
       (str_store_party_name, s44, ":center"),
-      (assign, reg44, ":interest"),
-      (display_message, "@{s44} 的钱庄放贷利息 {reg44} 第纳尔进了你的口袋。", 0xFFCC66),
+      (assign, reg44, ":paid"),
+      (assign, reg45, ":unpaid"),
+      (try_begin),
+        (gt, ":paid", 0),
+        (troop_add_gold, "trp_player", ":paid"),
+        (eq, ":unpaid", 0),
+        (display_message, "@{s44} 的钱庄放贷利息 {reg44} 第纳尔进了你的口袋。", 0xFFCC66),
+      (else_try),
+        (gt, ":paid", 0),
+        (display_message, "@{s44} 的钱庄只付得出 {reg44} 第纳尔利息，欠下的 {reg45} 滚进了本金。", 0xFFCC66),
+      (else_try),
+        (display_message, "@{s44} 的钱庄这周一文利息也付不出，{reg45} 第纳尔滚进了本金。", 0xFF9966),
+      (try_end),
     (try_end),
   ]),
 
