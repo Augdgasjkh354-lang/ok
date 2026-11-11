@@ -920,5 +920,9 @@ script_af63_rebel_one = 918
 script_af63_free_faction = 919
 script_af63_king_sponsors = 920
 script_af64_late_start = 921
+script_af65_pick_target = 922
+script_af65_rebel_evade = 923
+script_af65_find_invite = 924
+script_af65_lords_defect = 925
 
 

@@ -4696,4 +4696,26 @@ simple_triggers = [
   (24*7, [
     (call_script, "script_af63_king_sponsors"),
   ]),
+
+  # v1.0 称王者优化 B: 每 6 小时, 义军躲开打不过的大军。
+  (6, [
+    (call_script, "script_af65_rebel_evade"),
+  ]),
+
+  # v1.0 称王者优化 D: 每周, 原国心怀不满的领主暗中接济义军。
+  (24*7, [
+    (call_script, "script_af65_lords_defect"),
+  ]),
+
+  # v1.0 称王者优化 C: 每周, 坐大的称王者派人请玩家出山 (和借钱信使错开 3 天)。
+  (24*7, [
+    (store_current_day, ":today"),
+    (party_get_slot, ":loan", "p_main_party", slot_af33_loan_visit_day),
+    (store_sub, ":since_loan", ":today", ":loan"),
+    (this_or_next|eq, ":loan", 0),
+    (ge, ":since_loan", 3),
+    (call_script, "script_af65_find_invite"),
+    (ge, reg0, 0),
+    (jump_to_menu, "mnu_af65_invite"),
+  ]),
 ]

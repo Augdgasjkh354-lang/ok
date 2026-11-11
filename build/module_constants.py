@@ -2150,6 +2150,8 @@ slot_af63_band            = 993  # pretender troop: her rebel band party (0 none
 slot_af63_next_day        = 994  # pretender troop: day she may raise a band again; replaces p_main_party 983
 slot_af63_home            = 995  # pretender troop: the hall she left to lead the band; replaces p_main_party 991
 slot_af63_king_sponsor    = 996  # pretender troop: the enemy king secretly funding her (0 none)
+slot_af65_wins            = 997  # pretender troop: victories of her rebel band (caravans robbed, lords' war chests taken) (2026-11-11)
+slot_af65_invite_day      = 998  # pretender troop: day she may send for the player again to raise her banner (2026-11-11)
 slot_af26_license            = 902 # p_main_party: I1 mercenary license, 1 = licensed
 slot_af26_protect_day        = 903 # town: I5 next protection collection day+1; 0 = not protected
 slot_af26_sanctuary_day      = 904 # p_main_party: L5 sanctuary expiry (day+7); 0 = not in sanctuary

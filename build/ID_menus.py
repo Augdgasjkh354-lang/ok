@@ -276,3 +276,4 @@ menu_af52_army = 274
 menu_af57_tax_level = 275
 menu_af61_peace_call = 276
 menu_af61_siege_call = 277
+menu_af65_invite = 278
