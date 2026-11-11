@@ -4719,4 +4719,9 @@ simple_triggers = [
     (ge, reg0, 0),
     (jump_to_menu, "mnu_af65_invite"),
   ]),
+
+  # v1.0 村庄产业: 每周, 玩家买的牛下崽, 满了宰了卖。
+  (24*7, [
+    (call_script, "script_af66_cattle_weekly"),
+  ]),
 ]

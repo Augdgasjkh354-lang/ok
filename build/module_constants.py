@@ -2152,6 +2152,11 @@ slot_af63_home            = 995  # pretender troop: the hall she left to lead th
 slot_af63_king_sponsor    = 996  # pretender troop: the enemy king secretly funding her (0 none)
 slot_af65_wins            = 997  # pretender troop: victories of her rebel band (caravans robbed, lords' war chests taken) (2026-11-11)
 slot_af65_invite_day      = 998  # pretender troop: day she may send for the player again to raise her banner (2026-11-11)
+# 村庄产业可多次投资 (2026-11-11 玩家定)。以下都是村庄 Slot。
+slot_af66_week_tag        = 999   # village: (week+1)*10 + investments made that week (at most 3)
+slot_af66_mills           = 1000  # village: mills the player paid for that still stand
+slot_af66_herds           = 1001  # village: cattle herds (15 head each) the player bought that are still there
+slot_af66_fields          = 1002  # village: farmland plots (2500 acres each) the player paid for
 slot_af26_license            = 902 # p_main_party: I1 mercenary license, 1 = licensed
 slot_af26_protect_day        = 903 # town: I5 next protection collection day+1; 0 = not protected
 slot_af26_sanctuary_day      = 904 # p_main_party: L5 sanctuary expiry (day+7); 0 = not in sanctuary

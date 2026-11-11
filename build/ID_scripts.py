@@ -924,5 +924,9 @@ script_af65_pick_target = 922
 script_af65_rebel_evade = 923
 script_af65_find_invite = 924
 script_af65_lords_defect = 925
+script_af66_week_count = 926
+script_af66_can_invest = 927
+script_af66_invest = 928
+script_af66_cattle_weekly = 929
 
 
