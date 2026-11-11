@@ -509,6 +509,16 @@ simple_triggers = [
            (assign, ":cur_wealth", 0),
            (call_script, "script_af56_garrison_shortfall", ":center_no", ":af_short", ":af_wage"),
          (try_end),
+         # v1.0 城堡没有金库 (玩家 2026-11-11 定): 城堡本周的入账 (连旧存档里留在城堡的钱) 先付饷,
+         # 剩下的全归城主财产; 饷不够仍走上面的城主补、开小差。城堡没有入股, 下面的分红不会发生。
+         (try_begin),
+           (is_between, ":center_no", castles_begin, castles_end),
+           (gt, ":cur_wealth", 0),
+           (party_get_slot, ":af_lord", ":center_no", slot_town_lord),
+           (is_between, ":af_lord", active_npcs_begin, active_npcs_end),
+           (call_script, "script_af14_lord_wealth", ":af_lord", ":cur_wealth", 0),
+           (assign, ":cur_wealth", 0),
+         (try_end),
          # v1.0 资本家第二批 (条目 4): 入股分红, 股份记镇 Slot 947 (百分比 10/20/30)。
          # 本触发器只给非玩家据点发收入 (上面两行守卫), 玩家自己的城镇本来就不吃这条, 不会重复发。
          # 分红 = 本周入账 :added_wealth 的股份比例, 单次不超金库 3/4; 金库不够只给实数, 不记欠账。
@@ -634,13 +644,15 @@ simple_triggers = [
        (try_end),
        
        (try_for_range, ":unused", 0, ":num_hiring_rounds"),              
-         (party_get_slot, ":cur_wealth", ":center_no", slot_town_wealth),
+         # v1.0 城堡没有金库: 城镇花金库, 城堡花城主财产 (af58_purse / af58_purse_change)。
+         (call_script, "script_af58_purse", ":center_no"),
+         (assign, ":cur_wealth", reg0),
          (assign, ":hiring_budget", ":cur_wealth"),
          (val_div, ":hiring_budget", 2),
          (gt, ":hiring_budget", ":reinforcement_cost"),       
          (call_script, "script_cf_reinforce_party", ":center_no"),       
-         (val_sub, ":cur_wealth", ":reinforcement_cost"),
-         (party_set_slot, ":center_no", slot_town_wealth, ":cur_wealth"),
+         (store_sub, ":af_cost", 0, ":reinforcement_cost"),
+         (call_script, "script_af58_purse_change", ":center_no", ":af_cost"),
        (try_end),  
      (try_end),
 

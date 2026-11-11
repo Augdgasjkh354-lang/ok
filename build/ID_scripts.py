@@ -899,5 +899,7 @@ script_af56_garrison_shortfall = 897
 script_af56_lord_squeeze = 898
 script_af57_buy_tax_farm = 899
 script_af57_daily_tax_mood = 900
+script_af58_purse = 901
+script_af58_purse_change = 902
 
 
