@@ -17264,7 +17264,17 @@ game_menus = [
        (store_sub, reg41, ":stored", 1)],
       "去钱庄看看（未收回本金 {reg41} 第纳尔）",
       [(jump_to_menu, "mnu_af31_bank")]),
+     ("af54_market_entry", [(is_between, "$current_town", towns_begin, towns_end)],
+      "向商人打听行情", [(jump_to_menu, "mnu_af54_market")]),
      ("af34_trade_back", [], "返回城镇", [(jump_to_menu, "mnu_town")]),
+   ]),
+
+  # v1.0 经济1.0：城镇商情簿（只读）。
+  ("af54_market", 0,
+   "{s40}",
+   "none", [(call_script, "script_af54_market_text", "$current_town")],
+   [
+     ("af54_market_back", [], "返回", [(jump_to_menu, "mnu_af34_trade")]),
    ]),
 
   ("af34_war", 0,
