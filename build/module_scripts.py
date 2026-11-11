@@ -22286,8 +22286,11 @@ scripts = [
       (troop_ensure_inventory_space, ":merchant_troop", 80),
       
       #Adding 1 prosperity to the village while reducing each 3000 gold from the elder
+      # v1.0 玩家 2026-11-11 定: 村长换繁荣统一成每 200 换 1 点, 只留经济 1.0 那套 (每周触发器:
+      # 留 500 周转、每 200 换 1 点、每周最多 3 点)。原版这套 (超过 3500 时每 3000 换 1 点) 停用: (eq, 1, 0)。
       (store_troop_gold, ":gold",":merchant_troop"),
       (try_begin),
+        (eq, 1, 0),
         (gt, ":gold", 3500),
         (store_div, ":prosperity_added", ":gold", 3000),
         (store_mul, ":gold_removed", ":prosperity_added", 3000),
