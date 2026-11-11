@@ -2143,6 +2143,7 @@ slot_af61_relief_center   = 987  # p_main_party: besieged center the player prom
 slot_af61_relief_day      = 988  # p_main_party: while 987 > 0 the deadline day; otherwise the day the next relief call may come (2026-11-11)
 slot_af61_relief_lord     = 989  # p_main_party: the lord who asked for relief (pays on success) (2026-11-11)
 slot_af61_bribe_day       = 990  # lord troop: day he may buy his way past the player again (day+7); 0 = any time (2026-11-11)
+slot_af59_pretender_home  = 991  # p_main_party: the hall (slot_troop_cur_center) the funded pretender left to lead the rebel band; restored when the band is gone (2026-11-11)
 slot_af26_license            = 902 # p_main_party: I1 mercenary license, 1 = licensed
 slot_af26_protect_day        = 903 # town: I5 next protection collection day+1; 0 = not protected
 slot_af26_sanctuary_day      = 904 # p_main_party: L5 sanctuary expiry (day+7); 0 = not in sanctuary

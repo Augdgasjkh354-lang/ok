@@ -915,5 +915,6 @@ script_af61_relief_watch = 913
 script_af61_bribe_price = 914
 script_af62_special_party = 915
 script_af59_rebel_recruit = 916
+script_af59_pretender_home = 917
 
 

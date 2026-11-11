@@ -34,6 +34,7 @@ ALLOWED_DIALOG_CHANGES={'dlga_village_elder_donate:village_elder_pretalk',  # v1
 # v1.0 第六批（十）: arena prizes and ladies' quest rewards are paid from
 # real money too (town treasury / the lady's guardian).
 ALLOWED_DIALOG_CHANGES|={
+    'dlga_start:pretender_start', 'dlga_start:pretender_intro_1',  # v1.0 称王者带义军时走义军对话 (af62_special_party)
     'dlga_start:party_encounter_hostile_defender',  # v1.0 义军、民军: 通用开场白让开 (af62_special_party)
     'dlga_lord_propose_mercenary:lord_mercenary_service',  # v1.0 更聪明的领主和国王 C: 签约钱按国王吃紧程度 x1.5/x2
     'dlga_arena_master_fight_result:arena_master_pre_talk.2',

@@ -1449,6 +1449,7 @@ village_af55_done
 village_af55_repair_done
 af62_rebel_talk
 af62_rebel_funder
+af62_rebel_disband
 af62_rebel_bye
 af62_rebel_fight
 af62_militia_talk
