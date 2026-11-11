@@ -906,5 +906,12 @@ script_af59_rebel_pick_village = 904
 script_af60_village_rises = 905
 script_af60_militia_watch = 906
 script_af60_go_outlaw = 907
+script_af61_strength = 908
+script_af61_desperation = 909
+script_af61_find_peace_request = 910
+script_af61_broker_peace = 911
+script_af61_find_siege_call = 912
+script_af61_relief_watch = 913
+script_af61_bribe_price = 914
 
 

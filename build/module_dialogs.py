@@ -14352,6 +14352,10 @@ Hand over my {reg19} denars, if you please, and end our business together.", "lo
                                      (val_add, ":offer_value", 100),
                                      (call_script, "script_round_value", ":offer_value"),
                                      (assign, ":offer_value", reg0),
+                                     # v1.0 更聪明的领主和国王 C: 打得越惨, 签约钱越高 (x1.5 / x2)。
+                                     (call_script, "script_af61_desperation", "$g_talk_troop_faction"),
+                                     (val_mul, ":offer_value", reg0),
+                                     (val_div, ":offer_value", 100),
                                      (assign, "$temp", ":offer_value"),
                                      (faction_get_slot, ":faction_leader", "$g_talk_troop_faction", slot_faction_leader),
                                      (neq, ":faction_leader", "$g_talk_troop"),

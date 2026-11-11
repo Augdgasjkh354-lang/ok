@@ -2138,6 +2138,11 @@ slot_af59_rebel_party     = 982  # p_main_party: the funded pretender's rebel ba
 slot_af59_rebel_next_day  = 983  # p_main_party: day a new rebel band may be raised after the last one was scattered (day+14); 0 = any time (2026-11-11)
 slot_af60_militia         = 984  # village: its avenging militia party (0 = none); on the militia party itself: the raider it hunts (2026-11-11)
 slot_af60_militia_size    = 985  # village: the militia's size when it set out; on the militia party itself: its home village (marker) (2026-11-11)
+slot_af61_peace_call_day  = 986  # p_main_party: day the next "broker our peace" messenger may come (day+30); 0 = any time (2026-11-11)
+slot_af61_relief_center   = 987  # p_main_party: besieged center the player promised to relieve; 0 = none (2026-11-11)
+slot_af61_relief_day      = 988  # p_main_party: while 987 > 0 the deadline day; otherwise the day the next relief call may come (2026-11-11)
+slot_af61_relief_lord     = 989  # p_main_party: the lord who asked for relief (pays on success) (2026-11-11)
+slot_af61_bribe_day       = 990  # lord troop: day he may buy his way past the player again (day+7); 0 = any time (2026-11-11)
 slot_af26_license            = 902 # p_main_party: I1 mercenary license, 1 = licensed
 slot_af26_protect_day        = 903 # town: I5 next protection collection day+1; 0 = not protected
 slot_af26_sanctuary_day      = 904 # p_main_party: L5 sanctuary expiry (day+7); 0 = not in sanctuary

@@ -15,6 +15,7 @@ mno_af05_cheat_entry|烽 烟 与 暗 流 · 政 治 战 争 联 动 （ v0.5）
 mno_af04_cheat_entry|烽 烟 与 暗 流 · 匪 帮 网 络 测 试 （ v0.4） 
 mno_af03_cheat_entry|烽 烟 与 暗 流 · 战 争 承 包 商 测 试 （ v0.3） 
 mno_af20_demand_surrender|勒 令 他 们 放 下 武 器 
+mno_af61_take_bribe|{s4}愿 出 {reg41} 第 纳 尔 买 路 ， 收 下 放 他 走 
 mno_af26_sanctuary_entry|以 受 庇 护 者 的 身 份 求 见 城 主 （ 领 主 好 感 ≥ 40） 
 mno_af06_siege_ops_entry|围 城 暗 战 ： 侦 察 、 破 坏 粮 仓 与 策 反 守 军 
 mno_af06_defender_supply|将 随 身 四 袋 谷 物 秘 密 送 入 守 城 粮 仓 
@@ -333,3 +334,12 @@ mno_af57_tax_low|低 税
 mno_af57_tax_normal|正 常 
 mno_af57_tax_heavy|重 税 
 mno_af57_tax_back|算 了 
+menu_af61_peace_call|{s11}的 信 使 赶 到 你 的 营 地 ： 『 {s12}和 {s13}这 仗 再 打 下 去 ， 国 就 要 亡 了 。 您 跟 两 位 陛 下 都 说 得 上 话 ， 求 您 出 面 ， 让 {s13}停 手 。 陛 下 说 了 ， 您 开 个 价 。 』 ^（ 停 战 四 十 天 。 你 要 的 价 钱 ， 一 半 归 你 、 一 半 归 {s13}当 赔 款 ， 都 由 {s12}分 期 付 清 。 ） 
+mno_af61_peace_10k|一 万 第 纳 尔 
+mno_af61_peace_20k|两 万 第 纳 尔 
+mno_af61_peace_40k|四 万 第 纳 尔 
+mno_af61_peace_free|分 文 不 取 ， 我 去 谈 
+mno_af61_peace_no|这 事 我 不 掺 和 
+menu_af61_siege_call|一 个 浑 身 是 土 的 信 使 找 到 你 ： 『 {s10}被 围 了 好 几 天 了 。 {s11}大 人 请 您 七 天 之 内 带 兵 来 解 围 ， 事 成 之 后 奉 上 {reg41} 第 纳 尔 。 』 
+mno_af61_siege_yes|我 去 。 
+mno_af61_siege_no|我 脱 不 开 身 。 

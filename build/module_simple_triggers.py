@@ -4655,4 +4655,40 @@ simple_triggers = [
   (3, [
     (call_script, "script_af60_militia_watch"),
   ]),
+
+  # v1.0 更聪明的领主和国王 ①: 每周, 劣势国王派信使请玩家斡旋停战 (30 天最多一次, 和借钱信使错开 3 天)。
+  (24*7, [
+    (store_current_day, ":today"),
+    (party_get_slot, ":next", "p_main_party", slot_af61_peace_call_day),
+    (ge, ":today", ":next"),
+    (party_get_slot, ":loan", "p_main_party", slot_af33_loan_visit_day),
+    (store_sub, ":since_loan", ":today", ":loan"),
+    (this_or_next|eq, ":loan", 0),
+    (ge, ":since_loan", 3),
+    (call_script, "script_af61_find_peace_request"),
+    (ge, reg0, 0),
+    (store_add, ":next", ":today", 30),
+    (party_set_slot, "p_main_party", slot_af61_peace_call_day, ":next"),
+    (jump_to_menu, "mnu_af61_peace_call"),
+  ]),
+
+  # v1.0 更聪明的领主和国王 A: 每天, 被围的城主派人请玩家解围 (同时只有一个约, 结束后 14 天才有下一个)。
+  (24, [
+    (party_slot_eq, "p_main_party", slot_af61_relief_center, 0),
+    (store_current_day, ":today"),
+    (party_get_slot, ":next", "p_main_party", slot_af61_relief_day),
+    (ge, ":today", ":next"),
+    (party_get_slot, ":loan", "p_main_party", slot_af33_loan_visit_day),
+    (store_sub, ":since_loan", ":today", ":loan"),
+    (this_or_next|eq, ":loan", 0),
+    (ge, ":since_loan", 3),
+    (call_script, "script_af61_find_siege_call"),
+    (ge, reg0, 0),
+    (jump_to_menu, "mnu_af61_siege_call"),
+  ]),
+
+  # v1.0 更聪明的领主和国王 A: 每 3 小时看一次解围之约。
+  (3, [
+    (call_script, "script_af61_relief_watch"),
+  ]),
 ]
