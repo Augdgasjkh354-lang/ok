@@ -228,10 +228,10 @@ dlga_lord_talk_court:af53_treaty_reply|陛 下 ， {s4}撑 不 住 了 。 我 �
 dlga_af53_treaty_reply:lord_talk_court|好 。 {s4}肯 认 这 笔 账 ， 这 仗 就 先 停 下 。 四 周 之 内 ， 一 个 子 儿 也 不 能 少 。 
 dlga_af53_treaty_reply:lord_talk_court.1|这 事 已 经 变 了 ， 再 说 吧 。 
 dlga_af53_treaty_reply:lord_talk_court.2|这 事 已 经 变 了 ， 再 说 吧 。 
-dlga_village_elder_talk:village_af54_offer|我 想 出 钱 给 村 里 添 一 样 产 业 。 
-dlga_village_af54_offer:village_af54_choose|您 肯 出 钱 ？ 能 干 的 事 倒 是 不 少 ： 往 荒 坡 上 开 些 田 多 种 麦 子 ， 添 一 座 磨 坊 ， 或 者 再 买 些 牛 。 工 钱 料 钱 都 花 在 村 里 人 身 上 ， 七 天 上 下 就 能 弄 好 。 您 看 做 哪 一 样 ？ 
-dlga_village_af54_choose:village_af54_done|开 垦 农 田 (2500 第 纳 尔 )： 多 打 些 麦 子 。 
-dlga_village_af54_choose:village_af54_done.1|增 建 磨 坊 (3000 第 纳 尔 )： 多 出 面 包 ， 也 多 吃 进 麦 子 。 
-dlga_village_af54_choose:village_af54_done.2|扩 大 牛 群 (2500 第 纳 尔 )： 多 出 肉 、 奶 酪 和 皮 子 。 
-dlga_village_af54_choose:village_elder_pretalk|算 了 ， 先 不 弄 。 
-dlga_village_af54_done:village_elder_pretalk|好 ， 明 天 就 叫 人 开 工 。 弄 好 了 ， 往 后 村 里 的 出 产 就 不 一 样 了 。 
+dlga_village_elder_talk:village_af55_offer|我 想 出 钱 给 村 里 添 一 样 产 业 。 
+dlga_village_af55_offer:village_af55_choose|您 肯 出 钱 ？ 能 干 的 事 倒 是 不 少 ： 往 荒 坡 上 开 些 田 多 种 麦 子 ， 添 一 座 磨 坊 ， 或 者 再 买 些 牛 。 工 钱 给 村 里 人 ， 石 料 、 农 具 和 牲 口 得 去 城 里 买 ， 七 天 上 下 就 能 弄 好 。 您 看 做 哪 一 样 ？ 
+dlga_village_af55_choose:village_af55_done|开 垦 农 田 (2500 第 纳 尔 )： 多 打 些 麦 子 。 
+dlga_village_af55_choose:village_af55_done.1|增 建 磨 坊 (3000 第 纳 尔 )： 多 出 面 包 ， 也 多 吃 进 麦 子 。 
+dlga_village_af55_choose:village_af55_done.2|扩 大 牛 群 (2500 第 纳 尔 )： 多 出 肉 、 奶 酪 和 皮 子 。 
+dlga_village_af55_choose:village_elder_pretalk|算 了 ， 先 不 弄 。 
+dlga_village_af55_done:village_elder_pretalk|好 ， 明 天 就 叫 人 开 工 。 弄 好 了 ， 往 后 村 里 的 出 产 就 不 一 样 了 。 

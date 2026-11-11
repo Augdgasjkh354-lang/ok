@@ -886,7 +886,13 @@ script_af52_appeal = 884
 script_af53_treaty_target = 885
 script_af53_sign_treaty = 886
 script_af53_weekly_reparations = 887
-script_af54_war_demand = 888
-script_af54_finish_projects = 889
+script_af54_market_text = 888
+script_af54_find_reinforce = 889
+script_af54_do_reinforce = 890
+script_af54_import_pressure = 891
+script_af54_village_goods_value = 892
+script_af55_war_demand = 893
+script_af55_finish_projects = 894
+script_af55_pay_project = 895
 
 

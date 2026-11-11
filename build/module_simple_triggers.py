@@ -2211,6 +2211,27 @@ simple_triggers = [
              (val_min, ":town_food_store", ":food_store_limit"),
              (party_set_slot, ":cur_ai_object", slot_party_food_store, ":town_food_store"),
 
+             # v1.0 经济1.0：农民卖货的货款，按市价算。城镇金库付、村长收，数额相等。
+             # 货款 = 本村各贸易商品的产量 × 物品基础价 × 本城该商品价格因子/1000，再除以 10（折成一趟的量）。
+             # 村子被劫时产量为 0，货款自然为 0。金库一次最多出二分之一；村长钱袋不设上限。
+             (party_get_slot, ":af_home", ":party_no", slot_party_home_center),
+             (try_begin),
+               (is_between, ":af_home", villages_begin, villages_end),
+               (party_get_slot, ":af_elder", ":af_home", slot_town_elder),
+               (gt, ":af_elder", 0),
+               (call_script, "script_af54_village_goods_value", ":af_home", ":cur_ai_object"),
+               (assign, ":af_pay", reg0),
+               (party_get_slot, ":af_treasury", ":cur_ai_object", slot_town_wealth),
+               (gt, ":af_treasury", 0),
+               (store_div, ":af_cap", ":af_treasury", 2),
+               (val_min, ":af_pay", ":af_cap"),
+               (gt, ":af_pay", 0),
+               (call_script, "script_af13_village_purse", ":af_home", ":af_pay"),
+               (gt, reg0, 0),
+               (val_sub, ":af_treasury", reg0),
+               (party_set_slot, ":cur_ai_object", slot_town_wealth, ":af_treasury"),
+             (try_end),
+
              #Adding 1 to village prosperity
              (try_begin),
                (store_random_in_range, ":rand", 0, 100),
@@ -4552,8 +4573,30 @@ simple_triggers = [
     (call_script, "script_af53_weekly_reparations"),
   ]),
 
+  # v1.0 经济1.0：村长把攒下的钱投进村子，每 200 第纳尔换 1 点繁荣（约 25 口人）。
+  # 村长身上留 500 周转，每周最多换 3 点；只在村子正常时投（被劫、洗劫、恢复中不投）；
+  # 钱花在开荒、盖屋、添农具上，从村长身上扣掉。繁荣涨了，产量和领主每周的租金都跟着涨（原版逻辑）。
+  (24*7, [
+    (try_for_range, ":village", villages_begin, villages_end),
+      (party_slot_eq, ":village", slot_village_state, svs_normal),
+      (party_get_slot, ":elder", ":village", slot_town_elder),
+      (gt, ":elder", 0),
+      (store_troop_gold, ":gold", ":elder"),
+      (val_sub, ":gold", 500),
+      (gt, ":gold", 0),
+      (store_div, ":points", ":gold", 200),
+      (val_min, ":points", 3),
+      (gt, ":points", 0),
+      (party_get_slot, ":pros", ":village", slot_town_prosperity),
+      (lt, ":pros", 200),
+      (store_mul, ":cost", ":points", 200),
+      (troop_remove_gold, ":elder", ":cost"),
+      (call_script, "script_change_center_prosperity", ":village", ":points"),
+    (try_end),
+  ]),
+
   # v1.0 经济 2.0 第一批: 村庄产业每天看一次是否完工。
   (24, [
-    (call_script, "script_af54_finish_projects"),
+    (call_script, "script_af55_finish_projects"),
   ]),
 ]
