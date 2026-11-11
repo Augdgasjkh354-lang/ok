@@ -889,5 +889,6 @@ script_af53_weekly_reparations = 887
 script_af54_market_text = 888
 script_af54_find_reinforce = 889
 script_af54_do_reinforce = 890
+script_af54_import_pressure = 891
 
 

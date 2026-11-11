@@ -14420,6 +14420,10 @@ scripts = [
       (try_for_range, ":center_no", towns_begin, towns_end),
         (call_script, "script_af17_grain_price_pressure", ":center_no"),
       (try_end),
+      # v1.0 经济1.0 第二批：大商队很久不来的城镇，本地产不够的进口货慢慢涨价（同样在归一化之前）。
+      (try_for_range, ":center_no", towns_begin, towns_end),
+        (call_script, "script_af54_import_pressure", ":center_no"),
+      (try_end),
       
       (try_for_range, ":cur_good", trade_goods_begin, trade_goods_end),
         (assign, ":total_price", 0),
@@ -64272,10 +64276,10 @@ scripts = [
     (store_script_param, ":town", 1),
     (str_clear, s40),
     (store_sub, ":off", slot_town_trade_good_prices_begin, trade_goods_begin),
-    # --- 找最贵（≥130）和最便宜（≤75）的商品 ---
-    (assign, ":hi_good", -1), (assign, ":hi_price", 129),
-    (assign, ":hi2_good", -1), (assign, ":hi2_price", 129),
-    (assign, ":lo_good", -1), (assign, ":lo_price", 76),
+    # --- 找最贵（价格因子 ≥1300）和最便宜（≤750）的商品（基准 average_price_factor=1000）---
+    (assign, ":hi_good", -1), (assign, ":hi_price", 1299),
+    (assign, ":hi2_good", -1), (assign, ":hi2_price", 1299),
+    (assign, ":lo_good", -1), (assign, ":lo_price", 751),
     (try_for_range, ":good", trade_goods_begin, trade_goods_end),
       (store_add, ":ps", ":good", ":off"),
       (party_get_slot, ":price", ":town", ":ps"),
@@ -64451,6 +64455,41 @@ scripts = [
       (assign, ":done", ":n"),
     (try_end),
     (assign, reg0, ":done"),
+  ]),
+
+  # ========== v1.0 经济1.0 第二批：商路断供的进口货涨价 ==========
+  # 大商队超过 21 天没来成交（af41_trade_gap），本地产量低于消费量的贸易商品（粮食另有粮仓逻辑，不算）
+  # 每 72 小时多涨一点：21 天以上 +8，42 天以上 +16（价格因子，基准 1000）；已经到 2000 以上不再推。
+  # 原版每轮会把价格往 1000 拉回 4%，所以长期稳态最多比平价高约两成到四成，不会顶到上限。
+  ("af54_import_pressure", [
+    (store_script_param, ":town", 1),
+    (call_script, "script_af41_trade_gap", ":town"),
+    (assign, ":gap", reg0),
+    (assign, ":push", 0),
+    (try_begin),
+      (gt, ":gap", 42),
+      (assign, ":push", 16),
+    (else_try),
+      (gt, ":gap", 21),
+      (assign, ":push", 8),
+    (try_end),
+    (try_begin),
+      (gt, ":push", 0),
+      (try_for_range, ":good", trade_goods_begin, trade_goods_end),
+        (neq, ":good", "itm_grain"),
+        (call_script, "script_center_get_production", ":town", ":good"),
+        (assign, ":prod", reg0),
+        (call_script, "script_center_get_consumption", ":town", ":good"),
+        (lt, ":prod", reg0),
+        (store_sub, ":slot", ":good", trade_goods_begin),
+        (val_add, ":slot", slot_town_trade_good_prices_begin),
+        (party_get_slot, ":price", ":town", ":slot"),
+        (lt, ":price", 2000),
+        (val_add, ":price", ":push"),
+        (val_clamp, ":price", minimum_price_factor, maximum_price_factor),
+        (party_set_slot, ":town", ":slot", ":price"),
+      (try_end),
+    (try_end),
   ]),
 
 ]
