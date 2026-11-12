@@ -2157,6 +2157,8 @@ slot_af66_week_tag        = 999   # village: (week+1)*10 + investments made that
 slot_af66_mills           = 1000  # village: mills the player paid for that still stand
 slot_af66_herds           = 1001  # village: cattle herds (15 head each) the player bought that are still there
 slot_af66_fields          = 1002  # village: farmland plots (2500 acres each) the player paid for
+# 称王者会打仗、收领主 (2026-11-12 玩家定)。领主 Troop Slot。
+slot_af68_joined_pretender = 1003  # lord troop: the pretender he openly went over to (0 none); he is in fac_outlaws with no party until her band is gone
 slot_af26_license            = 902 # p_main_party: I1 mercenary license, 1 = licensed
 slot_af26_protect_day        = 903 # town: I5 next protection collection day+1; 0 = not protected
 slot_af26_sanctuary_day      = 904 # p_main_party: L5 sanctuary expiry (day+7); 0 = not in sanctuary

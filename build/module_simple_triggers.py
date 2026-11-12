@@ -4701,11 +4701,13 @@ simple_triggers = [
   # v1.0 称王者优化 B: 每 6 小时, 义军躲开打不过的大军。
   (6, [
     (call_script, "script_af65_rebel_evade"),
+    (call_script, "script_af68_rebel_hunt"),
   ]),
 
   # v1.0 称王者优化 D: 每周, 原国心怀不满的领主暗中接济义军。
   (24*7, [
     (call_script, "script_af65_lords_defect"),
+    (call_script, "script_af68_lords_join"),
   ]),
 
   # v1.0 称王者优化 C: 每周, 坐大的称王者派人请玩家出山 (和借钱信使错开 3 天)。
