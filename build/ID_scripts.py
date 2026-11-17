@@ -977,5 +977,9 @@ script_af84_spend_wages = 975
 script_af84_remit_weekly = 976
 script_af85_price_level = 977
 script_af86_stipend = 978
+script_af87_folk_max = 979
+script_af87_folk = 980
+script_af87_folk_add = 981
+script_af87_folk_weekly = 982
 
 

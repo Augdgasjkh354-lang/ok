@@ -2353,10 +2353,8 @@ simple_triggers = [
                (val_min, ":af_spend", 1000),
                (gt, ":af_spend", 0),
                (troop_remove_gold, ":af_elder", ":af_spend"),
-               # 2026-11-17 城镇一个钱袋：直接进金库。
-               (party_get_slot, ":af_tw", ":cur_ai_object", slot_town_wealth),
-               (val_add, ":af_tw", ":af_spend"),
-               (party_set_slot, ":cur_ai_object", slot_town_wealth, ":af_tw"),
+               # 2026-11-17 镇民钱袋：村民的钱花在城里铺子，先到老百姓手里（满了进金库）。
+               (call_script, "script_af87_folk_add", ":cur_ai_object", ":af_spend"),
                (party_get_slot, ":af_rec", ":cur_ai_object", slot_af74_villager_spend),
                (val_add, ":af_rec", ":af_spend"),
                (party_set_slot, ":cur_ai_object", slot_af74_villager_spend, ":af_rec"),
@@ -4951,5 +4949,10 @@ simple_triggers = [
   # v1.0 领主兵饷寄回老家: 每周把各王国攒下的寄回钱平均分给本国村子（af84_remit_weekly）。
   (24*7, [
     (call_script, "script_af84_remit_weekly"),
+  ]),
+
+  # v1.0 镇民钱袋: 每周看百姓手头紧不紧，连续两周不到一半就有人搬回乡下（af87_folk_weekly）。
+  (24*7, [
+    (call_script, "script_af87_folk_weekly"),
   ]),
 ]
