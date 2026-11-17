@@ -69613,4 +69613,21 @@ scripts = [
       (display_message, "@你和{s44}的关系 +{reg44}（现在 {reg45}）。", 0x66FF66),
     (try_end),
   ]),
+
+  # v1.0 城镇金库太穷（2026-11-17 玩家定）：每周把镇民钱袋的二十分之一转进城镇金库（城里人交的捐、规费）。
+  # 钱从镇民钱袋出（af87_folk_add 实扣多少进多少），不凭空生。在 af87_folk_weekly 之后跑，本周的贫富判定按转之前算。
+  ("af98_folk_to_treasury", [
+    (try_for_range, ":town", towns_begin, towns_end),
+      (call_script, "script_af87_folk", ":town"),
+      (store_div, ":take", reg0, 20),
+      (gt, ":take", 0),
+      (store_sub, ":neg", 0, ":take"),
+      (call_script, "script_af87_folk_add", ":town", ":neg"),
+      (store_sub, ":got", 0, reg0),
+      (gt, ":got", 0),
+      (party_get_slot, ":w", ":town", slot_town_wealth),
+      (val_add, ":w", ":got"),
+      (party_set_slot, ":town", slot_town_wealth, ":w"),
+    (try_end),
+  ]),
 ]

@@ -5009,6 +5009,7 @@ simple_triggers = [
   # v1.0 镇民钱袋: 每周看百姓手头紧不紧，连续两周不到一半就有人搬回乡下（af87_folk_weekly）。
   (24*7, [
     (call_script, "script_af87_folk_weekly"),
+    (call_script, "script_af98_folk_to_treasury"),  # 2026-11-17：镇民钱袋 1/20 进金库
   ]),
 
   # v1.0 村民钱袋: 每周看村民手头紧不紧，领主救急、讨赈济，连续两周不到一半就有人进城（af89_village_weekly）。

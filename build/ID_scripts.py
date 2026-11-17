@@ -996,5 +996,6 @@ script_af94_militia_home = 994
 script_af95_emigrate = 995
 script_af96_take_over = 996
 script_af97_gift_relation = 997
+script_af98_folk_to_treasury = 998
 
 
