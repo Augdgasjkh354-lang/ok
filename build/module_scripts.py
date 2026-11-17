@@ -66664,29 +66664,9 @@ scripts = [
   # 避免每人一条提示刷屏，也不吃仁名的双倍加成；每次结算只出一条汇总提示。
   ("af69_realm_mood", [
     (store_script_param, ":mode", 1),
-    # 宽限期：称王后前 30 天不生效。原版不记称王的日子，所以由本脚本第一次看到玩家是国王时记下（Slot 1006 = 当天 + 30）；
-    # 不再是国王时清零，以后再称王重新算。旧存档里已经称王的，从装上这一版那天起算 30 天。
-    (call_script, "script_af49_is_player_king"),
-    (assign, ":king", reg0),
-    (store_current_day, ":day0"),
     (try_begin),
-      (eq, ":king", 0),
-      (party_set_slot, "p_main_party", slot_af69_grace_day, 0),
-    (else_try),
-      (party_slot_eq, "p_main_party", slot_af69_grace_day, 0),
-      (store_add, ":grace", ":day0", 30),
-      (party_set_slot, "p_main_party", slot_af69_grace_day, ":grace"),
-    (try_end),
-    (try_begin),
-      (eq, ":king", 1),
-      (eq, ":mode", 1),
-      (party_slot_eq, "p_main_party", slot_af69_grace_day, ":day0"),
-      (display_message, "@称王满三十天了，封臣们开始看你怎么分地。"),
-    (try_end),
-    (try_begin),
-      (eq, ":king", 1),
-      (party_get_slot, ":grace", "p_main_party", slot_af69_grace_day),
-      (ge, ":day0", ":grace"),
+      (call_script, "script_af49_is_player_king"),
+      (eq, reg0, 1),
       # 分母：王国已经占有的据点；分子：其中玩家自己握着的（封主是玩家，或还没分封出去的）。
       (assign, ":mine", 0),
       (assign, ":total", 0),
