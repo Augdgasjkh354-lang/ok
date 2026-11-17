@@ -517,16 +517,21 @@ simple_triggers = [
            (is_between, ":af77_fac", kingdoms_begin, kingdoms_end),
            (faction_get_slot, ":af77_king", ":af77_fac", slot_faction_leader),
            (neg|party_slot_eq, ":center_no", slot_town_lord, ":af77_king"),
+           # 税率：你当国王时按「税收」国策（轻 5、中 10、重 20），其余王国一律 10（af79_tax_rate）。
+           (call_script, "script_af79_tax_rate", ":af77_fac"),
+           (assign, ":af77_rate", reg0),
            (assign, ":af77_tax", 0),
            (store_sub, ":af77_left", ":cur_wealth", ":af_wage"),
            (try_begin),
              (ge, ":af77_left", 2000),
-             (store_div, ":af77_tax", ":added_wealth", 10),
+             (store_mul, ":af77_tax", ":added_wealth", ":af77_rate"),
+             (val_div, ":af77_tax", 100),
            (try_end),
            (try_begin),
              (gt, ":cur_wealth", 10000),
              (store_sub, ":af77_rich", ":cur_wealth", 10000),
-             (val_div, ":af77_rich", 10),
+             (val_mul, ":af77_rich", ":af77_rate"),
+             (val_div, ":af77_rich", 100),
              (val_add, ":af77_tax", ":af77_rich"),
            (try_end),
            (val_min, ":af77_tax", ":cur_wealth"),
@@ -611,6 +616,20 @@ simple_triggers = [
          (gt, ":af77_to_player", 0),
          (assign, reg44, ":af77_to_player"),
          (display_message, "@各地封臣的城堡、城镇按规矩交来了本周的王室税，共 {reg44} 第纳尔。", 0xFFCC66),
+         # 国策「拨款给谁」：把一半拨出去（af79_allocate）。
+         (call_script, "script_af79_allocate", ":af77_to_player"),
+         (gt, reg0, 0),
+         (assign, reg44, reg0),
+         (party_get_slot, ":af79_g", "p_main_party", slot_af79_grant_policy),
+         (try_begin),
+           (eq, ":af79_g", 1),
+           (display_message, "@按国策，其中 {reg44} 第纳尔拨给了最缺钱的几位封臣。", 0xFFCC66),
+         (else_try),
+           (eq, ":af79_g", 2),
+           (display_message, "@按国策，其中 {reg44} 第纳尔拨给了最穷的几个村子。", 0xFFCC66),
+         (else_try),
+           (display_message, "@按国策，其中 {reg44} 第纳尔拨给了最富庶的两座城。", 0xFFCC66),
+         (try_end),
        (try_end),
     ]),
 
@@ -4885,5 +4904,10 @@ simple_triggers = [
   (24*7, [
     (call_script, "script_af78_town_invest_weekly"),
     (call_script, "script_af78_village_loans_weekly"),
+  ]),
+
+  # v1.0 国策「税收」: 每周轻税 +1、重税 -1 本国城乡对你的好感（af79_tax_mood_weekly）。
+  (24*7, [
+    (call_script, "script_af79_tax_mood_weekly"),
   ]),
 ]

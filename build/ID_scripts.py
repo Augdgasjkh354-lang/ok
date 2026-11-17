@@ -954,5 +954,8 @@ script_af78_village_invest_weekly = 952
 script_af78_town_invest_weekly = 953
 script_af78_merchant_float = 954
 script_af78_pool_merchants = 955
+script_af79_tax_rate = 956
+script_af79_tax_mood_weekly = 957
+script_af79_allocate = 958
 
 

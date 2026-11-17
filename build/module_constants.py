@@ -2222,3 +2222,7 @@ slot_af68_loan_owed          = 1004 # p_main_party: principal + interest owed (f
 slot_af68_loan_day           = 1005 # p_main_party: if 1003 > 0: due day (borrow day + 30); else: day the player may borrow again; 0 = never borrowed
 slot_af26_borrow_troop       = 1012 # p_main_party: L1 borrowed troop type, recorded when lending (fixes the lender changing faction mid-loan); 0 = no loan / old save
 slot_af78_village_loan       = 1013 # village: principal the player has lent to the village (interest 1%/week, unpaid interest rolls in); 0 = none
+slot_af79_tax_policy         = 1014 # p_main_party: player-king tax policy: 0 = normal (10%), 1 = light (5%), 2 = heavy (20%)
+slot_af79_tax_policy_day     = 1015 # p_main_party: day the tax policy may change again (day+30); 0 = any time
+slot_af79_grant_policy       = 1016 # p_main_party: player-king grant policy: 0 = keep it all, 1 = vassals, 2 = relieve the poor, 3 = strengthen the rich
+slot_af79_grant_policy_day   = 1017 # p_main_party: day the grant policy may change again (day+30); 0 = any time
