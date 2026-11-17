@@ -454,12 +454,21 @@ simple_triggers = [
   #Adding net incomes to centers (once a week)
   (24*7,
    [
+       (store_troop_gold, ":af86_before", "trp_player"),  # v1.0 你当国王时给封臣的补贴（af86_stipend）
        (try_for_range, ":troop_no", active_npcs_begin, active_npcs_end),
          (troop_get_slot, ":cur_debt", ":troop_no", slot_troop_player_debt),#Increasing debt
          (val_mul, ":cur_debt", 101),
          (val_div, ":cur_debt", 100),
          (troop_set_slot, ":troop_no", slot_troop_player_debt, ":cur_debt"),
          (call_script, "script_calculate_hero_weekly_net_income_and_add_to_wealth", ":troop_no"),#Adding net income
+       (try_end),
+       (try_begin),
+         (store_troop_gold, ":af86_after", "trp_player"),
+         (store_sub, ":af86_paid", ":af86_before", ":af86_after"),
+         (gt, ":af86_paid", 0),
+         (assign, reg44, ":af86_paid"),
+         (store_div, reg45, ":af86_paid", 200),
+         (display_message, "@本周你给 {reg45} 位封臣各发了 200 第纳尔补贴，共 {reg44} 第纳尔。", 0xFFCC66),
        (try_end),
            
        (assign, ":af77_to_player", 0),  # v1.0 王室税: 你当国王时本周收到的合计

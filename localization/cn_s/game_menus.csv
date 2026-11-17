@@ -358,9 +358,9 @@ mno_af71_expand_refuse|驳 回 ： 眼 下 国 库 也 紧 。
 menu_af76_smuggler|这 是 接 头 人 派 出 的 走 私 队 ， 正 赶 往 目 的 地 。 帮 里 的 买 卖 要 找 真 正 的 首 领 去 谈 。 
 mno_af76_smuggler_leave|让 他 们 继 续 赶 路 ， 接 着 护 送 。 
 menu_af79_policy|国 策 ^^税 收 ： {s41}^拨 款 ： {s42}^{s43}^每 条 国 策 改 了 以 后 ， 30 天 内 不 能 再 改 。 
-mno_af79_tax_light|税 收 改 为 轻 税 （ 王 室 税 5%， 城 乡 好 感 每 周 +1） 
-mno_af79_tax_normal|税 收 改 为 常 税 （ 王 室 税 10%） 
-mno_af79_tax_heavy|税 收 改 为 重 税 （ 王 室 税 20%， 城 乡 好 感 每 周 -1） 
+mno_af79_tax_light|税 收 改 为 轻 税 （ 王 室 税 10%， 城 乡 好 感 每 周 +1） 
+mno_af79_tax_normal|税 收 改 为 常 税 （ 王 室 税 20%） 
+mno_af79_tax_heavy|税 收 改 为 重 税 （ 王 室 税 30%， 城 乡 好 感 每 周 -1） 
 mno_af79_grant_none|拨 款 ： 王 室 税 全 归 国 库 
 mno_af79_grant_vassal|拨 款 ： 一 半 拨 给 最 缺 钱 的 三 位 封 臣 （ 关 系 +1， 他 们 能 多 养 兵 ） 
 mno_af79_grant_poor|拨 款 ： 一 半 拨 给 最 穷 的 三 个 村 子 （ 村 长 会 投 成 繁 荣 ） 
@@ -375,9 +375,9 @@ mno_af80_policy_grain_entry|改 粮 政 的 国 策
 mno_af80_policy_bandit_entry|改 匪 患 的 国 策 
 mno_af80_policy_back|返 回 营 地 
 menu_af80_policy_tax|税 收 ^^{s41}
-mno_af80_tax_normal|改 为 常 税 （ 王 室 税 10%） 
-mno_af80_tax_light|改 为 轻 税 （ 王 室 税 5%， 城 乡 好 感 每 周 +1） 
-mno_af80_tax_heavy|改 为 重 税 （ 王 室 税 20%， 城 乡 好 感 每 周 -1） 
+mno_af80_tax_normal|改 为 常 税 （ 王 室 税 20%） 
+mno_af80_tax_light|改 为 轻 税 （ 王 室 税 10%， 城 乡 好 感 每 周 +1） 
+mno_af80_tax_heavy|改 为 重 税 （ 王 室 税 30%， 城 乡 好 感 每 周 -1） 
 mno_af80_policy_tax_back|返 回 国 策 
 menu_af80_policy_grant|拨 款 ^^{s41}
 mno_af80_grant_none|王 室 税 全 归 国 库 

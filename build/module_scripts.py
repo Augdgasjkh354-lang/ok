@@ -21601,22 +21601,10 @@ scripts = [
       (troop_get_slot, ":party_no", ":troop_no", slot_troop_leaded_party),
       (troop_get_slot, ":cur_wealth", ":troop_no", slot_troop_wealth),
       
-      (assign, ":weekly_income", 750), #let every hero receive 750 denars by default
-      
-      (store_character_level, ":troop_level", ":troop_no"),
-      (store_mul, ":level_income", ":troop_level", 10),
-      (val_add, ":weekly_income", ":level_income"),
-      
-      (store_troop_faction,":faction_no", ":troop_no"),
-      (try_begin), #check if troop is kingdom leader
-        (faction_slot_eq, ":faction_no", slot_faction_leader, ":troop_no"),
-        (val_add, ":weekly_income", 1000),
-      (try_end),
-      
-      (try_begin), #check if troop is marshall
-        (faction_slot_eq, ":faction_no", slot_faction_marshall, ":troop_no"),
-        (val_add, ":weekly_income", 1000),
-      (try_end),
+      # v1.0 2026-11-17 玩家定：原版每周白给每位领主 750＋等级×10（国王、元帅再各 +1000），钱凭空产生。
+      # 现在只有国王从自己的财产里给每位封臣发 200 补贴（af86_stipend）；国王自己靠封地、王室税（20%）和抽成。
+      (call_script, "script_af86_stipend", ":troop_no"),
+      (assign, ":weekly_income", reg0),
       
       (assign, ":cur_weekly_wage", 0),
       (try_begin),
@@ -67663,17 +67651,17 @@ scripts = [
   # ========== v1.0 国策（2026-11-17 玩家定，先做「税收」「拨款给谁」两条；新 Slot 1014～1017）==========
   # 只在你自己当国王时生效（af49_is_player_king）。每条国策改了以后 30 天才能再改。
 
-  # 王室税率（百分数）。参数 1：阵营。你当国王时按「税收」国策：轻 5、中 10、重 20；其余王国一律 10。
+  # 王室税率（百分数）。参数 1：阵营。2026-11-17 玩家定提高一倍：你当国王时按「税收」国策：轻 10、中 20、重 30；其余王国一律 20。
   ("af79_tax_rate", [
     (store_script_param, ":fac", 1),
-    (assign, ":rate", 10),
+    (assign, ":rate", 20),
     (try_begin),
       (eq, ":fac", "fac_player_supporters_faction"),
       (call_script, "script_af49_is_player_king"),
       (eq, reg0, 1),
       (party_get_slot, ":t", "p_main_party", slot_af79_tax_policy),
-      (try_begin), (eq, ":t", 1), (assign, ":rate", 5),
-      (else_try), (eq, ":t", 2), (assign, ":rate", 20),
+      (try_begin), (eq, ":t", 1), (assign, ":rate", 10),
+      (else_try), (eq, ":t", 2), (assign, ":rate", 30),
       (try_end),
     (try_end),
     (assign, reg0, ":rate"),
@@ -68595,5 +68583,34 @@ scripts = [
     (val_add, ":level", 100),
     (val_clamp, ":level", 70, 151),
     (assign, reg0, ":level"),
+  ]),
+
+  # ========== v1.0 国王给封臣发补贴（2026-11-17 玩家定）==========
+  # 取代原版凭空的保底收入。参数 1：领主。是某个王国的封臣（不是国王本人）时，国王从财产里出 200；
+  # 你当国王时从你身上的金币出（每周一条汇总，见每周收支触发器）。国王付不起就没有。reg0 = 实际发的数。
+  ("af86_stipend", [
+    (store_script_param, ":lord", 1),
+    (assign, ":paid", 0),
+    (try_begin),
+      (troop_slot_eq, ":lord", slot_troop_occupation, slto_kingdom_hero),
+      (store_troop_faction, ":fac", ":lord"),
+      (is_between, ":fac", kingdoms_begin, kingdoms_end),
+      (faction_get_slot, ":king", ":fac", slot_faction_leader),
+      (neq, ":king", ":lord"),
+      (try_begin),
+        (eq, ":king", "trp_player"),
+        (store_troop_gold, ":gold", "trp_player"),
+        (ge, ":gold", 200),
+        (troop_remove_gold, "trp_player", 200),
+        (assign, ":paid", 200),
+      (else_try),
+        (is_between, ":king", active_npcs_begin, active_npcs_end),
+        (troop_get_slot, ":w", ":king", slot_troop_wealth),
+        (ge, ":w", 200),
+        (call_script, "script_af14_lord_wealth", ":king", 0, 200),
+        (assign, ":paid", 200),
+      (try_end),
+    (try_end),
+    (assign, reg0, ":paid"),
   ]),
 ]
