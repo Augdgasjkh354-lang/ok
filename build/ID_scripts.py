@@ -957,5 +957,8 @@ script_af78_pool_merchants = 955
 script_af79_tax_rate = 956
 script_af79_tax_mood_weekly = 957
 script_af79_allocate = 958
+script_af80_player_loot = 959
+script_af80_tariff_pct = 960
+script_af80_policy_weekly = 961
 
 

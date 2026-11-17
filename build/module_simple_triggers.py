@@ -4910,4 +4910,9 @@ simple_triggers = [
   (24*7, [
     (call_script, "script_af79_tax_mood_weekly"),
   ]),
+
+  # v1.0 国策第二批: 每周粮政（囤粮收购）、匪患（剿匪／招抚）的花销和效果。
+  (24*7, [
+    (call_script, "script_af80_policy_weekly"),
+  ]),
 ]

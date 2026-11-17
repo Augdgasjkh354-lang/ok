@@ -2226,3 +2226,11 @@ slot_af79_tax_policy         = 1014 # p_main_party: player-king tax policy: 0 = 
 slot_af79_tax_policy_day     = 1015 # p_main_party: day the tax policy may change again (day+30); 0 = any time
 slot_af79_grant_policy       = 1016 # p_main_party: player-king grant policy: 0 = keep it all, 1 = vassals, 2 = relieve the poor, 3 = strengthen the rich
 slot_af79_grant_policy_day   = 1017 # p_main_party: day the grant policy may change again (day+30); 0 = any time
+slot_af80_loot_policy        = 1018 # p_main_party: player-king loot-share policy: 0 = normal (1/3), 1 = low (28%), 2 = high (38%)
+slot_af80_loot_policy_day    = 1019 # p_main_party: day it may change again (day+30)
+slot_af80_tariff_policy      = 1020 # p_main_party: player-king tariff policy: 0 = normal, 1 = light (tariffs x0.5, caravans count more), 2 = heavy (x1.5, count less)
+slot_af80_tariff_policy_day  = 1021 # p_main_party: day it may change again (day+30)
+slot_af80_grain_policy       = 1022 # p_main_party: player-king grain policy: 0 = normal, 1 = stockpile (food store limit x1.5, towns buy grain from their villages weekly)
+slot_af80_grain_policy_day   = 1023 # p_main_party: day it may change again (day+30)
+slot_af80_bandit_policy      = 1024 # p_main_party: player-king bandit policy: 0 = leave it, 1 = suppress (1000/week, kingdom villages unrest -2), 2 = appease (500/week into gang purses, unrest -1)
+slot_af80_bandit_policy_day  = 1025 # p_main_party: day it may change again (day+30)

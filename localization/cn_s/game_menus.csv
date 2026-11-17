@@ -366,3 +366,41 @@ mno_af79_grant_vassal|拨 款 ： 一 半 拨 给 最 缺 钱 的 三 位 封 �
 mno_af79_grant_poor|拨 款 ： 一 半 拨 给 最 穷 的 三 个 村 子 （ 村 长 会 投 成 繁 荣 ） 
 mno_af79_grant_rich|拨 款 ： 一 半 拨 给 最 富 庶 的 两 座 城 （ 强 干 弱 枝 ） 
 mno_af79_policy_back|返 回 营 地 
+menu_af80_policy_main|国 策 ^^税 收 ： {s41}^拨 款 ： {s42}^军 事 ： {s43}^商 路 ： {s44}^粮 政 ： {s45}^匪 患 ： {s46}^^每 条 国 策 改 了 以 后 ， 30 天 内 不 能 再 改 。 
+mno_af80_policy_tax_entry|改 税 收 的 国 策 
+mno_af80_policy_grant_entry|改 拨 款 的 国 策 
+mno_af80_policy_loot_entry|改 军 事 的 国 策 
+mno_af80_policy_tariff_entry|改 商 路 的 国 策 
+mno_af80_policy_grain_entry|改 粮 政 的 国 策 
+mno_af80_policy_bandit_entry|改 匪 患 的 国 策 
+mno_af80_policy_back|返 回 营 地 
+menu_af80_policy_tax|税 收 ^^{s41}
+mno_af80_tax_normal|改 为 常 税 （ 王 室 税 10%） 
+mno_af80_tax_light|改 为 轻 税 （ 王 室 税 5%， 城 乡 好 感 每 周 +1） 
+mno_af80_tax_heavy|改 为 重 税 （ 王 室 税 20%， 城 乡 好 感 每 周 -1） 
+mno_af80_policy_tax_back|返 回 国 策 
+menu_af80_policy_grant|拨 款 ^^{s41}
+mno_af80_grant_none|王 室 税 全 归 国 库 
+mno_af80_grant_vassal|一 半 拨 给 最 缺 钱 的 三 位 封 臣 （ 关 系 +1， 他 们 能 多 养 兵 ） 
+mno_af80_grant_poor|一 半 拨 给 最 穷 的 三 个 村 子 （ 村 长 会 投 成 繁 荣 ） 
+mno_af80_grant_rich|一 半 拨 给 最 富 庶 的 两 座 城 （ 强 干 弱 枝 ） 
+mno_af80_policy_grant_back|返 回 国 策 
+menu_af80_policy_loot|军 事 ^^{s41}
+mno_af80_loot_normal|缴 获 照 常 上 缴 三 分 之 一 
+mno_af80_loot_low|缴 获 少 收 ： 上 缴 28%（ 交 钱 的 封 臣 关 系 +1） 
+mno_af80_loot_high|缴 获 多 收 ： 上 缴 38%（ 交 钱 的 封 臣 关 系 -1） 
+mno_af80_policy_loot_back|返 回 国 策 
+menu_af80_policy_tariff|商 路 ^^{s41}
+mno_af80_tariff_normal|关 税 照 常 
+mno_af80_tariff_light|轻 关 税 ： 关 税 减 半 ， 商 队 更 爱 来 （ 城 镇 的 商 队 加 成 涨 得 快 ） 
+mno_af80_tariff_heavy|重 关 税 ： 关 税 加 五 成 ， 商 队 不 爱 来 （ 商 队 加 成 涨 得 慢 ） 
+mno_af80_policy_tariff_back|返 回 国 策 
+menu_af80_policy_grain|粮 政 ^^{s41}
+mno_af80_grain_normal|粮 政 照 常 
+mno_af80_grain_stock|囤 粮 ： 城 堡 、 城 镇 粮 仓 上 限 加 五 成 ； 各 城 每 周 花 300 向 村 里 收 购 余 粮 
+mno_af80_policy_grain_back|返 回 国 策 
+menu_af80_policy_bandit|匪 患 ^^{s41}
+mno_af80_bandit_none|匪 患 不 管 
+mno_af80_bandit_suppress|剿 匪 ： 每 周 花 1000 派 兵 清 剿 ， 你 王 国 的 村 子 战 乱 -2
+mno_af80_bandit_appease|招 抚 ： 每 周 给 匪 帮 送 500， 你 王 国 的 村 子 战 乱 -1， 但 匪 帮 钱 多 了 会 招 人 
+mno_af80_policy_bandit_back|返 回 国 策 
