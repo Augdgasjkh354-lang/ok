@@ -2394,7 +2394,7 @@ dialogs = [
   "Well... My brother is home safe. I'm not sure what to do with him -- maybe pack him off to a university outside Calradia. That way, if he gets knocked on the head in a street brawl, no one can say it's my fault. But that's not your problem. Here's the rest of your reward. It was well-earned.", "merchant_quest_3b", 
   [    
     (call_script, "script_finish_quest", "qst_save_relative_of_merchant", 100),
-    (troop_add_gold, "trp_player", 200),
+    (call_script, "script_af19_town_pays", "$current_town", 200),  # 审计第 48 条：尾款由本城出
   ]],
 
   [anyone|plyr, "merchant_quest_3b", #was startup
@@ -25878,7 +25878,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   ], 
   "You won't be able to do this by yourself, though. If you try and take on the whole gang singlehandedly, the hunter will become the hunted, I'll warrant. You'll first want to round up a group of volunteers. There's always a few lads in the villages around here, looking for a bit of work that's more interesting than tilling the soil or hauling water. They'll follow you if you pay. So... Take this purse of 100 denars. Consider it an advance on your reward. Go round to the villages, and use the money to hire some help. I'll reckon that you need at least five men to take on these bandits.", "merchant_quest_1c",
   [
-    (call_script, "script_troop_add_gold", "trp_player", 100),
+    (call_script, "script_af19_town_pays", "$current_town", 100),  # 审计第 48 条：预付款由本城出
     
     (str_store_troop_name, s9, "$g_talk_troop"),
     (str_store_party_name, s1, "$g_starting_town"),

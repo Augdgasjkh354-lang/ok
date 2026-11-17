@@ -152,6 +152,7 @@ ALLOWED_DIALOG_CHANGES |= {  # v1.0 经济审计第一批 (2026-11-17): 钱有�
     'dlga_lord_collect_debt_pay:lord_pretalk',  # 第 47 条: 讨债交账进债主财产
     'dlga_lord_pay_debt_2:lord_pay_debt_3_1',  # 第 49 条: 还领主的债进领主财产
     'dlga_merchant_ask_for_debts:merchant_debts_paid',  # 第 49 条: 还商会的债进本城金库
+    'dlga_merchant_quest_1b:merchant_quest_1c', 'dlga_start:merchant_quest_3b',  # 第 48 条: 开局商人任务的预付款和尾款由本城出
 }
 _new=(data/'conversation.txt').read_text('utf-8').split('\n')
 if _old and _old[-1]=='': _old=_old[:-1]
