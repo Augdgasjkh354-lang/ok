@@ -43284,15 +43284,25 @@ scripts = [
                     
                     (this_or_next|gt, ":hours_since_last_combat", 12),
                     (lt, ":hours_since_last_rest", 96),
-                    (gt, ":aggressiveness", 40),
                     
-                    (this_or_next|eq, ":troop_reputation", lrep_debauched),
-                    (this_or_next|eq, ":troop_reputation", lrep_selfrighteous),
-                    (this_or_next|eq, ":troop_reputation", lrep_cunning),
-                    (eq, ":troop_reputation", lrep_quarrelsome),
-                    
-                    (troop_get_slot, ":wealth", ":troop_no", slot_troop_wealth),
-                    (lt, ":wealth", 500),
+                    # v1.0 2026-11-17 玩家定：买地欠钱、这周还没还上利息的领主（af81 拖欠 ≥1 周），
+                    # 不看性格、不看好斗、不看财产，也会去抢敌国的村子凑钱。其余领主照原版。
+                    (assign, ":af93_hungry", 0),
+                    (try_begin),
+                      (troop_slot_ge, ":troop_no", slot_af81_debt_seller, 1),
+                      (troop_slot_ge, ":troop_no", slot_af81_debt_missed, 1),
+                      (assign, ":af93_hungry", 1),
+                    (else_try),
+                      (gt, ":aggressiveness", 40),
+                      (this_or_next|eq, ":troop_reputation", lrep_debauched),
+                      (this_or_next|eq, ":troop_reputation", lrep_selfrighteous),
+                      (this_or_next|eq, ":troop_reputation", lrep_cunning),
+                      (eq, ":troop_reputation", lrep_quarrelsome),
+                      (troop_get_slot, ":wealth", ":troop_no", slot_troop_wealth),
+                      (lt, ":wealth", 500),
+                      (assign, ":af93_hungry", 1),
+                    (try_end),
+                    (eq, ":af93_hungry", 1),
                     
                     (assign, ":score_to_beat", 0),
                     (assign, ":target_village", -1),
@@ -43305,7 +43315,11 @@ scripts = [
                       (this_or_next|party_slot_eq, ":possible_target", slot_village_state, svs_normal),
                       (party_slot_eq, ":possible_target", slot_village_state, svs_being_raided),
                       
-                      (party_get_slot, reg17, ":possible_target", slot_town_prosperity),
+                      # v1.0 2026-11-17：挑村民手头钱多的村子（村长钱袋 ÷ 200，钱袋满额时等于繁荣），原版按繁荣。
+                      (party_get_slot, ":af93_elder", ":possible_target", slot_town_elder),
+                      (gt, ":af93_elder", 0),
+                      (store_troop_gold, reg17, ":af93_elder"),
+                      (val_div, reg17, 200),
                       (store_distance_to_party_from_party, ":distance", ":party_no", ":possible_target"),
                       (val_sub, reg17, ":distance"),
                       
@@ -68886,6 +68900,20 @@ scripts = [
       (is_between, ":king", active_npcs_begin, active_npcs_end),
       (troop_get_slot, ":kw", ":king", slot_troop_wealth),
       (ge, ":kw", 10000),
+      # 2026-11-17 玩家定：国王看和这位城主的关系，关系不好（< 0）就不给，两人关系 −2，14 天后才能再讨。
+      (call_script, "script_troop_get_relation_with_troop", ":king", ":lord"),
+      (assign, ":af93_rel", reg0),
+      (try_begin),
+        (lt, ":af93_rel", 0),
+        (call_script, "script_troop_change_relation_with_troop", ":king", ":lord", -2),
+        (store_add, ":next", ":today", 14),
+        (party_set_slot, ":town", slot_af87_petition_day, ":next"),
+        (str_store_troop_name, s44, ":lord"),
+        (str_store_troop_name, s45, ":king"),
+        (str_store_party_name, s46, ":town"),
+        (display_message, "@{s44}替{s46}向{s45}讨赈济，{s45}一口回绝，两人更不和了。", 0xCC9966),
+      (try_end),
+      (ge, ":af93_rel", 0),
       (troop_get_slot, ":rep", ":lord", slot_lord_reputation_type),
       (assign, ":skim", 30),
       (try_begin), (eq, ":rep", lrep_upstanding), (assign, ":skim", 0),
@@ -69212,13 +69240,13 @@ scripts = [
   # v1.0 2026-11-17 玩家定：买封地的分期款还不上利息时，买家向治下百姓摊派。
   # 参数 1 买家，2 要凑的钱，3 买的据点（消息用）。村子从村民钱袋拿、城镇从镇民钱袋拿，都最多拿到只剩满额的一半；
   # 城堡没有百姓钱袋，只刮它下面归买家的村子（村子本来就在名下，一并扫到）。被刮的村子战乱 +3。
-  # 被刮的地方 14 天内不能向国王讨赈济（Slot 1038），免得国王替他还债。钱进买家财产（af14）。输出 reg0 凑到多少。
+  # 被刮的地方 30 天内不能向国王讨赈济（Slot 1038），免得国王替他还债。钱进买家财产（af14）。输出 reg0 凑到多少。
   ("af92_squeeze_fiefs", [
     (store_script_param, ":lord", 1),
     (store_script_param, ":need", 2),
     (store_script_param, ":bought", 3),
     (store_current_day, ":today"),
-    (store_add, ":block", ":today", 14),
+    (store_add, ":block", ":today", 30),
     (assign, ":got", 0),
     (try_for_range, ":c", villages_begin, villages_end),
       (lt, ":got", ":need"),
