@@ -975,5 +975,6 @@ script_af83_shop_open = 973
 script_af83_sweep_all = 974
 script_af84_spend_wages = 975
 script_af84_remit_weekly = 976
+script_af85_price_level = 977
 
 

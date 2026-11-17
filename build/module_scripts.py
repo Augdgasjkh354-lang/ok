@@ -3870,6 +3870,13 @@ scripts = [
       (val_mul, ":price_factor", ":penalty_factor"),
       (val_div, ":price_factor", 100),
       
+      # v1.0 繁荣决定物价（2026-11-17 玩家定：繁荣高的地方东西贵）：在城镇、城堡、村子里买卖都乘上当地物价（af85_price_level）。
+      (try_begin),
+        (is_between, "$g_encountered_party", centers_begin, centers_end),
+        (call_script, "script_af85_price_level", "$g_encountered_party"),
+        (val_mul, ":price_factor", reg0),
+        (val_div, ":price_factor", 100),
+      (try_end),
       # v1.0 lord relations (L4): a town whose lord likes the player (>= 40)
       # sells 10% cheaper to him.
       (try_begin),
@@ -3917,6 +3924,13 @@ scripts = [
       (val_mul, ":price_factor", 100),
       (val_div, ":price_factor", ":penalty_divisor"),
       
+      # v1.0 繁荣决定物价（2026-11-17 玩家定：繁荣高的地方东西贵）：在城镇、城堡、村子里买卖都乘上当地物价（af85_price_level）。
+      (try_begin),
+        (is_between, "$g_encountered_party", centers_begin, centers_end),
+        (call_script, "script_af85_price_level", "$g_encountered_party"),
+        (val_mul, ":price_factor", reg0),
+        (val_div, ":price_factor", 100),
+      (try_end),
       # v1.0 lord relations (L4): a town whose lord likes the player (>= 40)
       # buys 10% dearer from him.
       (try_begin),
@@ -68408,8 +68422,8 @@ scripts = [
   # ========== v1.0 领主兵饷有去处（2026-11-17 玩家定）==========
   # 以前领主每周发的兵饷凭空消失。现在按兵种分开算：
   # · 王国兵（兵种属于某个王国）：饷的三分之一花在部队最近的城里（进金库，记进城镇 Slot 1010 驻军花销），
-  #   三分之二寄回老家——记进兵种所属王国的 Slot 1034，每周平均分给那个王国名下的村子（af84_remit_weekly）。
-  #   不追溯每个兵是哪个村的，按王国平均分。
+  #   三分之二寄回老家——记进兵种所属王国的 Slot 1034，每周平均分给这个兵种文化的村子，不管村子现在归谁
+  #   （af84_remit_weekly）。不追溯每个兵是哪个村的，按文化平均分。
   # · 雇佣兵和其他（兵种不属于任何王国）：五分之四花在最近的城里，五分之一落在随便一个村子。
   # · 领主本人、同伴等英雄不算。舍入剩下的零头也进城里，钱一文不丢。
   # 「最近的城」= 离部队最近、和领主阵营没在打仗的城镇；找不到就全部寄回领主自己王国的村子。
@@ -68516,18 +68530,21 @@ scripts = [
     (try_end),
   ]),
 
-  # af84_remit_weekly：把各王国本周寄回的兵饷平均分给那个王国名下（有村长）的村子；零头给第一个村子。
-  # 王国名下一个村子都没有（亡国）时，给随便一个村子。
+  # af84_remit_weekly：把各王国兵种本周寄回的兵饷平均分给「老家」的村子；零头给第一个村子。
+  # 老家按文化算，不按现在归谁（2026-11-17 玩家定）：斯瓦迪亚的村子被别国占了，在那里征兵照样是斯瓦迪亚新兵，
+  # 所以斯瓦迪亚兵的饷寄回所有斯瓦迪亚文化的村子（slot_center_culture 等于王国的 slot_faction_culture）。
+  # 一个这样的村子都没有时，给随便一个村子。
   ("af84_remit_weekly", [
     (try_for_range, ":fac", kingdoms_begin, kingdoms_end),
       (faction_get_slot, ":pool", ":fac", slot_af84_remit),
       (gt, ":pool", 0),
       (faction_set_slot, ":fac", slot_af84_remit, 0),
+      (faction_get_slot, ":culture", ":fac", slot_faction_culture),
       (assign, ":count", 0),
       (assign, ":first", -1),
       (try_for_range, ":v", villages_begin, villages_end),
-        (store_faction_of_party, ":vf", ":v"),
-        (eq, ":vf", ":fac"),
+        (gt, ":culture", 0),
+        (party_slot_eq, ":v", slot_center_culture, ":culture"),
         (party_slot_ge, ":v", slot_town_elder, 1),
         (val_add, ":count", 1),
         (try_begin),
@@ -68543,8 +68560,7 @@ scripts = [
         (try_begin),
           (gt, ":each", 0),
           (try_for_range, ":v", villages_begin, villages_end),
-            (store_faction_of_party, ":vf", ":v"),
-            (eq, ":vf", ":fac"),
+            (party_slot_eq, ":v", slot_center_culture, ":culture"),
             (party_slot_ge, ":v", slot_town_elder, 1),
             (call_script, "script_af13_village_purse", ":v", ":each"),
           (try_end),
@@ -68564,5 +68580,19 @@ scripts = [
         (try_end),
       (try_end),
     (try_end),
+  ]),
+
+  # ========== v1.0 繁荣决定物价（第纳尔购买力，2026-11-17 玩家定）==========
+  # 不新增数值，物价直接由繁荣算：繁荣 50 为 100%，每高 10 点贵 3%、每低 10 点便宜 3%，最低 85%、最高 150%。
+  # 买和卖同样乘，所以「穷处收货、富处卖货」有赚头。城堡的繁荣是原版按下面村子算的平均值。reg0 = 百分比。
+  ("af85_price_level", [
+    (store_script_param, ":center", 1),
+    (party_get_slot, ":p", ":center", slot_town_prosperity),
+    (store_sub, ":level", ":p", 50),
+    (val_mul, ":level", 3),
+    (val_div, ":level", 10),
+    (val_add, ":level", 100),
+    (val_clamp, ":level", 85, 151),
+    (assign, reg0, ":level"),
   ]),
 ]
