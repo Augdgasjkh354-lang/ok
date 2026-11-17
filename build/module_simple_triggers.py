@@ -769,6 +769,9 @@ simple_triggers = [
          (try_end),
            (else_try),
          (gt, ":prosperity", ":ideal_prosperity"),
+         # 2026-11-17 购买力：老百姓手头在满额以上的地方，不往下拉（繁荣是钱撑起来的，af91）。
+         (call_script, "script_af91_ratio", ":center_no"),
+         (lt, reg0, 100),
          # 2026-11-17 玩家定：每周往理想值靠的步子 1 → 2（涨跌都加快一倍），不冲过理想值。
          (store_sub, ":af_step", ":prosperity", ":ideal_prosperity"),
          (val_min, ":af_step", 2),
@@ -5011,5 +5014,10 @@ simple_triggers = [
   # v1.0 村民钱袋: 每周看村民手头紧不紧，领主救急、讨赈济，连续两周不到一半就有人进城（af89_village_weekly）。
   (24*7, [
     (call_script, "script_af89_village_weekly"),
+  ]),
+
+  # v1.0 购买力 500%: 每三天，老百姓手头富余的城镇、村子自己往上长（af91_growth_3days）。
+  (24*3, [
+    (call_script, "script_af91_growth_3days"),
   ]),
 ]

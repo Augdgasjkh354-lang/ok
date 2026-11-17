@@ -987,5 +987,7 @@ script_af88_produce = 985
 script_af89_village_weekly = 986
 script_af89_village_text = 987
 script_af90_quest_pay = 988
+script_af91_ratio = 989
+script_af91_growth_3days = 990
 
 
