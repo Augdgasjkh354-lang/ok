@@ -2211,3 +2211,4 @@ slot_af33_funded_pretender   = 963 # p_main_party: pretender troop the player fu
 slot_af33_pretender_funded_amount = 964 # p_main_party: cumulative denars funded to the pretender in 963; >= 0 = funded, < 0 = refund due after his coronation (magnitude = 1.5x funded minus paid so far); 0 = none (capital 2.0 batch 4, item 9)
 slot_af33_assassin           = 965 # p_main_party: assassin hit state; > 0 = pending target goods-merchant troop, < 0 = cooldown until day -value (7 days after a hit resolves), 0 = free (capital 2.0 batch 4, item 10c)
 slot_af33_intel_net          = 966 # p_main_party: intel network = level (1-3) * 100000 + expiry day; 0 = no network (capital 2.0 batch 4, item 10d)
+slot_af69_grace_day          = 1006 # p_main_party: day the realm-mood grace ends (first daily check after the player becomes king + 30); 0 = not king
