@@ -256,3 +256,10 @@ dlga_af72_fief_plan:minister_pretalk|眼 下 没 有 空 着 的 封 地 要 分
 dlga_af72_fief_plan_choice:af72_fief_plan_done|就 照 这 么 办 。 
 dlga_af72_fief_plan_choice:minister_pretalk|我 再 想 想 。 
 dlga_af72_fief_plan_done:minister_pretalk|遵 命 ， {reg41} 处 封 地 已 经 分 下 去 了 。 
+dlga_lord_talk_money:af96_offer|听 说 你 买 {s4}还 欠 {s5} {reg41} 第 纳 尔 。 这 笔 钱 ， 我 替 你 还 了 吧 。 
+dlga_af96_offer:af96_choice|… … 你 肯 替 我 还 ？ {reg41} 第 纳 尔 可 不 是 小 数 。 你 打 算 怎 么 算 ？ 
+dlga_af96_choice:af96_done|算 我 送 你 的 ， 不 用 还 。 
+dlga_af96_choice:af96_done.1|我 先 垫 上 ， 你 以 后 还 我 ， 不 算 利 息 。 
+dlga_af96_choice:lord_pretalk|我 手 头 的 钱 还 不 够 ， 改 天 再 说 。 
+dlga_af96_done:lord_pretalk|这 份 情 ， 我 记 一 辈 子 。 往 后 你 有 什 么 事 ， 只 管 开 口 。 
+dlga_af96_done:lord_pretalk.1|好 ， 这 笔 账 我 认 。 手 头 宽 了 ， 一 定 先 还 你 。 

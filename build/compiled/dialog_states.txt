@@ -1458,3 +1458,6 @@ af62_militia_fight
 af72_fief_plan
 af72_fief_plan_choice
 af72_fief_plan_done
+af96_offer
+af96_choice
+af96_done

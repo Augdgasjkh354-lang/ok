@@ -994,5 +994,6 @@ script_af94_on_squeezed = 992
 script_af94_rise = 993
 script_af94_militia_home = 994
 script_af95_emigrate = 995
+script_af96_take_over = 996
 
 

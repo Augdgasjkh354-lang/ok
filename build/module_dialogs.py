@@ -28761,4 +28761,43 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   ]],
   [anyone|plyr, "af72_fief_plan_choice", [], "我再想想。", "minister_pretalk", []],
   [anyone, "af72_fief_plan_done", [], "遵命，{reg41} 处封地已经分下去了。", "minister_pretalk", []],
+
+  # v1.0 接手领主的债（2026-11-17 玩家定）：领主分期买地还欠着卖家的钱，你替他一次还清。
+  # 两种算法：送他（关系 +，按钱数，2～10），或垫上记成他欠你的账（874，关系 +2，以后见面有钱就还，也能走以税抵债）。
+  # 钱照分期款的规矩走（af81_pay：卖家 85%，卖家所在王国的国王抽 15%）。脚本 af96_take_over。
+  [anyone|plyr, "lord_talk_money", [
+    (troop_get_slot, ":seller", "$g_talk_troop", slot_af81_debt_seller),
+    (is_between, ":seller", active_npcs_begin, active_npcs_end),
+    (troop_get_slot, ":owed", "$g_talk_troop", slot_af81_debt_owed),
+    (gt, ":owed", 0),
+    (troop_get_slot, ":center", "$g_talk_troop", slot_af81_debt_center),
+    (str_store_party_name, s4, ":center"),
+    (str_store_troop_name, s5, ":seller"),
+    (assign, reg41, ":owed"),
+  ], "听说你买{s4}还欠{s5} {reg41} 第纳尔。这笔钱，我替你还了吧。", "af96_offer", []],
+  [anyone, "af96_offer", [
+    (troop_get_slot, ":owed", "$g_talk_troop", slot_af81_debt_owed),
+    (assign, reg41, ":owed"),
+  ], "……你肯替我还？{reg41} 第纳尔可不是小数。你打算怎么算？", "af96_choice", []],
+  [anyone|plyr, "af96_choice", [
+    (troop_get_slot, ":owed", "$g_talk_troop", slot_af81_debt_owed),
+    (store_troop_gold, ":g", "trp_player"),
+    (ge, ":g", ":owed"),
+  ], "算我送你的，不用还。", "af96_done", [
+    (call_script, "script_af96_take_over", "$g_talk_troop", 0),
+    (assign, "$temp", 1),
+  ]],
+  [anyone|plyr, "af96_choice", [
+    (troop_get_slot, ":owed", "$g_talk_troop", slot_af81_debt_owed),
+    (store_troop_gold, ":g", "trp_player"),
+    (ge, ":g", ":owed"),
+  ], "我先垫上，你以后还我，不算利息。", "af96_done", [
+    (call_script, "script_af96_take_over", "$g_talk_troop", 1),
+    (assign, "$temp", 2),
+  ]],
+  [anyone|plyr, "af96_choice", [], "我手头的钱还不够，改天再说。", "lord_pretalk", []],
+  [anyone, "af96_done", [(eq, "$temp", 1)],
+   "这份情，我记一辈子。往后你有什么事，只管开口。", "lord_pretalk", []],
+  [anyone, "af96_done", [],
+   "好，这笔账我认。手头宽了，一定先还你。", "lord_pretalk", []],
 ]
