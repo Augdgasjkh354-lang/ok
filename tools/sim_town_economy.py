@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""离线推演：一座城镇＋周边村子的钱，按天算 52 周。
+"""离线推演：一座城镇＋周边村子的钱，按天算 52 周，表里只列前 13 周。
+
+玩家 2026-11-17 指出：现实玩几个小时游戏里才过几个月，所以平衡要看头一到三个月（4～13 周），不看一年。
 
 只是估算，用来比较「改之前」和「改之后」的走向，不代替实机。公式取自源码：
 - 城镇每周进账：(有效繁荣×15＋700)×1.5（module_simple_triggers.py 每周金库结算；超出 100 的繁荣只算一半）
@@ -21,7 +23,7 @@ import sys
 WEEKS = 52
 PAY_PER_TRIP = int(sys.argv[1]) if len(sys.argv) > 1 else 300
 TRIPS_PER_WEEK = 1.75
-RESERVE = int(sys.argv[2]) if len(sys.argv) > 2 else 3000  # 村长留存（新）
+RESERVE = int(sys.argv[2]) if len(sys.argv) > 2 else 2000  # 村长留存（新）
 CARAVANS = float(sys.argv[3]) if len(sys.argv) > 3 else 2  # 每周来成交的商队支数（估算）
 CROWN = int(sys.argv[4]) if len(sys.argv) > 4 else 10  # 王室税：本周进账的百分之几交给国王（新）
 N_VILLAGES = 3
@@ -147,7 +149,7 @@ def run(new, raid_week=None, player_sells=0):
     return rows
 
 
-def table(title, rows, weeks=(1, 4, 8, 13, 20, 21, 22, 24, 26, 39, 52)):
+def table(title, rows, weeks=(1, 2, 3, 4, 5, 6, 8, 10, 13)):
     out = [f'### {title}', '',
            '| 周 | 城镇繁荣 | 金库 | 本周王室税 | 驻军 | 杂货商现钱 | 玩家卖出 | 本周村民采买 | 本周货款 | 村子平均繁荣 | 村长平均钱袋 |',
            '|---|---|---|---|---|---|---|---|---|---|---|']
@@ -161,6 +163,6 @@ if __name__ == '__main__':
     print(f'# 推演：城镇三根柱子＋王室税（一趟货款 {PAY_PER_TRIP}、村长留存 {RESERVE}、每周商队 {CARAVANS} 支、王室税 {CROWN}%，前三项为估算）\n')
     print(table('A. 改之前，和平', run(False)))
     print(table('B. 改之后，和平', run(True)))
-    print(table('C. 改之后，第 21 周两个村被劫', run(True, raid_week=20)))
+    print(table('C. 改之后，第 5 周两个村被劫', run(True, raid_week=4)))
     print(table('D. 改之前，玩家每周卖 3000 的货', run(False, player_sells=3000)))
     print(table('E. 改之后，玩家每周卖 3000 的货', run(True, player_sells=3000)))
