@@ -521,6 +521,7 @@ simple_triggers = [
          # 裁完重算 :af_wage, 后面的花销/王室税/扣饷/短缺都用新饷。
          (try_begin),
            (gt, ":af_wage", ":added_wealth"),
+           (party_slot_eq, ":center_no", slot_center_is_besieged_by, -1),  # 被围时不裁（与招兵同一条件）
            (call_script, "script_af100_disband_to_income", ":center_no", ":added_wealth"),
            (assign, ":af_wage", reg0),
          (try_end),
@@ -2400,7 +2401,7 @@ simple_triggers = [
              (try_end),
 
              # v1.0 村民进城采买（2026-11-17 玩家定）：卖完货，村长拿钱袋里 1000 以上部分的一成进城买东西
-             # （盐、铁器、布匹……），一趟最多 1000。钱进本城杂货商身上（他每周按周转金把多出的交回金库），
+             # （盐、铁器、布匹……），一趟最多 1000。钱进本城杂货商身上（走 af87_folk_add，满了进金库），
              # 并记进城镇 Slot 1009（每周减半），算进城镇的繁荣加成（af45_prosperity_bonus）。
              # 村子被劫、农民被截，这一趟就没人来，城里自然冷清。
              (try_begin),
@@ -3815,7 +3816,7 @@ simple_triggers = [
          (try_begin),
            (is_between, "$g_encountered_party", villages_begin, villages_end),
            (call_script, "script_af13_village_purse", "$g_encountered_party", ":af90_neg"),
-           (store_mul, ":collected_tax", reg0, -1),
+           (assign, ":collected_tax", reg0),  # af13 扣钱返回实扣的正数（2026-11-17 审计第 1 条同款）
          (else_try),
            (is_between, "$g_encountered_party", towns_begin, towns_end),
            (call_script, "script_af87_folk_add", "$g_encountered_party", ":af90_neg"),

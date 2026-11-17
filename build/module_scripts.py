@@ -15547,7 +15547,8 @@ scripts = [
         (store_mul, ":af90_need", ":player_gold_gain", ":num_player_party_shares"),
         (store_mul, ":af90_neg", ":af90_need", -1),
         (call_script, "script_af13_village_purse", "$g_encountered_party", ":af90_neg"),
-        (store_mul, ":af90_got", reg0, -1),
+        (assign, ":af90_got", reg0),  # af13 扣钱时返回实扣的正数（2026-11-17 审计第 1 条：原先多乘了 -1，玩家反被扣钱）
+        (val_max, ":af90_got", 0),
         (store_div, ":player_gold_gain", ":af90_got", ":num_player_party_shares"),
       (else_try),
         (is_between, "$g_encountered_party", walled_centers_begin, walled_centers_end),
@@ -57768,7 +57769,7 @@ scripts = [
   # every 3000 above 3500 is invested as +1 prosperity). Input: village, amount
   # (negative takes money out, never below zero).
   ("af13_village_purse", [
-    # v1.0 Codex 修复：返回实际动了多少钱（reg0）。正数是给村长的数；负数是实际扣到的数（不超过村长现有的钱）。
+    # v1.0 Codex 修复：返回实际动了多少钱（reg0）。给钱时是给村长的数；扣钱时也是正数，为实际扣到的数（不超过村长现有的钱）。
     # 村子无效或没有村长时返回 0。调用方按 reg0 给玩家付钱，不再凭空生钱。
     (store_script_param, ":village", 1),
     (store_script_param, ":amount", 2),
@@ -59564,7 +59565,7 @@ scripts = [
     # 2026-11-17 玩家定：城镇一个钱袋。金库和四家商店合成一个钱袋，商人平时不留钱（af83_*）。
     # 每周刷新：先把四家店里的钱收回金库；杂货商那一次（份额 40）再结算「你卖给城里的货」：
     # 本周你卖货从城里拿走的钱（Slot 1032），城里人按购买力（繁荣×45＋1500，旧周转金的总份额）买走，
-    # 钱回到金库，然后清零。以前的周转金、商人匀钱（af78_pool_merchants）不再用。
+    # 钱回到金库，然后清零。以前的周转金、商人匀钱不再用（af78_merchant_float／af78_pool_merchants 已无调用，保留只为占住脚本 ID）。
     (store_script_param, ":merchant", 1),
     (store_script_param, ":town", 2),
     (store_script_param, ":float", 5),
