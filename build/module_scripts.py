@@ -59532,7 +59532,7 @@ scripts = [
     # 2026-11-17 玩家定：城镇一个钱袋。金库和四家商店合成一个钱袋，商人平时不留钱（af83_*）。
     # 每周刷新：先把四家店里的钱收回金库；杂货商那一次（份额 40）再结算「你卖给城里的货」：
     # 本周你卖货从城里拿走的钱（Slot 1032），城里人按购买力（繁荣×45＋1500，旧周转金的总份额）买走，
-    # 钱回到金库，然后清零。以前的周转金、商人匀钱（af78_pool_merchants）不再用。
+    # 钱回到金库，然后清零。以前的周转金、商人匀钱不再用（2026-11-17 核查时已删）。
     (store_script_param, ":merchant", 1),
     (store_script_param, ":town", 2),
     (store_script_param, ":float", 5),
@@ -67723,50 +67723,6 @@ scripts = [
       (party_set_slot, ":town", slot_town_wealth, ":w"),
       (call_script, "script_change_center_prosperity", ":town", ":pts"),
     (try_end),
-  ]),
-
-  # 商人的周转金（按商人种类）。参数 1 商人 troop。输出 reg0（杂货 6000、防具／武器 3750、马 2400，其余 0）。
-  ("af78_merchant_float", [
-    (store_script_param, ":m", 1),
-    (assign, reg0, 0),
-    (try_begin), (is_between, ":m", goods_merchants_begin, goods_merchants_end), (assign, reg0, 6000),
-    (else_try), (is_between, ":m", armor_merchants_begin, armor_merchants_end), (assign, reg0, 3750),
-    (else_try), (is_between, ":m", weapon_merchants_begin, weapon_merchants_end), (assign, reg0, 3750),
-    (else_try), (is_between, ":m", horse_merchants_begin, horse_merchants_end), (assign, reg0, 2400),
-    (try_end),
-  ]),
-
-  # 商人匀钱。参数 1 缺钱的商人，参数 2 城镇，参数 3 他还差多少。同城另外三个商人谁的钱超过自己的周转金，
-  # 就把多出的部分匀给他（交易界面里每人只能花自己的钱，所以每周刷新时匀一次）。输出 reg0 匀到多少。
-  ("af78_pool_merchants", [
-    (store_script_param, ":me", 1),
-    (store_script_param, ":town", 2),
-    (store_script_param, ":need", 3),
-    (assign, ":got", 0),
-    (try_begin),
-      (is_between, ":town", towns_begin, towns_end),
-      (store_sub, ":off", ":town", towns_begin),
-      (try_for_range, ":k", 0, 4),
-        (lt, ":got", ":need"),
-        (try_begin), (eq, ":k", 0), (store_add, ":m", goods_merchants_begin, ":off"),
-        (else_try), (eq, ":k", 1), (store_add, ":m", armor_merchants_begin, ":off"),
-        (else_try), (eq, ":k", 2), (store_add, ":m", weapon_merchants_begin, ":off"),
-        (else_try), (store_add, ":m", horse_merchants_begin, ":off"),
-        (try_end),
-        (neq, ":m", ":me"),
-        (call_script, "script_af78_merchant_float", ":m"),
-        (assign, ":f", reg0),
-        (store_troop_gold, ":g", ":m"),
-        (store_sub, ":spare", ":g", ":f"),
-        (gt, ":spare", 0),
-        (store_sub, ":want", ":need", ":got"),
-        (val_min, ":spare", ":want"),
-        (troop_remove_gold, ":m", ":spare"),
-        (troop_add_gold, ":me", ":spare"),
-        (val_add, ":got", ":spare"),
-      (try_end),
-    (try_end),
-    (assign, reg0, ":got"),
   ]),
 
   # ========== v1.0 国策（2026-11-17 玩家定，先做「税收」「拨款给谁」两条；新 Slot 1014～1017）==========
