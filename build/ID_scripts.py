@@ -982,5 +982,6 @@ script_af87_folk = 980
 script_af87_folk_add = 981
 script_af87_folk_weekly = 982
 script_af87_folk_text = 983
+script_af87_petition_king = 984
 
 

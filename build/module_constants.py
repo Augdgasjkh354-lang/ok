@@ -2245,4 +2245,5 @@ slot_af84_remit              = 1034 # kingdom faction: soldiers' wages sent home
 slot_af87_folk               = 1035 # town: townsfolk purse (their spending money) + 1; 0 = not set yet (old save: starts at 60% of prosperity x 500)
 slot_af87_low_weeks          = 1036 # town: weeks in a row the townsfolk purse was under half of prosperity x 500
 slot_af87_relief_day         = 1037 # town: end of the two weeks its lord gets double rent for having helped the townsfolk (day+14; also the cooldown); 0 = never
+slot_af87_petition_day       = 1038 # town: day its lord may ask the king for relief again (day+14); 0 = never
 slot_af83_handed             = 1033 # town: treasury handed to a shopkeeper when the player opened his shop (to work out the net on return); 0 = no shop open
