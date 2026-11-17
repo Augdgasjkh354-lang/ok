@@ -84,7 +84,7 @@ dlga_lord_af29_lend:lord_af29_lend_choose|哦 ？ 你 肯 借 钱 给 我 ？ �
 dlga_lord_af29_lend_choose:lord_af29_lend_done|借 你 1000 第 纳 尔 。 
 dlga_lord_af29_lend_choose:lord_af29_lend_done.1|借 你 3000 第 纳 尔 。 
 dlga_lord_af29_lend_choose:lord_af29_lend_done.2|借 你 5000 第 纳 尔 。 
-dlga_lord_af29_lend_choose:lord_talk|算 了 , 当 我 没 说 。 
+dlga_lord_af29_lend_choose:lord_pretalk|算 了 , 当 我 没 说 。 
 dlga_lord_af29_lend_done:lord_talk|多 谢 了 。 这 钱 我 会 连 本 带 息 还 你 , 下 回 见 面 就 结 清 。 
 dlga_master_craftsman_talk:craftsman_af31_hire|雇 工 人 。 
 dlga_craftsman_af31_hire:craftsman_af31_hire_choose|雇 一 个 工 人 , 每 周 多 20 第 纳 尔 工 资 , 不 过 产 量 也 能 涨 一 成 。 如 今 作 坊 里 有 {reg41} 个 工 人 , 最 多 能 雇 10 个 。 你 想 雇 几 个 ？ 
@@ -131,7 +131,7 @@ dlga_af33_warloan:af33_warloan_choose|你 肯 借 钱 给 我 打 仗 ？ 说 �
 dlga_af33_warloan_choose:af33_warloan_done|借 你 1000 第 纳 尔 ， 30 天 后 还 1080。 
 dlga_af33_warloan_choose:af33_warloan_done.1|借 你 3000 第 纳 尔 ， 30 天 后 还 3240。 
 dlga_af33_warloan_choose:af33_warloan_done.2|借 你 5000 第 纳 尔 ， 30 天 后 还 5400。 
-dlga_af33_warloan_choose:lord_talk|算 了 ， 当 我 没 说 。 
+dlga_af33_warloan_choose:lord_pretalk|算 了 ， 当 我 没 说 。 
 dlga_af33_warloan_done:lord_talk|多 谢 。 这 钱 我 会 拿 去 雇 兵 ， 30 天 后 连 本 带 息 还 你 。 
 dlga_lord_talk_money:af33_buy_peace|陛 下 ， 我 出 5000 第 纳 尔 ， 替 你 向 {s4}买 个 停 战 。 
 dlga_af33_buy_peace:lord_talk|谈 成 了 。 {s4}与 {s5}已 经 停 战 ， 四 十 天 内 不 再 开 战 。 你 替 我 国 出 的 这 5000 第 纳 尔 赔 款 ， 对 方 国 王 已 经 收 下 了 。 这 份 情 ， 两 国 都 记 下 了 。 
@@ -153,8 +153,8 @@ dlga_lord_talk:lord_talk_money|谈 钱 的 事 。
 dlga_lord_talk:lord_talk_gang|谈 帮 派 的 事 。 
 dlga_lord_talk_money:lord_talk_money|钱 的 事 ？ 说 来 听 听 。 
 dlga_lord_talk_gang:lord_talk_gang|帮 派 的 事 ？ 你 说 。 
-dlga_lord_talk_money:lord_talk|还 是 说 点 别 的 吧 。 
-dlga_lord_talk_gang:lord_talk|还 是 说 点 别 的 吧 。 
+dlga_lord_talk_money:lord_pretalk|还 是 说 点 别 的 吧 。 
+dlga_lord_talk_gang:lord_pretalk|还 是 说 点 别 的 吧 。 
 dlga_pretender_start:af33_pretender_abandoned|放 弃 对 {s48}的 资 助 — — 那 笔 钱 就 当 打 水 漂 了 。 
 dlga_af33_pretender_abandoned:pretender_start|明 白 了 。 这 事 就 此 了 结 — — 你 资 助 的 钱 不 会 退 回 来 ， 但 你 随 时 可 以 资 助 别 人 。 
 dlga_supported_pretender_talk:af33_pretender_abandoned_supp|放 弃 对 {s48}的 资 助 — — 那 笔 钱 就 当 打 水 漂 了 。 
@@ -172,7 +172,7 @@ dlga_craftsman_af37_fire_choose:craftsman_af37_fire_done.1|裁 5 个 ， 付 100
 dlga_craftsman_af37_fire_choose:craftsman_af37_fire_done.2|全 部 裁 掉 ， 付 {reg42} 第 纳 尔 遣 散 费 。 
 dlga_craftsman_af37_fire_choose:master_craftsman_pretalk|算 了 ， 先 不 裁 。 
 dlga_craftsman_af37_fire_done:master_craftsman_pretalk|人 我 这 就 打 发 走 。 作 坊 里 清 静 了 ， 货 也 会 出 得 慢 些 。 
-dlga_lord_talk_court:lord_talk|还 是 说 点 别 的 吧 。 
+dlga_lord_talk_court:lord_pretalk|还 是 说 点 别 的 吧 。 
 dlga_lord_talk_money:lord_af38_taxdebt|你 手 头 紧 ， 就 别 硬 撑 了 — — 拿 城 里 的 税 抵 账 吧 。 
 dlga_lord_af38_taxdebt:lord_af38_taxdebt_choose|… … 也 只 能 这 样 了 。 {s4}往 后 四 周 的 租 税 归 你 收 ， 抵 掉 {reg41} 第 纳 尔 。 剩 下 {reg42} 照 旧 记 着 。 
 dlga_lord_af38_taxdebt:lord_af38_taxdebt_choose.1|… … 也 只 能 这 样 了 。 {s4}往 后 四 周 的 租 税 归 你 收 ， 这 笔 账 就 算 两 清 了 。 

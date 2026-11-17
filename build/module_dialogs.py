@@ -27237,7 +27237,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
     (store_current_day, ":day"),
     (troop_set_slot, "$g_talk_troop", slot_af29_loan_day, ":day"),
   ]],
-  [anyone|plyr,"lord_af29_lend_choose", [], "算了, 当我没说。", "lord_talk",[]],
+  [anyone|plyr,"lord_af29_lend_choose", [], "算了, 当我没说。", "lord_pretalk",[]],
   [anyone,"lord_af29_lend_done", [], "多谢了。这钱我会连本带息还你, 下回见面就结清。", "lord_talk",[]],
 
   # v1.0 资本家第三批 (条目 6): 工匠处雇工人, 每家作坊最多 10 人, 每人每周工资 20 (从每周结算里扣),
@@ -27610,7 +27610,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
     (val_add, ":day", 30),
     (troop_set_slot, "$g_talk_troop", slot_af33_warloan_due_day, ":day"),
   ]],
-  [anyone|plyr,"af33_warloan_choose", [], "算了，当我没说。", "lord_talk",[]],
+  [anyone|plyr,"af33_warloan_choose", [], "算了，当我没说。", "lord_pretalk",[]],
   [anyone,"af33_warloan_done", [], "多谢。这钱我会拿去雇兵，30 天后连本带息还你。", "lord_talk",[]],
 
   # v1.0 资本家 2.0 第三批 (条目 7b): 出钱买和平, I4 外交掮客的反向。
@@ -27920,9 +27920,9 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   # 菜单摩擦点第五批：谈帮派的回应，下一状态与本状态相同，让帮组选项接着列出来。
   [anyone, "lord_talk_gang", [], "帮派的事？你说。", "lord_talk_gang", []],
   # 菜单摩擦点第五批：从钱组返回 lord_talk 顶层。
-  [anyone|plyr, "lord_talk_money", [], "还是说点别的吧。", "lord_talk", []],
+  [anyone|plyr, "lord_talk_money", [], "还是说点别的吧。", "lord_pretalk", []],
   # 菜单摩擦点第五批：从帮组返回 lord_talk 顶层。
-  [anyone|plyr, "lord_talk_gang", [], "还是说点别的吧。", "lord_talk", []],
+  [anyone|plyr, "lord_talk_gang", [], "还是说点别的吧。", "lord_pretalk", []],
   # 审计 13 F-04 修复 (方案 B, 玩家 2026-11-10 拍板): 资助的称王者消失
   # (派系灭了人可能消失, 原版领主不死) 时结算脚本两支都不触发, 963/964
   # 永久挂起、玩家再也资助不了别人。加“放弃资助”选项: 玩家主动放弃,
@@ -28108,7 +28108,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   ]],
   [anyone|plyr,"craftsman_af37_fire_choose", [], "算了，先不裁。", "master_craftsman_pretalk",[]],
   [anyone,"craftsman_af37_fire_done", [], "人我这就打发走。作坊里清静了，货也会出得慢些。", "master_craftsman_pretalk",[]],
-  [anyone|plyr, "lord_talk_court", [], "还是说点别的吧。", "lord_talk", []],
+  [anyone|plyr, "lord_talk_court", [], "还是说点别的吧。", "lord_pretalk", []],
   [anyone|plyr,"lord_talk_money", [
     (call_script, "script_af38_taxdebt_town", "$g_talk_troop"),
     (gt, reg0, 0),
