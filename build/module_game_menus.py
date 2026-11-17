@@ -8953,6 +8953,7 @@ game_menus = [
           (call_script, "script_music_set_situation_with_culture", mtf_sit_travel),
         (try_end),
         (store_encountered_party, "$current_town"),
+        (call_script, "script_af83_sweep_town", "$current_town"),  # v1.0 城镇一个钱袋：出店回到菜单，钱回金库
         (call_script, "script_update_center_recon_notes", "$current_town"),
         (assign, "$g_defending_against_siege", 0),
         (str_clear, s3),
@@ -11703,24 +11704,28 @@ game_menus = [
        "Trade with the arms merchant.",
        [
            (party_get_slot, ":merchant_troop", "$current_town", slot_town_weaponsmith),
+           (call_script, "script_af83_shop_open", "$current_town", ":merchant_troop"),  # v1.0 城镇一个钱袋
            (change_screen_trade, ":merchant_troop"),
         ]),
       ("trade_with_armor_merchant",[(party_slot_ge, "$current_town", slot_town_armorer, 1)],
        "Trade with the armor merchant.",
        [
            (party_get_slot, ":merchant_troop", "$current_town", slot_town_armorer),
+           (call_script, "script_af83_shop_open", "$current_town", ":merchant_troop"),  # v1.0 城镇一个钱袋
            (change_screen_trade, ":merchant_troop"),
         ]),
       ("trade_with_horse_merchant",[(party_slot_ge, "$current_town", slot_town_horse_merchant, 1)],
        "Trade with the horse merchant.",
        [
            (party_get_slot, ":merchant_troop", "$current_town", slot_town_horse_merchant),
+           (call_script, "script_af83_shop_open", "$current_town", ":merchant_troop"),  # v1.0 城镇一个钱袋
            (change_screen_trade, ":merchant_troop"),
         ]),
       ("trade_with_goods_merchant",[(party_slot_ge, "$current_town", slot_town_merchant, 1)],
        "Trade with the goods merchant.",
        [
            (party_get_slot, ":merchant_troop", "$current_town", slot_town_merchant),
+           (call_script, "script_af83_shop_open", "$current_town", ":merchant_troop"),  # v1.0 城镇一个钱袋
            (change_screen_trade, ":merchant_troop"),
         ]),
       ("af26_protect_offer",

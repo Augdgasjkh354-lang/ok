@@ -34,6 +34,9 @@ ALLOWED_DIALOG_CHANGES={'dlga_village_elder_donate:village_elder_pretalk',  # v1
 # v1.0 第六批（十）: arena prizes and ladies' quest rewards are paid from
 # real money too (town treasury / the lady's guardian).
 ALLOWED_DIALOG_CHANGES|={
+    'dlga_goods_trade_requested:goods_trade_completed', 'dlga_trade_requested_weapons:merchant_trade',  # v1.0 城镇一个钱袋: 进店前把金库交给店主 (af83_shop_open)
+    'dlga_trade_requested_armor:merchant_trade', 'dlga_trade_requested_horse:merchant_trade',
+    'dlga_goods_trade_completed:goods_merchant_talk', 'dlga_merchant_trade:town_merchant_talk',  # 交易完回到对话就把钱收回金库
     'dlga_start:threaten_1',  # v1.0 开场白保底: 「放下武器」兜底给末尾追加的开场白让开 (af64_late_start)
     'dlga_start:pretender_start', 'dlga_start:pretender_intro_1',  # v1.0 称王者带义军时走义军对话 (af62_special_party)
     'dlga_start:party_encounter_hostile_defender',  # v1.0 义军、民军: 通用开场白让开 (af62_special_party)

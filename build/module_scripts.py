@@ -15087,15 +15087,16 @@ scripts = [
           (assign, ":af42_pay", 1),
         (try_end),
         (eq, ":af42_pay", 1),
-        (party_get_slot, ":af42_merchant", ":center_no", slot_town_merchant),
-        (gt, ":af42_merchant", 0),
-        (store_troop_gold, ":af42_gold", ":af42_merchant"),
+        # 2026-11-17 城镇一个钱袋：商人不再自己留钱，改从金库出，单次仍不超四分之一。
+        (party_get_slot, ":af42_gold", ":center_no", slot_town_wealth),
+        (val_max, ":af42_gold", 0),
         (store_div, ":af42_cap", ":af42_gold", 4),
         (assign, ":af42_profit", ":total_change"),
         (val_min, ":af42_profit", ":af42_cap"),
         (val_max, ":af42_profit", 0),
         (gt, ":af42_profit", 0),
-        (troop_remove_gold, ":af42_merchant", ":af42_profit"),
+        (val_sub, ":af42_gold", ":af42_profit"),
+        (party_set_slot, ":center_no", slot_town_wealth, ":af42_gold"),
       (try_end),
       # v1.0 领主关系与独立玩法·第三波 I8: 玩家派系商队的交易收益进自己的钱箱（只加正收益，不设上限）。
       # 审计 13 F-05: 收益改为城里商人实付的 :af42_profit; 白送的商队这一项为 0, 什么都不加。
@@ -59458,23 +59459,23 @@ scripts = [
   # which garrison wages keep near empty in most towns.)
   # New games: merchants start at 0 and are filled from the first week's market.
   ("af24_settle_stock", [
-    # 2026-11-17 玩家定：商人手里现钱太少，玩家卖货城里吸收不了。周转金 ×3（杂货 6000、防具／武器 3750、马 2400），
-    # 城里人的购买力 ×3（繁荣×45＋1500 的份额）。多出周转金的部分照旧交回金库。
-    # 推演过「补不满再从金库补」：卖货量几乎不变，却把金库掏空、付不出农民货款，所以不做（tools/sim_town_economy.py）。
+    # 2026-11-17 玩家定：城镇一个钱袋。金库和四家商店合成一个钱袋，商人平时不留钱（af83_*）。
+    # 每周刷新：先把四家店里的钱收回金库；杂货商那一次（份额 40）再结算「你卖给城里的货」：
+    # 本周你卖货从城里拿走的钱（Slot 1032），城里人按购买力（繁荣×45＋1500，旧周转金的总份额）买走，
+    # 钱回到金库，然后清零。以前的周转金、商人匀钱（af78_pool_merchants）不再用。
     (store_script_param, ":merchant", 1),
     (store_script_param, ":town", 2),
     (store_script_param, ":float", 5),
     (store_script_param, ":share", 6),
-    (store_troop_gold, ":gold", ":merchant"),
+    (assign, ":float", ":float"),
+    (assign, ":merchant", ":merchant"),
+    (call_script, "script_af83_sweep_town", ":town"),
     (try_begin),
-      (lt, ":gold", ":float"),
-      (store_sub, ":short", ":float", ":gold"),
-      # 2026-11-17 商人匀钱：先从同城另外三个商人多出周转金的部分匀过来，还差的再按购买力补。
-      (call_script, "script_af78_pool_merchants", ":merchant", ":town", ":short"),
-      (val_sub, ":short", reg0),
-      (gt, ":short", 0),
+      (eq, ":share", 40),
+      (party_get_slot, ":sold", ":town", slot_af83_sold),
+      (gt, ":sold", 0),
       (party_get_slot, ":prosperity", ":town", slot_town_prosperity),
-      (try_begin),  # v1.0 繁荣上限 200: 超出 100 的部分只算一半
+      (try_begin),  # 繁荣超出 100 的部分只算一半
         (gt, ":prosperity", 100),
         (val_sub, ":prosperity", 100),
         (val_div, ":prosperity", 2),
@@ -59482,19 +59483,11 @@ scripts = [
       (try_end),
       (store_mul, ":market", ":prosperity", 45),
       (val_add, ":market", 1500),
-      (val_mul, ":market", ":share"),
-      (val_div, ":market", 100),
-      (assign, ":give", ":short"),
-      (val_min, ":give", ":market"),
-      (gt, ":give", 0),
-      (call_script, "script_troop_add_gold", ":merchant", ":give"),
-    (else_try),
-      (gt, ":gold", ":float"),
-      (store_sub, ":surplus", ":gold", ":float"),
-      (troop_remove_gold, ":merchant", ":surplus"),
+      (val_min, ":sold", ":market"),
       (party_get_slot, ":wealth", ":town", slot_town_wealth),
-      (val_add, ":wealth", ":surplus"),
+      (val_add, ":wealth", ":sold"),
       (party_set_slot, ":town", slot_town_wealth, ":wealth"),
+      (party_set_slot, ":town", slot_af83_sold, 0),
     (try_end),
   ]),
 
@@ -67223,9 +67216,10 @@ scripts = [
         (try_end),
       (try_end),
       (is_between, ":town", towns_begin, towns_end),
-      (party_get_slot, ":merchant", ":town", slot_town_merchant),
-      (gt, ":merchant", 0),
-      (troop_add_gold, ":merchant", ":spend"),
+      # 2026-11-17 城镇一个钱袋：直接进金库（以前先进杂货商口袋，每周才交回）。
+      (party_get_slot, ":tw", ":town", slot_town_wealth),
+      (val_add, ":tw", ":spend"),
+      (party_set_slot, ":town", slot_town_wealth, ":tw"),
       (party_get_slot, ":v", ":town", slot_af75_garrison_spend),
       (val_add, ":v", ":spend"),
       (party_set_slot, ":town", slot_af75_garrison_spend, ":v"),
@@ -68333,6 +68327,68 @@ scripts = [
   ("af82_wealth_notes_daily", [
     (try_for_range, ":lord", active_npcs_begin, active_npcs_end),
       (call_script, "script_af82_wealth_note", ":lord"),
+    (try_end),
+  ]),
+
+  # ========== v1.0 城镇一个钱袋（2026-11-17 玩家定）==========
+  # 金库和武器、防具、马、杂货四家商店合成一个钱袋。平时钱都在金库，商人身上不留钱；你打开哪家店，
+  # 就把整个金库交给那家店主（四家店显示的是同一个数）；出店回到城镇菜单、或者回到大地图后的下一个小时，
+  # 店主手里的钱全部收回金库。你卖货拿走的净额记进 Slot 1032，每周刷新时城里人按购买力买走、钱回金库（af24_settle_stock）。
+  # af83_sweep_town：把一座城四家店主身上的钱收回金库。若刚开过店（Slot 1033），算出你净拿走多少，记进 1032。
+  ("af83_sweep_town", [
+    (store_script_param, ":town", 1),
+    (try_begin),
+      (is_between, ":town", towns_begin, towns_end),
+      (assign, ":back", 0),
+      (try_for_range, ":slot", slot_town_weaponsmith, slot_town_horse_merchant + 1),
+        (party_get_slot, ":m", ":town", ":slot"),
+        (gt, ":m", 0),
+        (store_troop_gold, ":g", ":m"),
+        (gt, ":g", 0),
+        (troop_remove_gold, ":m", ":g"),
+        (val_add, ":back", ":g"),
+      (try_end),
+      (party_get_slot, ":wealth", ":town", slot_town_wealth),
+      (val_add, ":wealth", ":back"),
+      (party_set_slot, ":town", slot_town_wealth, ":wealth"),
+      (party_get_slot, ":handed", ":town", slot_af83_handed),
+      (try_begin),
+        (gt, ":handed", 0),
+        (store_sub, ":net", ":handed", ":back"),
+        (gt, ":net", 0),
+        (party_get_slot, ":sold", ":town", slot_af83_sold),
+        (val_add, ":sold", ":net"),
+        (party_set_slot, ":town", slot_af83_sold, ":sold"),
+      (try_end),
+      (party_set_slot, ":town", slot_af83_handed, 0),
+    (try_end),
+  ]),
+
+  # af83_shop_open：你要和某家店主交易。先把四家店的钱收回金库，再把整个金库交给这位店主。
+  ("af83_shop_open", [
+    (store_script_param, ":town", 1),
+    (store_script_param, ":merchant", 2),
+    (try_begin),
+      (is_between, ":town", towns_begin, towns_end),
+      (assign, ":ok", 0),
+      (try_for_range, ":slot", slot_town_weaponsmith, slot_town_horse_merchant + 1),
+        (party_slot_eq, ":town", ":slot", ":merchant"),
+        (assign, ":ok", 1),
+      (try_end),
+      (eq, ":ok", 1),
+      (call_script, "script_af83_sweep_town", ":town"),
+      (party_get_slot, ":wealth", ":town", slot_town_wealth),
+      (gt, ":wealth", 0),
+      (party_set_slot, ":town", slot_town_wealth, 0),
+      (troop_add_gold, ":merchant", ":wealth"),
+      (party_set_slot, ":town", slot_af83_handed, ":wealth"),
+    (try_end),
+  ]),
+
+  # af83_sweep_all：每小时把所有城的店钱收回金库（兜底：在城里场景里和店主交易后直接离城的情况）。
+  ("af83_sweep_all", [
+    (try_for_range, ":town", towns_begin, towns_end),
+      (call_script, "script_af83_sweep_town", ":town"),
     (try_end),
   ]),
 ]

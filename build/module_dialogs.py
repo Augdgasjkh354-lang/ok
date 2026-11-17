@@ -24379,8 +24379,8 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   [anyone,"goods_merchant_pretalk", [], "Anything else?", "goods_merchant_talk",[]],
 
   [anyone|plyr,"goods_merchant_talk", [], "I want to buy a few items... and perhaps sell some.", "goods_trade_requested",[]],
-  [anyone,"goods_trade_requested", [], "Sure, sure... Here, have a look at my stock...", "goods_trade_completed",[[change_screen_trade]]],
-  [anyone,"goods_trade_completed", [], "Anything else?", "goods_merchant_talk",[]],
+  [anyone,"goods_trade_requested", [], "Sure, sure... Here, have a look at my stock...", "goods_trade_completed",[(call_script, "script_af83_shop_open", "$current_town", "$g_talk_troop"),(change_screen_trade)]],
+  [anyone,"goods_trade_completed", [], "Anything else?", "goods_merchant_talk",[(call_script, "script_af83_sweep_town", "$current_town")]],
 
   [anyone|plyr,"goods_merchant_talk", [], "What goods should I buy here to trade with other towns?", "trade_info_request",[]],
 
@@ -25296,12 +25296,12 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   [anyone|plyr,"town_merchant_talk", [(is_between,"$g_talk_troop",horse_merchants_begin,horse_merchants_end)],
    "I am thinking of buying a horse.", "trade_requested_horse",[]],
 
-  [anyone,"trade_requested_weapons", [], "Ah, yes {sir/madam}. These arms are the best you'll find anywhere.", "merchant_trade",[[change_screen_trade]]],
-  [anyone,"trade_requested_armor", [], "Of course, {sir/madam}. You won't find better quality armour than these in all Calradia.", "merchant_trade",[[change_screen_trade]]],
-  [anyone,"trade_requested_horse", [], "You have a fine eye for horses, {sir/madam}. You won't find better beasts than these anywhere else.", "merchant_trade",[[change_screen_trade]]],
+  [anyone,"trade_requested_weapons", [], "Ah, yes {sir/madam}. These arms are the best you'll find anywhere.", "merchant_trade",[(call_script, "script_af83_shop_open", "$current_town", "$g_talk_troop"),(change_screen_trade)]],
+  [anyone,"trade_requested_armor", [], "Of course, {sir/madam}. You won't find better quality armour than these in all Calradia.", "merchant_trade",[(call_script, "script_af83_shop_open", "$current_town", "$g_talk_troop"),(change_screen_trade)]],
+  [anyone,"trade_requested_horse", [], "You have a fine eye for horses, {sir/madam}. You won't find better beasts than these anywhere else.", "merchant_trade",[(call_script, "script_af83_shop_open", "$current_town", "$g_talk_troop"),(change_screen_trade)]],
 
 
-  [anyone,"merchant_trade", [], "Anything else?", "town_merchant_talk",[]],
+  [anyone,"merchant_trade", [], "Anything else?", "town_merchant_talk",[(call_script, "script_af83_sweep_town", "$current_town")]],
   [anyone|plyr,"town_merchant_talk", [], "Tell me. What are people talking about these days?", "merchant_gossip",[]],
   [anyone,"merchant_gossip", [], "Well, nothing new lately. Prices, weather, the war, the same old things.", "town_merchant_talk",[]],
   [anyone|plyr,"town_merchant_talk", [], "Good-bye.", "close_window",[]],

@@ -2344,7 +2344,10 @@ simple_triggers = [
                (val_min, ":af_spend", 1000),
                (gt, ":af_spend", 0),
                (troop_remove_gold, ":af_elder", ":af_spend"),
-               (call_script, "script_troop_add_gold", ":af_merchant", ":af_spend"),
+               # 2026-11-17 城镇一个钱袋：直接进金库。
+               (party_get_slot, ":af_tw", ":cur_ai_object", slot_town_wealth),
+               (val_add, ":af_tw", ":af_spend"),
+               (party_set_slot, ":cur_ai_object", slot_town_wealth, ":af_tw"),
                (party_get_slot, ":af_rec", ":cur_ai_object", slot_af74_villager_spend),
                (val_add, ":af_rec", ":af_spend"),
                (party_set_slot, ":cur_ai_object", slot_af74_villager_spend, ":af_rec"),
@@ -4929,5 +4932,10 @@ simple_triggers = [
   # v1.0 每天刷新领主笔记里的当前财富（af82_wealth_notes_daily）。
   (24, [
     (call_script, "script_af82_wealth_notes_daily"),
+  ]),
+
+  # v1.0 城镇一个钱袋: 每小时把店主手里的钱收回金库（af83_sweep_all）。
+  (1, [
+    (call_script, "script_af83_sweep_all"),
   ]),
 ]

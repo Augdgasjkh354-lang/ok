@@ -2240,3 +2240,5 @@ slot_af81_debt_owed          = 1028 # lord troop (buyer): denars still owed (1%/
 slot_af81_debt_missed        = 1029 # lord troop (buyer): weeks in a row he paid less than the interest; 4 = seller takes the fief back
 slot_af81_debt_center        = 1030 # lord troop (buyer): the center bought (castle or village) that can be taken back
 slot_af81_king_buy_day       = 1031 # king troop: day he may buy a fief again (day+60)
+slot_af83_sold               = 1032 # town: what the player took out of the town purse by selling in its shops since the weekly refresh; 0 = none / old save
+slot_af83_handed             = 1033 # town: treasury handed to a shopkeeper when the player opened his shop (to work out the net on return); 0 = no shop open
