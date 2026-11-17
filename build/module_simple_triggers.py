@@ -4724,4 +4724,12 @@ simple_triggers = [
   (24*7, [
     (call_script, "script_af66_cattle_weekly"),
   ]),
+
+  # v1.0 王国大小与封臣的心: 每日、每周各结算一次（见 af69_realm_mood）。
+  (24, [
+    (call_script, "script_af69_realm_mood", 1),
+  ]),
+  (24*7, [
+    (call_script, "script_af69_realm_mood", 2),
+  ]),
 ]

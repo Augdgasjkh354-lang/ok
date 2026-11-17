@@ -931,5 +931,6 @@ script_af66_cattle_weekly = 929
 script_af67_pretender_line = 930
 script_af67_messenger_line = 931
 script_af67_militia_line = 932
+script_af69_realm_mood = 933
 
 
