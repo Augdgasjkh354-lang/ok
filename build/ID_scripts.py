@@ -999,5 +999,7 @@ script_af97_gift_relation = 997
 script_af98_folk_to_treasury = 998
 script_cf_af99_tell = 999
 script_af99_world_text = 1000
+script_af100_weekly_income = 1001
+script_af100_disband_to_income = 1002
 
 

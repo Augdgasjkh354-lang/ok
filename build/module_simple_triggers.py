@@ -512,6 +512,16 @@ simple_triggers = [
          (call_script, "script_calculate_weekly_party_wage", ":center_no"),
          # v1.0 数据联动⑦: 金库付不起的饷不再一笔勾销: 城主从自己财产补, 城主也付不起, 守军开小差 (af56_garrison_shortfall)。
          (assign, ":af_wage", reg0),
+         # v1.0 经济 2.0 第二批 (主动裁军): 周饷大于本周入账时, 从低等级兵开始裁,
+         # 裁到周饷不高于周入账为止, 底线留 150 人。裁军看的是饷和入账的结构性缺口,
+         # 不是等金库付不起才动手; 城主贴钱也不改变这个判断。裁到 150 人底线后饷仍
+         # 高于入账的, 保留原有的短缺处理 (af56_garrison_shortfall) 作兜底, 不改它。
+         # 裁完重算 :af_wage, 后面的花销/王室税/扣饷/短缺都用新饷。
+         (try_begin),
+           (gt, ":af_wage", ":added_wealth"),
+           (call_script, "script_af100_disband_to_income", ":center_no", ":added_wealth"),
+           (assign, ":af_wage", reg0),
+         (try_end),
          # v1.0 2026-11-17 驻军花销: 金库实际发出的饷 (不算城主补的), 三分之一花在城里 (af75_garrison_spend)。
          (assign, ":af_paid", ":cur_wealth"),
          (val_max, ":af_paid", 0),
@@ -723,8 +733,19 @@ simple_triggers = [
          (assign, ":cur_wealth", reg0),
          (assign, ":hiring_budget", ":cur_wealth"),
          (val_div, ":hiring_budget", 2),
-         (gt, ":hiring_budget", ":reinforcement_cost"),       
-         (call_script, "script_cf_reinforce_party", ":center_no"),       
+         (gt, ":hiring_budget", ":reinforcement_cost"),
+         # v1.0 经济 2.0 第二批 (招兵加闸): 当前周饷已经大于等于周入账时不招;
+         # 招了会让周饷超过入账的也不招 (一轮补兵最多约 100 饷, 按这个上限估,
+         # 见提交说明)。城堡走城主钱袋的同样加闸。两个都是本轮的过滤条件,
+         # 不满足只跳过这一轮, 不影响下一轮和下一个据点。
+         (call_script, "script_calculate_weekly_party_wage", ":center_no"),
+         (assign, ":af_wage_now", reg0),
+         (call_script, "script_af100_weekly_income", ":center_no"),
+         (assign, ":af_income_now", reg0),
+         (lt, ":af_wage_now", ":af_income_now"),
+         (store_add, ":af_wage_after", ":af_wage_now", 100),
+         (le, ":af_wage_after", ":af_income_now"),
+         (call_script, "script_cf_reinforce_party", ":center_no"),
          (store_sub, ":af_cost", 0, ":reinforcement_cost"),
          (call_script, "script_af58_purse_change", ":center_no", ":af_cost"),
        (try_end),  
