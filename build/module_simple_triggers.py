@@ -4916,8 +4916,9 @@ simple_triggers = [
     (call_script, "script_af80_policy_weekly"),
   ]),
 
-  # v1.0 封地买卖第一批: 每周穷领主把村子卖给本国有钱的领主，国王抽 15%（af81_fief_sale_weekly）。
+  # v1.0 封地买卖: 每周先结算分期款，再看有没有穷领主卖地（af81_installments_weekly、af81_fief_sale_weekly）。
   (24*7, [
+    (call_script, "script_af81_installments_weekly"),
     (call_script, "script_af81_fief_sale_weekly"),
   ]),
 ]

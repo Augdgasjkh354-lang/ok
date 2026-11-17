@@ -27424,14 +27424,14 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
     (troop_get_slot, ":wealth", "$g_talk_troop", slot_troop_wealth),
     (lt, ":wealth", 5000),
     (store_troop_gold, ":gold", "trp_player"),
-    (ge, ":gold", 10000),
+    (ge, ":gold", 3000),
     (call_script, "script_af33_king_selling", "$g_talk_troop"),
     (eq, reg0, 1),
   ], "我想买下这座城——出个价吧。", "af33_buy_center_intro",[]],
   [anyone,"af33_buy_center_intro", [
     (party_slot_eq, "p_main_party", slot_af33_funded_faction, "$players_kingdom"),
-  ], "你资助过我国打仗，这份情我记着。我的封地可以卖给你：城镇五万第纳尔，城堡三万，村庄一万。你看中哪一处？", "af33_buy_center_select",[]],
-  [anyone,"af33_buy_center_intro", [], "我的封地可以卖：城镇五万第纳尔，城堡三万，村庄一万。你看中哪一处？国库正紧，不然我也不卖。", "af33_buy_center_select",[]],
+  ], "你资助过我国打仗，这份情我记着。我的封地可以卖给你：城堡六万第纳尔；城镇看繁荣，最少十万；村子也看繁荣，每点三百。你看中哪一处？", "af33_buy_center_select",[]],
+  [anyone,"af33_buy_center_intro", [], "我的封地可以卖：城堡六万第纳尔；城镇看繁荣，最少十万；村子也看繁荣，每点三百。你看中哪一处？国库正紧，不然我也不卖。", "af33_buy_center_select",[]],
   [anyone|plyr|repeat_for_parties,"af33_buy_center_select", [
     (store_repeat_object, ":center"),
     (is_between, ":center", centers_begin, centers_end),
@@ -28197,7 +28197,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   [anyone,"af42_fief_intro", [
     (call_script, "script_af42_king_debt", "$g_talk_troop"),
     (assign, reg41, reg0),
-  ], "……你算得清楚，我也认账：前后欠你 {reg41} 第纳尔。国库确实空了。我名下的地，按买卖的价钱算——城镇五万，城堡三万，村庄一万。你挑一处，抵掉多少就是多少。", "af42_fief_select", []],
+  ], "……你算得清楚，我也认账：前后欠你 {reg41} 第纳尔。国库确实空了。我名下的地，按买卖的价钱算——城堡六万；城镇看繁荣，最少十万；村子每点繁荣三百。你挑一处，抵掉多少就是多少。", "af42_fief_select", []],
 
   [anyone|plyr|repeat_for_parties,"af42_fief_select", [
     (store_repeat_object, ":center"),

@@ -961,5 +961,12 @@ script_af80_player_loot = 959
 script_af80_tariff_pct = 960
 script_af80_policy_weekly = 961
 script_af81_fief_sale_weekly = 962
+script_af81_lord_wage = 963
+script_af81_count_fiefs = 964
+script_af81_package_price = 965
+script_af81_pick_for_sale = 966
+script_af81_pay = 967
+script_af81_clear_debt = 968
+script_af81_installments_weekly = 969
 
 

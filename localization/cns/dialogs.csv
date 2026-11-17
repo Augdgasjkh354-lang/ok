@@ -112,8 +112,8 @@ dlga_village_af33_invest_choose:village_af33_invest_done|投 2000 第 纳 尔 �
 dlga_village_af33_invest_choose:village_elder_pretalk|算 了 , 先 不 投 。 
 dlga_village_af33_invest_done:village_elder_pretalk|多 谢 大 人 ！ 村 里 有 了 这 笔 钱 , 往 后 的 日 子 总 算 有 个 盼 头 。 每 周 的 分 红 , 村 长 会 按 时 给 您 送 去 。 
 dlga_lord_talk_money:af33_buy_center_intro|我 想 买 下 这 座 城 — — 出 个 价 吧 。 
-dlga_af33_buy_center_intro:af33_buy_center_select|你 资 助 过 我 国 打 仗 ， 这 份 情 我 记 着 。 我 的 封 地 可 以 卖 给 你 ： 城 镇 五 万 第 纳 尔 ， 城 堡 三 万 ， 村 庄 一 万 。 你 看 中 哪 一 处 ？ 
-dlga_af33_buy_center_intro:af33_buy_center_select.1|我 的 封 地 可 以 卖 ： 城 镇 五 万 第 纳 尔 ， 城 堡 三 万 ， 村 庄 一 万 。 你 看 中 哪 一 处 ？ 国 库 正 紧 ， 不 然 我 也 不 卖 。 
+dlga_af33_buy_center_intro:af33_buy_center_select|你 资 助 过 我 国 打 仗 ， 这 份 情 我 记 着 。 我 的 封 地 可 以 卖 给 你 ： 城 堡 六 万 第 纳 尔 ； 城 镇 看 繁 荣 ， 最 少 十 万 ； 村 子 也 看 繁 荣 ， 每 点 三 百 。 你 看 中 哪 一 处 ？ 
+dlga_af33_buy_center_intro:af33_buy_center_select.1|我 的 封 地 可 以 卖 ： 城 堡 六 万 第 纳 尔 ； 城 镇 看 繁 荣 ， 最 少 十 万 ； 村 子 也 看 繁 荣 ， 每 点 三 百 。 你 看 中 哪 一 处 ？ 国 库 正 紧 ， 不 然 我 也 不 卖 。 
 dlga_af33_buy_center_select:af33_buy_center_done|{s1} — — {reg0} 第 纳 尔 
 dlga_af33_buy_center_select:lord_pretalk|算 了 ， 先 不 买 。 
 dlga_af33_buy_center_done:lord_pretalk|成 交 。 {s1} 从 今 往 后 归 你 所 有 — — 愿 它 给 你 赚 回 这 {reg41} 第 纳 尔 。 
@@ -180,7 +180,7 @@ dlga_lord_af38_taxdebt_choose:lord_af38_taxdebt_done|就 这 么 办 。
 dlga_lord_af38_taxdebt_choose:lord_pretalk|算 了 ， 我 再 等 等 。 
 dlga_lord_af38_taxdebt_done:lord_pretalk|我 这 就 给 城 里 的 管 事 写 信 。 这 笔 账 ， 总 算 轻 了 些 。 
 dlga_lord_talk_money:af42_fief_intro|陛 下 欠 我 的 钱 ， 看 来 是 还 不 上 了 。 不 如 拿 一 处 封 地 来 抵 。 
-dlga_af42_fief_intro:af42_fief_select|… … 你 算 得 清 楚 ， 我 也 认 账 ： 前 后 欠 你 {reg41} 第 纳 尔 。 国 库 确 实 空 了 。 我 名 下 的 地 ， 按 买 卖 的 价 钱 算 — — 城 镇 五 万 ， 城 堡 三 万 ， 村 庄 一 万 。 你 挑 一 处 ， 抵 掉 多 少 就 是 多 少 。 
+dlga_af42_fief_intro:af42_fief_select|… … 你 算 得 清 楚 ， 我 也 认 账 ： 前 后 欠 你 {reg41} 第 纳 尔 。 国 库 确 实 空 了 。 我 名 下 的 地 ， 按 买 卖 的 价 钱 算 — — 城 堡 六 万 ； 城 镇 看 繁 荣 ， 最 少 十 万 ； 村 子 每 点 繁 荣 三 百 。 你 挑 一 处 ， 抵 掉 多 少 就 是 多 少 。 
 dlga_af42_fief_select:af42_fief_done|{s1} — — 抵 {reg0} 第 纳 尔 
 dlga_af42_fief_select:lord_pretalk|再 想 想 。 
 dlga_af42_fief_done:lord_pretalk|地 契 拿 去 吧 。 {s1} 从 今 往 后 是 你 的 — — 这 笔 账 ， 就 算 清 了 {reg41} 第 纳 尔 。 

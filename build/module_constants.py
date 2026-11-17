@@ -2235,3 +2235,8 @@ slot_af80_grain_policy_day   = 1023 # p_main_party: day it may change again (day
 slot_af80_bandit_policy      = 1024 # p_main_party: player-king bandit policy: 0 = leave it, 1 = suppress (1000/week, kingdom villages unrest -2), 2 = appease (500/week into gang purses, unrest -1)
 slot_af80_bandit_policy_day  = 1025 # p_main_party: day it may change again (day+30)
 slot_af81_fief_sale_day      = 1026 # lord troop: day he may sell a village again (day+30); 0 = never sold / old save
+slot_af81_debt_seller        = 1027 # lord troop (buyer): who he still owes for a fief bought on installments; 0 = no debt
+slot_af81_debt_owed          = 1028 # lord troop (buyer): denars still owed (1%/week interest compounds in)
+slot_af81_debt_missed        = 1029 # lord troop (buyer): weeks in a row he paid less than the interest; 4 = seller takes the fief back
+slot_af81_debt_center        = 1030 # lord troop (buyer): the center bought (castle or village) that can be taken back
+slot_af81_king_buy_day       = 1031 # king troop: day he may buy a fief again (day+60)
