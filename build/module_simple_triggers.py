@@ -470,6 +470,7 @@ simple_triggers = [
          (store_div, reg45, ":af86_paid", 200),
          (display_message, "@本周你给 {reg45} 位封臣各发了 200 第纳尔补贴，共 {reg44} 第纳尔。", 0xFFCC66),
        (try_end),
+       (call_script, "script_af102_lord_debt_weekly"),  # 2026-11-17 玩家定：欠你钱的领主每周先还一部分（放在补贴统计之后）
            
        (assign, ":af77_to_player", 0),  # v1.0 王室税: 你当国王时本周收到的合计
        (try_for_range, ":center_no", walled_centers_begin, walled_centers_end),

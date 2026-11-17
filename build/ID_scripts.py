@@ -1004,5 +1004,7 @@ script_af100_disband_to_income = 1002
 script_af101_kingdom_strapped = 1003
 script_af101_bailout = 1004
 script_af101_weekly = 1005
+script_af102_gang_take = 1006
+script_af102_lord_debt_weekly = 1007
 
 

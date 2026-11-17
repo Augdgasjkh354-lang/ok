@@ -15238,7 +15238,10 @@ scripts = [
           (val_add, "$newglob_total_prosperity_from_caravan_trade", 1),
         (try_end),
       (try_end),
-      (call_script, "script_af18_caravan_fund", ":party_no", ":center_no"),  # v1.0: top up the cash box here
+      (try_begin),  # 审计第 29 条：白送商队（968 = 1）只在出生时拿一次本钱，被抢后不再由金库补
+        (party_slot_eq, ":party_no", slot_af42_free_caravan, 0),
+        (call_script, "script_af18_caravan_fund", ":party_no", ":center_no"),  # v1.0: top up the cash box here
+      (try_end),
   ]),
   
   #script_party_calculate_regular_strength:
@@ -58149,6 +58152,20 @@ scripts = [
     (val_div, ":loot", 100),
     (val_sub, ":treasury", ":loot"),
     (party_set_slot, ":center", slot_town_wealth, ":treasury"),
+    # 2026-11-17 玩家定（审计第 41 条）：城堡没有金库，抢的是城主财产的四成（城主就是在这里攒钱的）。
+    (try_begin),
+      (is_between, ":center", castles_begin, castles_end),
+      (party_get_slot, ":clord", ":center", slot_town_lord),
+      (neq, ":clord", ":receiver"),
+      (is_between, ":clord", active_npcs_begin, active_npcs_end),
+      (troop_get_slot, ":cw", ":clord", slot_troop_wealth),
+      (gt, ":cw", 0),
+      (store_mul, ":closs", ":cw", 40),
+      (val_div, ":closs", 100),
+      (gt, ":closs", 0),
+      (call_script, "script_af14_lord_wealth", ":clord", 0, ":closs"),
+      (val_add, ":loot", ":closs"),
+    (try_end),
     (assign, reg41, 0), (assign, reg42, 0),
     (try_begin),
       (gt, ":loot", 0),
@@ -58394,22 +58411,8 @@ scripts = [
         (is_between, ":kind", 1, 7),
         (call_script, "script_af04_main_slot", slot_af04_party_start, ":kind"),
         (party_slot_eq, "p_main_party", reg0, ":winner"),
-        (call_script, "script_af15_gang_purse", ":kind", ":purse"),
-        # v1.0 资本家 2.0 第三批 (8a): 帮打赢商队抢到钱, 投过钱的玩家分 20%
-        # (af33_gang_dividend; 按抢到的全额算, L3 资助人的 30% 在后面另扣)。
-        (call_script, "script_af33_gang_dividend", ":kind", ":purse"),
-        # v1.0 领主与匪帮 L3: 有资助人的帮打赢商队，30% 分给资助的领主。
-        (call_script, "script_af27_find_sponsor", ":kind"),
-        (try_begin),
-          (is_between, reg0, active_npcs_begin, active_npcs_end),
-          (assign, ":sponsor", reg0),
-          (store_mul, ":share", ":purse", 30),
-          (val_div, ":share", 100),
-          (gt, ":share", 0),
-          (call_script, "script_af14_lord_wealth", ":sponsor", ":share", 0),
-          (store_mul, ":take", ":share", -1),
-          (call_script, "script_af15_gang_purse", ":kind", ":take"),
-        (try_end),
+        # 2026-11-17 玩家定：帮抢到的钱一律走 af102_gang_take（你两成、资助领主三成、其余进帮钱袋）。
+        (call_script, "script_af102_gang_take", ":kind", ":purse"),
       (try_end),
     (try_end),
   ]),
@@ -58467,6 +58470,7 @@ scripts = [
     (store_script_param, ":asked", 2),
     (try_begin),
       (party_slot_eq, ":caravan", slot_af18_caravan_purse, 0),
+      (party_slot_eq, ":caravan", slot_af42_free_caravan, 0),  # 审计第 29 条：白送商队被抢空后不再补
       (party_get_slot, ":home", ":caravan", slot_party_home_center),
       (call_script, "script_af18_caravan_fund", ":caravan", ":home"),
     (try_end),
@@ -59513,7 +59517,7 @@ scripts = [
           (val_mul, ":taken", -1),
           (call_script, "script_af15_gang_purse", ":loser_kind", ":taken"),
           (val_mul, ":taken", -1),
-          (call_script, "script_af15_gang_purse", ":winner_kind", ":taken"),
+          (call_script, "script_af102_gang_take", ":winner_kind", ":taken"),  # 2026-11-17 统一分成
         (try_end),
         (store_distance_to_party_from_party, ":dist_w", ":winner_party", "p_main_party"),
         (store_distance_to_party_from_party, ":dist_l", ":loser_party", "p_main_party"),
@@ -60441,9 +60445,7 @@ scripts = [
       (assign, ":taken", reg0),  # 扣钱时 af13 返回实扣的正数
       (try_begin),
         (gt, ":taken", 0),
-        (call_script, "script_af15_gang_purse", ":kind", ":taken"),
-        # v1.0 资本家 2.0 第三批 (8a): 帮劫村抢到钱, 投过钱的玩家分 20%。
-        (call_script, "script_af33_gang_dividend", ":kind", ":taken"),
+        (call_script, "script_af102_gang_take", ":kind", ":taken"),  # 2026-11-17 统一分成
       (try_end),
       (party_set_slot, ":gang", slot_af04_last_strike, ":day"),
       (str_store_party_name, s57, ":target"),
@@ -61390,8 +61392,7 @@ scripts = [
         (gt, ":take", 0),
         (store_sub, ":new_purse", ":purse", ":take"),
         (party_set_slot, ":caravan", slot_af18_caravan_purse, ":new_purse"),
-        (call_script, "script_af15_gang_purse", ":kind", ":take"),
-        (call_script, "script_af33_gang_dividend", ":kind", ":take"),
+        (call_script, "script_af102_gang_take", ":kind", ":take"),  # 2026-11-17 统一分成
       (try_end),
       (party_set_slot, ":gang", slot_af04_last_strike, ":day"),
       (assign, ":hit", 1),
@@ -64990,12 +64991,16 @@ scripts = [
           (neg|is_between, ":king_b", active_npcs_begin, active_npcs_end),
           (assign, ":void", 1),
         (else_try),
+          # 2026-11-17 玩家定（审计第 42 条）：再宣战不再一笔勾销，欠款挂着，打仗期间停付。
           (store_relation, ":rel", ":kingdom_a", ":kingdom_b"),
           (lt, ":rel", 0),
-          (assign, ":void", 1),
+          (assign, ":void", 2),
         (try_end),
         (try_begin),
+          (eq, ":void", 2),
+        (else_try),
           (eq, ":void", 1),
+          (faction_set_slot, ":kingdom_b", slot_af53_default_weeks, 0),
           # 作废: 两个 Slot 清零; 两国中有一国是 $players_kingdom 时消息。
           (faction_set_slot, ":kingdom_b", slot_af53_reparation_to, 0),
           (faction_set_slot, ":kingdom_b", slot_af53_reparation_left, 0),
@@ -65019,6 +65024,20 @@ scripts = [
           (call_script, "script_af14_lord_wealth", ":king_a", ":actual", 0),
           (val_sub, ":left", ":actual"),
           # --- 违约 (实付 < 应付) ---
+          # 2026-11-17 玩家定（审计第 43 条）：连续违约满 4 周，剩下的减半，重新计数。
+          (try_begin),
+            (lt, ":actual", ":due"),
+            (faction_get_slot, ":dw", ":kingdom_b", slot_af53_default_weeks),
+            (val_add, ":dw", 1),
+            (try_begin),
+              (ge, ":dw", 4),
+              (val_div, ":left", 2),
+              (assign, ":dw", 0),
+            (try_end),
+            (faction_set_slot, ":kingdom_b", slot_af53_default_weeks, ":dw"),
+          (else_try),
+            (faction_set_slot, ":kingdom_b", slot_af53_default_weeks, 0),
+          (try_end),
           (try_begin),
             (lt, ":actual", ":due"),
             (call_script, "script_troop_change_relation_with_troop", ":king_a", ":king_b", -5),
@@ -65039,6 +65058,7 @@ scripts = [
             (eq, ":left", 0),
             (faction_set_slot, ":kingdom_b", slot_af53_reparation_to, 0),
             (faction_set_slot, ":kingdom_b", slot_af53_reparation_left, 0),
+            (faction_set_slot, ":kingdom_b", slot_af53_default_weeks, 0),
             (call_script, "script_troop_change_relation_with_troop", ":king_a", ":king_b", 3),
             (str_store_faction_name, s10, ":kingdom_b"),
             (str_store_faction_name, s11, ":kingdom_a"),
@@ -70244,6 +70264,60 @@ scripts = [
       (try_end),
     (try_end),
     (assign, reg0, ":player_needs"),
+  ]),
+
+  # 2026-11-17 玩家定（审计第 22 条）：帮抢到的钱一律这样分：先进帮钱袋，投过钱的你分两成
+  # （af33_gang_dividend），资助它的领主分三成，其余留在帮里。参数 1 帮（1～6），2 抢到的钱。
+  ("af102_gang_take", [
+    (store_script_param, ":kind", 1),
+    (store_script_param, ":amount", 2),
+    (try_begin),
+      (gt, ":amount", 0),
+      (is_between, ":kind", 1, 7),
+      (call_script, "script_af15_gang_purse", ":kind", ":amount"),
+      (call_script, "script_af33_gang_dividend", ":kind", ":amount"),
+      (call_script, "script_af27_find_sponsor", ":kind"),
+      (try_begin),
+        (is_between, reg0, active_npcs_begin, active_npcs_end),
+        (assign, ":sponsor", reg0),
+        (store_mul, ":share", ":amount", 30),
+        (val_div, ":share", 100),
+        (gt, ":share", 0),
+        (call_script, "script_af14_lord_wealth", ":sponsor", ":share", 0),
+        (store_mul, ":neg", ":share", -1),
+        (call_script, "script_af15_gang_purse", ":kind", ":neg"),
+      (try_end),
+    (try_end),
+  ]),
+
+  # 2026-11-17 玩家定（审计第 24 条）：欠你钱的领主（Slot 874）每周收入到账后，拿财产的四分之一先还你。
+  # 两国交战时不还（照 af19_settle_debts）。一条汇总消息。
+  ("af102_lord_debt_weekly", [
+    (assign, ":total", 0),
+    (assign, ":n", 0),
+    (try_for_range, ":lord", active_npcs_begin, active_npcs_end),
+      (troop_get_slot, ":owed", ":lord", slot_af19_lord_owes_player),
+      (gt, ":owed", 0),
+      (troop_get_slot, ":w", ":lord", slot_troop_wealth),
+      (store_div, ":pay", ":w", 4),
+      (val_min, ":pay", ":owed"),
+      (gt, ":pay", 0),
+      (store_troop_faction, ":lf", ":lord"),
+      (store_relation, ":rel", ":lf", "fac_player_supporters_faction"),
+      (ge, ":rel", 0),
+      (call_script, "script_af14_lord_wealth", ":lord", 0, ":pay"),
+      (val_sub, ":owed", ":pay"),
+      (troop_set_slot, ":lord", slot_af19_lord_owes_player, ":owed"),
+      (troop_add_gold, "trp_player", ":pay"),
+      (val_add, ":total", ":pay"),
+      (val_add, ":n", 1),
+    (try_end),
+    (try_begin),
+      (gt, ":total", 0),
+      (assign, reg44, ":n"),
+      (assign, reg45, ":total"),
+      (display_message, "@本周有 {reg44} 位欠你钱的领主派人送来 {reg45} 第纳尔还债。", 0xFFCC66),
+    (try_end),
   ]),
 
 ]

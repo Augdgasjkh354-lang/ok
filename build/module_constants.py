@@ -2252,3 +2252,4 @@ slot_af94_squeeze_count      = 1041 # village: times its own lord squeezed it in
 slot_af94_squeeze_since      = 1042 # village: first day of the current squeeze window + 1; 0 = never squeezed
 slot_af94_squeeze_sum        = 1043 # village: denars squeezed in the current window; militia party: denars it goes to take back (> 0 marks an uprising against its own lord)
 slot_af83_handed             = 1033 # town: treasury handed to a shopkeeper when the player opened his shop (to work out the net on return); 0 = no shop open
+slot_af53_default_weeks     = 1044 # faction (debtor): consecutive weeks the reparation was not paid in full; at 4 the rest is halved and it resets
