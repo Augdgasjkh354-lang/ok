@@ -22602,22 +22602,12 @@ scripts = [
               (try_end),
               
               #give loot gold to raid leader
-              (party_get_slot, ":village_prosperity", ":village_no"),
-              (store_mul, ":value_of_loot", ":village_prosperity", 60), #average is 3000
-              (call_script, "script_af16_take_village_cash", ":village_no"),  # v1.0: the elder's purse too
-              # v1.0 2026-11-17：劫村所得也照缴获的规矩分给国王（AI 领主 1/3；你当国王时进你的金币），
-              # 原来直接全进劫掠领主的财产，国王一分拿不到。
-              (store_add, ":af80_raid_total", ":value_of_loot", reg0),
+              # v1.0 2026-11-17 玩家定：劫村所得全从村民钱袋出（抢走一半），不再按繁荣 × 60 从村子领主的财产里扣。
+              # 领主的损失改由现成的连锁体现：村民钱袋不到一半 → 领主掏钱接济／向国王讨赈济 → 两周缓不过来繁荣 −5。
+              (call_script, "script_af16_take_village_cash", ":village_no"),
+              # 劫村所得照缴获的规矩分给国王（AI 领主 1/3；你当国王时进你的金币）。
+              (assign, ":af80_raid_total", reg0),
               (call_script, "script_af16_split_loot", ":raid_leader", ":af80_raid_total"),
-              
-              #take loot gold from village lord #new 1.126
-              (try_begin),
-                (is_between, ":village_lord", active_npcs_begin, active_npcs_end),
-                (troop_get_slot, ":village_lord_gold", ":village_lord", slot_troop_wealth),
-                (val_sub, ":village_lord_gold", ":value_of_loot"),
-                (val_max, ":village_lord_gold", 0),
-                (troop_set_slot, ":village_lord", slot_troop_wealth, ":village_lord_gold"),
-              (try_end),
               
               (call_script, "script_village_set_state",  ":village_no", svs_looted),
               (party_set_slot, ":village_no", slot_center_accumulated_rents, 0), #new 1.126
@@ -58114,9 +58104,8 @@ scripts = [
       (party_get_slot, ":elder", ":village", slot_town_elder),
       (gt, ":elder", 0),
       (store_troop_gold, ":cash", ":elder"),
-      (store_random_in_range, ":points", 1, 4),
-      (store_mul, ":cap", ":points", 200),
-      (val_min, ":cash", ":cap"),
+      # 2026-11-17 玩家定：劫空一个村子，抢走村民钱袋的一半（原来只拿 200～600）。
+      (val_div, ":cash", 2),
       (gt, ":cash", 0),
       (troop_remove_gold, ":elder", ":cash"),
       (assign, reg0, ":cash"),
@@ -68303,6 +68292,15 @@ scripts = [
       (else_try),
         (store_div, ":interest", ":owed", 100),
         (val_add, ":owed", ":interest"),
+        # v1.0 2026-11-17 玩家定：财产凑不够这周利息时，先向自己治下的百姓摊派（af92_squeeze_fiefs）。
+        (try_begin),
+          (troop_get_slot, ":wealth", ":buyer", slot_troop_wealth),
+          (store_sub, ":spare", ":wealth", 1000),
+          (val_max, ":spare", 0),
+          (lt, ":spare", ":interest"),
+          (store_sub, ":short", ":interest", ":spare"),
+          (call_script, "script_af92_squeeze_fiefs", ":buyer", ":short", ":center"),
+        (try_end),
         (troop_get_slot, ":wealth", ":buyer", slot_troop_wealth),
         (store_sub, ":pay", ":wealth", 1000),
         (val_max, ":pay", 0),
@@ -69209,5 +69207,62 @@ scripts = [
       (try_end),
       (call_script, "script_change_center_prosperity", ":c", ":pts"),
     (try_end),
+  ]),
+
+  # v1.0 2026-11-17 玩家定：买封地的分期款还不上利息时，买家向治下百姓摊派。
+  # 参数 1 买家，2 要凑的钱，3 买的据点（消息用）。村子从村民钱袋拿、城镇从镇民钱袋拿，都最多拿到只剩满额的一半；
+  # 城堡没有百姓钱袋，只刮它下面归买家的村子（村子本来就在名下，一并扫到）。被刮的村子战乱 +3。
+  # 被刮的地方 14 天内不能向国王讨赈济（Slot 1038），免得国王替他还债。钱进买家财产（af14）。输出 reg0 凑到多少。
+  ("af92_squeeze_fiefs", [
+    (store_script_param, ":lord", 1),
+    (store_script_param, ":need", 2),
+    (store_script_param, ":bought", 3),
+    (store_current_day, ":today"),
+    (store_add, ":block", ":today", 14),
+    (assign, ":got", 0),
+    (try_for_range, ":c", villages_begin, villages_end),
+      (lt, ":got", ":need"),
+      (party_slot_eq, ":c", slot_town_lord, ":lord"),
+      (party_slot_eq, ":c", slot_village_state, svs_normal),
+      (party_get_slot, ":elder", ":c", slot_town_elder),
+      (gt, ":elder", 0),
+      (store_troop_gold, ":have", ":elder"),
+      (party_get_slot, ":p", ":c", slot_town_prosperity),
+      (store_mul, ":half", ":p", 100),
+      (store_sub, ":take", ":have", ":half"),
+      (store_sub, ":left", ":need", ":got"),
+      (val_min, ":take", ":left"),
+      (gt, ":take", 0),
+      (troop_remove_gold, ":elder", ":take"),
+      (val_add, ":got", ":take"),
+      (call_script, "script_af01_change_unrest", ":c", 3),
+      (party_set_slot, ":c", slot_af87_petition_day, ":block"),
+    (try_end),
+    (try_for_range, ":c", towns_begin, towns_end),
+      (lt, ":got", ":need"),
+      (party_slot_eq, ":c", slot_town_lord, ":lord"),
+      (call_script, "script_af87_folk", ":c"),
+      (assign, ":have", reg0),
+      (call_script, "script_af87_folk_max", ":c"),
+      (store_div, ":half", reg0, 2),
+      (store_sub, ":take", ":have", ":half"),
+      (store_sub, ":left", ":need", ":got"),
+      (val_min, ":take", ":left"),
+      (gt, ":take", 0),
+      (store_sub, ":neg", 0, ":take"),
+      (call_script, "script_af87_folk_add", ":c", ":neg"),
+      (store_sub, ":take", 0, reg0),
+      (val_add, ":got", ":take"),
+      (party_set_slot, ":c", slot_af87_petition_day, ":block"),
+    (try_end),
+    (try_begin),
+      (gt, ":got", 0),
+      (call_script, "script_af14_lord_wealth", ":lord", ":got", 0),
+      (str_store_troop_name, s44, ":lord"),
+      (str_store_party_name, s45, ":bought"),
+      (assign, reg44, ":got"),
+      (display_message, "@{s44}还不上买{s45}的钱，向治下百姓摊派了 {reg44} 第纳尔。", 0xFF9966),
+    (try_end),
+    (assign, reg0, ":got"),
   ]),
 ]

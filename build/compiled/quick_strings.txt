@@ -1,4 +1,4 @@
-2436
+2437
 qstr_Next_Page Next_Page
 qstr_Game_Rules:^ Game_Rules:^
 qstr_0 0
@@ -2170,6 +2170,7 @@ qstr_村民手头宽裕（{reg44}／{reg4 村民手头宽裕（{reg44}／{reg45}
 qstr_村民手头寻常（{reg44}／{reg4 村民手头寻常（{reg44}／{reg45}_第纳尔）。
 qstr_村民手头拮据（{reg44}／{reg4 村民手头拮据（{reg44}／{reg45}_第纳尔），已经_{reg46}_周了。
 qstr_村民手头拮据（{reg44}／{reg45 村民手头拮据（{reg44}／{reg45}_第纳尔）。
+qstr_{s44}还不上买{s45}的钱，向治下 {s44}还不上买{s45}的钱，向治下百姓摊派了_{reg44}_第纳尔。
 qstr_{s1}^威名：+{reg8} {s1}^威名：+{reg8}
 qstr_已收取_{reg1}_支商队的收益，共_ 已收取_{reg1}_支商队的收益，共_{reg0}_第纳尔。
 qstr_你手头的钱不够付这笔盾牌钱。 你手头的钱不够付这笔盾牌钱。

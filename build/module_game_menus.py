@@ -8809,18 +8809,9 @@ game_menus = [
           (call_script, "script_change_player_relation_with_faction", ":village_faction", -3),
         (try_end),
                 
-        (assign, ":money_gained", 50),
-        (party_get_slot, ":prosperity", "$current_town", slot_town_prosperity),
-        (try_begin),  # v1.0 繁荣上限 200: 超出 100 的部分只算一半
-          (gt, ":prosperity", 100),
-          (val_sub, ":prosperity", 100),
-          (val_div, ":prosperity", 2),
-          (val_add, ":prosperity", 100),
-        (try_end),
-        (store_mul, ":prosperity_of_village_mul_5", ":prosperity", 5),
-        (val_add, ":money_gained", ":prosperity_of_village_mul_5"),
-        (call_script, "script_af16_take_village_cash", "$current_town"),  # v1.0: the village's own cash
-        (val_add, ":money_gained", reg0),
+        # v1.0 2026-11-17 玩家定：劫村所得全从村民钱袋出（抢走一半），不再凭空给 50 + 繁荣 × 5。
+        (call_script, "script_af16_take_village_cash", "$current_town"),
+        (assign, ":money_gained", reg0),
         (call_script, "script_troop_add_gold", "trp_player", ":money_gained"),
         # v1.0 第六批（七）：村子记得这次劫掠，60 天内不给招兵、不来答谢。
         (store_current_day, ":day"),
@@ -8829,6 +8820,7 @@ game_menus = [
                 
         (assign, ":morale_increase", 3),
         (store_div, ":money_gained_div_100", ":money_gained", 100),
+        (val_min, ":money_gained_div_100", 7),  # v1.0：抢得多了，士气加成仍按原版量级（最多 +10）
         (val_add, ":morale_increase", ":money_gained_div_100"),
         (call_script, "script_change_player_party_morale", ":morale_increase"),
         

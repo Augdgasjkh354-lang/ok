@@ -989,5 +989,6 @@ script_af89_village_text = 987
 script_af90_quest_pay = 988
 script_af91_ratio = 989
 script_af91_growth_3days = 990
+script_af92_squeeze_fiefs = 991
 
 
