@@ -16911,8 +16911,9 @@ game_menus = [
    ]),
 
   # v1.0 资本家第三批 (条目 7): 钱庄菜单。Slot 950 存本金+1 (0 = 没开过, 1 = 已开且无未收回本金),
-  # 所以各选项里先减 1 才是本金。放贷: 玩家现钱 -> 本城商人 (商人不在账上, 本金只记 Slot 950,
-  # 照工资消失的先例); 利息每周由触发器从金库付, 本金在这里收回, 金库一次最多出 3/4、不够的城主国王补。
+  # 所以各选项里先减 1 才是本金。放贷: 玩家现钱 -> 本城金库 (商人就是金库，af83 一个钱袋，
+  # 钱进金库就是给了本城商人)，本金同时记 Slot 950; 利息每周由触发器从金库付, 本金在这里收回,
+  # 金库一次最多出 3/4、不够的城主国王补。
   ("af31_bank", 0,
    "钱庄——{s10}。^借出去的钱每周生 1% 的息, 从本城金库出, 金库不够由城主、国王补, 再不够就滚进本金; 本金也可以在这里收回, 金库一次最多出四分之三, 不够的由城主、国王补。",
    "none",
@@ -16927,6 +16928,10 @@ game_menus = [
        (party_get_slot, ":stored", "$current_town", slot_af31_bank_principal),
        (val_add, ":stored", 1000),
        (party_set_slot, "$current_town", slot_af31_bank_principal, ":stored"),
+       # v1.0 经济 2.0 第五批 (钱庄放贷进金库): 商人就是金库（af83 一个钱袋），钱进金库就是给了本城商人。
+       (party_get_slot, ":treasury", "$current_town", slot_town_wealth),
+       (val_add, ":treasury", 1000),
+       (party_set_slot, "$current_town", slot_town_wealth, ":treasury"),
        (store_sub, reg41, ":stored", 1),
        (display_message, "@借出去了, 本城商人还欠着你 {reg41} 第纳尔本金, 每周 1% 的息从金库出。", 0x66FF66),
        (jump_to_menu, "mnu_af31_bank")]),
@@ -16939,6 +16944,10 @@ game_menus = [
        (party_get_slot, ":stored", "$current_town", slot_af31_bank_principal),
        (val_add, ":stored", 3000),
        (party_set_slot, "$current_town", slot_af31_bank_principal, ":stored"),
+       # v1.0 经济 2.0 第五批 (钱庄放贷进金库): 商人就是金库（af83 一个钱袋），钱进金库就是给了本城商人。
+       (party_get_slot, ":treasury", "$current_town", slot_town_wealth),
+       (val_add, ":treasury", 3000),
+       (party_set_slot, "$current_town", slot_town_wealth, ":treasury"),
        (store_sub, reg41, ":stored", 1),
        (display_message, "@借出去了, 本城商人还欠着你 {reg41} 第纳尔本金, 每周 1% 的息从金库出。", 0x66FF66),
        (jump_to_menu, "mnu_af31_bank")]),
