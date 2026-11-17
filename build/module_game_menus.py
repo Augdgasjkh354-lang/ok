@@ -15460,7 +15460,7 @@ game_menus = [
        (party_set_slot, "$g_encountered_party", slot_af02_helped, 1),
        (party_get_slot, ":home", "$g_encountered_party", slot_af02_source),
        (call_script, "script_af01_change_unrest", ":home", -2),
-       (call_script, "script_change_player_relation_with_center", ":home", 1),
+       (call_script, "script_af97_gift_relation", 2, ":home", 150),  # 统一好感：村庄 500 一点，三成机会 +1
        (call_script, "script_change_player_honor", 1),
        (display_message, "@流民收到了路费，仍将继续前往安全城镇。"),
        (leave_encounter), (change_screen_return)]),
