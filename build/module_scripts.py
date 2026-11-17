@@ -48739,7 +48739,7 @@ scripts = [
                     
                     (troop_ensure_inventory_space, ":cur_merchant", 20),
                     (troop_sort_inventory, ":cur_merchant"),
-                    (call_script, "script_af24_settle_stock", ":cur_merchant", ":cur_center", 0, 0, 2000, 40),  # v1.0 商人转卖
+                    (call_script, "script_af24_settle_stock", ":cur_merchant", ":cur_center", 0, 0, 6000, 40),  # v1.0 商人转卖（周转金 2026-11-17 ×3）
                     (try_end),
                   (try_end),
               ]),
@@ -48760,7 +48760,7 @@ scripts = [
                     (troop_add_merchandise_with_faction, ":cur_merchant", ":cur_faction", itp_type_hand_armor, 4),
                     (troop_ensure_inventory_space, ":cur_merchant", merchant_inventory_space),
                     (troop_sort_inventory, ":cur_merchant"),
-                    (call_script, "script_af24_settle_stock", ":cur_merchant", ":cur_town", 0, 0, 1250, 20),  # v1.0 商人转卖
+                    (call_script, "script_af24_settle_stock", ":cur_merchant", ":cur_town", 0, 0, 3750, 20),  # v1.0 商人转卖（周转金 2026-11-17 ×3）
                   (end_try),
               ]),
               
@@ -48785,7 +48785,7 @@ scripts = [
                     (troop_add_merchandise_with_faction, ":cur_merchant", ":cur_faction", itp_type_bolts, 2),
                     (troop_ensure_inventory_space, ":cur_merchant", merchant_inventory_space),
                     (troop_sort_inventory, ":cur_merchant"),
-                    (call_script, "script_af24_settle_stock", ":cur_merchant", ":cur_town", 0, 0, 1250, 20),  # v1.0 商人转卖
+                    (call_script, "script_af24_settle_stock", ":cur_merchant", ":cur_town", 0, 0, 3750, 20),  # v1.0 商人转卖（周转金 2026-11-17 ×3）
                   (try_end),
               ]),
               
@@ -48802,7 +48802,7 @@ scripts = [
                     (troop_add_merchandise_with_faction, ":cur_merchant", ":cur_faction", itp_type_horse, 5),
                     (troop_ensure_inventory_space, ":cur_merchant", 65),
                     (troop_sort_inventory, ":cur_merchant"),
-                    (call_script, "script_af24_settle_stock", ":cur_merchant", ":cur_town", 0, 0, 800, 20),  # v1.0 商人转卖
+                    (call_script, "script_af24_settle_stock", ":cur_merchant", ":cur_town", 0, 0, 2400, 20),  # v1.0 商人转卖（周转金 2026-11-17 ×3）
                   (try_end),
               ]),
               
@@ -59358,6 +59358,9 @@ scripts = [
   # which garrison wages keep near empty in most towns.)
   # New games: merchants start at 0 and are filled from the first week's market.
   ("af24_settle_stock", [
+    # 2026-11-17 玩家定：商人手里现钱太少，玩家卖货城里吸收不了。周转金 ×3（杂货 6000、防具／武器 3750、马 2400），
+    # 城里人的购买力 ×3（繁荣×45＋1500 的份额）。多出周转金的部分照旧交回金库。
+    # 推演过「补不满再从金库补」：卖货量几乎不变，却把金库掏空、付不出农民货款，所以不做（tools/sim_town_economy.py）。
     (store_script_param, ":merchant", 1),
     (store_script_param, ":town", 2),
     (store_script_param, ":float", 5),
@@ -59373,13 +59376,14 @@ scripts = [
         (val_div, ":prosperity", 2),
         (val_add, ":prosperity", 100),
       (try_end),
-      (store_mul, ":market", ":prosperity", 15),
-      (val_add, ":market", 500),
+      (store_mul, ":market", ":prosperity", 45),
+      (val_add, ":market", 1500),
       (val_mul, ":market", ":share"),
       (val_div, ":market", 100),
-      (val_min, ":short", ":market"),
-      (gt, ":short", 0),
-      (call_script, "script_troop_add_gold", ":merchant", ":short"),
+      (assign, ":give", ":short"),
+      (val_min, ":give", ":market"),
+      (gt, ":give", 0),
+      (call_script, "script_troop_add_gold", ":merchant", ":give"),
     (else_try),
       (gt, ":gold", ":float"),
       (store_sub, ":surplus", ":gold", ":float"),
@@ -62997,6 +63001,11 @@ scripts = [
         (le, ":gap", 14),
         (val_add, ":bonus", 25),
       (try_end),
+      # v1.0 村民进城采买（Slot 1009，每周减半）：每 100 第纳尔 +1，最多 +25。
+      (party_get_slot, ":v", ":center", slot_af74_villager_spend),
+      (val_div, ":v", 100),
+      (val_clamp, ":v", 0, 26),
+      (val_add, ":bonus", ":v"),
       (try_begin),
         (party_slot_eq, ":center", slot_town_lord, "trp_player"),
         (val_add, ":bonus", 30),

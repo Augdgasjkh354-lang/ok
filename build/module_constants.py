@@ -2214,3 +2214,4 @@ slot_af33_intel_net          = 966 # p_main_party: intel network = level (1-3) *
 # 1006 (p_main_party): reserved, unused. Was the realm-mood 30-day grace period, dropped 2026-11-17 before any release; do not reuse.
 slot_af70_shield_day         = 1007 # p_main_party: player is king: day the crown may next collect shield money from no-show vassals (day+14); 0 = never
 slot_af71_expand_day         = 1008 # p_main_party: player is king: day a vassal may next petition for money to expand his army (day+14); 0 = never
+slot_af74_villager_spend     = 1009 # town: villagers' recent purchases in this town (each farmer visit adds what they spent; halved every week); 0 = none / old save

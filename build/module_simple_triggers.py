@@ -2254,6 +2254,28 @@ simple_triggers = [
                (party_set_slot, ":cur_ai_object", slot_town_wealth, ":af_treasury"),
              (try_end),
 
+             # v1.0 村民进城采买（2026-11-17 玩家定）：卖完货，村长拿钱袋里 1000 以上部分的一成进城买东西
+             # （盐、铁器、布匹……），一趟最多 1000。钱进本城杂货商身上（他每周按周转金把多出的交回金库），
+             # 并记进城镇 Slot 1009（每周减半），算进城镇的繁荣加成（af45_prosperity_bonus）。
+             # 村子被劫、农民被截，这一趟就没人来，城里自然冷清。
+             (try_begin),
+               (is_between, ":af_home", villages_begin, villages_end),
+               (party_get_slot, ":af_elder", ":af_home", slot_town_elder),
+               (gt, ":af_elder", 0),
+               (party_get_slot, ":af_merchant", ":cur_ai_object", slot_town_merchant),
+               (gt, ":af_merchant", 0),
+               (store_troop_gold, ":af_purse", ":af_elder"),
+               (store_sub, ":af_spend", ":af_purse", 1000),
+               (val_div, ":af_spend", 10),
+               (val_min, ":af_spend", 1000),
+               (gt, ":af_spend", 0),
+               (troop_remove_gold, ":af_elder", ":af_spend"),
+               (call_script, "script_troop_add_gold", ":af_merchant", ":af_spend"),
+               (party_get_slot, ":af_rec", ":cur_ai_object", slot_af74_villager_spend),
+               (val_add, ":af_rec", ":af_spend"),
+               (party_set_slot, ":cur_ai_object", slot_af74_villager_spend, ":af_rec"),
+             (try_end),
+
              #Adding 1 to village prosperity
              (try_begin),
                (store_random_in_range, ":rand", 0, 100),
@@ -4610,7 +4632,7 @@ simple_triggers = [
   ]),
 
   # v1.0 经济1.0：村长把攒下的钱投进村子，每 200 第纳尔换 1 点繁荣（约 25 口人）。
-  # 2026-11-11 玩家定：改为每天一次，村长身上留 1000 周转，每天最多换 1 点（原为每周、留 500、最多 3 点）；
+  # 2026-11-11 玩家定：改为每天一次，村长身上留 1000 周转（2026-11-17 改为 3000），每天最多换 1 点（原为每周、留 500、最多 3 点）；
   # 只在村子正常时投（被劫、洗劫、恢复中不投）；繁荣上限 260。
   # 钱花在开荒、盖屋、添农具上，从村长身上扣掉。繁荣涨了，产量和领主每周的租金都跟着涨（原版逻辑）。
   (24, [
@@ -4619,7 +4641,7 @@ simple_triggers = [
       (party_get_slot, ":elder", ":village", slot_town_elder),
       (gt, ":elder", 0),
       (store_troop_gold, ":gold", ":elder"),
-      (val_sub, ":gold", 1000),
+      (val_sub, ":gold", 3000),  # 2026-11-17 玩家定：留 3000 周转（原 1000），村子手里现钱多些，玩家卖货村里收得下
       (gt, ":gold", 0),
       (store_div, ":points", ":gold", 200),
       (val_min, ":points", 1),
@@ -4758,5 +4780,14 @@ simple_triggers = [
     (store_add, ":next", ":today", 14),
     (party_set_slot, "p_main_party", slot_af71_expand_day, ":next"),
     (jump_to_menu, "mnu_af71_expand"),
+  ]),
+
+  # v1.0 村民进城采买: 每周把各城记下的村民采买额减半（越近的采买分量越重）。
+  (24*7, [
+    (try_for_range, ":town", towns_begin, towns_end),
+      (party_get_slot, ":v", ":town", slot_af74_villager_spend),
+      (val_div, ":v", 2),
+      (party_set_slot, ":town", slot_af74_villager_spend, ":v"),
+    (try_end),
   ]),
 ]
