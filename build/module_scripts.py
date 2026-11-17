@@ -68660,7 +68660,7 @@ scripts = [
     (try_begin),
       (le, ":v", 0),
       (call_script, "script_af87_folk_max", ":town"),
-      (store_mul, ":v", reg0, 60),
+      (store_mul, ":v", reg0, 95),  # 2026-11-17 玩家定：初始 95%（原 60%）
       (val_div, ":v", 100),
       (val_add, ":v", 1),
       (party_set_slot, ":town", slot_af87_folk, ":v"),
@@ -68700,6 +68700,21 @@ scripts = [
   # 第二批：不到一半时，城主（电脑领主）财产有 10000 以上、14 天内没救过，就拿 5000 接济百姓（Slot 1037 记两周回报期）。
   ("af87_folk_weekly", [
     (store_current_day, ":today"),
+    # 一次性：试玩包三十三的存档按 60% 起算过，补到 95%（补的钱算城里本来就有的家底）。
+    (try_begin),
+      (party_slot_eq, "p_main_party", slot_af87_topped_up, 0),
+      (party_set_slot, "p_main_party", slot_af87_topped_up, 1),
+      (try_for_range, ":town", towns_begin, towns_end),
+        (call_script, "script_af87_folk", ":town"),
+        (assign, ":have", reg0),
+        (call_script, "script_af87_folk_max", ":town"),
+        (store_mul, ":want", reg0, 95),
+        (val_div, ":want", 100),
+        (gt, ":want", ":have"),
+        (store_add, ":store", ":want", 1),
+        (party_set_slot, ":town", slot_af87_folk, ":store"),
+      (try_end),
+    (try_end),
     (try_for_range, ":town", towns_begin, towns_end),
       (call_script, "script_af87_folk", ":town"),
       (assign, ":have", reg0),
