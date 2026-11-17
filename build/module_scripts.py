@@ -66621,8 +66621,8 @@ scripts = [
                ":scene", ":key", ":idx", s42) + [
   ]),
 
-  # v1.0 王国大小与封臣的心（0 新 Slot，玩家 2026-11-17 定）。参数 1：1 每日结算，2 每周结算。
-  # 只在玩家自立为王时生效；地图上所有据点（城、城堡、村）一起数，玩家王国 ≤ 10 处时不生效。
+  # v1.0 国王自留地与封臣的心（0 新 Slot，玩家 2026-11-17 定）。参数 1：1 每日结算，2 每周结算。
+  # 只在玩家自立为王时生效；看王国已占据点（城、城堡、村）里玩家自己握着的比例，王国 ≤ 10 处时不生效。
   # 档：< 1/10 每天 +1；< 1/5 每周 +1（正向都只推到 50 为止）；到 1/2 不变；
   # > 1/2 每周 -1（温厚、正直、造福乡里的不扣）；> 2/3 每周 -1（人人都扣）；全部 每天 -1。
   # 只算本国封臣（slto_kingdom_hero）。直接改 slot_troop_player_relation，不走 change_player_relation_with_troop：
@@ -66632,14 +66632,19 @@ scripts = [
     (try_begin),
       (call_script, "script_af49_is_player_king"),
       (eq, reg0, 1),
+      # 分母：王国已经占有的据点；分子：其中玩家自己握着的（封主是玩家，或还没分封出去的）。
       (assign, ":mine", 0),
+      (assign, ":total", 0),
       (try_for_range, ":center", centers_begin, centers_end),
         (store_faction_of_party, ":cf", ":center"),
         (eq, ":cf", "fac_player_supporters_faction"),
+        (val_add, ":total", 1),
+        (party_get_slot, ":owner", ":center", slot_town_lord),
+        (this_or_next|eq, ":owner", "trp_player"),
+        (lt, ":owner", 0),
         (val_add, ":mine", 1),
       (try_end),
-      (gt, ":mine", 10),
-      (store_sub, ":total", centers_end, centers_begin),
+      (gt, ":total", 10),
       (store_mul, ":x10", ":mine", 10),
       (store_mul, ":x5", ":mine", 5),
       (store_mul, ":x3", ":mine", 3),
@@ -66715,20 +66720,20 @@ scripts = [
       (try_begin),
         (eq, ":tier", 1),
         (eq, ":dow", 0),
-        (display_message, "@王国尚弱，四面是敌，封臣们同仇敌忾，和你一天比一天亲近（{reg41} 位封臣好感每天 +1，到 50 为止）。", 0x66FF66),
+        (display_message, "@你把土地几乎都分给了封臣，他们念你的好，和你一天比一天亲近（{reg41} 位封臣好感每天 +1，到 50 为止）。", 0x66FF66),
       (else_try),
         (eq, ":tier", 2),
-        (display_message, "@王国还不算大，封臣们觉得跟着你有奔头（{reg41} 位封臣好感 +1，到 50 为止）。", 0x66FF66),
+        (display_message, "@你自己留的地不多，封臣们觉得跟着你有奔头（{reg41} 位封臣好感 +1，到 50 为止）。", 0x66FF66),
       (else_try),
         (eq, ":tier", 4),
-        (display_message, "@王国已占天下一半，封臣们开始各怀心思（{reg41} 位封臣好感 -1；温厚、正直的人不计较）。", 0xFF6666),
+        (display_message, "@王国一半的土地攥在你自己手里，封臣们开始各怀心思（{reg41} 位封臣好感 -1；温厚、正直的人不计较）。", 0xFF6666),
       (else_try),
         (eq, ":tier", 5),
-        (display_message, "@王国已占天下大半，「功高震主、兔死狗烹」的话在封臣间传开了（{reg41} 位封臣好感 -1）。", 0xFF6666),
+        (display_message, "@王国大半的土地都在你自己手里，「打下江山不分地」的怨言在封臣间传开了（{reg41} 位封臣好感 -1）。", 0xFF6666),
       (else_try),
         (eq, ":tier", 6),
         (eq, ":dow", 0),
-        (display_message, "@天下尽归你手，再没有外敌能让封臣们和你一条心了（{reg41} 位封臣好感每天 -1）。", 0xFF6666),
+        (display_message, "@王国的土地全被你一人握着，封臣们和你越来越离心（{reg41} 位封臣好感每天 -1）。", 0xFF6666),
       (try_end),
     (try_end),
   ]),
