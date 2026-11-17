@@ -1746,6 +1746,22 @@ simple_triggers = [
             (try_end),                
           (try_end),  
                     
+          # v1.0 镇民钱袋第二批：城主出钱救过城的两周里租金翻倍，多的那份由金库付（一次最多四分之三）。
+          (try_begin),
+            (is_between, ":center_no", towns_begin, towns_end),
+            (store_current_day, ":af87_today"),
+            (party_get_slot, ":af87_until", ":center_no", slot_af87_relief_day),
+            (gt, ":af87_until", ":af87_today"),
+            (party_get_slot, ":af87_tw", ":center_no", slot_town_wealth),
+            (store_mul, ":af87_cap", ":af87_tw", 3),
+            (val_div, ":af87_cap", 4),
+            (assign, ":af87_extra", ":cur_rents"),
+            (val_min, ":af87_extra", ":af87_cap"),
+            (gt, ":af87_extra", 0),
+            (val_sub, ":af87_tw", ":af87_extra"),
+            (party_set_slot, ":center_no", slot_town_wealth, ":af87_tw"),
+            (val_add, ":cur_rents", ":af87_extra"),
+          (try_end),
           (val_add, ":accumulated_rents", ":cur_rents"), #cur rents changes between 23..1000
           (party_set_slot, ":center_no", slot_center_accumulated_rents, ":accumulated_rents"),
         (try_end),

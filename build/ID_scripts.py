@@ -981,5 +981,6 @@ script_af87_folk_max = 979
 script_af87_folk = 980
 script_af87_folk_add = 981
 script_af87_folk_weekly = 982
+script_af87_folk_text = 983
 
 
