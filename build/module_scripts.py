@@ -15089,15 +15089,12 @@ scripts = [
       (try_begin),
         (gt, ":total_change", 0),
         (party_slot_eq, ":party_no", slot_party_type, spt_kingdom_caravan),
-        (store_faction_of_party, ":af42_fac", ":party_no"),
+        # v1.0 经济 2.0 第四批 (商队上缴): 门扩到所有王国商队（白送的除外）。白送的记号
+        # 只打在玩家阵营的商队上，所以 slot 968 = 0 就等于「不是白送的」；利润算法、
+        # 镇民出钱、上限 1/4 都照现有，不变。
         (assign, ":af42_pay", 0),
         (try_begin),
-          (eq, ":af42_fac", "fac_player_supporters_faction"),
           (party_slot_eq, ":party_no", slot_af42_free_caravan, 0),
-          (assign, ":af42_pay", 1),
-        (else_try),
-          (neq, ":af42_fac", "fac_player_supporters_faction"),
-          (party_slot_ge, ":party_no", slot_af32_caravan_shares, 1),
           (assign, ":af42_pay", 1),
         (try_end),
         (eq, ":af42_pay", 1),
@@ -15150,6 +15147,41 @@ scripts = [
         (str_store_party_name, s44, ":center_no"),
         (assign, reg44, ":dividend"),
         (display_message, "@你入股的商队在 {s44} 做成一笔买卖, 按股分了你 {reg44} 第纳尔。", 0xFFCC66),
+      (else_try),
+        # v1.0 经济 2.0 第四批 (商队上缴): 非玩家派系、无股份的普通王国商队，利润也进钱箱，
+        # 不分红（等下面统一上缴给派系领袖）。没有这一支，利润就算出来了也进不了钱箱。
+        (gt, ":af42_profit", 0),
+        (party_slot_eq, ":party_no", slot_party_type, spt_kingdom_caravan),
+        (store_faction_of_party, ":caravan_faction", ":party_no"),
+        (neq, ":caravan_faction", "fac_player_supporters_faction"),
+        (party_get_slot, ":purse", ":party_no", slot_af18_caravan_purse),
+        (val_max, ":purse", 0),
+        (val_add, ":purse", ":af42_profit"),
+        (party_set_slot, ":party_no", slot_af18_caravan_purse, ":purse"),
+      (try_end),
+      # v1.0 经济 2.0 第四批 (商队上缴): 每笔交易后，非玩家派系的王国商队把钱箱里超 600
+      # （af18_caravan_capital）的部分立即上缴给该派系领袖（国王），走 af14_lord_wealth，
+      # 钱箱留 600 周转。玩家派系的自建商队不走这条，仍由玩家手动结算（af26_caravan_collect）；
+      # 白送商队不拿钱，钱箱一直是 600，不会触发。领袖无效（不是在任领主）时跳过上缴，
+      # 钱留在钱箱，不凭空生钱、不记欠账。每次交易不上缴消息，免得刷屏；只在作弊模式下留一句调试。
+      (try_begin),
+        (party_slot_eq, ":party_no", slot_party_type, spt_kingdom_caravan),
+        (party_slot_eq, ":party_no", slot_af42_free_caravan, 0),
+        (store_faction_of_party, ":caravan_faction", ":party_no"),
+        (neq, ":caravan_faction", "fac_player_supporters_faction"),
+        (party_get_slot, ":purse", ":party_no", slot_af18_caravan_purse),
+        (gt, ":purse", af18_caravan_capital),
+        (faction_get_slot, ":leader", ":caravan_faction", slot_faction_leader),
+        (is_between, ":leader", active_npcs_begin, active_npcs_end),
+        (store_sub, ":remit", ":purse", af18_caravan_capital),
+        (call_script, "script_af14_lord_wealth", ":leader", ":remit", 0),
+        (party_set_slot, ":party_no", slot_af18_caravan_purse, af18_caravan_capital),
+        (try_begin),
+          (eq, "$cheat_mode", 2),
+          (str_store_troop_name, s44, ":leader"),
+          (assign, reg44, ":remit"),
+          (display_message, "@{!}DEBUG -- Caravan remits {reg44} to {s44}"),
+        (try_end),
       (try_end),
       (str_store_party_name, s1, ":party_no"),
       (str_store_party_name, s2, ":center_no"),
