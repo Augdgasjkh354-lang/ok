@@ -1746,6 +1746,10 @@ simple_triggers = [
             (try_end),                
           (try_end),  
                     
+          # v1.0 先产后税（2026-11-17 玩家定）：上面算出的是这处地方一周的产出，先进老百姓的口袋（村长钱袋／镇民钱袋，
+          # 城堡的分给下面的村子），领主只收三成作租金（af88_produce）。
+          (call_script, "script_af88_produce", ":center_no", ":cur_rents"),
+          (assign, ":cur_rents", reg0),
           # v1.0 镇民钱袋第二批：城主出钱救过城的两周里租金翻倍，多的那份由金库付（一次最多四分之三）。
           (try_begin),
             (is_between, ":center_no", towns_begin, towns_end),
@@ -1765,16 +1769,7 @@ simple_triggers = [
           (val_add, ":accumulated_rents", ":cur_rents"), #cur rents changes between 23..1000
           (party_set_slot, ":center_no", slot_center_accumulated_rents, ":accumulated_rents"),
         (try_end),
-        
-                (try_begin),
-                  (is_between, ":center_no", villages_begin, villages_end),
-                  (party_get_slot, ":bound_castle", ":center_no", slot_village_bound_center),
-                  (party_slot_ge, ":bound_castle", slot_town_lord, 0), #unassigned centers do not accumulate rents        
-                  (is_between, ":bound_castle", castles_begin, castles_end),
-                  (party_get_slot, ":accumulated_rents", ":bound_castle", slot_center_accumulated_rents), #castle's accumulated rents
-                  (val_add, ":accumulated_rents", ":cur_rents"), #add village's rent to castle rents
-                  (party_set_slot, ":bound_castle", slot_center_accumulated_rents, ":accumulated_rents"),
-                (try_end),              
+        # v1.0 先产后税：原版在这里把村子的租金再给它挂靠的城堡算一份（同一笔钱算两次，凭空多出来），去掉。
       (try_end),
     ]),
 
@@ -2311,6 +2306,14 @@ simple_triggers = [
                          (val_mul, ":tariffs_generated", ":prosperity"),
                          (val_div, ":tariffs_generated", 100),
                          (val_div, ":tariffs_generated", 20), #10 for caravans, 20 for villages
+                         # v1.0 先产后税：关税由城里人出（从镇民钱袋扣，扣到多少收多少）。
+                         (try_begin),
+                           (is_between, ":cur_ai_object", towns_begin, towns_end),
+                           (gt, ":tariffs_generated", 0),
+                           (store_mul, ":af88_neg", ":tariffs_generated", -1),
+                           (call_script, "script_af87_folk_add", ":cur_ai_object", ":af88_neg"),
+                           (store_mul, ":tariffs_generated", reg0, -1),
+                         (try_end),
                          (val_add, ":accumulated_tariffs", ":tariffs_generated"),
           
                          (try_begin),
