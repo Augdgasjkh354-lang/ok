@@ -99,6 +99,7 @@ ALLOWED_DIALOG_CHANGES|={
 # 搬动本身不触发比对；此处备案是为改动留痕。
 ALLOWED_DIALOG_CHANGES |= {
     'dlga_lord_talk:lord_af29_lend',
+    'dlga_lord_talk:lord_af26_borrow',  # v1.0 荣誉当信用：借兵好感门槛按荣誉档（基线之后的行，留痕）
     'dlga_lord_talk:lord_af26_letter',
     'dlga_lord_talk:af33_buy_center_intro',
     'dlga_lord_talk:af33_fund_war',

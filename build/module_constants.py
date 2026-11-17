@@ -2217,3 +2217,6 @@ slot_af71_expand_day         = 1008 # p_main_party: player is king: day a vassal
 slot_af74_villager_spend     = 1009 # town: villagers' recent purchases in this town (each farmer visit adds what they spent; halved every week); 0 = none / old save
 slot_af75_garrison_spend     = 1010 # town: garrison soldiers' recent spending in this town (a third of wages actually paid, own garrison and nearby castles; halved every week); 0 = none / old save
 slot_af75_caravan_count      = 1011 # town: recent caravan trades x10 (each trade +10, halved every week); 0 = none / old save
+slot_af68_loan_town          = 1003 # p_main_party: town the player borrowed from; 0 = no loan (honor credit batch 1)
+slot_af68_loan_owed          = 1004 # p_main_party: principal + interest owed (fixed at borrow time); 0 = no loan
+slot_af68_loan_day           = 1005 # p_main_party: if 1003 > 0: due day (borrow day + 30); else: day the player may borrow again; 0 = never borrowed

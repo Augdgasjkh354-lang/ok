@@ -939,5 +939,10 @@ script_af72_fief_plan = 937
 script_af72_fief_apply = 938
 script_af73_prosperity_tier = 939
 script_af75_garrison_spend = 940
+script_af68_honor_tier = 941
+script_af68_loan_offer = 942
+script_af68_loan_take = 943
+script_af68_loan_repay = 944
+script_af68_can_borrow = 945
 
 
