@@ -69533,7 +69533,7 @@ scripts = [
 
   # v1.0 接手领主的债（2026-11-17 玩家定）。参数：领主、方式（0 送他，1 记成他欠你的账）。调用方已查过钱够。
   # 你出钱 → 先进领主财产 → 照分期款规矩付给卖家（af81_pay，卖家所在王国的国王抽 15%）→ 了结这笔分期。
-  # 送他：关系 + 欠款 ÷ 1000（2～10）。记账：欠款并进领主欠你的账（874，不计息），关系 +2。
+  # 送他：关系 + 欠款 ÷ 200。记账：欠款并进领主欠你的账（874，不计息），关系 + 欠款 ÷ 2000（最少 1）。
   ("af96_take_over", [
     (store_script_param, ":lord", 1),
     (store_script_param, ":mode", 2),
@@ -69554,17 +69554,27 @@ scripts = [
       (try_end),
       (call_script, "script_af81_pay", ":lord", ":seller", ":owed", ":king"),
       (call_script, "script_af81_clear_debt", ":lord"),
+      # 2026-11-17 玩家定：领主每 200 第纳尔 1 点好感（几百第纳尔就是一个普通村子一周的税）。
+      # 送：欠款 ÷ 200；垫（不计息）：省下的是利息和被收地的风险，按十分之一算，欠款 ÷ 2000，最少 1。
+      # 直接改关系 Slot、夹在 −100～100，不走原版改关系脚本（仁名会再翻一倍，就不是 200 一点了）。
       (try_begin),
         (eq, ":mode", 0),
-        (store_div, ":rel", ":owed", 1000),
-        (val_clamp, ":rel", 2, 11),
-        (call_script, "script_change_player_relation_with_troop", ":lord", ":rel"),
+        (store_div, ":rel", ":owed", 200),
       (else_try),
         (troop_get_slot, ":debt", ":lord", slot_af19_lord_owes_player),
         (val_add, ":debt", ":owed"),
         (troop_set_slot, ":lord", slot_af19_lord_owes_player, ":debt"),
-        (call_script, "script_change_player_relation_with_troop", ":lord", 2),
+        (store_div, ":rel", ":owed", 2000),
       (try_end),
+      (val_max, ":rel", 1),
+      (troop_get_slot, ":new_rel", ":lord", slot_troop_player_relation),
+      (val_add, ":new_rel", ":rel"),
+      (val_clamp, ":new_rel", -100, 101),
+      (troop_set_slot, ":lord", slot_troop_player_relation, ":new_rel"),
+      (str_store_troop_name, s44, ":lord"),
+      (assign, reg44, ":rel"),
+      (assign, reg45, ":new_rel"),
+      (display_message, "@你和{s44}的关系 +{reg44}（现在 {reg45}）。", 0x66FF66),
     (try_end),
   ]),
 ]
