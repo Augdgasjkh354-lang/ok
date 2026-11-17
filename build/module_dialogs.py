@@ -1358,7 +1358,8 @@ dialogs = [
    "I've brought you some prisoners, Ramun. Would you like a look?", "ramun_sell_prisoners",[]],
   [trp_ramun_the_slave_trader,"ramun_sell_prisoners", [],
   "Let me see what you have...", "ramun_sell_prisoners_2",
-   [[change_screen_trade_prisoners]]],
+   [(call_script, "script_af103_prisoner_snapshot"),  # 2026-11-17 玩家定：卖掉的俘虏由城里各方买下
+    [change_screen_trade_prisoners]]],
   [trp_ramun_the_slave_trader, "ramun_sell_prisoners_2", [], "A pleasure doing business with you.", "close_window",[]],
 
   [trp_ramun_the_slave_trader|plyr,"ramun_talk", [(neg|troop_slot_ge,"$g_talk_troop",slot_troop_met_previously,1)], "How do I take somebody as prisoner?", "ramun_ask_about_capturing",[]],
@@ -20272,7 +20273,8 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   [anyone|plyr,"ransom_broker_talk",[], "Not this time. Good-bye.", "close_window",[]],
   [anyone,"ransom_broker_sell_prisoners", [],
   "Let me see what you have...", "ransom_broker_sell_prisoners_2",
-   [[change_screen_trade_prisoners]]],
+   [(call_script, "script_af103_prisoner_snapshot"),  # 2026-11-17 玩家定：卖掉的俘虏由城里各方买下
+    [change_screen_trade_prisoners]]],
 #  [anyone, "ransom_broker_sell_prisoners_2", [], "You take more prisoners, bring them to me. I will pay well.", "close_window",[]],
   [anyone, "ransom_broker_sell_prisoners_2", [], "I will be staying here for a few days. Let me know if you need my services.", "close_window",[]],
 
@@ -24955,7 +24957,8 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   [trp_galeas|plyr,"galeas_talk",[], "Not this time. Good-bye.", "close_window",[]],
   [trp_galeas,"galeas_sell_prisoners", [],
   "Let me see what you have...", "galeas_sell_prisoners_2",
-   [[change_screen_trade_prisoners]]],
+   [(call_script, "script_af103_prisoner_snapshot"),  # 2026-11-17 玩家定：卖掉的俘虏由城里各方买下
+    [change_screen_trade_prisoners]]],
   [trp_galeas, "galeas_sell_prisoners_2", [], "You take more prisoners, bring them to me. I will pay well.", "close_window",[]],
 
 ##  [party_tpl|pt_refugees,"start", [], "We have been driven out of our homes because of this war.", "close_window",[(assign, "$g_leave_encounter",1)]],

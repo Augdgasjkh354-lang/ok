@@ -2253,3 +2253,6 @@ slot_af94_squeeze_since      = 1042 # village: first day of the current squeeze 
 slot_af94_squeeze_sum        = 1043 # village: denars squeezed in the current window; militia party: denars it goes to take back (> 0 marks an uprising against its own lord)
 slot_af83_handed             = 1033 # town: treasury handed to a shopkeeper when the player opened his shop (to work out the net on return); 0 = no shop open
 slot_af53_default_weeks     = 1044 # faction (debtor): consecutive weeks the reparation was not paid in full; at 4 the rest is halved and it resets
+slot_af103_sold_value        = 1045 # p_main_party: total price of the prisoners held when the player opened a prisoner sale screen
+slot_af103_sold_count        = 1046 # p_main_party: number of non-hero prisoners held at that moment
+slot_af103_sold_town         = 1047 # p_main_party: the town whose people buy the sold prisoners; 0 = no sale pending

@@ -153,6 +153,7 @@ ALLOWED_DIALOG_CHANGES |= {  # v1.0 经济审计第一批 (2026-11-17): 钱有�
     'dlga_lord_pay_debt_2:lord_pay_debt_3_1',  # 第 49 条: 还领主的债进领主财产
     'dlga_merchant_ask_for_debts:merchant_debts_paid',  # 第 49 条: 还商会的债进本城金库
     'dlga_merchant_quest_1b:merchant_quest_1c', 'dlga_start:merchant_quest_3b',  # 第 48 条: 开局商人任务的预付款和尾款由本城出
+    'dlga_ransom_broker_sell_prisoners:ransom_broker_sell_prisoners_2', 'dlga_ramun_sell_prisoners:ramun_sell_prisoners_2', 'dlga_galeas_sell_prisoners:galeas_sell_prisoners_2',  # 第 20 条: 卖俘虏前记下俘虏总价
 }
 _new=(data/'conversation.txt').read_text('utf-8').split('\n')
 if _old and _old[-1]=='': _old=_old[:-1]

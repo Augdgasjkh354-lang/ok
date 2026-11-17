@@ -1006,5 +1006,9 @@ script_af101_bailout = 1004
 script_af101_weekly = 1005
 script_af102_gang_take = 1006
 script_af102_lord_debt_weekly = 1007
+script_af103_prisoner_value = 1008
+script_af103_prisoner_snapshot = 1009
+script_af103_add_recruit = 1010
+script_af103_prisoner_settle = 1011
 
 

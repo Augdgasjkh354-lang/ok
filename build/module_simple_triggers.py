@@ -5059,4 +5059,9 @@ simple_triggers = [
   (24*3, [
     (call_script, "script_af91_growth_3days"),
   ]),
+
+  # 2026-11-17 玩家定：卖掉的俘虏每小时结一次账（af103_prisoner_settle），由城里各方买下。
+  (1, [
+    (call_script, "script_af103_prisoner_settle"),
+  ]),
 ]
