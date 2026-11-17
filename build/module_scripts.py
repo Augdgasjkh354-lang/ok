@@ -33913,29 +33913,40 @@ scripts = [
   # INPUT: center_no
   # OUTPUT: none
   ("get_prosperity_text_to_s50",
+    # v1.0 2026-11-17 玩家定：繁荣上限放到 260 以后，原版每 20 点一档、最高 140 封顶的描述不准了，改成七档
+    # （0–19 凋敝／20–39 贫苦／40–69 寻常／70–99 殷实／100–139 富庶／140–189 繁华／190 以上 富甲一方）。
+    # 分档和 af73_prosperity_tier 一致；这里内联写，不调脚本，免得改写调用方的 reg0。
     [(store_script_param, ":center_no", 1),
       (party_get_slot, ":prosperity", ":center_no", slot_town_prosperity),
-      (val_div, ":prosperity", 20),
       (try_begin),
-        (eq, ":prosperity", 0), #0..19
-        (str_store_string, s50, "@Very Poor"),
+        (lt, ":prosperity", 20),
+        (str_store_string, s50, "@凋敝"),
       (else_try),
-        (eq, ":prosperity", 1), #20..39
-        (str_store_string, s50, "@Poor"),
+        (lt, ":prosperity", 40),
+        (str_store_string, s50, "@贫苦"),
       (else_try),
-        (eq, ":prosperity", 2), #40..59
-        (str_store_string, s50, "@Average"),
+        (lt, ":prosperity", 70),
+        (str_store_string, s50, "@寻常"),
       (else_try),
-        (eq, ":prosperity", 3), #60..79
-        (str_store_string, s50, "@Rich"),
+        (lt, ":prosperity", 100),
+        (str_store_string, s50, "@殷实"),
       (else_try),
-        (ge, ":prosperity", 7), #140..200
-        (str_store_string, s50, "@富甲一方"),
+        (lt, ":prosperity", 140),
+        (str_store_string, s50, "@富庶"),
       (else_try),
-        (ge, ":prosperity", 5), #100..139
+        (lt, ":prosperity", 190),
         (str_store_string, s50, "@繁华"),
       (else_try),
-        (str_store_string, s50, "@Very Rich"), #80..99
+        (str_store_string, s50, "@富甲一方"),
+      (try_end),
+      # 原版的英文档名不再显示；留在这里不执行，只为保住旧 quick_strings 的编号。
+      (try_begin),
+        (eq, 1, 0),
+        (str_store_string, s50, "@Very Poor"),
+        (str_store_string, s50, "@Poor"),
+        (str_store_string, s50, "@Average"),
+        (str_store_string, s50, "@Rich"),
+        (str_store_string, s50, "@Very Rich"),
       (try_end),
   ]),
   
@@ -34461,11 +34472,15 @@ scripts = [
   ("change_center_prosperity",
     [(store_script_param, ":center_no", 1),
       (store_script_param, ":difference", 2),
+      (assign, ":saved_reg0", reg0),  # v1.0: 下面调 af73_prosperity_tier 会改 reg0，结束时还原
       (party_get_slot, ":old_prosperity", ":center_no", slot_town_prosperity),
       (store_add, ":new_prosperity", ":old_prosperity", ":difference"),
       (val_clamp, ":new_prosperity", 0, 261),  # v1.0 玩家 2026-11-11 定: 繁荣上限 260 (原 200)
-      (store_div, ":old_state", ":old_prosperity", 20),
-      (store_div, ":new_state", ":new_prosperity", 20),
+      # v1.0 2026-11-17：按新的七档判断「繁荣变了一档」（原版每 20 点一档）。
+      (call_script, "script_af73_prosperity_tier", ":old_prosperity"),
+      (assign, ":old_state", reg0),
+      (call_script, "script_af73_prosperity_tier", ":new_prosperity"),
+      (assign, ":new_state", reg0),
       
       (try_begin),
         (neq, ":old_state", ":new_state"),
@@ -34521,6 +34536,7 @@ scripts = [
         (display_message, "@{!}DEBUG: Theoretical prosperity changes from convergence: {reg10}"),
       (try_end),
       
+    (assign, reg0, ":saved_reg0"),
   ]),
   
   #script_get_center_ideal_prosperity
@@ -67035,5 +67051,19 @@ scripts = [
       (call_script, "script_add_log_entry", logent_castle_given_to_lord_by_player, "trp_player", ":center", ":lord", "fac_player_supporters_faction"),
     (try_end),
     (assign, reg0, ":n"),
+  ]),
+
+  # v1.0 繁荣描述七档（见 get_prosperity_text_to_s50）。参数 1：繁荣值。输出 reg0：0～6。
+  ("af73_prosperity_tier", [
+    (store_script_param, ":p", 1),
+    (assign, ":t", 6),
+    (try_begin), (lt, ":p", 20), (assign, ":t", 0),
+    (else_try), (lt, ":p", 40), (assign, ":t", 1),
+    (else_try), (lt, ":p", 70), (assign, ":t", 2),
+    (else_try), (lt, ":p", 100), (assign, ":t", 3),
+    (else_try), (lt, ":p", 140), (assign, ":t", 4),
+    (else_try), (lt, ":p", 190), (assign, ":t", 5),
+    (try_end),
+    (assign, reg0, ":t"),
   ]),
 ]
