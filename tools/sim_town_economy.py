@@ -13,7 +13,8 @@
 - 繁荣：每周向理想值走 1 点；有经营加成又低于理想值再 +1
 - 驻军花销（新）：金库实际发出的饷的三分之一进杂货商；城镇记账每周减半，每 100 繁荣加成 +1，最多 +15
 - 商队（新）：每成交一次记 +10、每周减半，加成 = 记数÷2，最多 +25（原：14 天内有成交就 +25）
-用法：python tools/sim_town_economy.py [货款每趟] [村长留存] [每周商队支数]
+- 王室税（新）：金库加上本周进账、扣掉本周驻军饷后还剩 2000 以上，才收本周进账的 CROWN%；金库超过 10000 的部分再收 CROWN%（富城多交、穷城少交）
+用法：python tools/sim_town_economy.py [货款每趟] [村长留存] [每周商队支数] [王室税%]
 """
 import sys
 
@@ -22,6 +23,7 @@ PAY_PER_TRIP = int(sys.argv[1]) if len(sys.argv) > 1 else 300
 TRIPS_PER_WEEK = 1.75
 RESERVE = int(sys.argv[2]) if len(sys.argv) > 2 else 3000  # 村长留存（新）
 CARAVANS = float(sys.argv[3]) if len(sys.argv) > 3 else 2  # 每周来成交的商队支数（估算）
+CROWN = int(sys.argv[4]) if len(sys.argv) > 4 else 10  # 王室税：本周进账的百分之几交给国王（新）
 N_VILLAGES = 3
 
 
@@ -84,7 +86,15 @@ def run(new, raid_week=None, player_sells=0):
             if v['looted'] >= 0:
                 v['looted'] -= 1
         # 每周：进账、工资
-        treasury += (eff(town_p) * 15 + 700) * 3 // 2
+        income = (eff(town_p) * 15 + 700) * 3 // 2
+        treasury += income
+        crown_paid = 0
+        if new:
+            # 看家底收：发完本周的饷还剩 2000 以上才收进账的 CROWN%；金库超过 10000 的部分再收 CROWN%
+            crown_paid = (income * CROWN // 100) if treasury - int(wage) >= 2000 else 0
+            crown_paid += max(treasury - 10000, 0) * CROWN // 100
+            crown_paid = min(crown_paid, max(treasury, 0))
+            treasury -= crown_paid
         if new:
             paid = min(int(wage), max(treasury, 0))
             mgold[0] += paid // 3
@@ -130,7 +140,7 @@ def run(new, raid_week=None, player_sells=0):
         spend_slot //= 2
         garrison_slot //= 2
         caravan_slot //= 2
-        rows.append(dict(week=week + 1, town_p=town_p, treasury=treasury, garrison=int(garrison),
+        rows.append(dict(week=week + 1, town_p=town_p, treasury=treasury, crown=crown_paid, garrison=int(garrison),
                          goods_merchant=mgold[0], sold=sold, villager_spend=weekly_villager_spend,
                          payments=weekly_payments, vil_p=sum(v['p'] for v in vil) // N_VILLAGES,
                          vil_purse=sum(v['purse'] for v in vil) // N_VILLAGES))
@@ -139,16 +149,16 @@ def run(new, raid_week=None, player_sells=0):
 
 def table(title, rows, weeks=(1, 4, 8, 13, 20, 21, 22, 24, 26, 39, 52)):
     out = [f'### {title}', '',
-           '| 周 | 城镇繁荣 | 金库 | 驻军 | 杂货商现钱 | 玩家卖出 | 本周村民采买 | 本周货款 | 村子平均繁荣 | 村长平均钱袋 |',
-           '|---|---|---|---|---|---|---|---|---|---|']
+           '| 周 | 城镇繁荣 | 金库 | 本周王室税 | 驻军 | 杂货商现钱 | 玩家卖出 | 本周村民采买 | 本周货款 | 村子平均繁荣 | 村长平均钱袋 |',
+           '|---|---|---|---|---|---|---|---|---|---|---|']
     for r in rows:
         if r['week'] in weeks:
-            out.append('| {week} | {town_p} | {treasury} | {garrison} | {goods_merchant} | {sold} | {villager_spend} | {payments} | {vil_p} | {vil_purse} |'.format(**r))
+            out.append('| {week} | {town_p} | {treasury} | {crown} | {garrison} | {goods_merchant} | {sold} | {villager_spend} | {payments} | {vil_p} | {vil_purse} |'.format(**r))
     return '\n'.join(out) + '\n'
 
 
 if __name__ == '__main__':
-    print(f'# 推演：城镇三根柱子（一趟货款 {PAY_PER_TRIP}、村长留存 {RESERVE}、每周商队 {CARAVANS} 支，均为估算）\n')
+    print(f'# 推演：城镇三根柱子＋王室税（一趟货款 {PAY_PER_TRIP}、村长留存 {RESERVE}、每周商队 {CARAVANS} 支、王室税 {CROWN}%，前三项为估算）\n')
     print(table('A. 改之前，和平', run(False)))
     print(table('B. 改之后，和平', run(True)))
     print(table('C. 改之后，第 21 周两个村被劫', run(True, raid_week=20)))

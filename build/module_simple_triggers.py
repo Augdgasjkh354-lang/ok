@@ -462,6 +462,7 @@ simple_triggers = [
          (call_script, "script_calculate_hero_weekly_net_income_and_add_to_wealth", ":troop_no"),#Adding net income
        (try_end),
            
+       (assign, ":af77_to_player", 0),  # v1.0 王室税: 你当国王时本周收到的合计
        (try_for_range, ":center_no", walled_centers_begin, walled_centers_end),
          #If non-player center, adding income to wealth
          (neg|party_slot_eq, ":center_no", slot_town_lord, "trp_player"), #center does not belong to player.
@@ -507,6 +508,41 @@ simple_triggers = [
          (val_max, ":af_paid", 0),
          (val_min, ":af_paid", ":af_wage"),
          (call_script, "script_af75_garrison_spend", ":center_no", ":af_paid"),
+         # v1.0 王室税（2026-11-17 玩家定，看家底收，推演见 docs/推演_城镇三根柱子.md）：
+         # 金库加上本周进账、扣掉本周驻军饷后还剩 2000 以上，才收本周进账的一成；金库超过 10000 的部分再收一成。
+         # 富城多交、困难的城不交。电脑国王进他的财产（他有钱就多养兵）；你当国王时进你身上的金币（周末一条汇总）。
+         # 国王自己的城堡、城镇不收（本来就是他的）；你自己的封地不走这个触发器，所以你当臣子时不交。钱从金库出，不凭空生。
+         (try_begin),
+           (store_faction_of_party, ":af77_fac", ":center_no"),
+           (is_between, ":af77_fac", kingdoms_begin, kingdoms_end),
+           (faction_get_slot, ":af77_king", ":af77_fac", slot_faction_leader),
+           (neg|party_slot_eq, ":center_no", slot_town_lord, ":af77_king"),
+           (assign, ":af77_tax", 0),
+           (store_sub, ":af77_left", ":cur_wealth", ":af_wage"),
+           (try_begin),
+             (ge, ":af77_left", 2000),
+             (store_div, ":af77_tax", ":added_wealth", 10),
+           (try_end),
+           (try_begin),
+             (gt, ":cur_wealth", 10000),
+             (store_sub, ":af77_rich", ":cur_wealth", 10000),
+             (val_div, ":af77_rich", 10),
+             (val_add, ":af77_tax", ":af77_rich"),
+           (try_end),
+           (val_min, ":af77_tax", ":cur_wealth"),
+           (gt, ":af77_tax", 0),
+           (try_begin),
+             (eq, ":af77_king", "trp_player"),
+             (eq, ":af77_fac", "fac_player_supporters_faction"),
+             (val_sub, ":cur_wealth", ":af77_tax"),
+             (troop_add_gold, "trp_player", ":af77_tax"),
+             (val_add, ":af77_to_player", ":af77_tax"),
+           (else_try),
+             (is_between, ":af77_king", active_npcs_begin, active_npcs_end),
+             (val_sub, ":cur_wealth", ":af77_tax"),
+             (call_script, "script_af14_lord_wealth", ":af77_king", ":af77_tax", 0),
+           (try_end),
+         (try_end),
          (val_sub, ":cur_wealth", ":af_wage"),
          (try_begin),
            (lt, ":cur_wealth", 0),
@@ -570,6 +606,11 @@ simple_triggers = [
            (try_end),
          (try_end),
          (party_set_slot, ":center_no", slot_town_wealth, ":cur_wealth"),
+       (try_end),
+       (try_begin),
+         (gt, ":af77_to_player", 0),
+         (assign, reg44, ":af77_to_player"),
+         (display_message, "@各地封臣的城堡、城镇按规矩交来了本周的王室税，共 {reg44} 第纳尔。", 0xFFCC66),
        (try_end),
     ]),
 
