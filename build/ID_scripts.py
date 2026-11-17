@@ -960,5 +960,6 @@ script_af79_allocate = 958
 script_af80_player_loot = 959
 script_af80_tariff_pct = 960
 script_af80_policy_weekly = 961
+script_af81_fief_sale_weekly = 962
 
 

@@ -2234,3 +2234,4 @@ slot_af80_grain_policy       = 1022 # p_main_party: player-king grain policy: 0 
 slot_af80_grain_policy_day   = 1023 # p_main_party: day it may change again (day+30)
 slot_af80_bandit_policy      = 1024 # p_main_party: player-king bandit policy: 0 = leave it, 1 = suppress (1000/week, kingdom villages unrest -2), 2 = appease (500/week into gang purses, unrest -1)
 slot_af80_bandit_policy_day  = 1025 # p_main_party: day it may change again (day+30)
+slot_af81_fief_sale_day      = 1026 # lord troop: day he may sell a village again (day+30); 0 = never sold / old save
