@@ -28726,4 +28726,20 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
    "有什么事吗？", "mayor_begin", [(assign, "$g_comment_found", 0)]],
   [anyone,"start", [(is_between, "$g_talk_troop", tavernkeepers_begin, tavernkeepers_end)],
    "要点什么？", "tavernkeeper_talk", [(assign, "$g_comment_found", 0)]],
+
+  # v1.0 封地推荐：宰相（同伴或妻子）替你拟分封方案，照办就一次分完（af72_fief_plan／af72_fief_apply）。
+  [anyone|plyr, "minister_talk", [
+    (is_between, "$g_player_minister", active_npcs_begin, kingdom_ladies_end),
+  ], "空着的封地，你替我拟一份分封方案吧。", "af72_fief_plan", []],
+  [anyone, "af72_fief_plan", [
+    (call_script, "script_af72_fief_plan"),
+    (gt, reg0, 0),
+  ], "{s40}", "af72_fief_plan_choice", []],
+  [anyone, "af72_fief_plan", [], "眼下没有空着的封地要分。", "minister_pretalk", []],
+  [anyone|plyr, "af72_fief_plan_choice", [], "就照这么办。", "af72_fief_plan_done", [
+    (call_script, "script_af72_fief_apply"),
+    (assign, reg41, reg0),
+  ]],
+  [anyone|plyr, "af72_fief_plan_choice", [], "我再想想。", "minister_pretalk", []],
+  [anyone, "af72_fief_plan_done", [], "遵命，{reg41} 处封地已经分下去了。", "minister_pretalk", []],
 ]

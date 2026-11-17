@@ -1455,3 +1455,6 @@ af62_rebel_fight
 af62_militia_talk
 af62_militia_bye
 af62_militia_fight
+af72_fief_plan
+af72_fief_plan_choice
+af72_fief_plan_done

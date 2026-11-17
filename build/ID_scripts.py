@@ -935,5 +935,7 @@ script_af69_realm_mood = 933
 script_af70_shield_collect = 934
 script_af71_find_expand = 935
 script_af71_grant_expand = 936
+script_af72_fief_plan = 937
+script_af72_fief_apply = 938
 
 

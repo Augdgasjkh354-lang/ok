@@ -251,3 +251,8 @@ dlga_af62_militia_fight:close_window|原 来 你 跟 他 们 是 一 伙 的 ！
 dlga_start:village_elder_talk.7|有 什 么 事 吗 ？ 
 dlga_start:mayor_begin.3|有 什 么 事 吗 ？ 
 dlga_start:tavernkeeper_talk.3|要 点 什 么 ？ 
+dlga_minister_talk:af72_fief_plan|空 着 的 封 地 ， 你 替 我 拟 一 份 分 封 方 案 吧 。 
+dlga_af72_fief_plan:minister_pretalk|眼 下 没 有 空 着 的 封 地 要 分 。 
+dlga_af72_fief_plan_choice:af72_fief_plan_done|就 照 这 么 办 。 
+dlga_af72_fief_plan_choice:minister_pretalk|我 再 想 想 。 
+dlga_af72_fief_plan_done:minister_pretalk|遵 命 ， {reg41} 处 封 地 已 经 分 下 去 了 。 
