@@ -4404,8 +4404,10 @@ simple_triggers = [
       (gt, ":interest", 0),
       # 2026-11-11 玩家定：金库出四分之三以内，不够的城主、国王补 (af14_pay_from_center)；
       # 还付不出的利息滚进本金 (利滚利)，不再作废。
-      (call_script, "script_af14_pay_from_center", ":center", ":interest"),
+      # 2026-11-17 繁荣即家底：金库 → 城镇急卖繁荣（八折，每次最多 2 点）→ 城主、国王 → 滚本金。
+      (call_script, "script_af78_town_pay_debt", ":center", ":interest"),
       (assign, ":paid", reg0),
+      (assign, ":af78_sold", reg1),
       (store_sub, ":unpaid", ":interest", ":paid"),
       (try_begin),
         (gt, ":unpaid", 0),
@@ -4415,6 +4417,11 @@ simple_triggers = [
       (str_store_party_name, s44, ":center"),
       (assign, reg44, ":paid"),
       (assign, reg45, ":unpaid"),
+      (assign, reg46, ":af78_sold"),
+      (try_begin),
+        (gt, ":af78_sold", 0),
+        (display_message, "@{s44} 拿不出现钱，变卖了些产业来付你的利息（繁荣 -{reg46}）。", 0xFF9966),
+      (try_end),
       (try_begin),
         (gt, ":paid", 0),
         (troop_add_gold, "trp_player", ":paid"),
@@ -4695,26 +4702,10 @@ simple_triggers = [
   ]),
 
   # v1.0 经济1.0：村长把攒下的钱投进村子，每 200 第纳尔换 1 点繁荣（约 25 口人）。
-  # 2026-11-11 玩家定：改为每天一次，村长身上留 1000 周转（2026-11-17 改为 2000），每天最多换 1 点（原为每周、留 500、最多 3 点）；
-  # 只在村子正常时投（被劫、洗劫、恢复中不投）；繁荣上限 260。
-  # 钱花在开荒、盖屋、添农具上，从村长身上扣掉。繁荣涨了，产量和领主每周的租金都跟着涨（原版逻辑）。
-  (24, [
-    (try_for_range, ":village", villages_begin, villages_end),
-      (party_slot_eq, ":village", slot_village_state, svs_normal),
-      (party_get_slot, ":elder", ":village", slot_town_elder),
-      (gt, ":elder", 0),
-      (store_troop_gold, ":gold", ":elder"),
-      (val_sub, ":gold", 2000),  # 2026-11-17 玩家定：留 2000 周转（原 1000）。试过 3000：按头三个月看，村子前 8 周完全不长
-      (gt, ":gold", 0),
-      (store_div, ":points", ":gold", 200),
-      (val_min, ":points", 1),
-      (gt, ":points", 0),
-      (party_get_slot, ":pros", ":village", slot_town_prosperity),
-      (lt, ":pros", 260),
-      (store_mul, ":cost", ":points", 200),
-      (troop_remove_gold, ":elder", ":cost"),
-      (call_script, "script_change_center_prosperity", ":village", ":points"),
-    (try_end),
+  # 2026-11-17 玩家定（繁荣即家底）：不再留固定的现钱，改为每周把钱袋 500 以上部分的四分之一投进去（af78_village_invest_weekly）。
+  # 之前：每天一次、留 2000（更早 1000）、每天最多 1 点。这一条原地改成每周，不挪位置。
+  (24*7, [
+    (call_script, "script_af78_village_invest_weekly"),
   ]),
 
   # v1.0 经济 2.0 第一批: 村庄产业每天看一次是否完工。
@@ -4888,5 +4879,11 @@ simple_triggers = [
       (str_store_party_name, s4, ":town"),
       (display_message, "@{s4}商会又派人来催债了。", 0xFF6666),
     (try_end),
+  ]),
+
+  # v1.0 繁荣即家底: 每周, 城镇金库超过 5000 的部分拿十分之一投成繁荣; 借给村子的钱收利息。
+  (24*7, [
+    (call_script, "script_af78_town_invest_weekly"),
+    (call_script, "script_af78_village_loans_weekly"),
   ]),
 ]

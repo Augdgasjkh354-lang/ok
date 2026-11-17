@@ -944,5 +944,15 @@ script_af68_loan_offer = 942
 script_af68_loan_take = 943
 script_af68_loan_repay = 944
 script_af68_can_borrow = 945
+script_af78_prosperity_price = 946
+script_af78_center_cash_add = 947
+script_af78_liquidate = 948
+script_af78_town_pay_debt = 949
+script_af78_village_pay_debt = 950
+script_af78_village_loans_weekly = 951
+script_af78_village_invest_weekly = 952
+script_af78_town_invest_weekly = 953
+script_af78_merchant_float = 954
+script_af78_pool_merchants = 955
 
 

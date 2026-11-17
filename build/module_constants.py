@@ -2221,3 +2221,4 @@ slot_af68_loan_town          = 1003 # p_main_party: town the player borrowed fro
 slot_af68_loan_owed          = 1004 # p_main_party: principal + interest owed (fixed at borrow time); 0 = no loan
 slot_af68_loan_day           = 1005 # p_main_party: if 1003 > 0: due day (borrow day + 30); else: day the player may borrow again; 0 = never borrowed
 slot_af26_borrow_troop       = 1012 # p_main_party: L1 borrowed troop type, recorded when lending (fixes the lender changing faction mid-loan); 0 = no loan / old save
+slot_af78_village_loan       = 1013 # village: principal the player has lent to the village (interest 1%/week, unpaid interest rolls in); 0 = none

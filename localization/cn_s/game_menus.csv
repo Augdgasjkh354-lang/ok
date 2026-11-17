@@ -303,10 +303,13 @@ mno_af23_provoke_gang_4|花 400 第 纳 尔 ， 挑 拨 怒 海 帮 去 跟 其 
 mno_af23_provoke_gang_5|花 400 第 纳 尔 ， 挑 拨 断 峰 帮 去 跟 其 他 匪 帮 火 并 
 mno_af23_provoke_gang_6|花 400 第 纳 尔 ， 挑 拨 黄 沙 帮 去 跟 其 他 匪 帮 火 并 
 mno_af35_network_provoke_back|返 回 
-menu_af36_village_affairs|村 里 事 — — 查 看 地 方 战 乱 与 援 助 、 和 村 长 聊 聊 附 近 的 动 静 、 有 村 民 请 你 主 持 公 道 。 
+menu_af36_village_affairs|村 里 事 — — 查 看 地 方 战 乱 与 援 助 、 和 村 长 聊 聊 附 近 的 动 静 、 有 村 民 请 你 主 持 公 道 、 借 钱 给 村 里 。 
 mno_af01_village_status|查 看 地 方 战 乱 与 援 助 
 mno_af12_case_entry|有 村 民 请 你 主 持 公 道 
 mno_af10_village_word|和 村 长 聊 聊 附 近 的 动 静 
+mno_af78_village_lend_1000|借 钱 给 村 里 ： 1000 第 纳 尔 （ 每 周 1% 利 息 ） 
+mno_af78_village_lend_3000|借 钱 给 村 里 ： 3000 第 纳 尔 （ 每 周 1% 利 息 ） 
+mno_af78_village_collect|收 回 借 给 村 里 的 钱 ： {reg41} 第 纳 尔 （ 共 欠 {reg42}， 村 长 一 次 最 多 拿 出 手 头 的 四 分 之 三 ） 
 mno_af36_village_affairs_back|返 回 村 庄 
 menu_af37_ledger|{s40}
 mno_af37_ledger_back|返 回 烽 烟 案 头 

@@ -9,7 +9,7 @@
 - 每天招兵：金库÷2 > 450 时花 450 招约 9.45 人，招到 378 人为止（同上，估算）
 - 农民货款：一趟 = 村子产量×价格÷10，代码里没有固定值，这里用 PAY_PER_TRIP（估算，可改）
 - 农民一周约 1.75 趟（每天 60% 出发、来回约 3～4 天，估算）
-- 村长投资：钱袋超过「留存」的部分，每天最多换 1 点繁荣（200 第纳尔／点）
+- 村长投资：旧＝钱袋超过「留存」的部分，每天最多换 1 点繁荣（200 第纳尔／点）；新（繁荣即家底）＝每周把钱袋 500 以上部分的四分之一投进去，城镇金库超过 5000 的部分每周投十分之一（500 一点），借给村子的钱每周 1% 利息，付不出先急卖繁荣（160 一点）
 - 村民采买（新）：每趟花（钱袋−1000）÷10，最多 1000，进杂货商；城镇记账每周减半，每 100 繁荣加成 +1，最多 +25
 - 商人补钱：周转金不足时，由城里人的购买力（繁荣×15＋500 的份额；新：×45＋1500）补（推演过再从金库补 1/8：卖货量几乎不变，金库被掏空，已放弃）
 - 繁荣：每周向理想值走 1 点；有经营加成又低于理想值再 +1（新：各 2 点，2026-11-17 玩家定加快一倍）
@@ -33,14 +33,19 @@ def eff(p):
     return p if p <= 100 else 100 + (p - 100) // 2
 
 
-def run(new, raid_week=None, player_sells=0):
+def run(new, raid_week=None, player_sells=0, lend=0):
+    loan_income = [0]
     town_p, treasury = 80, 3000
     garrison, wage = 378.0, 2450.0
     floats = [6000, 3750, 3750, 2400] if new else [2000, 1250, 1250, 800]
     shares = [40, 20, 20, 20]
     mgold = list(floats)
     reserve = RESERVE if new else 1000
-    vil = [{'p': 40, 'purse': 1500, 'looted': -1} for _ in range(N_VILLAGES)]
+    vil = [{'p': 40, 'purse': 1500, 'looted': -1, 'loan': 0} for _ in range(N_VILLAGES)]
+    for v in vil:
+        if lend:
+            v['purse'] += lend
+            v['loan'] = lend
     spend_slot = 0
     garrison_slot = 0
     caravan_slot = 0
@@ -68,16 +73,43 @@ def run(new, raid_week=None, player_sells=0):
                         mgold[0] += s
                         spend_slot += s
                         weekly_villager_spend += s
-            # 村长投资
-            for v in vil:
-                if v['looted'] < 0 and v['purse'] - reserve >= 200 and v['p'] < 260:
-                    v['purse'] -= 200
-                    v['p'] += 1
+            # 村长投资（旧：每天，留存以上每 200 一点、每天最多 1 点）
+            if not new:
+                for v in vil:
+                    if v['looted'] < 0 and v['purse'] - reserve >= 200 and v['p'] < 260:
+                        v['purse'] -= 200
+                        v['p'] += 1
             # 驻军每天招兵
             if treasury // 2 > 450 and garrison < 378:
                 treasury -= 450
                 garrison += 9.45
                 wage += 9.45 * 4.36
+        # 新（繁荣即家底）：村长每周把钱袋 500 以上部分的四分之一投进去（200 一点）；
+        # 城镇金库超过 5000 的部分每周拿十分之一投进去（500 一点）；借给村子的钱每周 1% 利息
+        if new:
+            for v in vil:
+                if v['looted'] < 0:
+                    pts = min(max(v['purse'] - 500, 0) // 4 // 200, 260 - v['p'])
+                    if pts > 0:
+                        v['purse'] -= pts * 200
+                        v['p'] += pts
+                if v.get('loan', 0) > 0:
+                    i = max(v['loan'] // 100, 1)
+                    pay = min(i, v['purse'] * 3 // 4)
+                    v['purse'] -= pay
+                    short = i - pay
+                    if short > 0 and v['p'] > 10:  # 急卖：160 一点，最多 2 点
+                        pts = min((short + 159) // 160, 2, v['p'] - 10)
+                        v['p'] -= pts
+                        raised = pts * 160
+                        v['purse'] += max(raised - short, 0)
+                        short = max(short - raised, 0)
+                    v['loan'] += short
+                    loan_income[0] += i - short
+            pts = min(max(treasury - 5000, 0) // 10 // 500, 260 - town_p)
+            if pts > 0:
+                treasury -= pts * 500
+                town_p += pts
         # 劫村
         if raid_week is not None and week == raid_week:
             for v in vil[:2]:
@@ -167,3 +199,5 @@ if __name__ == '__main__':
     print(table('C. 改之后，第 5 周两个村被劫', run(True, raid_week=4)))
     print(table('D. 改之前，玩家每周卖 3000 的货', run(False, player_sells=3000)))
     print(table('E. 改之后，玩家每周卖 3000 的货', run(True, player_sells=3000)))
+    r = run(True, lend=3000)
+    print(table('F. 改之后，第 1 周你借给三个村各 3000', r))
