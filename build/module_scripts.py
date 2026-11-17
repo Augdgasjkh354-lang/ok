@@ -69916,7 +69916,7 @@ scripts = [
   ]),
 
   # v1.0 经济 2.0 第二批 (主动裁军): 从低等级兵开始裁, 裁到周饷不高于入账为止,
-  # 底线留 150 人不裁。裁掉的兵直接 party_remove_members, 不生成流寇、不走开小差。
+  # 底线留 50 人不裁。裁掉的兵直接 party_remove_members, 不生成流寇、不走开小差。
   # 裁军看的是饷和入账的结构性缺口, 不是等金库付不起才动手; 城主贴钱也不改变这个判断。
   # 参数 1: 据点; 参数 2: 本周入账 (裁到周饷 ≤ 这个数为止)。
   # 输出 reg0: 裁完后的周饷 (最后赋值)。
@@ -69934,7 +69934,7 @@ scripts = [
         (assign, ":done", 1),
       (else_try),
         (party_get_num_companions, ":size", ":center_no"),
-        (le, ":size", 150),
+        (le, ":size", 50),
         (assign, ":done", 1),
       (else_try),
         # 找等级最低的兵种栈 (不含英雄)。
@@ -69962,9 +69962,9 @@ scripts = [
           (val_sub, ":need", 1),
           (val_div, ":need", ":troop_wage"),
           (val_min, ":need", ":stack_size"),
-          # 底线 150: 不能裁到 150 人以下。
+          # 底线 50: 不能裁到 50 人以下。
           (party_get_num_companions, ":size", ":center_no"),
-          (store_sub, ":can_cut", ":size", 150),
+          (store_sub, ":can_cut", ":size", 50),
           (val_min, ":need", ":can_cut"),
           (try_begin),
             (gt, ":need", 0),
