@@ -57834,6 +57834,8 @@ scripts = [
     (store_script_param, ":amount", 2),
     (assign, ":king_share", 0),
     (assign, ":king", -1),
+    (assign, ":faction", -1),
+    (assign, ":to_player", 0),
     (try_begin),
       (eq, ":receiver", "trp_player"),
       (is_between, "$players_kingdom", kingdoms_begin, kingdoms_end),
@@ -57870,6 +57872,17 @@ scripts = [
       (try_end),
       (call_script, "script_af14_lord_wealth", ":king", ":king_share", 0),
       (str_store_troop_name, s47, ":king"),
+    (else_try),
+      # v1.0 玩家当国王：本国封臣的缴获照样三分之一上缴，进玩家身上的金币（王国的钱就是玩家的金币，
+      # 同政治 2.0；不读写玩家的 slot_troop_wealth）。玩家自己的缴获不抽（上面第一段已排除自立王国）。
+      (eq, ":king", "trp_player"),
+      (neq, ":receiver", "trp_player"),
+      (eq, ":faction", "fac_player_supporters_faction"),
+      (eq, "$players_kingdom", "fac_player_supporters_faction"),
+      (store_div, ":king_share", ":amount", 3),
+      (gt, ":king_share", 0),
+      (troop_add_gold, "trp_player", ":king_share"),
+      (assign, ":to_player", 1),
     (try_end),
     (store_sub, ":kept", ":amount", ":king_share"),
     (try_begin),
@@ -57880,6 +57893,12 @@ scripts = [
     (try_end),
     (assign, reg41, ":kept"),
     (assign, reg42, ":king_share"),
+    (try_begin),
+      (eq, ":to_player", 1),
+      # 这种情况下 s47 是上缴的封臣（国王就是你自己）。
+      (str_store_troop_name, s47, ":receiver"),
+      (display_message, "@{s47}打了胜仗，按规矩把缴获的三分之一送到你这里：{reg42} 第纳尔。", 0x66FF66),
+    (try_end),
   ]),
 
   # A captured town or castle: 60% of its treasury is carried off.
