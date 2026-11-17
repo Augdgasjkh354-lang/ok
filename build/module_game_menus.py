@@ -11829,6 +11829,11 @@ game_menus = [
      (val_div, ":max_iteration", 20),
 
      (assign, ":org_encountered_party", "$g_encountered_party"),
+     # v1.0 2026-11-17 核对旧 fix 分支：货商被刺杀后本城 slot_town_merchant 是 -1，读他的货架会出错，这时不估价。
+     (try_begin),
+       (neg|party_slot_ge, ":org_encountered_party", slot_town_merchant, 1),
+       (assign, ":max_iteration", 0),
+     (try_end),
 
      (try_for_range, ":unused", 0, ":max_iteration"),
        (store_random_in_range, ":random_trade_good", trade_goods_begin, trade_goods_end),
@@ -18713,4 +18718,11 @@ game_menus = [
        (try_end),
        (change_screen_return)]),
    ]),
+
+  # v1.0 2026-11-17 核对旧 fix 分支：路上碰到你正在护送的走私队（和帮主部队同一个模板），不再弹帮派菜单。
+  ("af76_smuggler", 0,
+   "这是接头人派出的走私队，正赶往目的地。帮里的买卖要找真正的首领去谈。",
+   "none", [],
+   [("af76_smuggler_leave", [], "让他们继续赶路，接着护送。",
+     [(leave_encounter), (change_screen_return)])]),
 ]

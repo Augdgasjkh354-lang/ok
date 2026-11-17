@@ -4493,7 +4493,11 @@ simple_triggers = [
           (party_set_slot, ":center2", slot_af33_garrison_rent_day, 0),
         (else_try),
           (party_get_slot, ":rent2", ":center2", slot_af33_garrison_rent_day),
-          (gt, ":rent2", 0),
+          # v1.0 2026-11-17 核对旧 fix 分支：自己的城免租时租期记 0；城易手后不再是你的，从今天起照常收租。
+          (try_begin),
+            (eq, ":rent2", 0),
+            (assign, ":rent2", ":today"),
+          (try_end),
           (ge, ":today", ":rent2"),
           (try_begin),
             (store_troop_gold, ":gold2", "trp_player"),

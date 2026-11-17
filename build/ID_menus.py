@@ -278,3 +278,4 @@ menu_af61_peace_call = 276
 menu_af61_siege_call = 277
 menu_af65_invite = 278
 menu_af71_expand = 279
+menu_af76_smuggler = 280

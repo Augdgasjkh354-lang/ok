@@ -2220,3 +2220,4 @@ slot_af75_caravan_count      = 1011 # town: recent caravan trades x10 (each trad
 slot_af68_loan_town          = 1003 # p_main_party: town the player borrowed from; 0 = no loan (honor credit batch 1)
 slot_af68_loan_owed          = 1004 # p_main_party: principal + interest owed (fixed at borrow time); 0 = no loan
 slot_af68_loan_day           = 1005 # p_main_party: if 1003 > 0: due day (borrow day + 30); else: day the player may borrow again; 0 = never borrowed
+slot_af26_borrow_troop       = 1012 # p_main_party: L1 borrowed troop type, recorded when lending (fixes the lender changing faction mid-loan); 0 = no loan / old save
