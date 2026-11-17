@@ -7872,6 +7872,11 @@ game_menus = [
         (else_try),
           (assign, "$town_nighttime", 1),
         (try_end),
+        # v1.0 村民钱袋：村子菜单里显示村民手头的钱（af89_village_text）。
+        (try_begin),
+          (call_script, "script_af89_village_text", "$current_town"),
+          (str_store_string, s7, "@{s7}^{s45}"),
+        (try_end),
     ],
     [
       ("village_manage",
@@ -8056,6 +8061,27 @@ game_menus = [
         (call_script, "script_af23_gang_live_party", ":kind"),
         (assign, "$g_encountered_party", reg0),
         (jump_to_menu, "mnu_af04_gang")]),
+      # v1.0 村民钱袋：你自己的村子，可以拿 2000 接济村民；接下来两周租金翻倍（多的那份由村长出）。14 天一次。
+      ("af89_relief_village",
+      [
+        (party_slot_eq, "$current_town", slot_town_lord, "trp_player"),
+        (party_slot_ge, "$current_town", slot_town_elder, 1),
+        (store_current_day, ":today"),
+        (party_get_slot, ":d", "$current_town", slot_af87_relief_day),
+        (le, ":d", ":today"),
+        (store_troop_gold, ":gold", "trp_player"),
+        (ge, ":gold", 2000),
+      ],
+      "拿 2000 第纳尔接济村民（两周内租金翻倍）",
+      [
+        (troop_remove_gold, "trp_player", 2000),
+        (call_script, "script_af13_village_purse", "$current_town", 2000),
+        (store_current_day, ":today"),
+        (val_add, ":today", 14),
+        (party_set_slot, "$current_town", slot_af87_relief_day, ":today"),
+        (display_message, "@你拿出 2000 第纳尔接济村民。接下来两周，这里的租金加倍，多的那份由村长交给你。", 0x66FF66),
+        (jump_to_menu, "mnu_village"),
+      ]),
       ("village_leave",[],"Leave...",[(change_screen_return,0)]),
       
     ],

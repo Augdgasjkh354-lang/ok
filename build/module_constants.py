@@ -2247,4 +2247,5 @@ slot_af87_low_weeks          = 1036 # town: weeks in a row the townsfolk purse w
 slot_af87_relief_day         = 1037 # town: end of the two weeks its lord gets double rent for having helped the townsfolk (day+14; also the cooldown); 0 = never
 slot_af87_petition_day       = 1038 # town: day its lord may ask the king for relief again (day+14); 0 = never
 slot_af87_topped_up          = 1039 # p_main_party: 1 = towns' townsfolk purses were topped up to 95% once (saves made with trial pack 33 started them at 60%)
+slot_af89_topped_up          = 1040 # p_main_party: 1 = village elders' purses were topped up to 95% of prosperity x 200 once
 slot_af83_handed             = 1033 # town: treasury handed to a shopkeeper when the player opened his shop (to work out the net on return); 0 = no shop open

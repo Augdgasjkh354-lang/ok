@@ -1765,6 +1765,23 @@ simple_triggers = [
             (val_sub, ":af87_tw", ":af87_extra"),
             (party_set_slot, ":center_no", slot_town_wealth, ":af87_tw"),
             (val_add, ":cur_rents", ":af87_extra"),
+          (else_try),
+            # 村子：领主接济过的两周里租金翻倍，多的那份由村长出（一次最多四分之三）。
+            (is_between, ":center_no", villages_begin, villages_end),
+            (store_current_day, ":af87_today"),
+            (party_get_slot, ":af87_until", ":center_no", slot_af87_relief_day),
+            (gt, ":af87_until", ":af87_today"),
+            (party_get_slot, ":af87_elder", ":center_no", slot_town_elder),
+            (gt, ":af87_elder", 0),
+            (store_troop_gold, ":af87_g", ":af87_elder"),
+            (store_mul, ":af87_cap", ":af87_g", 3),
+            (val_div, ":af87_cap", 4),
+            (assign, ":af87_take", ":cur_rents"),
+            (val_min, ":af87_take", ":af87_cap"),
+            (store_mul, ":af87_neg", ":af87_take", -1),
+            (call_script, "script_af13_village_purse", ":center_no", ":af87_neg"),
+            (store_mul, ":af87_extra", reg0, -1),
+            (val_add, ":cur_rents", ":af87_extra"),
           (try_end),
           (val_add, ":accumulated_rents", ":cur_rents"), #cur rents changes between 23..1000
           (party_set_slot, ":center_no", slot_center_accumulated_rents, ":accumulated_rents"),
@@ -4973,5 +4990,10 @@ simple_triggers = [
   # v1.0 镇民钱袋: 每周看百姓手头紧不紧，连续两周不到一半就有人搬回乡下（af87_folk_weekly）。
   (24*7, [
     (call_script, "script_af87_folk_weekly"),
+  ]),
+
+  # v1.0 村民钱袋: 每周看村民手头紧不紧，领主救急、讨赈济，连续两周不到一半就有人进城（af89_village_weekly）。
+  (24*7, [
+    (call_script, "script_af89_village_weekly"),
   ]),
 ]
