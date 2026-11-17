@@ -2212,3 +2212,5 @@ slot_af33_pretender_funded_amount = 964 # p_main_party: cumulative denars funded
 slot_af33_assassin           = 965 # p_main_party: assassin hit state; > 0 = pending target goods-merchant troop, < 0 = cooldown until day -value (7 days after a hit resolves), 0 = free (capital 2.0 batch 4, item 10c)
 slot_af33_intel_net          = 966 # p_main_party: intel network = level (1-3) * 100000 + expiry day; 0 = no network (capital 2.0 batch 4, item 10d)
 slot_af69_grace_day          = 1006 # p_main_party: day the realm-mood grace ends (first daily check after the player becomes king + 30); 0 = not king
+slot_af70_shield_day         = 1007 # p_main_party: player is king: day the crown may next collect shield money from no-show vassals (day+14); 0 = never
+slot_af71_expand_day         = 1008 # p_main_party: player is king: day a vassal may next petition for money to expand his army (day+14); 0 = never

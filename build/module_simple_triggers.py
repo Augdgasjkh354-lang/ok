@@ -4732,4 +4732,31 @@ simple_triggers = [
   (24*7, [
     (call_script, "script_af69_realm_mood", 2),
   ]),
+
+  # v1.0 你当国王：元帅出征时没来的封臣交盾牌钱（af70_shield_collect）。
+  (24, [
+    (call_script, "script_af70_shield_collect"),
+  ]),
+
+  # v1.0 你当国王：封臣请你拨钱扩军。每两周最多一次（冷却在信使来时记下）；
+  # 别和政治 2.0 的封臣请愿、资本家 2.0 的借钱信使撞车（3 天内来过就这周不来）。
+  (24*7, [
+    (store_current_day, ":today"),
+    (party_get_slot, ":next", "p_main_party", slot_af71_expand_day),
+    (ge, ":today", ":next"),
+    (party_get_slot, ":loan", "p_main_party", slot_af33_loan_visit_day),
+    (store_sub, ":since_loan", ":today", ":loan"),
+    (this_or_next|eq, ":loan", 0),
+    (ge, ":since_loan", 3),
+    (party_get_slot, ":pet", "p_main_party", slot_af49_petition_day),
+    (store_sub, ":since_pet", ":today", ":pet"),
+    (val_add, ":since_pet", 14),
+    (this_or_next|eq, ":pet", 0),
+    (ge, ":since_pet", 3),
+    (call_script, "script_af71_find_expand"),
+    (ge, reg0, 0),
+    (store_add, ":next", ":today", 14),
+    (party_set_slot, "p_main_party", slot_af71_expand_day, ":next"),
+    (jump_to_menu, "mnu_af71_expand"),
+  ]),
 ]

@@ -932,5 +932,8 @@ script_af67_pretender_line = 930
 script_af67_messenger_line = 931
 script_af67_militia_line = 932
 script_af69_realm_mood = 933
+script_af70_shield_collect = 934
+script_af71_find_expand = 935
+script_af71_grant_expand = 936
 
 
