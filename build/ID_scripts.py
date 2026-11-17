@@ -968,5 +968,7 @@ script_af81_pick_for_sale = 966
 script_af81_pay = 967
 script_af81_clear_debt = 968
 script_af81_installments_weekly = 969
+script_af82_wealth_note = 970
+script_af82_wealth_notes_daily = 971
 
 

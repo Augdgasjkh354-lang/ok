@@ -21625,6 +21625,7 @@ scripts = [
       
       (val_max, ":cur_wealth", 0),
       (troop_set_slot, ":troop_no", slot_troop_wealth, ":cur_wealth"),
+      (call_script, "script_af82_wealth_note", ":troop_no"),  # v1.0 笔记里的当前财富跟着变
   ]),
   
   # script_cf_reinforce_party
@@ -57822,6 +57823,7 @@ scripts = [
       (val_sub, ":wealth", ":sub"),
       (val_max, ":wealth", 0),
       (troop_set_slot, ":lord", slot_troop_wealth, ":wealth"),
+      (call_script, "script_af82_wealth_note", ":lord"),  # 笔记里的当前财富跟着变（2026-11-17）
     (try_end),
   ]),
 
@@ -68307,6 +68309,30 @@ scripts = [
       (gt, ":player_cut", 0),
       (assign, reg44, ":player_cut"),
       (display_message, "@本周领主之间买卖封地的分期款，你按王法抽了一成五，共 {reg44} 第纳尔。", 0xFFCC66),
+    (try_end),
+  ]),
+
+  # v1.0 领主笔记里的「当前财富」跟着财产变（2026-11-17 玩家截图：借给领主 5000，笔记里的数不变）。
+  # 原版只在领主去封地收税的那一刻写一次（而且只在开了作弊菜单时写），之后发饷、借钱、抽成、买卖封地都不更新。
+  # 现在财产一变（af14_lord_wealth、每周收支）就重写那一行；每天再把所有领主刷一遍，兜住其他直接改财产的地方。
+  # 和原版一样只在开了作弊菜单时写。保存、还原 reg1，不影响调用方。
+  ("af82_wealth_note", [
+    (store_script_param, ":lord", 1),
+    (try_begin),
+      (this_or_next|eq, "$cheat_mode", 1),
+      (eq, "$cheat_mode", 3),
+      (is_between, ":lord", active_npcs_begin, active_npcs_end),
+      (troop_slot_eq, ":lord", slot_troop_occupation, slto_kingdom_hero),
+      (assign, ":save", reg1),
+      (troop_get_slot, reg1, ":lord", slot_troop_wealth),
+      (add_troop_note_from_sreg, ":lord", 1, "str_current_wealth_reg1", 0),
+      (assign, reg1, ":save"),
+    (try_end),
+  ]),
+
+  ("af82_wealth_notes_daily", [
+    (try_for_range, ":lord", active_npcs_begin, active_npcs_end),
+      (call_script, "script_af82_wealth_note", ":lord"),
     (try_end),
   ]),
 ]

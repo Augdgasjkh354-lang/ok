@@ -4925,4 +4925,9 @@ simple_triggers = [
   (24*3, [
     (call_script, "script_af81_fief_sale_weekly"),
   ]),
+
+  # v1.0 每天刷新领主笔记里的当前财富（af82_wealth_notes_daily）。
+  (24, [
+    (call_script, "script_af82_wealth_notes_daily"),
+  ]),
 ]
