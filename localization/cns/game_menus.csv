@@ -150,6 +150,7 @@ mno_af08_desk_ledger|查 看 秘 密 军 粮 案 卷
 mno_af08_desk_court|查 看 宫 廷 政 治 情 报 簿 
 mno_af08_desk_capital|查 看 商 号 总 账 
 mno_af08_desk_army|查 看 本 国 军 务 
+mno_af08_desk_world_now|查 看 各 地 动 静 （ 买 地 欠 债 、 百 姓 拮 据 、 民 变 、 流 民 ） 
 mno_af08_desk_back|返 回 营 地 
 menu_af08_town_rumor|城 中 风 声 ^^{s40}^^传 闻 只 说 明 公 开 的 地 方 状 况 ； 人 物 身 份 和 幕 后 阴 谋 需 要 调 查 确 认 。 
 mno_af08_town_rumor_back|返 回 城 镇 
@@ -407,3 +408,5 @@ mno_af80_bandit_none|匪 患 不 管
 mno_af80_bandit_suppress|剿 匪 ： 每 周 花 1000 派 兵 清 剿 ， 你 王 国 的 村 子 战 乱 -2
 mno_af80_bandit_appease|招 抚 ： 每 周 给 匪 帮 送 500， 你 王 国 的 村 子 战 乱 -1， 但 匪 帮 钱 多 了 会 招 人 
 mno_af80_policy_bandit_back|返 回 国 策 
+menu_af99_world|{s40}
+mno_af99_world_back|返 回 烽 烟 案 头 

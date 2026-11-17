@@ -16172,6 +16172,7 @@ game_menus = [
      ("af08_desk_court", [], "查看宫廷政治情报簿", [(jump_to_menu, "mnu_fb75_intel_book")]),
      ("af08_desk_capital", [], "查看商号总账", [(jump_to_menu, "mnu_af37_ledger")]),
      ("af08_desk_army", [], "查看本国军务", [(jump_to_menu, "mnu_af52_army")]),
+     ("af08_desk_world_now", [], "查看各地动静（买地欠债、百姓拮据、民变、流民）", [(jump_to_menu, "mnu_af99_world")]),
      ("af08_desk_back", [], "返回营地", [(jump_to_menu, "mnu_camp")]),
    ]),
 
@@ -19379,5 +19380,13 @@ game_menus = [
        (display_message, "@国策已定：招抚匪帮。", 0x66FF66),
        (jump_to_menu, "mnu_af80_policy_main")]),
      ("af80_policy_bandit_back", [], "返回国策", [(jump_to_menu, "mnu_af80_policy_main")]),
+   ]),
+
+  # v1.0 各地动静（2026-11-17 玩家定）：消息减量后，别处的事集中在这一页现算现看。
+  ("af99_world", 0,
+   "{s40}",
+   "none", [(call_script, "script_af99_world_text")],
+   [
+     ("af99_world_back", [], "返回烽烟案头", [(jump_to_menu, "mnu_af08_desk")]),
    ]),
 ]

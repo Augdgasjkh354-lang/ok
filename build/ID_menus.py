@@ -287,3 +287,4 @@ menu_af80_policy_loot = 285
 menu_af80_policy_tariff = 286
 menu_af80_policy_grain = 287
 menu_af80_policy_bandit = 288
+menu_af99_world = 289
