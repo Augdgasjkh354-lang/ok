@@ -502,6 +502,11 @@ simple_triggers = [
          (call_script, "script_calculate_weekly_party_wage", ":center_no"),
          # v1.0 数据联动⑦: 金库付不起的饷不再一笔勾销: 城主从自己财产补, 城主也付不起, 守军开小差 (af56_garrison_shortfall)。
          (assign, ":af_wage", reg0),
+         # v1.0 2026-11-17 驻军花销: 金库实际发出的饷 (不算城主补的), 三分之一花在城里 (af75_garrison_spend)。
+         (assign, ":af_paid", ":cur_wealth"),
+         (val_max, ":af_paid", 0),
+         (val_min, ":af_paid", ":af_wage"),
+         (call_script, "script_af75_garrison_spend", ":center_no", ":af_paid"),
          (val_sub, ":cur_wealth", ":af_wage"),
          (try_begin),
            (lt, ":cur_wealth", 0),
@@ -4782,12 +4787,18 @@ simple_triggers = [
     (jump_to_menu, "mnu_af71_expand"),
   ]),
 
-  # v1.0 村民进城采买: 每周把各城记下的村民采买额减半（越近的采买分量越重）。
+  # v1.0 村民进城采买、驻军花销、商队支数: 每周把各城记下的数减半（越近的分量越重）。
   (24*7, [
     (try_for_range, ":town", towns_begin, towns_end),
       (party_get_slot, ":v", ":town", slot_af74_villager_spend),
       (val_div, ":v", 2),
       (party_set_slot, ":town", slot_af74_villager_spend, ":v"),
+      (party_get_slot, ":v", ":town", slot_af75_garrison_spend),
+      (val_div, ":v", 2),
+      (party_set_slot, ":town", slot_af75_garrison_spend, ":v"),
+      (party_get_slot, ":v", ":town", slot_af75_caravan_count),
+      (val_div, ":v", 2),
+      (party_set_slot, ":town", slot_af75_caravan_count, ":v"),
     (try_end),
   ]),
 ]

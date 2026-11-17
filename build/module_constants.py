@@ -2215,3 +2215,5 @@ slot_af33_intel_net          = 966 # p_main_party: intel network = level (1-3) *
 slot_af70_shield_day         = 1007 # p_main_party: player is king: day the crown may next collect shield money from no-show vassals (day+14); 0 = never
 slot_af71_expand_day         = 1008 # p_main_party: player is king: day a vassal may next petition for money to expand his army (day+14); 0 = never
 slot_af74_villager_spend     = 1009 # town: villagers' recent purchases in this town (each farmer visit adds what they spent; halved every week); 0 = none / old save
+slot_af75_garrison_spend     = 1010 # town: garrison soldiers' recent spending in this town (a third of wages actually paid, own garrison and nearby castles; halved every week); 0 = none / old save
+slot_af75_caravan_count      = 1011 # town: recent caravan trades x10 (each trade +10, halved every week); 0 = none / old save

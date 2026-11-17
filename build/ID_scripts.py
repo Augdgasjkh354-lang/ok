@@ -938,5 +938,6 @@ script_af71_grant_expand = 936
 script_af72_fief_plan = 937
 script_af72_fief_apply = 938
 script_af73_prosperity_tier = 939
+script_af75_garrison_spend = 940
 
 

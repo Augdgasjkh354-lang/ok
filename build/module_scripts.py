@@ -15014,6 +15014,10 @@ scripts = [
         (store_current_day, ":af41_day"),
         (val_add, ":af41_day", 1),
         (party_set_slot, ":center_no", slot_af41_last_trade_day, ":af41_day"),
+        # v1.0 2026-11-17 商队按支数算: 每成交一次 +10 (每周减半), 繁荣加成看最近来了几支。
+        (party_get_slot, ":af75_n", ":center_no", slot_af75_caravan_count),
+        (val_add, ":af75_n", 10),
+        (party_set_slot, ":center_no", slot_af75_caravan_count, ":af75_n"),
       (try_end),
       
       (party_get_slot, ":origin", ":party_no", slot_party_last_traded_center),
@@ -62992,15 +62996,17 @@ scripts = [
         (gt, ":v", 0),
         (val_add, ":bonus", 15),
       (try_end),
-      (party_get_slot, ":v", ":center", slot_af41_last_trade_day),
-      (try_begin),
-        (gt, ":v", 0),
-        (store_current_day, ":today"),
-        (store_sub, ":gap", ":today", ":v"),
-        (val_add, ":gap", 1),
-        (le, ":gap", 14),
-        (val_add, ":bonus", 25),
-      (try_end),
+      # v1.0 2026-11-17 商队按支数算（原为 14 天内有成交就 +25）：Slot 1011 每次成交 +10、每周减半，
+      # 加成 = Slot ÷ 2，最多 +25。每周来 1 支约 +10，来 3 支以上满 +25。
+      (party_get_slot, ":v", ":center", slot_af75_caravan_count),
+      (val_div, ":v", 2),
+      (val_clamp, ":v", 0, 26),
+      (val_add, ":bonus", ":v"),
+      # v1.0 2026-11-17 驻军花销（Slot 1010，每周减半）：每 100 第纳尔 +1，最多 +15。
+      (party_get_slot, ":v", ":center", slot_af75_garrison_spend),
+      (val_div, ":v", 100),
+      (val_clamp, ":v", 0, 16),
+      (val_add, ":bonus", ":v"),
       # v1.0 村民进城采买（Slot 1009，每周减半）：每 100 第纳尔 +1，最多 +25。
       (party_get_slot, ":v", ":center", slot_af74_villager_spend),
       (val_div, ":v", 100),
@@ -67054,5 +67060,43 @@ scripts = [
     (else_try), (lt, ":p", 190), (assign, ":t", 5),
     (try_end),
     (assign, reg0, ":t"),
+  ]),
+
+  # v1.0 驻军在城里花钱（2026-11-17 玩家定）。参数 1：据点（城镇或城堡），参数 2：本周实际发出的饷。
+  # 饷的三分之一花在城里：城镇的驻军花在本城，城堡的驻军花在最近的、和城堡没在打仗的城镇。
+  # 钱进那座城的杂货商（他每周把多出周转金的部分交回金库），并记进那座城的 Slot 1010（每周减半），算繁荣加成。
+  # 以前饷发出去就消失了；现在三分之一回到城里，三分之二仍算消失（兵自己攒着、寄回家）。
+  ("af75_garrison_spend", [
+    (store_script_param, ":center", 1),
+    (store_script_param, ":paid", 2),
+    (try_begin),
+      (store_div, ":spend", ":paid", 3),
+      (gt, ":spend", 0),
+      (assign, ":town", -1),
+      (try_begin),
+        (is_between, ":center", towns_begin, towns_end),
+        (assign, ":town", ":center"),
+      (else_try),
+        (store_faction_of_party, ":cf", ":center"),
+        (assign, ":best", 1000000),
+        (try_for_range, ":t", towns_begin, towns_end),
+          (store_faction_of_party, ":tf", ":t"),
+          (store_relation, ":rel", ":cf", ":tf"),
+          (this_or_next|eq, ":cf", ":tf"),
+          (ge, ":rel", 0),
+          (store_distance_to_party_from_party, ":d", ":center", ":t"),
+          (lt, ":d", ":best"),
+          (assign, ":best", ":d"),
+          (assign, ":town", ":t"),
+        (try_end),
+      (try_end),
+      (is_between, ":town", towns_begin, towns_end),
+      (party_get_slot, ":merchant", ":town", slot_town_merchant),
+      (gt, ":merchant", 0),
+      (troop_add_gold, ":merchant", ":spend"),
+      (party_get_slot, ":v", ":town", slot_af75_garrison_spend),
+      (val_add, ":v", ":spend"),
+      (party_set_slot, ":town", slot_af75_garrison_spend, ":v"),
+    (try_end),
   ]),
 ]
