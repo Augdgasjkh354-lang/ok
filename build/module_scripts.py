@@ -67942,21 +67942,21 @@ scripts = [
   ]),
   # ========== v1.0 封地买卖（玩家 2026-11-17 定）：穷领主把封地卖给本国领主，分期付款 ==========
   # 第一批：只卖村子。第二批：加上城堡（连同卖家挂在它下面的村子一起卖）、分期付款、国王也能买（60 天一处）。
-  # 每周每个王国一半几率、最多成交一笔。
+  # 每三天每个王国 80% 几率、最多成交一笔。
   # 卖家：本国电脑封臣（不含国王），没被俘，财产不够付一周兵饷（没带兵按 1000 算），30 天内没卖过（Slot 1026），
   #       卖完至少还剩一处封地。先卖繁荣最低、眼下太平的村子；没有可卖的村子才卖城堡（没被围、打包后还剩一处）。
   #       几位都符合时挑最穷的。
   # 价钱：村子 繁荣 × 300（最低 3000）；城堡 60000 ＋ 打包村子各按村价。
   # 买家：本国电脑领主（国王也行，但 60 天只能买一处，Slot 1031），不是卖家，没被俘，没欠着别的买地钱，
-  #       和卖家关系 ≥ 0，付完首付还够两周兵饷（城堡另加两周驻军饷）。挑手里地最少的，一样少挑最有钱的。
-  # 首付四分之一，当场过户；余款记在买家身上（Slot 1027～1030），每周结算（af81_installments_weekly）。
+  #       和卖家关系 > -30。挑手里地最少的（没封地的最先），一样少挑最有钱的。
+  # 首付最多四分之一，手里留 1000，可以零首付；当场过户；余款记在买家身上（Slot 1027～1030），每周结算（af81_installments_weekly）。
   # 每笔付款国王抽 15%（买家就是国王时不抽；你当国王时进你的金币）。卖家声望 -2，双方关系 +2。
   ("af81_fief_sale_weekly", [
     (store_current_day, ":today"),
     (try_for_range, ":fac", kingdoms_begin, kingdoms_end),
       (faction_slot_eq, ":fac", slot_faction_state, sfs_active),
       (store_random_in_range, ":dice", 0, 100),
-      (lt, ":dice", 50),
+      (lt, ":dice", 80),
       (faction_get_slot, ":king", ":fac", slot_faction_leader),
       # 找卖家：最穷（财产减一周兵饷最小）、手里有东西可卖的那位
       (assign, ":seller", -1),
@@ -67986,14 +67986,6 @@ scripts = [
       (call_script, "script_af81_package_price", ":item", ":seller"),
       (assign, ":price", reg0),
       (assign, ":n_bundled", reg1),
-      (store_div, ":down", ":price", 4),
-      # 城堡的驻军饷由城主自己出，买家要多留两周
-      (assign, ":garrison", 0),
-      (try_begin),
-        (is_between, ":item", castles_begin, castles_end),
-        (call_script, "script_calculate_weekly_party_wage", ":item"),
-        (assign, ":garrison", reg0),
-      (try_end),
       # 找买家
       (assign, ":buyer", -1),
       (assign, ":best_fiefs", 1000),
@@ -68013,14 +68005,9 @@ scripts = [
           (assign, ":ok", 0),
         (try_end),
         (eq, ":ok", 1),
-        (call_script, "script_af81_lord_wage", ":lord"),
-        (store_add, ":need", reg0, ":garrison"),
-        (val_mul, ":need", 2),
-        (val_add, ":need", ":down"),
         (troop_get_slot, ":wealth", ":lord", slot_troop_wealth),
-        (ge, ":wealth", ":need"),
         (call_script, "script_troop_get_relation_with_troop", ":lord", ":seller"),
-        (ge, reg0, 0),
+        (gt, reg0, -30),
         (call_script, "script_af81_count_fiefs", ":lord"),
         (assign, ":n_fiefs", reg0),
         (assign, ":better", 0),
@@ -68038,8 +68025,16 @@ scripts = [
         (assign, ":best_wealth", ":wealth"),
       (try_end),
       (gt, ":buyer", 0),
-      # 成交：首付四分之一，当场过户（城堡连同卖家挂在它下面的村子）
-      (call_script, "script_af81_pay", ":buyer", ":seller", ":down", ":king"),
+      # 成交：首付最多四分之一，买家手里留 1000（可以零首付），当场过户（城堡连同卖家挂在它下面的村子）
+      (troop_get_slot, ":wealth", ":buyer", slot_troop_wealth),
+      (store_sub, ":down", ":wealth", 1000),
+      (store_div, ":quarter", ":price", 4),
+      (val_min, ":down", ":quarter"),
+      (val_max, ":down", 0),
+      (try_begin),
+        (gt, ":down", 0),
+        (call_script, "script_af81_pay", ":buyer", ":seller", ":down", ":king"),
+      (try_end),
       (try_begin),
         (is_between, ":item", castles_begin, castles_end),
         (try_for_range, ":v", villages_begin, villages_end),
@@ -68070,6 +68065,13 @@ scripts = [
       (assign, reg45, ":down"),
       (assign, reg46, ":n_bundled"),
       (try_begin),
+        (eq, ":down", 0),
+        (gt, ":n_bundled", 0),
+        (display_message, "@{s44}手头拮据，把{s45}连同下面 {reg46} 个村子作价 {reg44} 第纳尔卖给了{s46}。没收首付，全按周分期，一分利。", 0xCCCCCC),
+      (else_try),
+        (eq, ":down", 0),
+        (display_message, "@{s44}手头拮据，把{s45}作价 {reg44} 第纳尔卖给了{s46}。没收首付，全按周分期，一分利。", 0xCCCCCC),
+      (else_try),
         (gt, ":n_bundled", 0),
         (display_message, "@{s44}手头拮据，把{s45}连同下面 {reg46} 个村子作价 {reg44} 第纳尔卖给了{s46}。首付 {reg45}，余下按周分期，一分利。", 0xCCCCCC),
       (else_try),
@@ -68208,7 +68210,7 @@ scripts = [
   ]),
 
   # af81_installments_weekly: 每周结算分期。欠款先加一分利（利滚利），买家拿出财产里
-  # 超出一周兵饷的部分来还（最多还清）。还的不够当周利息算一次拖欠，连拖 4 周卖家把地收回
+  # 超出 1000 的部分来还（最多还清）。还的不够当周利息算一次拖欠，连拖 4 周卖家把地收回
   # （城堡连同买家挂在它下面的村子），已付的钱不退，双方关系 -10。收不回（换了阵营、地丢了、
   # 正被围）就一笔勾销，关系照样 -10。卖家或买家不再是王国领主时一笔勾销。买家被俘这周不结算。
   ("af81_installments_weekly", [
@@ -68228,10 +68230,8 @@ scripts = [
       (else_try),
         (store_div, ":interest", ":owed", 100),
         (val_add, ":owed", ":interest"),
-        (call_script, "script_af81_lord_wage", ":buyer"),
-        (assign, ":wage", reg0),
         (troop_get_slot, ":wealth", ":buyer", slot_troop_wealth),
-        (store_sub, ":pay", ":wealth", ":wage"),
+        (store_sub, ":pay", ":wealth", 1000),
         (val_max, ":pay", 0),
         (val_min, ":pay", ":owed"),
         # 抽成归卖家所在王国的国王；卖家不在王国里时不抽（把国王记成买家）

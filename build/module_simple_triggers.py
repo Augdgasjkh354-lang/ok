@@ -4916,9 +4916,13 @@ simple_triggers = [
     (call_script, "script_af80_policy_weekly"),
   ]),
 
-  # v1.0 封地买卖: 每周先结算分期款，再看有没有穷领主卖地（af81_installments_weekly、af81_fief_sale_weekly）。
+  # v1.0 封地买卖: 每周结算分期款（af81_installments_weekly）。
   (24*7, [
     (call_script, "script_af81_installments_weekly"),
+  ]),
+
+  # v1.0 封地买卖: 每三天看有没有穷领主卖地（af81_fief_sale_weekly，名字沿用）。
+  (24*3, [
     (call_script, "script_af81_fief_sale_weekly"),
   ]),
 ]
