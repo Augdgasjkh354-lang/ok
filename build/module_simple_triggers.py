@@ -1783,7 +1783,7 @@ simple_triggers = [
             (val_min, ":af87_take", ":af87_cap"),
             (store_mul, ":af87_neg", ":af87_take", -1),
             (call_script, "script_af13_village_purse", ":center_no", ":af87_neg"),
-            (store_mul, ":af87_extra", reg0, -1),
+            (assign, ":af87_extra", reg0),  # 2026-11-17 修：af13 扣钱时返回实扣的正数，原来取负后租金反被减掉
             (val_add, ":cur_rents", ":af87_extra"),
           (try_end),
           (val_add, ":accumulated_rents", ":cur_rents"), #cur rents changes between 23..1000
