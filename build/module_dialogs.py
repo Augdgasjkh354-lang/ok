@@ -6318,6 +6318,8 @@ dialogs = [
  The fool has lost one of his most valuable retainers, and we are one step closer to bringing him to his knees.\
  Here, this purse contains {reg5} denars, and I wish you to have it. You deserve every copper.\
  And, need I remind you, there could be much more to come if you've a mind to earn it...", "lord_generic_mission_completed",[
+     (quest_get_slot, ":af_reward", "qst_incriminate_loyal_commander", slot_quest_gold_reward),
+     (call_script, "script_af19_lord_pays", "$g_talk_troop", ":af_reward"),  # v1.0 审计第 39 条: 答应的钱由领主出, 付不起记欠账
      (call_script, "script_end_quest", "qst_incriminate_loyal_commander"),
      (call_script, "script_change_player_relation_with_troop","$g_talk_troop",5),
      (call_script, "script_change_player_honor", -10),
@@ -6416,6 +6418,7 @@ dialogs = [
    "I must admit I'm impressed, {playername}. I had lost hope of ever getting this money back.\
  Please accept my sincere thanks.", "lord_pretalk",[
      (troop_remove_gold, "trp_player", reg4),
+     (call_script, "script_af14_lord_wealth", "$g_talk_troop", reg4, 0),  # v1.0 审计第 47 条: 交上去的钱进债主财产
      (call_script, "script_change_player_relation_with_troop","$g_talk_troop", 2),
      (add_xp_as_reward, 100),
      (call_script, "script_end_quest", "qst_collect_debt")
@@ -7022,6 +7025,7 @@ dialogs = [
                                     (le, ":cur_debt", ":cur_gold")],
    "That is why I came, {s65}. Here it is, every denar I owe you.", "lord_pay_debt_3_1", [(troop_get_slot, ":cur_debt", "$g_talk_troop", slot_troop_player_debt),
                                                    (troop_remove_gold, "trp_player", ":cur_debt"),
+                                                   (call_script, "script_af14_lord_wealth", "$g_talk_troop", ":cur_debt", 0),  # v1.0 审计第 49 条: 还的钱进领主财产
                                                    (troop_set_slot, "$g_talk_troop", slot_troop_player_debt, 0)]],
 
   [anyone|plyr, "lord_pay_debt_2", [],
@@ -22321,6 +22325,12 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
  I'd better collect that now.", "merchant_ask_for_debts",[(assign,reg(1),"$debt_to_merchants_guild")]],
   [anyone|plyr,"merchant_ask_for_debts", [[store_troop_gold,reg(5),"trp_player"],[ge,reg(5),"$debt_to_merchants_guild"]],
    "Alright. I'll pay my debt to you.", "merchant_debts_paid",[[troop_remove_gold, "trp_player","$debt_to_merchants_guild"],
+                                                                (try_begin),  # v1.0 审计第 49 条: 还商会的钱进本城金库
+                                                                  (is_between, "$current_town", towns_begin, towns_end),
+                                                                  (party_get_slot, ":af_w", "$current_town", slot_town_wealth),
+                                                                  (val_add, ":af_w", "$debt_to_merchants_guild"),
+                                                                  (party_set_slot, "$current_town", slot_town_wealth, ":af_w"),
+                                                                (try_end),
                                                                 [assign,"$debt_to_merchants_guild",0]]],
   [anyone, "merchant_debts_paid", [], "Excellent. I'll let my fellow merchants know that you are clear of any debts.", "mayor_pretalk",[]],
 

@@ -36081,6 +36081,12 @@ scripts = [
       (val_add, "$g_tournament_bet_placed", ":bet_amount"),
       (val_add, "$g_tournament_bet_win_amount", ":win_amount"),
       (troop_remove_gold, "trp_player", ":bet_amount"),
+      (try_begin),  # v1.0 审计第 40 条: 赌金进举办城镇的金库, 赢了照旧由金库赔付 (af19_town_pays)
+        (is_between, "$current_town", towns_begin, towns_end),
+        (party_get_slot, ":af_w", "$current_town", slot_town_wealth),
+        (val_add, ":af_w", ":bet_amount"),
+        (party_set_slot, "$current_town", slot_town_wealth, ":af_w"),
+      (try_end),
       (assign, "$g_tournament_last_bet_tier", "$g_tournament_cur_tier"),
   ]),
   
@@ -68775,6 +68781,7 @@ scripts = [
     (assign, ":paid", 0),
     (try_begin),
       (troop_slot_eq, ":lord", slot_troop_occupation, slto_kingdom_hero),
+      (troop_slot_eq, ":lord", slot_troop_prisoner_of_party, -1),  # v1.0 审计第 51 条: 被俘期间不发补贴
       (store_troop_faction, ":fac", ":lord"),
       (is_between, ":fac", kingdoms_begin, kingdoms_end),
       (faction_get_slot, ":king", ":fac", slot_faction_leader),

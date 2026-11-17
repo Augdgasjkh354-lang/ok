@@ -531,7 +531,7 @@ simple_triggers = [
          (val_min, ":af_paid", ":af_wage"),
          (call_script, "script_af75_garrison_spend", ":center_no", ":af_paid"),
          # v1.0 王室税（2026-11-17 玩家定，看家底收，推演见 docs/推演_城镇三根柱子.md）：
-         # 金库加上本周进账、扣掉本周驻军饷后还剩 2000 以上，才收本周进账的一成；金库超过 10000 的部分再收一成。
+         # 金库加上本周进账、扣掉本周驻军饷后还剩 2000 以上，才按税率（af79_tax_rate，电脑王国 20%）收本周进账；扣饷后金库超过 10000 的部分再按同一税率收（2026-11-17 审计第 13 条：原先按扣饷前算）。
          # 富城多交、困难的城不交。电脑国王进他的财产（他有钱就多养兵）；你当国王时进你身上的金币（周末一条汇总）。
          # 国王自己的城堡、城镇不收（本来就是他的）；你自己的封地不走这个触发器，所以你当臣子时不交。钱从金库出，不凭空生。
          (try_begin),
@@ -539,7 +539,7 @@ simple_triggers = [
            (is_between, ":af77_fac", kingdoms_begin, kingdoms_end),
            (faction_get_slot, ":af77_king", ":af77_fac", slot_faction_leader),
            (neg|party_slot_eq, ":center_no", slot_town_lord, ":af77_king"),
-           # 税率：你当国王时按「税收」国策（轻 5、中 10、重 20），其余王国一律 10（af79_tax_rate）。
+           # 税率：你当国王时按「税收」国策（轻 10、中 20、重 30），其余王国一律 20（af79_tax_rate）。
            (call_script, "script_af79_tax_rate", ":af77_fac"),
            (assign, ":af77_rate", reg0),
            (assign, ":af77_tax", 0),
@@ -550,8 +550,8 @@ simple_triggers = [
              (val_div, ":af77_tax", 100),
            (try_end),
            (try_begin),
-             (gt, ":cur_wealth", 10000),
-             (store_sub, ":af77_rich", ":cur_wealth", 10000),
+             (gt, ":af77_left", 10000),
+             (store_sub, ":af77_rich", ":af77_left", 10000),
              (val_mul, ":af77_rich", ":af77_rate"),
              (val_div, ":af77_rich", 100),
              (val_add, ":af77_tax", ":af77_rich"),
@@ -608,7 +608,7 @@ simple_triggers = [
          (try_end),
          # v1.0 资本家 3.0 第三批: 领主入股的一成 (Slot 969)。
          # 先清掉失效的股份: 领主不在了 / 不再是王国领主 / 自己成了这座城的封主 -> 股份作废, 钱留在金库 (照商队股份的先例)。
-         # 有效时按同样的算法分红: 本周入账的一成, 单次不超金库 1/4, 从金库进领主财产 (af14_lord_wealth)。
+         # 有效时按同样的算法分红: 本周入账的一成, 单次不超金库 3/4（城镇付钱的通例）, 从金库进领主财产 (af14_lord_wealth)。
          # 领主的国家和这座城的国家在打仗时不分红, 钱留在金库。
          (try_begin),
            (party_get_slot, ":npc_inv", ":center_no", slot_af40_npc_investor),
@@ -825,6 +825,7 @@ simple_triggers = [
       (try_begin),
         (eq, "$g_half_payment_checkpoint", 1),
         (val_add, "$g_cur_week_half_daily_wage_payments", 1), #half payment for yesterday
+        (val_min, "$g_cur_week_half_daily_wage_payments", 7),  # v1.0 审计第 52 条: 一周最多 7 天半饷, 周结被跳过时不再变成反向发钱
       (try_end),
       (assign, "$g_half_payment_checkpoint", 1),
     (try_end),

@@ -147,6 +147,12 @@ ALLOWED_DIALOG_CHANGES |= {
     'dlga_start:mayor_begin.1',
 }
 _old=(base/'compiled/conversation.txt').read_text('utf-8').split('\n')
+ALLOWED_DIALOG_CHANGES |= {  # v1.0 经济审计第一批 (2026-11-17): 钱有来处去处
+    'dlga_lord_start:lord_generic_mission_completed.1',  # 第 39 条: 栽赃任务付答应的赏金
+    'dlga_lord_collect_debt_pay:lord_pretalk',  # 第 47 条: 讨债交账进债主财产
+    'dlga_lord_pay_debt_2:lord_pay_debt_3_1',  # 第 49 条: 还领主的债进领主财产
+    'dlga_merchant_ask_for_debts:merchant_debts_paid',  # 第 49 条: 还商会的债进本城金库
+}
 _new=(data/'conversation.txt').read_text('utf-8').split('\n')
 if _old and _old[-1]=='': _old=_old[:-1]
 if _new and _new[-1]=='': _new=_new[:-1]
