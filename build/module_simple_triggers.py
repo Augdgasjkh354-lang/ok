@@ -508,6 +508,10 @@ simple_triggers = [
              (val_div, ":added_wealth", 100),
            (try_end),
          (try_end),
+         (try_begin),  # v1.0 围城（2026-11-17 玩家定）：被围的城本周没有入账，饷照付
+           (neg|party_slot_eq, ":center_no", slot_center_is_besieged_by, -1),
+           (assign, ":added_wealth", 0),
+         (try_end),
          (val_add, ":cur_wealth", ":added_wealth"),
          (call_script, "script_calculate_weekly_party_wage", ":center_no"),
          # v1.0 数据联动⑦: 金库付不起的饷不再一笔勾销: 城主从自己财产补, 城主也付不起, 守军开小差 (af56_garrison_shortfall)。
@@ -2375,7 +2379,10 @@ simple_triggers = [
              (party_get_slot, ":town_food_store", ":cur_ai_object", slot_party_food_store),
              (call_script, "script_center_get_food_store_limit", ":cur_ai_object"),
              (assign, ":food_store_limit", reg0),
-             (val_add, ":town_food_store", 1000),
+             (try_begin),  # v1.0 围城断粮（2026-11-17 玩家定）：被围的城农民运不进粮
+               (party_slot_eq, ":cur_ai_object", slot_center_is_besieged_by, -1),
+               (val_add, ":town_food_store", 1000),
+             (try_end),
              (val_min, ":town_food_store", ":food_store_limit"),
              (party_set_slot, ":cur_ai_object", slot_party_food_store, ":town_food_store"),
 
@@ -4811,7 +4818,7 @@ simple_triggers = [
   ]),
 
   # v1.0 经济1.0：村长把攒下的钱投进村子，每 200 第纳尔换 1 点繁荣（约 25 口人）。
-  # 2026-11-17 玩家定（繁荣即家底）：不再留固定的现钱，改为每周把钱袋 500 以上部分的四分之一投进去（af78_village_invest_weekly）。
+  # 2026-11-17 玩家定（繁荣即家底）：不再留固定的现钱，改为每周把钱袋超过满额 5 倍（繁荣×1000）的部分换成繁荣（af78_village_invest_weekly）；平时起作用的是 af91 每三天把满额以上的钱换成繁荣。
   # 之前：每天一次、留 2000（更早 1000）、每天最多 1 点。这一条原地改成每周，不挪位置。
   (24*7, [
     (call_script, "script_af78_village_invest_weekly"),

@@ -8812,7 +8812,17 @@ game_menus = [
         # v1.0 2026-11-17 玩家定：劫村所得全从村民钱袋出（抢走一半），不再凭空给 50 + 繁荣 × 5。
         (call_script, "script_af16_take_village_cash", "$current_town"),
         (assign, ":money_gained", reg0),
-        (call_script, "script_troop_add_gold", "trp_player", ":money_gained"),
+        # v1.0 2026-11-17 玩家定：你劫村和 AI 一样交国王抽成（af16_split_loot；劫村不一定打过仗，不按盟友出力分）。
+        (try_begin),
+          (gt, ":money_gained", 0),
+          (call_script, "script_af16_split_loot", "trp_player", ":money_gained"),
+          (try_begin),
+            (gt, reg42, 0),
+            (display_message, "@你从村里抢到 {reg41} 第纳尔，另有 {reg42} 第纳尔按规矩上缴{s47}。", 0x66FF66),
+          (else_try),
+            (display_message, "@你从村里抢到 {reg41} 第纳尔。", 0x66FF66),
+          (try_end),
+        (try_end),
         # v1.0 第六批（七）：村子记得这次劫掠，60 天内不给招兵、不来答谢。
         (store_current_day, ":day"),
         (val_add, ":day", 1),

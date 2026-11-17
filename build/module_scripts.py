@@ -22323,6 +22323,11 @@ scripts = [
       (try_begin),
         (party_slot_eq, ":center_no", slot_party_type, spt_town),
         (assign, ":food_consumption", 500),
+        # v1.0 围城断粮（2026-11-17 玩家定）：守军每人每天另吃 4。300 守军一天 1700，满仓 50000 约撑 29 天
+        #（原来 500 一天要 100 天）；城堡不变（满仓 1500、一天 50，约 30 天）。
+        (party_get_num_companions, ":af_garrison", ":center_no"),
+        (val_mul, ":af_garrison", 4),
+        (val_add, ":food_consumption", ":af_garrison"),
       (else_try),
         (party_slot_eq, ":center_no", slot_party_type, spt_castle),
         (assign, ":food_consumption", 50),
@@ -55362,10 +55367,15 @@ scripts = [
       (party_get_slot, ":purse", "p_main_party", ":purse_slot"),
       (try_begin),
         (gt, ":purse", 0),
-        (troop_add_gold, "trp_player", ":purse"),
         (party_set_slot, "p_main_party", ":purse_slot", 0),
-        (assign, reg41, ":purse"),
-        (display_message, "@你们在匪帮的营地里翻出了他们的钱箱：{reg41}第纳尔。", 0x66FF66),
+        # v1.0 2026-11-17 玩家定：剿匪缴获和 AI 一样交国王抽成（af80_player_loot，有盟友时按出力分）。
+        (call_script, "script_af80_player_loot", ":purse"),
+        (try_begin),
+          (gt, reg42, 0),
+          (display_message, "@你们在匪帮的营地里翻出了他们的钱箱：你分得{reg41}第纳尔，另有{reg42}第纳尔按规矩上缴{s47}。", 0x66FF66),
+        (else_try),
+          (display_message, "@你们在匪帮的营地里翻出了他们的钱箱：{reg41}第纳尔。", 0x66FF66),
+        (try_end),
       (try_end),
       # Keep the tracked party id until the native engine has actually removed it.
       # This prevents a duplicate leader band after a victory with survivors.
