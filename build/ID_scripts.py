@@ -1001,5 +1001,8 @@ script_cf_af99_tell = 999
 script_af99_world_text = 1000
 script_af100_weekly_income = 1001
 script_af100_disband_to_income = 1002
+script_af101_kingdom_strapped = 1003
+script_af101_bailout = 1004
+script_af101_weekly = 1005
 
 

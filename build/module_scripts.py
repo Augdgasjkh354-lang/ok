@@ -70012,4 +70012,160 @@ scripts = [
     (call_script, "script_calculate_weekly_party_wage", ":center_no"),
   ]),
 
+  # v1.0 经济 2.0 第三批 (王国再分配): 一个王国里城镇＋村庄的拮据情况。
+  # 只读。分母 = 该国全部城镇＋村庄（城堡本身没有镇民钱袋，不计；挂在城堡下的
+  # 村庄按村庄计；国王自己的属地也计）。分子 = 其中 low_weeks ≥ 2 的个数。
+  # 参数 1: 王国（阵营）。输出（最后赋值）: reg0 = 属地总数，reg1 = 拮据城镇数，
+  # reg2 = 拮据村庄数。
+  ("af101_kingdom_strapped", [
+    (store_script_param, ":fac", 1),
+    (assign, ":total", 0),
+    (assign, ":st_towns", 0),
+    (assign, ":st_villages", 0),
+    (try_for_range, ":town", towns_begin, towns_end),
+      (store_faction_of_party, ":f", ":town"),
+      (eq, ":f", ":fac"),
+      (val_add, ":total", 1),
+      (party_get_slot, ":wk", ":town", slot_af87_low_weeks),
+      (ge, ":wk", 2),
+      (val_add, ":st_towns", 1),
+    (try_end),
+    (try_for_range, ":v", villages_begin, villages_end),
+      (store_faction_of_party, ":f", ":v"),
+      (eq, ":f", ":fac"),
+      (val_add, ":total", 1),
+      (party_get_slot, ":wk", ":v", slot_af87_low_weeks),
+      (ge, ":wk", 2),
+      (val_add, ":st_villages", 1),
+    (try_end),
+    (assign, reg0, ":total"),
+    (assign, reg1, ":st_towns"),
+    (assign, reg2, ":st_villages"),
+  ]),
+
+  # v1.0 经济 2.0 第三批 (王国再分配): 国王拿钱兜底。每个拮据城镇 3000、每个拮据
+  # 村庄 1000，直接进百姓钱袋（城镇走 af87_folk_add，村子走 af13_village_purse），
+  # 不经过城主、不截留。国王从自己财产里出（走 af14_lord_wealth；玩家当国王时走
+  # 身上金币），不凭空生钱。先付城镇、再付村庄，有多少钱付多少钱，不够的部分不记
+  # 欠账。只实际拿到钱的属地把 low_weeks 清零（这样它要再穷两周才能重新计入 60%，
+  # 自然形成间隔）；没拿到钱的 low_weeks 不动。没有村长的村子跳过，钱不给城主。
+  # 参数 1: 王国（阵营）。输出（最后赋值）: reg0 = 实际接济的城镇数，reg1 = 实际
+  # 接济的村庄数，reg2 = 共付的钱。付了至少一处时弹一条消息说清（王国名、几个城镇、
+  # 几个村子、共多少钱），只在相关时弹（cf_af99_tell）；一处没付时不弹，免得国王
+  # 没钱时每周刷屏。
+  ("af101_bailout", [
+    (store_script_param, ":fac", 1),
+    (faction_get_slot, ":king", ":fac", slot_faction_leader),
+    (assign, ":towns_paid", 0),
+    (assign, ":villages_paid", 0),
+    (assign, ":total_paid", 0),
+    (assign, ":ref", 0),
+    # 国王的钱：电脑国王走财产，玩家当国王走身上金币（af14 只认 NPC 领主）。
+    (try_begin),
+      (eq, ":king", "trp_player"),
+      (store_troop_gold, ":kw", "trp_player"),
+      (assign, ":is_player", 1),
+    (else_try),
+      (troop_get_slot, ":kw", ":king", slot_troop_wealth),
+      (assign, ":is_player", 0),
+    (try_end),
+    # 先付城镇，每座 3000。钱先放进百姓钱袋，确认落袋了再从国王身上扣。
+    (try_for_range, ":town", towns_begin, towns_end),
+      (store_faction_of_party, ":f", ":town"),
+      (eq, ":f", ":fac"),
+      (party_get_slot, ":wk", ":town", slot_af87_low_weeks),
+      (ge, ":wk", 2),
+      (ge, ":kw", 3000),
+      (call_script, "script_af87_folk_add", ":town", 3000),
+      (gt, reg0, 0),
+      (try_begin),
+        (eq, ":is_player", 1),
+        (troop_remove_gold, "trp_player", 3000),
+      (else_try),
+        (call_script, "script_af14_lord_wealth", ":king", 0, 3000),
+      (try_end),
+      (val_sub, ":kw", 3000),
+      (party_set_slot, ":town", slot_af87_low_weeks, 0),
+      (val_add, ":towns_paid", 1),
+      (val_add, ":total_paid", 3000),
+      (try_begin),
+        (eq, ":ref", 0),
+        (assign, ":ref", ":town"),
+      (try_end),
+    (try_end),
+    # 再付村庄，每座 1000。没有村长的跳过，钱不给城主。
+    (try_for_range, ":v", villages_begin, villages_end),
+      (store_faction_of_party, ":f", ":v"),
+      (eq, ":f", ":fac"),
+      (party_get_slot, ":wk", ":v", slot_af87_low_weeks),
+      (ge, ":wk", 2),
+      (party_get_slot, ":elder", ":v", slot_town_elder),
+      (gt, ":elder", 0),
+      (ge, ":kw", 1000),
+      (call_script, "script_af13_village_purse", ":v", 1000),
+      (gt, reg0, 0),
+      (try_begin),
+        (eq, ":is_player", 1),
+        (troop_remove_gold, "trp_player", 1000),
+      (else_try),
+        (call_script, "script_af14_lord_wealth", ":king", 0, 1000),
+      (try_end),
+      (val_sub, ":kw", 1000),
+      (party_set_slot, ":v", slot_af87_low_weeks, 0),
+      (val_add, ":villages_paid", 1),
+      (val_add, ":total_paid", 1000),
+      (try_begin),
+        (eq, ":ref", 0),
+        (assign, ":ref", ":v"),
+      (try_end),
+    (try_end),
+    # 一条消息说清（王国名、几个城镇、几个村子、共多少钱），只在相关时弹。
+    (try_begin),
+      (store_add, ":paid", ":towns_paid", ":villages_paid"),
+      (gt, ":paid", 0),
+      (gt, ":ref", 0),
+      (str_store_faction_name, s11, ":fac"),
+      (assign, reg41, ":towns_paid"),
+      (assign, reg42, ":villages_paid"),
+      (assign, reg43, ":total_paid"),
+      (try_begin),
+        (call_script, "script_cf_af99_tell", ":ref"),
+        (display_message, "@{s11}的领主们联名请国王兜底：国王拿出 {reg43} 第纳尔，接济了 {reg41} 个城镇、{reg42} 个村子的百姓。", 0xFFCC66),
+      (try_end),
+    (try_end),
+    (assign, reg0, ":towns_paid"),
+    (assign, reg1, ":villages_paid"),
+    (assign, reg2, ":total_paid"),
+  ]),
+
+  # v1.0 经济 2.0 第三批 (王国再分配): 每周结算，在 af87_folk_weekly /
+  # af89_village_weekly 更新完低周数之后跑。按王国算：拮据属地（low_weeks ≥ 2）
+  # 占全部城镇＋村庄 60% 及以上就触发。电脑国王自动拨（调 af101_bailout）；
+  # 玩家当国王不自动扣钱，只记下来、由触发器弹请示菜单让玩家决定。
+  # 输出 reg0: 1 = 玩家当国王的王国触发了（要弹菜单），0 = 没有。
+  ("af101_weekly", [
+    (assign, ":player_needs", 0),
+    (try_for_range, ":fac", kingdoms_begin, kingdoms_end),
+      (faction_slot_eq, ":fac", slot_faction_state, sfs_active),
+      (faction_get_slot, ":king", ":fac", slot_faction_leader),
+      (call_script, "script_af101_kingdom_strapped", ":fac"),
+      (assign, ":total", reg0),
+      (assign, ":st_towns", reg1),
+      (assign, ":st_villages", reg2),
+      (gt, ":total", 0),
+      (store_add, ":strapped", ":st_towns", ":st_villages"),
+      (store_mul, ":pct", ":strapped", 100),
+      (val_div, ":pct", ":total"),
+      (ge, ":pct", 60),
+      (try_begin),
+        (eq, ":king", "trp_player"),
+        (assign, ":player_needs", 1),
+      (else_try),
+        (is_between, ":king", active_npcs_begin, active_npcs_end),
+        (call_script, "script_af101_bailout", ":fac"),
+      (try_end),
+    (try_end),
+    (assign, reg0, ":player_needs"),
+  ]),
+
 ]

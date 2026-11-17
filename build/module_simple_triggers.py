@@ -5036,8 +5036,13 @@ simple_triggers = [
   ]),
 
   # v1.0 村民钱袋: 每周看村民手头紧不紧，领主救急、讨赈济，连续两周不到一半就有人进城（af89_village_weekly）。
+  # v1.0 经济 2.0 第三批 (王国再分配): 在上面两处每周更新完低周数之后跑。
+  # 镇民触发器在文件前面先跑，所以到这里时城镇和村庄的低周数都已更新。
   (24*7, [
     (call_script, "script_af89_village_weekly"),
+    (call_script, "script_af101_weekly"),
+    (eq, reg0, 1),
+    (jump_to_menu, "mnu_af101_bailout"),
   ]),
 
   # v1.0 购买力 500%: 每三天，老百姓手头富余的城镇、村子自己往上长（af91_growth_3days）。

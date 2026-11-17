@@ -410,3 +410,6 @@ mno_af80_bandit_appease|招 抚 ： 每 周 给 匪 帮 送 500， 你 王 国 �
 mno_af80_policy_bandit_back|返 回 国 策 
 menu_af99_world|{s40}
 mno_af99_world_back|返 回 烽 烟 案 头 
+menu_af101_bailout|{s40}
+mno_af101_give|拿 钱 兜 底 （ 先 城 镇 后 村 庄 ， 有 多 少 钱 付 多 少 钱 ） 。 
+mno_af101_refuse|先 不 给 。 
