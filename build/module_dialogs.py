@@ -6156,7 +6156,7 @@ dialogs = [
     ], "Splendid work, {playername} -- your audacious attack is the talk of the realm. No doubt they, or others like them, will soon be back, but for a short while you have bought this land a small respite. We are most grateful to you.", "lord_pretalk", 
     [
       (quest_get_slot, ":quest_gold_reward", "qst_destroy_bandit_lair", slot_quest_gold_reward),
-      (call_script, "script_troop_add_gold", "trp_player", ":quest_gold_reward"),
+      (call_script, "script_af90_quest_pay", "qst_destroy_bandit_lair", ":quest_gold_reward"),  # v1.0 发任务的人出钱
       (assign, ":xp_reward", ":quest_gold_reward"),
       (val_mul, ":xp_reward", 2),
       (add_xp_as_reward, ":xp_reward"),
@@ -9994,6 +9994,7 @@ dialogs = [
  Thank you for accepting to take the money to him.\
  Please give him these {reg10} denars and thank him on my behalf.", "close_window",
    [(call_script, "script_troop_add_gold", "trp_player", reg10),
+    (call_script, "script_af14_lord_wealth", "$g_talk_troop", 0, reg10),  # v1.0 欠债的领主从自己财产里拿出来
     (quest_set_slot,  "qst_collect_debt", slot_quest_current_state, 1),
     (call_script, "script_succeed_quest", "qst_collect_debt"),
     (assign, "$g_leave_encounter", 1),
@@ -21959,7 +21960,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   
   [anyone|plyr,"master_craftsman_auction_decide", [
   ], "That sounds reasonable. Please proceed with the sale.", "master_craftsman_liquidation",[
-  (troop_add_gold, "trp_player", "$liquidation_price"),
+  (call_script, "script_af19_town_pays", "$current_town", "$liquidation_price"),  # v1.0 作坊卖给城里，由城镇出钱
   (troop_clear_inventory, "$g_talk_troop"),
   (party_set_slot, "$g_encountered_party", slot_center_player_enterprise, 0),
   (party_set_slot, "$g_encountered_party", slot_center_player_enterprise_production_order, 0),
@@ -23121,7 +23122,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
                                                        (call_script, "script_change_player_relation_with_center", ":quest_giver_center", 1),
                                                        (call_script, "script_end_quest","qst_escort_merchant_caravan"),
                                                        (quest_set_slot, "qst_escort_merchant_caravan", slot_quest_current_state, 2),
-                                                       (call_script, "script_troop_add_gold", "trp_player", ":quest_gold_reward"),
+                                                       (call_script, "script_af90_quest_pay", "qst_escort_merchant_caravan", ":quest_gold_reward"),  # v1.0 发任务的人出钱
                                                        (assign, ":xp_reward", ":quest_gold_reward"),
                                                        (val_mul, ":xp_reward", 5),
                                                        (val_add, ":xp_reward", 100),
@@ -23225,7 +23226,7 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
                                  (party_set_ai_behavior, ":quest_target_party", ai_bhvr_hold),
                                  (party_set_ai_object, ":quest_target_party", "p_main_party"),
                                  (party_set_flags, ":quest_target_party", pf_default_behavior, 0),
-                                 (call_script, "script_troop_add_gold", "trp_player", ":quest_target_amount"),
+                                 (call_script, "script_af90_quest_pay", "qst_kidnapped_girl", ":quest_target_amount"),  # v1.0 赎金由家里（发任务的城镇）出
                                  (assign, reg12, ":quest_target_amount"),
                                  (str_store_troop_name, s1, "$g_talk_troop"),
                                  (str_store_party_name_link, s4, "$g_encountered_party"),
@@ -25264,13 +25265,13 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
 # Ryan BEGIN
   [anyone,"sell_prisoner_outlaws", [[store_troop_kind_count,0,"trp_looter"],[ge,reg(0),1],[assign,reg(1),reg(0)],[val_mul,reg(1),10],[val_mul,reg(2),reg(0)],[val_mul,reg(2),10]],
    "Hmmm. 10 denars for each looter makes {reg1} denars for all {reg0} of them.", "sell_prisoner_outlaws",
-   [[call_script, "script_troop_add_gold", "trp_player", reg(1)],[add_xp_to_troop,reg(2)],[remove_member_from_party,"trp_looter"]]],
+   [[call_script, "script_af19_town_pays", "$current_town", reg(1)],[add_xp_to_troop,reg(2)],[remove_member_from_party,"trp_looter"]]],
   [anyone,"sell_prisoner_outlaws", [[store_troop_kind_count,0,"trp_bandit"],[ge,reg(0),1],[assign,reg(1),reg(0)],[val_mul,reg(1),20],[assign,reg(2),reg(0)],[val_mul,reg(2),20]],
    "Let me see. You've brought {reg0} bandits, so 20 denars for each comes up to {reg1} denars.", "sell_prisoner_outlaws",
-   [[call_script, "script_troop_add_gold", "trp_player", reg(1)],[add_xp_to_troop,reg(2)],[remove_member_from_party,"trp_bandit"]]],
+   [[call_script, "script_af19_town_pays", "$current_town", reg(1)],[add_xp_to_troop,reg(2)],[remove_member_from_party,"trp_bandit"]]],
   [anyone,"sell_prisoner_outlaws", [[store_troop_kind_count,0,"trp_brigand"],[ge,reg(0),1],[assign,reg(1),reg(0)],[val_mul,reg(1),30],[assign,reg(2),reg(0)],[val_mul,reg(2),30]],
    "Well well, you've captured {reg0} brigands. Each one is worth 30 denars, so I'll give you {reg1} for them in total.", "sell_prisoner_outlaws",
-   [[call_script, "script_troop_add_gold", "trp_player", reg(1)],[add_xp_to_troop,reg(2)],[remove_member_from_party,"trp_brigand"]]],
+   [[call_script, "script_af19_town_pays", "$current_town", reg(1)],[add_xp_to_troop,reg(2)],[remove_member_from_party,"trp_brigand"]]],
   [anyone,"sell_prisoner_outlaws", [], "I suppose that'll be all, then.", "close_window",[]],
 # Ryan END
 

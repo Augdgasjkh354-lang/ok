@@ -12638,6 +12638,16 @@ presentations = [
           (position_set_y, pos1, ":cur_y"),
           (overlay_set_position, reg1, pos1),
                   
+          # v1.0 作坊利润由城里人出（买你的货）：最多是镇民钱袋里的钱；真结算时从镇民钱袋扣。
+          (try_begin),
+            (gt, ":net_profit", 0),
+            (is_between, ":center_no", towns_begin, towns_end),
+            (call_script, "script_af87_folk", ":center_no"),
+            (val_min, ":net_profit", reg0),
+            (eq, "$g_apply_budget_report_to_gold", 1),
+            (store_mul, ":af90_neg", ":net_profit", -1),
+            (call_script, "script_af87_folk_add", ":center_no", ":af90_neg"),
+          (try_end),
           (assign, reg0, ":net_profit"),
                   
                   #Enterprise revenue strings

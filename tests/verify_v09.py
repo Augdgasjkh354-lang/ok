@@ -34,6 +34,10 @@ ALLOWED_DIALOG_CHANGES={'dlga_village_elder_donate:village_elder_pretalk',  # v1
 # v1.0 第六批（十）: arena prizes and ladies' quest rewards are paid from
 # real money too (town treasury / the lady's guardian).
 ALLOWED_DIALOG_CHANGES|={
+    'dlga_lair_quest_intermediate_1:lord_pretalk', 'dlga_kidnapped_girl_quest_brief:kidnapped_girl_quest_taken',  # v1.0 凭空的钱第二批: 任务奖金由发任务的人出 (af90_quest_pay)
+    'dlga_start:close_window.39',  # 护送商队任务的奖金 (af90_quest_pay)
+    'dlga_convince_accept:close_window',  # 收债任务: 欠债领主从财产里拿出来
+    'dlga_sell_prisoner_outlaws:sell_prisoner_outlaws', 'dlga_sell_prisoner_outlaws:sell_prisoner_outlaws.1', 'dlga_sell_prisoner_outlaws:sell_prisoner_outlaws.2',  # 卖匪徒俘虏: 城镇出钱
     'dlga_goods_trade_requested:goods_trade_completed', 'dlga_trade_requested_weapons:merchant_trade',  # v1.0 城镇一个钱袋: 进店前把金库交给店主 (af83_shop_open)
     'dlga_trade_requested_armor:merchant_trade', 'dlga_trade_requested_horse:merchant_trade',
     'dlga_goods_trade_completed:goods_merchant_talk', 'dlga_merchant_trade:town_merchant_talk',  # 交易完回到对话就把钱收回金库

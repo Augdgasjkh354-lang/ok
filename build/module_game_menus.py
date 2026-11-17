@@ -8525,7 +8525,7 @@ game_menus = [
       (store_mul, ":xp_reward", "$num_center_bandits", 117),
       (add_xp_to_troop, ":xp_reward", "trp_player"),
       (store_mul, ":gold_reward", "$num_center_bandits", 50),
-      (call_script, "script_troop_add_gold","trp_player",":gold_reward"),
+      (call_script, "script_af19_town_pays", "$current_town", ":gold_reward"),  # v1.0 赏钱由城镇出
     ],
     [
       ("continue",[],"Continue...",[(change_screen_return)]),

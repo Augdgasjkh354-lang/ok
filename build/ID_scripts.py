@@ -986,5 +986,6 @@ script_af87_petition_king = 984
 script_af88_produce = 985
 script_af89_village_weekly = 986
 script_af89_village_text = 987
+script_af90_quest_pay = 988
 
 

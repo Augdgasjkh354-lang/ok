@@ -15506,6 +15506,26 @@ scripts = [
       (val_mul, ":player_gold_gain", ":r"),
       (val_div, ":player_gold_gain", 100),
       (val_div, ":player_gold_gain", ":num_player_party_shares"),
+      # v1.0 打赢仗的金币有来处（2026-11-17 玩家定）：
+      # 打领主（另有随军财物 af16_lord_war_chest）、有名号的匪帮（另有帮里的钱袋 af04_player_victory）、
+      # 攻下城镇城堡（另有金库 af16_sack_center）时，原版这份不再给，免得拿两份。
+      # 替村子赶走匪徒时，村民拿出的钱从村长钱袋出（有多少给多少）。其余（野匪、散兵）照旧，算他们身上带的钱。
+      (try_begin),
+        (is_between, "$g_encountered_party", villages_begin, villages_end),
+        (store_mul, ":af90_need", ":player_gold_gain", ":num_player_party_shares"),
+        (store_mul, ":af90_neg", ":af90_need", -1),
+        (call_script, "script_af13_village_purse", "$g_encountered_party", ":af90_neg"),
+        (store_mul, ":af90_got", reg0, -1),
+        (store_div, ":player_gold_gain", ":af90_got", ":num_player_party_shares"),
+      (else_try),
+        (is_between, "$g_encountered_party", walled_centers_begin, walled_centers_end),
+        (assign, ":player_gold_gain", 0),
+      (else_try),
+        (party_stack_get_troop_id, ":af90_ldr", "p_encountered_party_backup", 0),
+        (this_or_next|is_between, ":af90_ldr", active_npcs_begin, active_npcs_end),
+        (party_slot_ge, "$g_encountered_party", slot_af04_kind, 1),
+        (assign, ":player_gold_gain", 0),
+      (try_end),
       
       #add gold now
       (party_get_num_companion_stacks, ":num_stacks","p_main_party"),
@@ -26259,7 +26279,7 @@ scripts = [
       (try_end),
       
       (add_xp_as_reward, ":quest_xp_reward"),
-      (call_script, "script_troop_add_gold", "trp_player", ":quest_gold_reward"),
+      (call_script, "script_af90_quest_pay", ":quest_no", ":quest_gold_reward"),  # v1.0 发任务的人出钱
       (call_script, "script_end_quest", ":quest_no"),
   ]),
   
@@ -69048,5 +69068,36 @@ scripts = [
       (try_end),
     (try_end),
     (assign, reg44, ":s44"), (assign, reg45, ":s45"), (assign, reg46, ":s46"),
+  ]),
+
+  # ========== v1.0 凭空的钱第二批（2026-11-17 玩家定，见 docs/调查_凭空产生的钱.md）==========
+  # af90_quest_pay：任务奖金由发任务的人出。领主从财产出（付不起记欠账，af19_lord_pays）；
+  # 城里的人（商人、镇长等，任务记着的发起城镇是城镇）由城镇出（af19_town_pays）；村子由村长钱袋出（有多少给多少）；
+  # 其余（贵妇等）照原版。参数 1：任务，参数 2：金额。
+  ("af90_quest_pay", [
+    (store_script_param, ":quest", 1),
+    (store_script_param, ":amount", 2),
+    (try_begin),
+      (gt, ":amount", 0),
+      (quest_get_slot, ":giver", ":quest", slot_quest_giver_troop),
+      (quest_get_slot, ":center", ":quest", slot_quest_giver_center),
+      (try_begin),
+        (is_between, ":giver", active_npcs_begin, active_npcs_end),
+        (troop_slot_eq, ":giver", slot_troop_occupation, slto_kingdom_hero),
+        (call_script, "script_af19_lord_pays", ":giver", ":amount"),
+      (else_try),
+        (is_between, ":center", towns_begin, towns_end),
+        (call_script, "script_af19_town_pays", ":center", ":amount"),
+      (else_try),
+        (is_between, ":center", villages_begin, villages_end),
+        (store_mul, ":neg", ":amount", -1),
+        (call_script, "script_af13_village_purse", ":center", ":neg"),
+        (store_mul, ":got", reg0, -1),
+        (gt, ":got", 0),
+        (troop_add_gold, "trp_player", ":got"),
+      (else_try),
+        (call_script, "script_troop_add_gold", "trp_player", ":amount"),
+      (try_end),
+    (try_end),
   ]),
 ]
