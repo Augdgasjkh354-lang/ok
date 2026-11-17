@@ -990,5 +990,8 @@ script_af90_quest_pay = 988
 script_af91_ratio = 989
 script_af91_growth_3days = 990
 script_af92_squeeze_fiefs = 991
+script_af94_on_squeezed = 992
+script_af94_rise = 993
+script_af94_militia_home = 994
 
 

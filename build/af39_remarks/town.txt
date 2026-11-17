@@ -87,7 +87,7 @@ unrest|mayor|大人若能清一清附近的匪，城里人感激不尽。
 unrest|elder|匪帮到处游荡，村里人夜里都不敢睡死。
 unrest|elder|牲口要拴紧，粮要藏好，日子过得提心吊胆。
 unrest|elder|大人，你有刀有马，能不能管管这些匪？
-militia_out|elder|村子叫人劫了，青壮拿起家伙追仇人去了，还没回来。
+militia_out|elder|村里的青壮拿起家伙出去讨说法了，还没回来。
 militia_out|elder|村里只剩老弱，地里的活都没人干。
 militia_out|elder|大人，若在路上遇着他们，替我们照看着点。
 tax_free|tavern|听说本城的税是大人包的，一文不收，谁不念着好？

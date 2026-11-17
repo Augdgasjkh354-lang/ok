@@ -2248,4 +2248,7 @@ slot_af87_relief_day         = 1037 # town: end of the two weeks its lord gets d
 slot_af87_petition_day       = 1038 # town: day its lord may ask the king for relief again (day+14); 0 = never
 slot_af87_topped_up          = 1039 # p_main_party: 1 = towns' townsfolk purses were topped up to 95% once (saves made with trial pack 33 started them at 60%)
 slot_af89_topped_up          = 1040 # p_main_party: 1 = village elders' purses were topped up to 95% of prosperity x 200 once
+slot_af94_squeeze_count      = 1041 # village: times its own lord squeezed it in the current 30-day window; militia party (uprising against own lord): the lord troop
+slot_af94_squeeze_since      = 1042 # village: first day of the current squeeze window + 1; 0 = never squeezed
+slot_af94_squeeze_sum        = 1043 # village: denars squeezed in the current window; militia party: denars it goes to take back (> 0 marks an uprising against its own lord)
 slot_af83_handed             = 1033 # town: treasury handed to a shopkeeper when the player opened his shop (to work out the net on return); 0 = no shop open
