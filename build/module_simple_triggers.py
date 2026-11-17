@@ -4938,4 +4938,9 @@ simple_triggers = [
   (1, [
     (call_script, "script_af83_sweep_all"),
   ]),
+
+  # v1.0 领主兵饷寄回老家: 每周把各王国攒下的寄回钱平均分给本国村子（af84_remit_weekly）。
+  (24*7, [
+    (call_script, "script_af84_remit_weekly"),
+  ]),
 ]

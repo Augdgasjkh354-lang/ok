@@ -973,5 +973,7 @@ script_af82_wealth_notes_daily = 971
 script_af83_sweep_town = 972
 script_af83_shop_open = 973
 script_af83_sweep_all = 974
+script_af84_spend_wages = 975
+script_af84_remit_weekly = 976
 
 
