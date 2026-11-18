@@ -1,0 +1,15 @@
+f_taunt|quarrelsome|又是你。女人家不在家纺线，跑到战场上来添什么乱？
+f_taunt|quarrelsome|带兵打仗是男人的事，你就别在这儿碍手碍脚了。
+f_taunt|quarrelsome|一个女人领着一帮兵，传出去真叫人笑掉大牙。
+f_taunt|selfrighteous|我听说过你。卡拉迪亚的规矩，什么时候轮到女人来改了？
+f_taunt|selfrighteous|身为女子却舞刀弄枪，你家里人就没教过你本分？
+f_taunt|selfrighteous|我不和女人议论军务。有话，叫你手下的男人来说。
+f_taunt|debauched|这么标致的人儿，何必风餐露宿？来我帐里喝一杯岂不更好。
+f_taunt|debauched|穿着这身甲胄可惜了。换身裙子，我保你过得舒舒服服。
+f_taunt|debauched|打仗多累。你要是肯陪我说说话，我帐里的好酒随你喝。
+m_taunt|quarrelsome|哪儿来的卖剑的，也配到我面前来晃？
+m_taunt|quarrelsome|一个没名没姓的雇佣兵，也敢拦我的路？
+m_taunt|quarrelsome|你这种人我见多了，拿钱卖命，哪天就死在沟里。
+m_taunt|selfrighteous|无名小卒，连家世都说不清楚，也想和我平起平坐？
+m_taunt|selfrighteous|我和贵族说话。你这样的出身，站远些。
+m_taunt|selfrighteous|带了几个兵就当自己是人物了？在我眼里，你还是个草民。

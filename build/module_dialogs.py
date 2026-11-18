@@ -157,7 +157,7 @@ dialogs = [
                        (eq, reg0, 1),
                        (assign, "$g_comment_found", 1),
                        (assign, "$log_comment_relation_change", 0),
-                       (assign, "$g_rejoinder_to_last_comment", 0),
+                       (assign, "$g_rejoinder_to_last_comment", reg1),  # 2026-11-18 嘲讽时有回嘴，接原版受辱回应
                      (else_try),
                        (eq, "$g_comment_found", 0),
                        (call_script, "script_af39_town_remark", "$g_talk_troop"),
