@@ -2256,3 +2256,4 @@ slot_af53_default_weeks     = 1044 # faction (debtor): consecutive weeks the rep
 slot_af103_sold_value        = 1045 # p_main_party: total price of the prisoners held when the player opened a prisoner sale screen
 slot_af103_sold_count        = 1046 # p_main_party: number of non-hero prisoners held at that moment
 slot_af103_sold_town         = 1047 # p_main_party: the town whose people buy the sold prisoners; 0 = no sale pending
+slot_af104_refilled          = 1048 # p_main_party: 1 = village elders' purses were topped up once to 95% of the new full (20 weeks of output, 2026-11-18)

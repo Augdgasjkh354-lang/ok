@@ -1010,5 +1010,6 @@ script_af103_prisoner_value = 1008
 script_af103_prisoner_snapshot = 1009
 script_af103_add_recruit = 1010
 script_af103_prisoner_settle = 1011
+script_af104_growth_pay = 1012
 
 
