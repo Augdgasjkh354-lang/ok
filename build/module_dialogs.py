@@ -27775,6 +27775,11 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
   [anyone|plyr, "lord_talk", [
       (assign, ":show", 0),
       (try_begin),
+      # 2026-11-18 玩家定：对领主、国王一律显示 (里面有「讨债」)。
+      (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
+      (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
+      (assign, ":show", 1),
+      (else_try),
       # 借钱给你, 拿去周转。(lord_af29_lend)
       (is_between, "$g_talk_troop", active_npcs_begin, active_npcs_end),
       (troop_slot_eq, "$g_talk_troop", slot_troop_occupation, slto_kingdom_hero),
@@ -28843,4 +28848,27 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
    "这份情，我记一辈子。往后你有什么事，只管开口。", "lord_pretalk", []],
   [anyone, "af96_done", [],
    "好，这笔账我认。手头宽了，一定先还你。", "lord_pretalk", []],
+
+  # ========== v1.0 用兵抵债 (2026-11-18 玩家定) ==========
+  # 「谈钱的事」里讨债: 欠的钱 = 领主欠你的 (874) + 你借给他的本息 (945)。还不起就从他队伍里挑兵抵, 兵按入伙价三倍算。
+  [anyone|plyr,"lord_talk_money", [
+    (call_script, "script_af111_owed", "$g_talk_troop"),
+    (gt, reg0, 0),
+    (assign, reg41, reg0),
+  ], "讨债：你还欠我 {reg41} 第纳尔，打算什么时候还？", "lord_af111_collect", []],
+  [anyone,"lord_af111_collect", [
+    (call_script, "script_af111_owed", "$g_talk_troop"),
+    (assign, reg41, reg0),
+    (troop_get_slot, ":lp", "$g_talk_troop", slot_troop_leaded_party),
+    (gt, ":lp", 0),
+    (party_is_active, ":lp"),
+  ], "{reg41} 第纳尔……我眼下实在拿不出这么多现钱。要不这样，我队伍里的人，你看中谁就带走，按身价抵账。", "lord_af111_choose", []],
+  [anyone,"lord_af111_collect", [], "我现在身边没带兵，也拿不出现钱。再宽限些日子吧。", "lord_pretalk", []],
+  [anyone|plyr,"lord_af111_choose", [], "那就用兵抵债，我去挑人。", "close_window", [
+    (party_set_slot, "p_main_party", slot_af111_lord, "$g_talk_troop"),
+    (party_set_slot, "p_main_party", slot_af111_stage, 1),
+    (jump_to_menu, "mnu_af111_pick"),
+    (assign, "$g_leave_encounter", 0),
+  ]],
+  [anyone|plyr,"lord_af111_choose", [], "算了，再宽限你些日子。", "lord_pretalk", []],
 ]

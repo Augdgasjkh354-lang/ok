@@ -2279,4 +2279,7 @@ slot_af109_caravan_last     = 1072 # town: the same, last week (shown in the tra
 slot_af110_cargo_item       = 1073 # caravan party: the trade good it is carrying (0 = empty), 2026-11-18
 slot_af110_cargo_qty        = 1074 # caravan party: how many pieces
 slot_af110_cargo_cost       = 1075 # caravan party: what it paid for them (for the record)
+slot_af111_stage            = 1076 # p_main_party: troops-for-debt screen: 0 idle, 1 prepare, 2 waiting for the exchange screen to close (2026-11-18)
+slot_af111_lord             = 1077 # p_main_party: the lord whose troops are on offer
+slot_af111_offered          = 1078 # p_main_party: value of the troops put on offer
 slot_af106_village_shares    = 1059 # village: player-owned shares in percent (10..70), 2026-11-18; old slot 960 investments are converted on the first weekly produce # 只认原版六国的数组 (六国匪帮 kind、快速战斗／多人的阵营列表) 用它当上界

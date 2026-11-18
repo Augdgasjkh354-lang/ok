@@ -1461,3 +1461,5 @@ af72_fief_plan_done
 af96_offer
 af96_choice
 af96_done
+lord_af111_collect
+lord_af111_choose

@@ -1046,5 +1046,10 @@ script_af110_load = 1044
 script_af110_cargo_to_loot = 1045
 script_af110_ai_takes_cargo = 1046
 script_af110_sell_cargo = 1047
+script_af111_owed = 1048
+script_af111_troop_value = 1049
+script_af111_party_value = 1050
+script_af111_prepare = 1051
+script_af111_settle = 1052
 
 
