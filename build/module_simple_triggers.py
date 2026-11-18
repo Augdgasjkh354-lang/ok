@@ -5116,4 +5116,12 @@ simple_triggers = [
   (24*7, [
     (call_script, "script_af109_weekly"),
   ]),
+
+  # v1.0 自动还债 (2026-11-18)：每周，还得起的直接还；还不起的派信使来，提出拨兵抵债。
+  (24*7, [
+    (call_script, "script_af112_weekly"),
+    (ge, reg0, 0),
+    (party_set_slot, "p_main_party", slot_af111_lord, reg0),
+    (jump_to_menu, "mnu_af112_letter"),
+  ]),
 ]

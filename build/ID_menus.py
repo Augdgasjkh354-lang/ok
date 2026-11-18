@@ -293,3 +293,4 @@ menu_af104_invite_vassal = 291
 menu_af105_bank = 292
 menu_af108_branches = 293
 menu_af111_pick = 294
+menu_af112_letter = 295

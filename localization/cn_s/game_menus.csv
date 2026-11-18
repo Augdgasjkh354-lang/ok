@@ -442,3 +442,6 @@ mno_af108_open_8|开 一 家 {s41}（ {reg41} 第 纳 尔 ； 已 有 分 号 {r
 mno_af108_back|返 回 
 menu_af111_pick|{s40}
 mno_af111_done|离 开 。 
+menu_af112_letter|{s10}的 信 使 找 到 你 ， 捎 来 {s10}的 话 ： 「 欠 你 的 {reg41} 第 纳 尔 ， 眼 下 实 在 拿 不 出 现 钱 。 我 队 伍 里 的 人 ， 你 看 中 谁 ， 我 就 拨 给 你 ， 按 身 价 抵 账 。 」 
+mno_af112_pick|挑 兵 抵 债 。 
+mno_af112_wait|再 等 等 ， 让 他 先 攒 钱 。 

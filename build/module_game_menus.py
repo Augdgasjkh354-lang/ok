@@ -19753,4 +19753,21 @@ game_menus = [
    [
      ("af111_done", [], "离开。", [(change_screen_return)]),
    ]),
+
+  # v1.0 自动还债 (2026-11-18)：还不起的领主派信使来，提出拨兵抵债。挑兵走 mnu_af111_pick (同一个换人界面)。
+  ("af112_letter", mnf_scale_picture,
+   "{s10}的信使找到你，捎来{s10}的话：「欠你的 {reg41} 第纳尔，眼下实在拿不出现钱。我队伍里的人，你看中谁，我就拨给你，按身价抵账。」",
+   "none",
+   [(set_background_mesh, "mesh_pic_messenger"),
+    (party_get_slot, ":lord", "p_main_party", slot_af111_lord),
+    (str_store_troop_name, s10, ":lord"),
+    (call_script, "script_af111_owed", ":lord"),
+    (assign, reg41, reg0)],
+   [
+     ("af112_pick", [], "挑兵抵债。",
+      [(party_set_slot, "p_main_party", slot_af111_stage, 1),
+       (jump_to_menu, "mnu_af111_pick")]),
+     ("af112_wait", [], "再等等，让他先攒钱。",
+      [(change_screen_return)]),
+   ]),
 ]
