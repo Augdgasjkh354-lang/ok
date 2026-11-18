@@ -17330,6 +17330,13 @@ game_menus = [
        (party_get_slot, reg42, "$current_town", slot_af107_industry_count),
        (party_get_slot, reg43, "$current_town", slot_af107_industry_profit),
        (str_store_string, s40, "@{s40}^本城自己的作坊：上周开了 {reg42} 家，给金库挣了 {reg43} 第纳尔。"),
+       (call_script, "script_af109_room", "$current_town"),
+       (party_get_slot, ":af109_p", "$current_town", slot_town_prosperity),
+       (store_div, ":af109_cap", ":af109_p", 40),
+       (val_min, ":af109_cap", 3),
+       (store_sub, reg44, ":af109_cap", reg0),
+       (party_get_slot, reg45, "$current_town", slot_af109_caravan_last),
+       (str_store_string, s40, "@{s40}^本城自己的商队：{reg44} 支，上周带回 {reg45} 第纳尔。"),
      (try_end),
    ],
    [

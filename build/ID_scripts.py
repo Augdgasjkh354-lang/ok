@@ -1034,5 +1034,10 @@ script_af108_scale = 1032
 script_af108_weekly = 1033
 script_af108_option_text = 1034
 script_af108_open = 1035
+script_af109_room = 1036
+script_af109_pick_town = 1037
+script_af109_spawn = 1038
+script_af109_caravan_remit = 1039
+script_af109_weekly = 1040
 
 

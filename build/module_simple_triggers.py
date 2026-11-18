@@ -5109,4 +5109,9 @@ simple_triggers = [
   (24*7, [
     (call_script, "script_af108_weekly"),
   ]),
+
+  # v1.0 商队改成城镇自有 (2026-11-18)：每周把商队带回的钱挪到「上周」(af109_weekly)。
+  (24*7, [
+    (call_script, "script_af109_weekly"),
+  ]),
 ]
