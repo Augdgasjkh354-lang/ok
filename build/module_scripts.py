@@ -67499,7 +67499,7 @@ scripts = [
   # v1.0 驻军在城里花钱（2026-11-17 玩家定）。参数 1：据点（城镇或城堡），参数 2：本周实际发出的饷。
   # 饷的三分之一花在城里：城镇的驻军花在本城，城堡的驻军花在最近的、和城堡没在打仗的城镇。
   # 钱进那座城的杂货商（他每周把多出周转金的部分交回金库），并记进那座城的 Slot 1010（每周减半），算繁荣加成。
-  # 以前饷发出去就消失了；现在三分之一回到城里，三分之二仍算消失（兵自己攒着、寄回家）。
+  # 以前饷发出去就消失了；现在三分之一回到城里，三分之二寄回兵的老家（2026-11-18 起，见下）。
   ("af75_garrison_spend", [
     (store_script_param, ":center", 1),
     (store_script_param, ":paid", 2),
@@ -67525,6 +67525,40 @@ scripts = [
         (try_end),
       (try_end),
       (is_between, ":town", towns_begin, towns_end),
+      # 2026-11-18 玩家定：剩下的三分之二不再消失，照领主兵饷 (af84_spend_wages) 寄回老家——按各队兵种所属王国
+      # 记进那国的 Slot 1034，每周平均分给这个文化的村子 (af84_remit_weekly)；兵种不属于任何王国的 (雇佣兵等) 那份花在城里。
+      (store_sub, ":rest", ":paid", ":spend"),
+      (assign, ":total", 0),
+      (party_get_num_companion_stacks, ":n", ":center"),
+      (try_for_range, ":i", 0, ":n"),
+        (party_stack_get_troop_id, ":t", ":center", ":i"),
+        (neg|troop_is_hero, ":t"),
+        (party_stack_get_size, ":size", ":center", ":i"),
+        (call_script, "script_npc_get_troop_wage", ":t", ":center"),
+        (store_mul, ":w", reg0, ":size"),
+        (val_add, ":total", ":w"),
+      (try_end),
+      (assign, ":sent", 0),
+      (try_begin),
+        (gt, ":total", 0),
+        (try_for_range, ":i", 0, ":n"),
+          (party_stack_get_troop_id, ":t", ":center", ":i"),
+          (neg|troop_is_hero, ":t"),
+          (store_troop_faction, ":tf", ":t"),
+          (is_between, ":tf", kingdoms_begin, kingdoms_end),
+          (party_stack_get_size, ":size", ":center", ":i"),
+          (call_script, "script_npc_get_troop_wage", ":t", ":center"),
+          (store_mul, ":w", reg0, ":size"),
+          (store_mul, ":home", ":rest", ":w"),
+          (val_div, ":home", ":total"),
+          (faction_get_slot, ":pool", ":tf", slot_af84_remit),
+          (val_add, ":pool", ":home"),
+          (faction_set_slot, ":tf", slot_af84_remit, ":pool"),
+          (val_add, ":sent", ":home"),
+        (try_end),
+      (try_end),
+      (store_sub, ":left", ":rest", ":sent"),
+      (val_add, ":spend", ":left"),
       # 2026-11-17 镇民钱袋：兵在酒馆、铺子里花钱，先到老百姓手里（满了的部分进金库）。
       (call_script, "script_af87_folk_add", ":town", ":spend"),
       (party_get_slot, ":v", ":town", slot_af75_garrison_spend),
