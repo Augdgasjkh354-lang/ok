@@ -22248,6 +22248,9 @@ scripts = [
           (eq, ":party_type", spt_kingdom_caravan),
           (party_set_slot, ":result", slot_party_home_center, ":spawn_center"),
           (party_set_slot, ":result", slot_party_last_traded_center, ":spawn_center"),
+          (party_set_slot, ":result", slot_af105_deposit, 0),  # 2026-11-18 部队号会被回收, 银行账要清零
+          (party_set_slot, ":result", slot_af105_loan, 0),
+          (party_set_slot, ":result", slot_af104_target, 0),
           (call_script, "script_af18_caravan_fund", ":result", ":spawn_center"),  # v1.0: capital from the town
           # 审计 13 F-05: 引擎白送给玩家阵营的商队打上记号, 交易利润不进钱箱、不算进 36 支上限。
           # 部队号会被回收, Slot 不会自动清零, 所以两种情况都写。
@@ -60205,6 +60208,8 @@ scripts = [
       (set_spawn_radius, 0),
       (spawn_around_party, ":town", "pt_kingdom_caravan_party"),
       (assign, ":caravan", reg0),
+      (party_set_slot, ":caravan", slot_af105_deposit, 0),  # 2026-11-18 部队号会被回收, 银行账要清零
+      (party_set_slot, ":caravan", slot_af105_loan, 0),
       (ge, ":caravan", 0),
       (party_set_faction, ":caravan", "fac_player_supporters_faction"),
       (party_set_slot, ":caravan", slot_party_home_center, ":town"),
@@ -66570,6 +66575,7 @@ scripts = [
       (party_set_aggressiveness, ":new", 6),
       (party_set_courage, ":new", 4),
       (party_set_slot, ":new", slot_af59_rebel_party, ":pre"),
+      (party_set_slot, ":new", slot_af104_target, 0),  # 2026-11-18 部队号会被回收, 攻城目标要清零
       (party_set_ai_behavior, ":new", ai_bhvr_patrol_party),
       (party_set_ai_object, ":new", ":village"),
       (troop_set_slot, ":pre", slot_af63_band, ":new"),
