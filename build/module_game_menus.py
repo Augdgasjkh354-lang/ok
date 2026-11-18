@@ -7885,6 +7885,12 @@ game_menus = [
           (call_script, "script_af89_village_text", "$current_town"),
           (str_store_string, s7, "@{s7}^{s45}"),
         (try_end),
+        # 2026-11-18 Sonnet 第三批文案：村里眼下的光景 (af114_place_desc)。
+        (try_begin),
+          (call_script, "script_af114_place_desc", "$current_town"),
+          (eq, reg0, 1),
+          (str_store_string, s7, "@{s7}^{s49}"),
+        (try_end),
     ],
     [
       ("village_manage",
@@ -9179,6 +9185,13 @@ game_menus = [
           (is_between, "$current_town", towns_begin, towns_end),
           (call_script, "script_af87_folk_text", "$current_town"),
           (str_store_string, s13, "@{s13}^{s45}"),
+        (try_end),
+        # 2026-11-18 Sonnet 第三批文案：城里眼下的光景 (af114_place_desc)。
+        (try_begin),
+          (is_between, "$current_town", towns_begin, towns_end),
+          (call_script, "script_af114_place_desc", "$current_town"),
+          (eq, reg0, 1),
+          (str_store_string, s13, "@{s13}^{s49}"),
         (try_end),
 
         (assign,"$castle_undefended",0),

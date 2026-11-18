@@ -1054,5 +1054,7 @@ script_af111_settle = 1052
 script_af112_weekly = 1053
 script_af113_count = 1054
 script_af113_weekly = 1055
+script_af114_flags = 1056
+script_af114_place_desc = 1057
 
 

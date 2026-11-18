@@ -2285,4 +2285,5 @@ slot_af111_offered          = 1078 # p_main_party: value of the troops put on of
 slot_af112_letter_day       = 1079 # lord troop: day he may send another troops-for-debt letter (day+14), 2026-11-18
 slot_af113_last_total       = 1080 # p_main_party: total money in the world at the last weekly snapshot (2026-11-18)
 slot_af113_last_change      = 1081 # p_main_party: how much the total changed between the last two snapshots
+slot_af114_paid_troops_day  = 1082 # lord troop: day+1 he last handed the player troops to settle a debt (for remarks), 2026-11-18
 slot_af106_village_shares    = 1059 # village: player-owned shares in percent (10..70), 2026-11-18; old slot 960 investments are converted on the first weekly produce # 只认原版六国的数组 (六国匪帮 kind、快速战斗／多人的阵营列表) 用它当上界
