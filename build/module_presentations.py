@@ -12648,6 +12648,18 @@ presentations = [
             (store_mul, ":af90_neg", ":net_profit", -1),
             (call_script, "script_af87_folk_add", ":center_no", ":af90_neg"),
           (try_end),
+          # 2026-11-18 玩家定：你的作坊赚了钱，一成作商税进本城金库（列在结算单里的是税后）。
+          (try_begin),
+            (gt, ":net_profit", 0),
+            (is_between, ":center_no", towns_begin, towns_end),
+            (store_div, ":af107_tax", ":net_profit", 10),
+            (gt, ":af107_tax", 0),
+            (val_sub, ":net_profit", ":af107_tax"),
+            (eq, "$g_apply_budget_report_to_gold", 1),
+            (party_get_slot, ":af107_tw", ":center_no", slot_town_wealth),
+            (val_add, ":af107_tw", ":af107_tax"),
+            (party_set_slot, ":center_no", slot_town_wealth, ":af107_tw"),
+          (try_end),
           (assign, reg0, ":net_profit"),
                   
                   #Enterprise revenue strings

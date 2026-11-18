@@ -1026,5 +1026,9 @@ script_af105_text = 1024
 script_af105_caravan_gone = 1025
 script_af106_share_price = 1026
 script_af106_village_dividend = 1027
+script_af107_town_industry_weekly = 1028
+script_af107_kind_item = 1029
+script_af107_local_supply = 1030
+script_af107_pay_suppliers = 1031
 
 

@@ -5099,4 +5099,9 @@ simple_triggers = [
   (24*7, [
     (call_script, "script_af105_weekly"),
   ]),
+
+  # v1.0 城镇自己的产业 (2026-11-18)：每周开工结算 (af107_town_industry_weekly)。
+  (24*7, [
+    (call_script, "script_af107_town_industry_weekly"),
+  ]),
 ]

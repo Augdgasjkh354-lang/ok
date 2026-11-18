@@ -2271,4 +2271,6 @@ slot_af105_last_in           = 1055 # p_main_party: loan interest received last 
 slot_af105_last_out          = 1056 # p_main_party: deposit interest credited last week
 slot_af105_deposit           = 1057 # lord troop / caravan party: balance deposited at the bank
 slot_af105_loan              = 1058 # lord troop / caravan party: outstanding loan from the bank
+slot_af107_industry_count   = 1060 # town: how many of the town's own workshops ran last week (2026-11-18)
+slot_af107_industry_profit  = 1061 # town: what the town's own workshops earned for the treasury last week
 slot_af106_village_shares    = 1059 # village: player-owned shares in percent (10..70), 2026-11-18; old slot 960 investments are converted on the first weekly produce # 只认原版六国的数组 (六国匪帮 kind、快速战斗／多人的阵营列表) 用它当上界
