@@ -1023,5 +1023,6 @@ script_af105_loanable = 1021
 script_af105_pay_out = 1022
 script_af105_weekly = 1023
 script_af105_text = 1024
+script_af105_caravan_gone = 1025
 
 

@@ -58422,6 +58422,7 @@ scripts = [
   ("af18_ai_caravan_defeated", [
     (store_script_param, ":caravan", 1),
     (store_script_param, ":winner", 2),
+    (call_script, "script_af105_caravan_gone", ":caravan"), # 2026-11-18 银行：欠款、存款转给所属势力
     (try_begin),
       (party_slot_eq, ":caravan", slot_party_type, spt_kingdom_caravan),
       (party_get_slot, ":purse", ":caravan", slot_af18_caravan_purse),
@@ -58449,6 +58450,10 @@ scripts = [
   # The player (or the player with an ally) beat a caravan: its cash box is
   # shared by contribution; the ally lord's part goes to his wealth.
   ("af18_player_caravan_defeated", [
+    (try_begin), # 2026-11-18 银行：欠款、存款转给所属势力
+      (gt, "$g_enemy_party", 0),
+      (call_script, "script_af105_caravan_gone", "$g_enemy_party"),
+    (try_end),
     (try_begin),
       (gt, "$g_enemy_party", 0),
       (party_is_active, "$g_enemy_party"),
@@ -58522,6 +58527,7 @@ scripts = [
   # back to the treasury of its home town, whoever holds it now.
   ("af18_caravan_disband", [
     (store_script_param, ":caravan", 1),
+    (call_script, "script_af105_caravan_gone", ":caravan"), # 2026-11-18 银行：欠款、存款转给所属势力
     (try_begin),
       (party_get_slot, ":purse", ":caravan", slot_af18_caravan_purse),
       (gt, ":purse", 0),
@@ -71438,4 +71444,44 @@ scripts = [
     (str_store_string, s40, "@金库现钱：{reg41} 第纳尔^存款：{reg42}（{reg43} 户）　贷款：{reg44}（{reg45} 户）^银行自己的本钱（金库＋贷款－存款）：{reg46}^准备金率 {reg48}%，至少要留 {reg47}；还能贷出 {reg50}^存款利息：每周千分之 {reg51}　贷款利息：每周千分之 {reg52}^上周收进贷款利息 {reg53}，记给存户利息 {reg54}"),
   ]),
 
+
+  # 2026-11-18 玩家定：商队没了 (被打掉、解散)，它在银行的欠款和存款不作废，转给掌控它收益的人——
+  # 所属势力的国王；没有电脑国王时转给出发城镇的城主。都找不到才留在商队账上 (随商队消失)。
+  # 参数: 商队。只在银行开着、商队身上有账时做事。
+  ("af105_caravan_gone", [
+    (store_script_param, ":caravan", 1),
+    (try_begin),
+      (party_slot_ge, "p_main_party", slot_af105_bank, 1),
+      (party_slot_eq, ":caravan", slot_party_type, spt_kingdom_caravan),
+      (party_get_slot, ":d", ":caravan", slot_af105_deposit),
+      (party_get_slot, ":l", ":caravan", slot_af105_loan),
+      (this_or_next|gt, ":d", 0),
+      (gt, ":l", 0),
+      (assign, ":heir", -1),
+      (store_faction_of_party, ":f", ":caravan"),
+      (try_begin),
+        (is_between, ":f", npc_kingdoms_begin, kingdoms_end),
+        (faction_get_slot, ":king", ":f", slot_faction_leader),
+        (is_between, ":king", active_npcs_begin, active_npcs_end),
+        (assign, ":heir", ":king"),
+      (else_try),
+        (party_get_slot, ":home", ":caravan", slot_party_home_center),
+        (is_between, ":home", walled_centers_begin, walled_centers_end),
+        (party_get_slot, ":hl", ":home", slot_town_lord),
+        (is_between, ":hl", active_npcs_begin, active_npcs_end),
+        (assign, ":heir", ":hl"),
+      (try_end),
+      (ge, ":heir", 0),
+      (troop_get_slot, ":hd", ":heir", slot_af105_deposit),
+      (val_max, ":d", 0),
+      (val_add, ":hd", ":d"),
+      (troop_set_slot, ":heir", slot_af105_deposit, ":hd"),
+      (troop_get_slot, ":hloan", ":heir", slot_af105_loan),
+      (val_max, ":l", 0),
+      (val_add, ":hloan", ":l"),
+      (troop_set_slot, ":heir", slot_af105_loan, ":hloan"),
+      (party_set_slot, ":caravan", slot_af105_deposit, 0),
+      (party_set_slot, ":caravan", slot_af105_loan, 0),
+    (try_end),
+  ]),
 ]
