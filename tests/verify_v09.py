@@ -155,6 +155,31 @@ ALLOWED_DIALOG_CHANGES |= {  # v1.0 经济审计第一批 (2026-11-17): 钱有�
     'dlga_merchant_quest_1b:merchant_quest_1c', 'dlga_start:merchant_quest_3b',  # 第 48 条: 开局商人任务的预付款和尾款由本城出
     'dlga_ransom_broker_sell_prisoners:ransom_broker_sell_prisoners_2', 'dlga_ramun_sell_prisoners:ramun_sell_prisoners_2', 'dlga_galeas_sell_prisoners:galeas_sell_prisoners_2',  # 第 20 条: 卖俘虏前记下俘虏总价
 }
+ALLOWED_DIALOG_CHANGES |= {  # v1.0 称王者夺城建国 (2026-11-18): factions 21/22 换位, kingdoms_end 从 21 变成 22, 这些行只有这个阵营号变了
+    'dlga_companion_embassy_results:companion_rejoin_response.4',
+    'dlga_lord_give_conclude:lord_give_conclude_2',
+    'dlga_lord_request_mission_ask:lord_propose_mercenary',
+    'dlga_lord_requests_recruitment_refuse:close_window',
+    'dlga_lord_start:lord_pretalk.2',
+    'dlga_lord_talk:fb74_report_reply',
+    'dlga_lord_talk:lord_ask_pardon',
+    'dlga_lord_talk:lord_husband_auto_recruit',
+    'dlga_lord_talk_ask_about_war:lord_talk_ask_about_war_2',
+    'dlga_lord_talk_ask_about_war_2:lord_talk_ask_about_war_details',
+    'dlga_lord_tell_mission_sworn_vassal:lord_pretalk.1',
+    'dlga_lord_tell_mission_sworn_vassal:lord_pretalk.2',
+    'dlga_mayor_political_questions:mayor_politics_assess',
+    'dlga_mayor_politics_assess_realm:mayor_politics_give_realm_assessment',
+    'dlga_member_talk:member_direct_campaign',
+    'dlga_minister_diplomatic_kingdoms_select:minister_diplomatic_initiative_type',
+    'dlga_minstrel_courtship_locations:minstrel_pretalk',
+    'dlga_start:close_window.41',
+    'dlga_start:close_window.42',
+    'dlga_start:close_window.43',
+    'dlga_start:hall_guard_talk',
+    'dlga_start:troublesome_bandits_intro_1',
+    'dlga_tavernkeeper_job_ask:tavernkeeper_job_search',
+}
 _new=(data/'conversation.txt').read_text('utf-8').split('\n')
 if _old and _old[-1]=='': _old=_old[:-1]
 if _new and _new[-1]=='': _new=_new[:-1]

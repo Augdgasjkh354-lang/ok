@@ -1010,5 +1010,13 @@ script_af103_prisoner_value = 1008
 script_af103_prisoner_snapshot = 1009
 script_af103_add_recruit = 1010
 script_af103_prisoner_settle = 1011
+script_cf_af104_blood_feud = 1012
+script_af104_defense = 1013
+script_af104_pick_siege = 1014
+script_af104_siege_check = 1015
+script_af104_assault = 1016
+script_af104_found_kingdom = 1017
+script_af104_weekly = 1018
+script_af104_dissolve = 1019
 
 

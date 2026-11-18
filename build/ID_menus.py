@@ -289,3 +289,4 @@ menu_af80_policy_grain = 287
 menu_af80_policy_bandit = 288
 menu_af99_world = 289
 menu_af101_bailout = 290
+menu_af104_invite_vassal = 291

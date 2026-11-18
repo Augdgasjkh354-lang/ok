@@ -507,7 +507,7 @@ triggers = [
            (gt, ":target_faction", 0),
            (call_script, "script_change_troop_faction", ":quest_object_troop", ":target_faction"),
          (else_try),
-           (call_script, "script_change_troop_faction", ":quest_object_troop", "fac_robber_knights"),
+           (call_script, "script_change_troop_faction", ":quest_object_troop", "fac_kingdoms_end"), # 2026-11-18: fac_robber_knights 已改作 kingdoms_end (同为 22 号); 本文件不编译, 用的是 v0.8 的 triggers.txt
          (try_end),
          (call_script, "script_succeed_quest", "qst_incriminate_loyal_commander"),
        (try_end),

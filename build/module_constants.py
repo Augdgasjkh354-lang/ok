@@ -2256,3 +2256,8 @@ slot_af53_default_weeks     = 1044 # faction (debtor): consecutive weeks the rep
 slot_af103_sold_value        = 1045 # p_main_party: total price of the prisoners held when the player opened a prisoner sale screen
 slot_af103_sold_count        = 1046 # p_main_party: number of non-hero prisoners held at that moment
 slot_af103_sold_town         = 1047 # p_main_party: the town whose people buy the sold prisoners; 0 = no sale pending
+# v1.0 称王者夺城建国 (2026-11-18, 规格 docs/任务_称王者建国.md)。fac_kingdom_7 是唯一的空位国家。
+slot_af104_next_siege        = 1048 # pretender troop: day her rebel band may assault a fortress again (lost: day+30, kingdom fell: day+60); 0 = any time
+slot_af104_target            = 1049 # rebel band party: the fortress it is marching on, +1; 0 = none
+af104_color                  = 0xAA2266 # 第七国在地图上的颜色
+six_kingdoms_end             = "fac_kingdom_7" # 只认原版六国的数组 (六国匪帮 kind、快速战斗／多人的阵营列表) 用它当上界

@@ -8,7 +8,7 @@ build=root/'build';compiled=build/'compiled'
 assert base.exists(), 'v0.8 base missing'
 if compiled.exists():shutil.rmtree(compiled)
 shutil.copytree(base,compiled)
-steps=('process_troops.py','process_party_tmps.py','process_global_variables.py',
+steps=('process_factions.py','process_troops.py','process_party_tmps.py','process_global_variables.py',
        'process_scripts.py','process_mission_tmps.py','process_game_menus.py',
        'process_simple_triggers.py','process_dialogs.py','process_presentations.py')
 for step in steps:
@@ -55,6 +55,11 @@ def merge_dialogs():
             out.append(o)
         else:
             assert ft[0]==ot[0], ('dialogue order changed',ft[0],ot[0])
+            # v1.0 称王者夺城建国 (2026-11-18): 逻辑变了 (比如 kingdoms_end 从 21 变成 22) 的行,
+            # 文字位置上旧行是中文、新编译是英文源码时, 仍保留旧行的中文。
+            if diff is not None:
+                ft=[y if (not y.isascii() and x.isascii()) else x for x,y in zip(ft,ot)]
+                f=' '.join(ft)
             out.append(f);changed+=1
     out.extend(fresh[len(old):])  # appended new rows, taken as compiled
     (output/'conversation.txt').write_text('\n'.join(out)+'\n','utf-8')

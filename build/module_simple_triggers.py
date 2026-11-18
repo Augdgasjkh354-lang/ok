@@ -5064,4 +5064,14 @@ simple_triggers = [
   (1, [
     (call_script, "script_af103_prisoner_settle"),
   ]),
+
+  # v1.0 称王者夺城建国 (2026-11-18): 每 6 小时, 攻城路上的义军走到城下就结算。
+  (6, [
+    (call_script, "script_af104_siege_check"),
+  ]),
+
+  # v1.0 称王者夺城建国: 每周, 第七国丢光城堡城镇就灭国、空位还原。
+  (24*7, [
+    (call_script, "script_af104_weekly"),
+  ]),
 ]

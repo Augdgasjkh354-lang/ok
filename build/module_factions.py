@@ -54,9 +54,12 @@ factions = [
 ##  ("kingdom_4_rebels",  "Nord rebels",    0, 0.9, [("outlaws",-0.05),("peasant_rebels", -0.1),("deserters", -0.02),("mountain_bandits", -0.05),("forest_bandits", -0.05)], [], 0xCC2211),
 ##  ("kingdom_5_rebels",  "Rhodok rebels",  0, 0.9, [("outlaws",-0.05),("peasant_rebels", -0.1),("deserters", -0.02),("mountain_bandits", -0.05),("forest_bandits", -0.05)], [], 0xCC2211),
 
-  ("kingdoms_end","{!}kingdoms_end", 0, 0,[], []),
+  # v1.0 称王者夺城建国 (2026-11-18): 原 21 号 kingdoms_end 改作第七国空位, 原 22 号 robber_knights
+  # (只有 module_triggers 的一个兜底分支用到, 那个文件不编译) 改作结束标记。总数不变, 22 号以后编号不动。
+  # 平时 sfs_inactive, 称王者夺城后才在运行时改名、上色、启用 (见 af104_found_kingdom)。
+  ("kingdom_7",  "{!}kingdom_7", 0, 0.9, [("outlaws",-0.05),("peasant_rebels", -0.1),("deserters", -0.02),("mountain_bandits", -0.05),("forest_bandits", -0.05)], [], 0xAA2266),
 
-  ("robber_knights",  "{!}robber_knights", 0, 0.1, [], []),
+  ("kingdoms_end","{!}kingdoms_end", 0, 0,[], []),
 
   ("khergits","{!}Khergits", 0, 0.5,[("player_faction",0.0)], []),
   ("black_khergits","{!}Black Khergits", 0, 0.5,[("player_faction",-0.3),("kingdom_1",-0.02),("kingdom_2",-0.02)], []),
