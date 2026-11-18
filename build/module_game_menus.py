@@ -4931,7 +4931,10 @@ game_menus = [
 #          (try_end),          
           (troop_clear_inventory, "trp_temp_troop"),
           (call_script, "script_party_calculate_loot", "p_total_enemy_casualties"), #p_encountered_party_backup changed to total_enemy_casualties
-          (gt, reg0, 0),          
+          (assign, ":af110_loot", reg0),
+          (call_script, "script_af110_cargo_to_loot", "$g_enemy_party"),  # 2026-11-18 商队车上的货进战利品
+          (val_add, ":af110_loot", reg0),
+          (gt, ":af110_loot", 0),          
           (troop_sort_inventory, "trp_temp_troop"),
           (change_screen_loot, "trp_temp_troop"),
         (else_try),

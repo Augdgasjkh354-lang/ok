@@ -1043,5 +1043,8 @@ script_af110_unit_price = 1041
 script_af110_push_price = 1042
 script_af110_unload = 1043
 script_af110_load = 1044
+script_af110_cargo_to_loot = 1045
+script_af110_ai_takes_cargo = 1046
+script_af110_sell_cargo = 1047
 
 
