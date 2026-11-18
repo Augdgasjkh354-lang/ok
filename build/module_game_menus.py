@@ -3038,6 +3038,11 @@ game_menus = [
        [(jump_to_menu, "mnu_camp_action"),
         ]
        ),
+      # 2026-11-18 玩家定：天下钱账
+      ("af113_ledger_entry",[],"看看天下钱账。",
+       [(jump_to_menu, "mnu_af113_ledger"),
+        ]
+       ),
       ("af26_declare_kingdom",
        [(call_script, "script_af26_can_declare"),
         (eq, reg0, 1)],
@@ -19769,5 +19774,21 @@ game_menus = [
        (jump_to_menu, "mnu_af111_pick")]),
      ("af112_wait", [], "再等等，让他先攒钱。",
       [(change_screen_return)]),
+   ]),
+
+  # v1.0 天下钱账 (2026-11-18)。营地菜单进来, 打开时现算。
+  ("af113_ledger", 0,
+   "天下钱账（全图现有的第纳尔）^^城镇金库：{reg50}^城里百姓：{reg51}^村民（村长钱袋）：{reg52}^领主、国王和称王者：{reg53}^匪帮：{reg54}^商队钱箱：{reg55}^银行金库：{reg56}^你身上：{reg57}^^合计：{reg58}^比上周快照多了：{reg59}^上周一周内涨了：{reg60}^^（银行存款、欠账只是账面，不算进来；钱只在各家之间转来转去时合计不变，合计变多就是有凭空生出来的钱。）",
+   "none",
+   [(call_script, "script_af113_count"),
+    (party_get_slot, ":last", "p_main_party", slot_af113_last_total),
+    (store_sub, reg59, reg58, ":last"),
+    (try_begin),
+      (le, ":last", 0),
+      (assign, reg59, 0),
+    (try_end),
+    (party_get_slot, reg60, "p_main_party", slot_af113_last_change)],
+   [
+     ("af113_back", [], "返回。", [(jump_to_menu, "mnu_camp")]),
    ]),
 ]

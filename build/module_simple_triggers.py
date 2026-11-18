@@ -513,6 +513,23 @@ simple_triggers = [
            (neg|party_slot_eq, ":center_no", slot_center_is_besieged_by, -1),
            (assign, ":added_wealth", 0),
          (try_end),
+         # 2026-11-18 玩家定：城镇金库每周凭空的本地生产只留「繁荣 × 5」(城堡没有作坊和商队, 照旧)。
+         # 裁军、王室税、分红看的「本周收入」改成真实进项: 繁荣 × 5 ＋ 上周城营作坊利润 (1061) ＋ 上周商队带回的钱 (1072)；
+         # 后两样已经直接进过金库, 这里只用来比较和算税、分红, 不再重复加。
+         (assign, ":af113_income", ":added_wealth"),
+         (try_begin),
+           (is_between, ":center_no", towns_begin, towns_end),
+           (try_begin),
+             (gt, ":added_wealth", 0),
+             (store_mul, ":added_wealth", ":prosperity", 5),
+           (try_end),
+           (party_get_slot, ":af113_ind", ":center_no", slot_af107_industry_profit),
+           (party_get_slot, ":af113_car", ":center_no", slot_af109_caravan_last),
+           (val_max, ":af113_ind", 0),
+           (val_max, ":af113_car", 0),
+           (store_add, ":af113_income", ":added_wealth", ":af113_ind"),
+           (val_add, ":af113_income", ":af113_car"),
+         (try_end),
          (val_add, ":cur_wealth", ":added_wealth"),
          (call_script, "script_calculate_weekly_party_wage", ":center_no"),
          # v1.0 数据联动⑦: 金库付不起的饷不再一笔勾销: 城主从自己财产补, 城主也付不起, 守军开小差 (af56_garrison_shortfall)。
@@ -525,9 +542,9 @@ simple_triggers = [
          # 领主能不能贴钱不改变这个判断。
          # 裁完重算 :af_wage, 后面的花销/王室税/扣饷/短缺都用新饷。
          (try_begin),
-           (gt, ":af_wage", ":added_wealth"),
+           (gt, ":af_wage", ":af113_income"),
            (party_slot_eq, ":center_no", slot_center_is_besieged_by, -1),  # 被围时不裁（与招兵同一条件）
-           (call_script, "script_af100_disband_to_income", ":center_no", ":added_wealth"),
+           (call_script, "script_af100_disband_to_income", ":center_no", ":af113_income"),
            (assign, ":af_wage", reg0),
          (try_end),
          # v1.0 2026-11-17 驻军花销: 金库实际发出的饷 (不算城主补的), 三分之一花在城里 (af75_garrison_spend)。
@@ -551,7 +568,7 @@ simple_triggers = [
            (store_sub, ":af77_left", ":cur_wealth", ":af_wage"),
            (try_begin),
              (ge, ":af77_left", 2000),
-             (store_mul, ":af77_tax", ":added_wealth", ":af77_rate"),
+             (store_mul, ":af77_tax", ":af113_income", ":af77_rate"),
              (val_div, ":af77_tax", 100),
            (try_end),
            (try_begin),
@@ -598,7 +615,7 @@ simple_triggers = [
          (try_begin),
            (party_get_slot, ":shares", ":center_no", slot_af30_town_shares),
            (gt, ":shares", 0),
-           (store_mul, ":dividend", ":added_wealth", ":shares"),
+           (store_mul, ":dividend", ":af113_income", ":shares"),
            (val_div, ":dividend", 100),
            (gt, ":dividend", 0),
            (store_mul, ":cap", ":cur_wealth", 3),
@@ -628,7 +645,7 @@ simple_triggers = [
              (store_faction_of_party, ":town_fac", ":center_no"),
              (store_relation, ":inv_rel", ":inv_fac", ":town_fac"),
              (ge, ":inv_rel", 0),
-             (store_div, ":npc_div", ":added_wealth", 10),
+             (store_div, ":npc_div", ":af113_income", 10),
              (store_mul, ":cap", ":cur_wealth", 3),
              (val_div, ":cap", 4),
              (val_min, ":npc_div", ":cap"),
@@ -5123,5 +5140,10 @@ simple_triggers = [
     (ge, reg0, 0),
     (party_set_slot, "p_main_party", slot_af111_lord, reg0),
     (jump_to_menu, "mnu_af112_letter"),
+  ]),
+
+  # v1.0 天下钱账 (2026-11-18)：每周给全图的钱拍一次快照 (af113_weekly)。
+  (24*7, [
+    (call_script, "script_af113_weekly"),
   ]),
 ]

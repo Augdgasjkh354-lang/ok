@@ -1052,5 +1052,7 @@ script_af111_party_value = 1050
 script_af111_prepare = 1051
 script_af111_settle = 1052
 script_af112_weekly = 1053
+script_af113_count = 1054
+script_af113_weekly = 1055
 
 
