@@ -2273,4 +2273,5 @@ slot_af105_deposit           = 1057 # lord troop / caravan party: balance deposi
 slot_af105_loan              = 1058 # lord troop / caravan party: outstanding loan from the bank
 slot_af107_industry_count   = 1060 # town: how many of the town's own workshops ran last week (2026-11-18)
 slot_af107_industry_profit  = 1061 # town: what the town's own workshops earned for the treasury last week
+slot_af108_branches_begin   = 1062 # town: 1062..1070 = how many extra workshops (branches) the player runs of each of the 9 enterprise kinds (af107_kind_item order)
 slot_af106_village_shares    = 1059 # village: player-owned shares in percent (10..70), 2026-11-18; old slot 960 investments are converted on the first weekly produce # 只认原版六国的数组 (六国匪帮 kind、快速战斗／多人的阵营列表) 用它当上界

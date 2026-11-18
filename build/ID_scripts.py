@@ -1030,5 +1030,9 @@ script_af107_town_industry_weekly = 1028
 script_af107_kind_item = 1029
 script_af107_local_supply = 1030
 script_af107_pay_suppliers = 1031
+script_af108_scale = 1032
+script_af108_weekly = 1033
+script_af108_option_text = 1034
+script_af108_open = 1035
 
 

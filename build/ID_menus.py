@@ -291,3 +291,4 @@ menu_af99_world = 289
 menu_af101_bailout = 290
 menu_af104_invite_vassal = 291
 menu_af105_bank = 292
+menu_af108_branches = 293

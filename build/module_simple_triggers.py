@@ -5104,4 +5104,9 @@ simple_triggers = [
   (24*7, [
     (call_script, "script_af107_town_industry_weekly"),
   ]),
+
+  # v1.0 玩家一城多家作坊 (2026-11-18)：每周结算分号 (af108_weekly)。
+  (24*7, [
+    (call_script, "script_af108_weekly"),
+  ]),
 ]
