@@ -211,6 +211,7 @@ menu_af31_bank|钱 庄 — — {s10}。 ^借 出 去 的 钱 每 周 生 1% 的 
 mno_af31_bank_lend_1000|放 贷 给 本 城 商 人 ： 借 出 1000 第 纳 尔 
 mno_af31_bank_lend_3000|放 贷 给 本 城 商 人 ： 借 出 3000 第 纳 尔 
 mno_af31_bank_collect|收 回 本 金 {reg41} 第 纳 尔 （ 金 库 出 四 分 之 三 以 内 ， 不 够 的 城 主 、 国 王 补 ） 
+mno_af105_upgrade|把 钱 庄 升 级 成 银 行 （ 100 万 第 纳 尔 放 进 银 行 当 本 钱 ， 全 大 陆 只 此 一 家 ） 
 mno_af31_bank_leave|离 开 钱 庄 
 menu_af33_loan_call|{s8}派 信 使 捎 话 来 , 请 你 去 见 他 一 面 。 ^{s9}
 mno_af33_loan_lord_500|借 他 500 第 纳 尔 。 
@@ -246,6 +247,7 @@ mno_af30_town_shares_entry|入 股 本 镇 （ 10000 第 纳 尔 ， 10% 股 份
 mno_af37_town_shares_sell|卖 回 一 成 股 份 给 本 镇 （ 眼 下 金 库 出 得 起 {reg41} 第 纳 尔 ， 已 有 {reg42}%） 
 mno_af31_bank_open_entry|开 钱 庄 （ 5000 第 纳 尔 ， 一 城 只 能 开 一 家 ） 
 mno_af31_bank_entry|去 钱 庄 看 看 （ 未 收 回 本 金 {reg41} 第 纳 尔 ） 
+mno_af105_bank_entry|去 银 行 （ 在 哪 座 城 都 能 管 ） 
 mno_af54_reinforce_entry|从 队 伍 里 拨 {reg41} 名 {s41}给 商 队 当 护 卫 
 mno_af30_tax_farm_entry|买 下 本 镇 4 周 包 税 权 （ 5000 第 纳 尔 ） 
 mno_af68_loan_borrow|向 本 城 商 会 借 {reg41} 第 纳 尔 （ 30 天 内 还 {reg43}， 利 息 {reg42}%） 
@@ -416,3 +418,13 @@ mno_af101_refuse|先 不 给 。
 menu_af104_invite_vassal|{s10}的 信 使 送 来 {s10}的 亲 笔 ： 『 {s11}已 经 是 我 的 了 。 当 初 没 人 肯 赌 我 能 成 事 ， 是 你 出 的 钱 。 如 今 我 立 了 国 ， 缺 的 是 靠 得 住 的 人 — — 你 愿 意 做 我 的 封 臣 吗 ？ 』 ^（ 答 应 就 和 照 原 版 向 国 王 宣 誓 一 样 ； 新 王 国 和 {s12}不 死 不 休 ， 没 有 和 约 可 谈 。 ） 
 mno_af104_vassal_yes|我 愿 意 。 
 mno_af104_vassal_no|多 谢 美 意 ， 我 还 是 自 由 身 好 。 
+menu_af105_bank|银 行 — — 全 大 陆 只 此 一 家 。 ^{s40}^^领 主 和 国 王 手 头 宽 裕 就 把 多 的 钱 存 进 来 ， 发 不 出 饷 就 取 、 取 光 了 再 借 ； 商 队 也 一 样 。 存 款 利 息 越 高 ， 存 的 人 越 多 ； 贷 款 利 息 越 高 ， 借 的 人 越 少 。 存 户 来 取 钱 而 金 库 不 够 时 ， 从 你 身 上 垫 付 。 
+mno_af105_dep_up|存 款 利 息 提 高 千 分 之 一 （ 存 的 人 多 ， 银 行 付 息 也 多 ） 
+mno_af105_dep_down|存 款 利 息 降 低 千 分 之 一 
+mno_af105_loan_up|贷 款 利 息 提 高 千 分 之 一 （ 借 的 人 少 ， 赚 得 多 ） 
+mno_af105_loan_down|贷 款 利 息 降 低 千 分 之 一 
+mno_af105_res_up|准 备 金 率 提 高 5%（ 更 稳 ， 能 贷 的 钱 更 少 ） 
+mno_af105_res_down|准 备 金 率 降 低 5%（ 能 多 贷 ， 但 怕 挤 兑 ） 
+mno_af105_inject|往 银 行 金 库 里 再 放 10 万 第 纳 尔 本 钱 
+mno_af105_withdraw|从 银 行 取 出 {reg41} 第 纳 尔 （ 只 能 取 银 行 自 己 的 本 钱 ， 而 且 要 留 够 准 备 金 ； 一 次 最 多 10 万 ） 
+mno_af105_leave|离 开 银 行 

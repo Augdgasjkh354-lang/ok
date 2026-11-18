@@ -5111,4 +5111,9 @@ simple_triggers = [
   (24*7, [
     (call_script, "script_af104_weekly"),
   ]),
+
+  # v1.0 资本家：银行每周结算 (af105_weekly)。
+  (24*7, [
+    (call_script, "script_af105_weekly"),
+  ]),
 ]

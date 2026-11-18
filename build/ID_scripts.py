@@ -1018,5 +1018,10 @@ script_af104_assault = 1016
 script_af104_found_kingdom = 1017
 script_af104_weekly = 1018
 script_af104_dissolve = 1019
+script_af105_totals = 1020
+script_af105_loanable = 1021
+script_af105_pay_out = 1022
+script_af105_weekly = 1023
+script_af105_text = 1024
 
 

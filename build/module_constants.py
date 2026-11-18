@@ -2260,4 +2260,14 @@ slot_af103_sold_town         = 1047 # p_main_party: the town whose people buy th
 slot_af104_next_siege        = 1048 # pretender troop: day her rebel band may assault a fortress again (lost: day+30, kingdom fell: day+60); 0 = any time
 slot_af104_target            = 1049 # rebel band party: the fortress it is marching on, +1; 0 = none
 af104_color                  = 0xAA2266 # 第七国在地图上的颜色
-six_kingdoms_end             = "fac_kingdom_7" # 只认原版六国的数组 (六国匪帮 kind、快速战斗／多人的阵营列表) 用它当上界
+six_kingdoms_end             = "fac_kingdom_7"
+# v1.0 资本家：全大陆唯一的银行 (2026-11-18)。1050～1056 在 p_main_party 上; 1057～1058 领主 Troop Slot 和商队 Party Slot 共用编号。
+slot_af105_bank              = 1050 # p_main_party: the town where the bank was founded, +1; 0 = no bank yet
+slot_af105_vault             = 1051 # p_main_party: cash in the bank's vault
+slot_af105_dep_rate          = 1052 # p_main_party: deposit interest, per mille per week
+slot_af105_loan_rate         = 1053 # p_main_party: loan interest, per mille per week
+slot_af105_reserve           = 1054 # p_main_party: reserve requirement, % of deposits
+slot_af105_last_in           = 1055 # p_main_party: loan interest received last week
+slot_af105_last_out          = 1056 # p_main_party: deposit interest credited last week
+slot_af105_deposit           = 1057 # lord troop / caravan party: balance deposited at the bank
+slot_af105_loan              = 1058 # lord troop / caravan party: outstanding loan from the bank # 只认原版六国的数组 (六国匪帮 kind、快速战斗／多人的阵营列表) 用它当上界
