@@ -62373,8 +62373,8 @@ scripts = [
   ]),
 
   # ========== v1.0 资本家 3.0 第三批: 领主也入股 (Slot 969) ==========
-  # 一座城对外最多卖三成: 玩家的股份 (947) 加上领主的一成 (969 非 0 时算 10)。
-  # 参数 1: 城镇。输出 reg0 = 玩家还能买的百分比 (0/10/20/30)。只读。
+  # 一座城对外最多卖七成 (2026-11-18 玩家定, 原三成): 玩家的股份 (947) 加上领主的一成 (969 非 0 时算 10)。
+  # 参数 1: 城镇。输出 reg0 = 玩家还能买的百分比 (0～70)。只读。
   ("af40_share_room", [
     (store_script_param, ":town", 1),
     (party_get_slot, ":taken", ":town", slot_af30_town_shares),
@@ -62382,7 +62382,7 @@ scripts = [
       (party_slot_ge, ":town", slot_af40_npc_investor, 1),
       (val_add, ":taken", 10),
     (try_end),
-    (store_sub, ":room", 30, ":taken"),
+    (store_sub, ":room", 70, ":taken"),
     (val_max, ":room", 0),
     (assign, reg0, ":room"),
   ]),
