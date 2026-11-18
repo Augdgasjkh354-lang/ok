@@ -1781,8 +1781,13 @@ simple_triggers = [
                     
           # v1.0 先产后税（2026-11-17 玩家定）：上面算出的是这处地方一周的产出，先进老百姓的口袋（村长钱袋／镇民钱袋，
           # 城堡的分给下面的村子），领主只收三成作租金（af88_produce）。
+          (assign, ":af106_prod", ":cur_rents"),
           (call_script, "script_af88_produce", ":center_no", ":cur_rents"),
           (assign, ":cur_rents", reg0),
+          (try_begin), # 2026-11-18 村庄股份：按股份从村民那份里分红
+            (is_between, ":center_no", villages_begin, villages_end),
+            (call_script, "script_af106_village_dividend", ":center_no", ":af106_prod"),
+          (try_end),
           # v1.0 镇民钱袋第二批：城主出钱救过城的两周里租金翻倍，多的那份由金库付（一次最多四分之三）。
           (try_begin),
             (is_between, ":center_no", towns_begin, towns_end),
@@ -4638,29 +4643,7 @@ simple_triggers = [
         (party_set_slot, ":center", slot_af33_town_begging, 0),
       (try_end),
     (try_end),
-    # --- 条目 7a: 村庄投资分红, 每周繁荣 / 2, 从村长钱袋出 (af13 负数取 = 只给实数,
-    # 不够不记欠账, 照 I2 悬赏的先例)。村子没村长时 af13 返回 0, 不发钱也不报错。
-    (try_for_range, ":village", villages_begin, villages_end),
-      (party_get_slot, ":inv", ":village", slot_af33_village_invested),
-      (gt, ":inv", 0),
-      (party_get_slot, ":pros2", ":village", slot_town_prosperity),
-      (try_begin),  # v1.0 繁荣上限 200: 超出 100 的部分只算一半
-        (gt, ":pros2", 100),
-        (val_sub, ":pros2", 100),
-        (val_div, ":pros2", 2),
-        (val_add, ":pros2", 100),
-      (try_end),
-      (store_div, ":div", ":pros2", 2),
-      (gt, ":div", 0),
-      (store_sub, ":neg", 0, ":div"),
-      (call_script, "script_af13_village_purse", ":village", ":neg"),
-      (gt, reg0, 0),
-      (assign, ":paid", reg0),
-      (troop_add_gold, "trp_player", ":paid"),
-      (str_store_party_name, s44, ":village"),
-      (assign, reg44, ":paid"),
-      (display_message, "@{s44} 村的投资分红 {reg44} 第纳尔进了你的口袋。", 0xFFCC66),
-    (try_end),
+    # --- 条目 7a 的每周「繁荣 / 2」分红 2026-11-18 起取消，改成村庄股份按产出分红 (af106_village_dividend)。
     # --- 条目 1: 驻兵饷银与租金。饷银按 calculate_weekly_party_wage 算, 从玩家身上扣
     # (原生每周结算只算主部队与玩家据点驻军, 这支外面的部队得自己扣); 钱不够只付实数,
     # 不记欠账、兵也不跑, 只提示还差多少。租金到期日 (953) 到了就收 500 进金库并顺延

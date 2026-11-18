@@ -1024,5 +1024,7 @@ script_af105_pay_out = 1022
 script_af105_weekly = 1023
 script_af105_text = 1024
 script_af105_caravan_gone = 1025
+script_af106_share_price = 1026
+script_af106_village_dividend = 1027
 
 
