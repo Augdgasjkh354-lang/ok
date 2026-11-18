@@ -264,7 +264,8 @@ dlga_af96_choice:lord_pretalk|我 手 头 的 钱 还 不 够 ， 改 天 再 �
 dlga_af96_done:lord_pretalk|这 份 情 ， 我 记 一 辈 子 。 往 后 你 有 什 么 事 ， 只 管 开 口 。 
 dlga_af96_done:lord_pretalk.1|好 ， 这 笔 账 我 认 。 手 头 宽 了 ， 一 定 先 还 你 。 
 dlga_lord_talk_money:lord_af111_collect|讨 债 ： 你 还 欠 我 {reg41} 第 纳 尔 ， 打 算 什 么 时 候 还 ？ 
+dlga_lord_af111_collect:lord_pretalk|好 吧 ， {reg41} 第 纳 尔 ， 这 就 还 你 。 我 们 的 账 两 清 了 。 
 dlga_lord_af111_collect:lord_af111_choose|{reg41} 第 纳 尔 … … 我 眼 下 实 在 拿 不 出 这 么 多 现 钱 。 要 不 这 样 ， 我 队 伍 里 的 人 ， 你 看 中 谁 就 带 走 ， 按 身 价 抵 账 。 
-dlga_lord_af111_collect:lord_pretalk|我 现 在 身 边 没 带 兵 ， 也 拿 不 出 现 钱 。 再 宽 限 些 日 子 吧 。 
+dlga_lord_af111_collect:lord_pretalk.1|我 现 在 身 边 没 带 兵 ， 也 拿 不 出 现 钱 。 再 宽 限 些 日 子 吧 。 
 dlga_lord_af111_choose:close_window|那 就 用 兵 抵 债 ， 我 去 挑 人 。 
 dlga_lord_af111_choose:lord_pretalk|算 了 ， 再 宽 限 你 些 日 子 。 

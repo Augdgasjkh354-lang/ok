@@ -28856,9 +28856,27 @@ I suppose there are plenty of bounty hunters around to get the job done . . .", 
     (gt, reg0, 0),
     (assign, reg41, reg0),
   ], "讨债：你还欠我 {reg41} 第纳尔，打算什么时候还？", "lord_af111_collect", []],
+  # 还得起 (财产够): 当场用现钱还清。
+  [anyone,"lord_af111_collect", [
+    (call_script, "script_af111_owed", "$g_talk_troop"),
+    (assign, ":owed", reg0),
+    (troop_get_slot, ":w", "$g_talk_troop", slot_troop_wealth),
+    (ge, ":w", ":owed"),
+    (assign, reg41, ":owed"),
+  ], "好吧，{reg41} 第纳尔，这就还你。我们的账两清了。", "lord_pretalk", [
+    (call_script, "script_af111_owed", "$g_talk_troop"),
+    (assign, ":owed", reg0),
+    (call_script, "script_af14_lord_wealth", "$g_talk_troop", 0, ":owed"),
+    (troop_add_gold, "trp_player", ":owed"),
+    (troop_set_slot, "$g_talk_troop", slot_af19_lord_owes_player, 0),
+    (troop_set_slot, "$g_talk_troop", slot_af29_loan_principal, 0),
+  ]],
+  # 还不起、身边带着兵: 提出用兵抵。
   [anyone,"lord_af111_collect", [
     (call_script, "script_af111_owed", "$g_talk_troop"),
     (assign, reg41, reg0),
+    (troop_get_slot, ":w", "$g_talk_troop", slot_troop_wealth),
+    (lt, ":w", reg41),
     (troop_get_slot, ":lp", "$g_talk_troop", slot_troop_leaded_party),
     (gt, ":lp", 0),
     (party_is_active, ":lp"),
