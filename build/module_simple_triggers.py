@@ -2297,9 +2297,11 @@ simple_triggers = [
        
            (try_begin),
              (eq, ":do_trade", 1),
+             (call_script, "script_af110_unload", ":party_no", ":cur_center"),  # 2026-11-18 真货：先卸货
              (str_store_party_name, s7, ":cur_center"),             
              (call_script, "script_do_merchant_town_trade", ":party_no", ":cur_center"),
            (try_end),
+           (call_script, "script_af110_load", ":party_no", ":cur_center", ":target_center"),  # 2026-11-18 真货：装货去下一站
            (party_set_ai_behavior, ":party_no", ai_bhvr_travel_to_party),
            (party_set_ai_object, ":party_no", ":target_center"),
            (party_set_flags, ":party_no", pf_default_behavior, 0),

@@ -1039,5 +1039,9 @@ script_af109_pick_town = 1037
 script_af109_spawn = 1038
 script_af109_caravan_remit = 1039
 script_af109_weekly = 1040
+script_af110_unit_price = 1041
+script_af110_push_price = 1042
+script_af110_unload = 1043
+script_af110_load = 1044
 
 
