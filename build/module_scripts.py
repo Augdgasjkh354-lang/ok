@@ -69047,6 +69047,7 @@ scripts = [
       (assign, ":have", reg0),
       (call_script, "script_af87_folk_max", ":town"),
       (store_div, ":half", reg0, 2),
+      (store_div, ":tenth", reg0, 10), # 2026-11-18 玩家定：惩罚只在不到一成时才有
       (try_begin),
         (lt, ":have", ":half"),
         (party_get_slot, ":lord", ":town", slot_town_lord),
@@ -69082,6 +69083,9 @@ scripts = [
         (val_add, ":wk", 1),
         (party_set_slot, ":town", slot_af87_low_weeks, ":wk"),
         (ge, ":wk", 2),
+        # 2026-11-18 玩家定：不到一半只算「拮据」（救济、讨赈济、国王兜底照旧）；
+        # 掉繁荣、人回乡下要连着两周拮据、而且眼下不到满额一成才发生。
+        (lt, ":have", ":tenth"),
         (party_get_slot, ":p", ":town", slot_town_prosperity),
         (store_sub, ":lost", ":p", 0),
         (val_min, ":lost", 5),
@@ -69329,6 +69333,7 @@ scripts = [
       (party_get_slot, ":p", ":v", slot_town_prosperity),
       (store_mul, ":max", ":p", 200),
       (store_div, ":half", ":max", 2),
+      (store_div, ":tenth", ":max", 10), # 2026-11-18 玩家定：惩罚只在不到一成时才有
       (store_troop_gold, ":have", ":elder"),
       (try_begin),
         (lt, ":have", ":half"),
@@ -69361,6 +69366,7 @@ scripts = [
         (val_add, ":wk", 1),
         (party_set_slot, ":v", slot_af87_low_weeks, ":wk"),
         (ge, ":wk", 2),
+        (lt, ":have", ":tenth"), # 2026-11-18 玩家定：连着两周拮据、而且眼下不到一成，才有人走
         (assign, ":lost", ":p"),
         (val_min, ":lost", 5),
         (gt, ":lost", 0),

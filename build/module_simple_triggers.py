@@ -2387,26 +2387,63 @@ simple_triggers = [
              (val_min, ":town_food_store", ":food_store_limit"),
              (party_set_slot, ":cur_ai_object", slot_party_food_store, ":town_food_store"),
 
-             # v1.0 经济1.0：农民卖货的货款，按市价算。城镇金库付、村长收，数额相等。
-             # 货款 = 本村各贸易商品的产量 × 物品基础价 × 本城该商品价格因子/1000，再除以 10（折成一趟的量）。
-             # 村子被劫时产量为 0，货款自然为 0。金库一次最多出二分之一；村长钱袋不设上限。
+             # v1.0 经济1.0：农民卖货的货款，按市价算，村长收。
+             # 2026-11-18 玩家定：货款从货值的十分之一提到三分之一（af54 已除以 10，这里 ×10÷3），
+             # 一半城镇金库出（一次最多金库的四分之三），一半镇民钱袋出（城里人买粮买菜，扣到多少算多少）。
+             # 村子被劫时产量为 0，货款自然为 0；村长钱袋不设上限。
              (party_get_slot, ":af_home", ":party_no", slot_party_home_center),
              (try_begin),
                (is_between, ":af_home", villages_begin, villages_end),
                (party_get_slot, ":af_elder", ":af_home", slot_town_elder),
                (gt, ":af_elder", 0),
                (call_script, "script_af54_village_goods_value", ":af_home", ":cur_ai_object"),
-               (assign, ":af_pay", reg0),
-               (party_get_slot, ":af_treasury", ":cur_ai_object", slot_town_wealth),
-               (gt, ":af_treasury", 0),
-               (store_mul, ":af_cap", ":af_treasury", 3),
-               (val_div, ":af_cap", 4),
-               (val_min, ":af_pay", ":af_cap"),
-               (gt, ":af_pay", 0),
-               (call_script, "script_af13_village_purse", ":af_home", ":af_pay"),
-               (gt, reg0, 0),
-               (val_sub, ":af_treasury", reg0),
-               (party_set_slot, ":cur_ai_object", slot_town_wealth, ":af_treasury"),
+               (store_mul, ":af_full", reg0, 10),
+               (val_div, ":af_full", 3),
+               (gt, ":af_full", 0),
+               (store_div, ":af_pay", ":af_full", 2),
+               (store_sub, ":af_folk_part", ":af_full", ":af_pay"),
+               # 一半：城镇金库
+               (try_begin),
+                 (party_get_slot, ":af_treasury", ":cur_ai_object", slot_town_wealth),
+                 (gt, ":af_treasury", 0),
+                 (store_mul, ":af_cap", ":af_treasury", 3),
+                 (val_div, ":af_cap", 4),
+                 (val_min, ":af_pay", ":af_cap"),
+                 (gt, ":af_pay", 0),
+                 (call_script, "script_af13_village_purse", ":af_home", ":af_pay"),
+                 (gt, reg0, 0),
+                 (val_sub, ":af_treasury", reg0),
+                 (party_set_slot, ":cur_ai_object", slot_town_wealth, ":af_treasury"),
+               (try_end),
+               # 另一半：镇民钱袋
+               (try_begin),
+                 (gt, ":af_folk_part", 0),
+                 (store_mul, ":af_neg", ":af_folk_part", -1),
+                 (call_script, "script_af87_folk_add", ":cur_ai_object", ":af_neg"),
+                 (store_mul, ":af_got", reg0, -1),
+                 (gt, ":af_got", 0),
+                 (call_script, "script_af13_village_purse", ":af_home", ":af_got"),
+               (try_end),
+             (try_end),
+
+             # 2026-11-18 玩家定：进城做工。城里百姓富足（镇民钱袋超过满额）时，来卖货的农民顺便打短工，
+             # 工钱 = 超出满额部分的二十分之一，一趟最多 1000，从镇民钱袋出、进村长钱袋。富城带穷村，穷城没有这笔。
+             (try_begin),
+               (is_between, ":af_home", villages_begin, villages_end),
+               (party_get_slot, ":af_elder", ":af_home", slot_town_elder),
+               (gt, ":af_elder", 0),
+               (call_script, "script_af87_folk", ":cur_ai_object"),
+               (assign, ":af_have", reg0),
+               (call_script, "script_af87_folk_max", ":cur_ai_object"),
+               (store_sub, ":af_wage", ":af_have", reg0),
+               (val_div, ":af_wage", 20),
+               (val_min, ":af_wage", 1000),
+               (gt, ":af_wage", 0),
+               (store_mul, ":af_neg", ":af_wage", -1),
+               (call_script, "script_af87_folk_add", ":cur_ai_object", ":af_neg"),
+               (store_mul, ":af_got", reg0, -1),
+               (gt, ":af_got", 0),
+               (call_script, "script_af13_village_purse", ":af_home", ":af_got"),
              (try_end),
 
              # v1.0 村民进城采买（2026-11-17 玩家定）：卖完货，村长拿钱袋里 1000 以上部分的一成进城买东西
