@@ -2288,3 +2288,4 @@ slot_af113_last_change      = 1081 # p_main_party: how much the total changed be
 slot_af114_paid_troops_day  = 1082 # lord troop: day+1 he last handed the player troops to settle a debt (for remarks), 2026-11-18
 slot_af115_taunt_day        = 1083 # lord troop: day he may taunt the player again (day+30), 2026-11-18
 slot_af106_village_shares    = 1059 # village: player-owned shares in percent (10..70), 2026-11-18; old slot 960 investments are converted on the first weekly produce # 只认原版六国的数组 (六国匪帮 kind、快速战斗／多人的阵营列表) 用它当上界
+slot_af116_refilled          = 1084 # p_main_party: 1 = village elders' purses were topped up once to 95% of the new full (20 weeks of output, 2026-11-18)

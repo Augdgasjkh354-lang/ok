@@ -68184,8 +68184,8 @@ scripts = [
       (party_get_slot, ":elder", ":village", slot_town_elder),
       (gt, ":elder", 0),
       (store_troop_gold, ":gold", ":elder"),
-      (party_get_slot, ":vp", ":village", slot_town_prosperity),
-      (store_mul, ":vmax", ":vp", 1000),  # 2026-11-17：繁荣改由 af91 按村民手头每三天长；这里只把 500% 以上的钱直接投成繁荣
+      (call_script, "script_af87_folk_max", ":village"),
+      (store_mul, ":vmax", reg0, 5),  # 2026-11-17：繁荣改由 af91 按村民手头每三天长；这里只把 500% 以上的钱直接投成繁荣
       (store_sub, ":spare", ":gold", ":vmax"),
       (store_div, ":pts", ":spare", 200),
       (party_get_slot, ":pros", ":village", slot_town_prosperity),
@@ -68194,6 +68194,7 @@ scripts = [
       (gt, ":pts", 0),
       (store_mul, ":cost", ":pts", 200),
       (troop_remove_gold, ":elder", ":cost"),
+      (call_script, "script_af116_growth_pay", ":village", ":cost"),  # 2026-11-18：钱进集市城镇金库
       (call_script, "script_change_center_prosperity", ":village", ":pts"),
     (try_end),
   ]),
@@ -68227,6 +68228,7 @@ scripts = [
       (store_mul, ":cost", ":pts", 500),
       (val_sub, ":w", ":cost"),
       (party_set_slot, ":town", slot_town_wealth, ":w"),
+      (call_script, "script_af87_folk_add", ":town", ":cost"),  # 2026-11-18：金库出钱修城，工钱进镇民钱袋，不再消失（满 500% 的进金库）
       (call_script, "script_change_center_prosperity", ":town", ":pts"),
     (try_end),
   ]),
@@ -69278,10 +69280,27 @@ scripts = [
   # 衰：连续两周不到满额一半，繁荣每周 -5，这 5 点（值 2500）按村子 1 点 200 换成 12 点繁荣分给下面的村子（人回了乡下）。
   # Slot 1035 存「钱数＋1」，0 表示还没设（旧存档第一次用到时按满额的 60% 起算）。
 
+  # 2026-11-18 玩家定（满额按产出算）：满额 = 本地 20 周的产出，不再是 繁荣 × 单价。
+  # 产出照每周租金的算法：城镇 2400、村子 1200 ×（20＋有效繁荣）÷ 120，繁荣超 100 的部分只算一半。
+  # 化简：城镇 400 ×（20＋有效繁荣），村子 200 ×（20＋有效繁荣）。繁荣 100 时城镇 48000、村子 24000。
+  # 这样购买力 = 攒下了几周的收入，繁荣涨了、收入跟着涨，比例不再被繁荣自动稀释。参数 1 城镇或村子。
   ("af87_folk_max", [
-    (store_script_param, ":town", 1),
-    (party_get_slot, ":p", ":town", slot_town_prosperity),
-    (store_mul, reg0, ":p", 500),
+    (store_script_param, ":c", 1),
+    (party_get_slot, ":p", ":c", slot_town_prosperity),
+    (try_begin),
+      (gt, ":p", 100),
+      (val_sub, ":p", 100),
+      (val_div, ":p", 2),
+      (val_add, ":p", 100),
+    (try_end),
+    (val_max, ":p", 0),
+    (val_add, ":p", 20),
+    (try_begin),
+      (is_between, ":c", towns_begin, towns_end),
+      (store_mul, reg0, ":p", 400),
+    (else_try),
+      (store_mul, reg0, ":p", 200),
+    (try_end),
   ]),
 
   # reg0 = 镇民钱袋现有的钱
@@ -69615,6 +69634,23 @@ scripts = [
   # 仍不到一半、连续两周：繁荣每周 -5，人进城——这 5 点值 1000，按城镇 500 一点换成 2 点加给村子的集市城镇。
   ("af89_village_weekly", [
     (store_current_day, ":today"),
+    # 一次性（2026-11-18 满额按产出算）：满额变大后，把各村村长钱袋补到新满额的 95%（补的钱算村里本来就有的家底）。
+    (try_begin),
+      (party_slot_eq, "p_main_party", slot_af116_refilled, 0),
+      (party_set_slot, "p_main_party", slot_af116_refilled, 1),
+      (party_set_slot, "p_main_party", slot_af89_topped_up, 1),  # 下面那次旧的补足不必再跑
+      (try_for_range, ":v", villages_begin, villages_end),
+        (party_get_slot, ":elder", ":v", slot_town_elder),
+        (gt, ":elder", 0),
+        (call_script, "script_af87_folk_max", ":v"),
+        (store_mul, ":want", reg0, 95),
+        (val_div, ":want", 100),
+        (store_troop_gold, ":g", ":elder"),
+        (gt, ":want", ":g"),
+        (store_sub, ":add", ":want", ":g"),
+        (troop_add_gold, ":elder", ":add"),
+      (try_end),
+    (try_end),
     # 一次性：把各村村长钱袋补到满额的 95%（和城镇的初始 95% 一致；补的钱算村里本来就有的家底）。
     (try_begin),
       (party_slot_eq, "p_main_party", slot_af89_topped_up, 0),
@@ -69622,8 +69658,9 @@ scripts = [
       (try_for_range, ":v", villages_begin, villages_end),
         (party_get_slot, ":elder", ":v", slot_town_elder),
         (gt, ":elder", 0),
-        (party_get_slot, ":p", ":v", slot_town_prosperity),
-        (store_mul, ":want", ":p", 190),
+        (call_script, "script_af87_folk_max", ":v"),
+        (store_mul, ":want", reg0, 95),
+        (val_div, ":want", 100),
         (store_troop_gold, ":g", ":elder"),
         (gt, ":want", ":g"),
         (store_sub, ":add", ":want", ":g"),
@@ -69635,7 +69672,8 @@ scripts = [
       (party_get_slot, ":elder", ":v", slot_town_elder),
       (gt, ":elder", 0),
       (party_get_slot, ":p", ":v", slot_town_prosperity),
-      (store_mul, ":max", ":p", 200),
+      (call_script, "script_af87_folk_max", ":v"),
+      (assign, ":max", reg0),
       (store_div, ":half", ":max", 2),
       (store_div, ":tenth", ":max", 10), # 2026-11-18 玩家定：惩罚只在不到一成时才有
       (store_troop_gold, ":have", ":elder"),
@@ -69710,8 +69748,8 @@ scripts = [
       (party_get_slot, ":elder", ":v", slot_town_elder),
       (gt, ":elder", 0),
       (store_troop_gold, reg44, ":elder"),
-      (party_get_slot, ":p", ":v", slot_town_prosperity),
-      (store_mul, reg45, ":p", 200),
+      (call_script, "script_af87_folk_max", ":v"),
+      (assign, reg45, reg0),
       (store_mul, ":a", reg44, 100),
       (store_mul, ":b", reg45, 50),
       (store_mul, ":c", reg45, 80),
@@ -69782,9 +69820,8 @@ scripts = [
       (is_between, ":c", towns_begin, towns_end),
       (call_script, "script_af87_folk", ":c"),
       (assign, ":have", reg0),
-      (party_get_slot, ":p", ":c", slot_town_prosperity),
-      (val_max, ":p", 1),
-      (store_mul, ":max", ":p", 500),
+      (call_script, "script_af87_folk_max", ":c"),
+      (assign, ":max", reg0),
       (store_mul, ":r", ":have", 100),
       (val_div, ":r", ":max"),
     (else_try),
@@ -69792,9 +69829,8 @@ scripts = [
       (party_get_slot, ":elder", ":c", slot_town_elder),
       (gt, ":elder", 0),
       (store_troop_gold, ":have", ":elder"),
-      (party_get_slot, ":p", ":c", slot_town_prosperity),
-      (val_max, ":p", 1),
-      (store_mul, ":max", ":p", 200),
+      (call_script, "script_af87_folk_max", ":c"),
+      (assign, ":max", reg0),
       (store_mul, ":r", ":have", 100),
       (val_div, ":r", ":max"),
     (try_end),
@@ -69849,6 +69885,7 @@ scripts = [
       (else_try),
         (call_script, "script_af13_village_purse", ":c", ":neg"),
       (try_end),
+      (call_script, "script_af116_growth_pay", ":c", ":cost"),  # 2026-11-18：钱付给城里的铺子（金库），不再消失
       (call_script, "script_change_center_prosperity", ":c", ":pts"),
     (try_end),
   ]),
@@ -69871,8 +69908,8 @@ scripts = [
       (party_get_slot, ":elder", ":c", slot_town_elder),
       (gt, ":elder", 0),
       (store_troop_gold, ":have", ":elder"),
-      (party_get_slot, ":p", ":c", slot_town_prosperity),
-      (store_mul, ":half", ":p", 100),
+      (call_script, "script_af87_folk_max", ":c"),
+      (store_div, ":half", reg0, 2),
       (store_sub, ":take", ":have", ":half"),
       (store_sub, ":left", ":need", ":got"),
       (val_min, ":take", ":left"),
@@ -72887,4 +72924,46 @@ scripts = [
       (assign, reg0, 0),
     (try_end),
   ]),
+
+  # v1.0 2026-11-18 玩家定（长繁荣的钱有去处）：百姓、村长用钱换繁荣时，钱付给卖方，不再消失。
+  # 参数 1 长繁荣的据点，参数 2 花掉的钱（调用方已从百姓钱袋／村长钱袋扣掉）。
+  # 城镇：盖房、添置的钱进本城金库（城镇一个钱袋：铺子就是金库）。
+  # 村子：农具、建材从集市城镇买，进集市城镇金库；没有就进所属城镇金库；属城堡的进城堡领主财产；
+  # 都没有（领主是玩家或空缺）就退回村长钱袋。金库出钱修城（af78_town_invest_weekly）不走这里，工钱直接进镇民钱袋。
+  ("af116_growth_pay", [
+    (store_script_param, ":c", 1),
+    (store_script_param, ":cost", 2),
+    (try_begin),
+      (gt, ":cost", 0),
+      (try_begin),
+        (is_between, ":c", towns_begin, towns_end),
+        (party_get_slot, ":w", ":c", slot_town_wealth),
+        (val_add, ":w", ":cost"),
+        (party_set_slot, ":c", slot_town_wealth, ":w"),
+      (else_try),
+        (is_between, ":c", villages_begin, villages_end),
+        (party_get_slot, ":town", ":c", slot_village_market_town),
+        (try_begin),
+          (neg|is_between, ":town", towns_begin, towns_end),
+          (party_get_slot, ":town", ":c", slot_village_bound_center),
+        (try_end),
+        (try_begin),
+          (is_between, ":town", towns_begin, towns_end),
+          (party_get_slot, ":w", ":town", slot_town_wealth),
+          (val_add, ":w", ":cost"),
+          (party_set_slot, ":town", slot_town_wealth, ":w"),
+        (else_try),
+          # 附近没有城镇（属城堡）：钱付给城堡领主（买木料、请工匠的钱落到领主治下），领主不在就留给村长。
+          (party_get_slot, ":lord", ":c", slot_town_lord),
+          (try_begin),
+            (is_between, ":lord", active_npcs_begin, active_npcs_end),
+            (call_script, "script_af14_lord_wealth", ":lord", ":cost", 0),
+          (else_try),
+            (call_script, "script_af13_village_purse", ":c", ":cost"),
+          (try_end),
+        (try_end),
+      (try_end),
+    (try_end),
+  ]),
+
 ]

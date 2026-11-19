@@ -1056,5 +1056,6 @@ script_af113_count = 1054
 script_af113_weekly = 1055
 script_af114_flags = 1056
 script_af114_place_desc = 1057
+script_af116_growth_pay = 1058
 
 
